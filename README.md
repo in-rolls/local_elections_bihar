@@ -13,3 +13,11 @@ The scripts scrape http://sec.bihar.gov.in/ovc.aspx and produce a CSV with all t
 pip install -r requirements.txt
 python mukhiya.py
 ```
+
+## 🔗 Adjacent Repositories
+
+- [in-rolls/indian-politician-bios](https://github.com/in-rolls/indian-politician-bios) — Biographical data of political candidates in India; rich data on Indian MPs
+- [in-rolls/bihar_land_records](https://github.com/in-rolls/bihar_land_records) — Bihar Land Records (2022)
+- [in-rolls/secc](https://github.com/in-rolls/secc) — Socio-Economic Caste Census 2011
+- [in-rolls/ration_bihar](https://github.com/in-rolls/ration_bihar) — Scripts for scraping Ration Card Data From Bihar
+- [in-rolls/bihar-2020-electoral-rolls](https://github.com/in-rolls/bihar-2020-electoral-rolls) — Bihar Electoral Rolls (2020)
