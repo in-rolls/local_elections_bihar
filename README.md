@@ -16,8 +16,8 @@ python mukhiya.py
 
 ## 🔗 Adjacent Repositories
 
-- [in-rolls/indian-politician-bios](https://github.com/in-rolls/indian-politician-bios) — Biographical data of political candidates in India; rich data on Indian MPs
-- [in-rolls/bihar_land_records](https://github.com/in-rolls/bihar_land_records) — Bihar Land Records (2022)
+- [in-rolls/local_elections_up](https://github.com/in-rolls/local_elections_up) — UP Local Election Data --- GP and ULB. Seat reservation, winner, and candidates for some elections
+- [in-rolls/local_elections_kerala](https://github.com/in-rolls/local_elections_kerala) — Kerala Local Government Seat Reservation Data and Winner Attributes
+- [in-rolls/local_elections_uttarakhand](https://github.com/in-rolls/local_elections_uttarakhand) — Data on Local Elections from Uttarakhand
 - [in-rolls/secc](https://github.com/in-rolls/secc) — Socio-Economic Caste Census 2011
-- [in-rolls/ration_bihar](https://github.com/in-rolls/ration_bihar) — Scripts for scraping Ration Card Data From Bihar
-- [in-rolls/bihar-2020-electoral-rolls](https://github.com/in-rolls/bihar-2020-electoral-rolls) — Bihar Electoral Rolls (2020)
+- [in-rolls/parse_unsearchable_rolls](https://github.com/in-rolls/parse_unsearchable_rolls) — Parse Unsearchable Electoral Rolls
