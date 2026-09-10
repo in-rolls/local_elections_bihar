@@ -1,0 +1,39 @@
+[project]
+name = "local-elections-bihar"
+version = "1.0.0"
+description = "Historical Bihar local-election records and offline data tools"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Gaurav Sood", email = "contact@gsood.com" }]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["Bihar", "elections", "panchayats", "reservation", "data"]
+dependencies = ["pyarrow>=21"]
+
+[project.urls]
+Repository = "https://github.com/in-rolls/local_elections_bihar"
+Issues = "https://github.com/in-rolls/local_elections_bihar/issues"
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = ["ruff>=0.14", "pre-commit>=4", { include-group = "test" }]
+test = ["pytest>=8"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "RUF"]
+allowed-confusables = ["‘", "’", "‛", "–"]
+
+[tool.pytest.ini_options]
+minversion = "8"
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+log_level = "INFO"
+xfail_strict = true
+filterwarnings = ["error"]
+addopts = ["-ra", "--strict-config", "--strict-markers"]
