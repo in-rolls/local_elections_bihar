@@ -1,0 +1,727 @@
+{
+  "format_version": 1,
+  "column_contract_sha256": "a1693223db183018e07ab2e3bbdb847c60841b3651980bb48595df148ed66516",
+  "files": [
+    {
+      "file": "mukhiya.parquet",
+      "source_csv": "mukhiya.csv",
+      "source_sha256": "350e88d226e67920d9d16085c9062f203a8c8720dca4bda54fcc27d4afe506a7",
+      "sha256": "a77aa6dfdd76fddff36c5f43a9ad9bbda33ccd3ec581c9ec0ecbd323f3a6c8d8",
+      "rows": 96266,
+      "duplicate_rows": 0,
+      "missing_candidates": 5,
+      "schema": [
+        {
+          "name": "year",
+          "type": "int16",
+          "nullable": false
+        },
+        {
+          "name": "post",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "district",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "block",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "panchayat",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "reservation_status",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "sr_no",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "candidate_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "father_husband_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "educ",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "mobile_number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "valid_vote",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "remarks",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_row",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "duplicate_of_source_row",
+          "type": "int32",
+          "nullable": true
+        },
+        {
+          "name": "candidate_missing",
+          "type": "bool",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "file": "panch.parquet",
+      "source_csv": "panch.csv",
+      "source_sha256": "c34a7f30149b9e221e4997af81481511650633b7d0a4eddc0894d501a4cc96d9",
+      "sha256": "7ea6bbca3767267b229b8e0c31b01b3450e02688df801ee7d5c1f65a0e318b14",
+      "rows": 136676,
+      "duplicate_rows": 640,
+      "missing_candidates": 1,
+      "schema": [
+        {
+          "name": "year",
+          "type": "int16",
+          "nullable": false
+        },
+        {
+          "name": "post",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "district",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "block",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "panchayat",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "ward",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "reservation_status",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "sr_no",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "candidate_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "father_husband_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "educ",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "mobile_number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "valid_vote",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "remarks",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_row",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "duplicate_of_source_row",
+          "type": "int32",
+          "nullable": true
+        },
+        {
+          "name": "candidate_missing",
+          "type": "bool",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "file": "panchayat_samiti_member.parquet",
+      "source_csv": "panchayat_samiti_member.csv",
+      "source_sha256": "f8b1a76b89fad8b1ce49ffe1e338b5ef94841509ef23d04d03571d06388e28bc",
+      "sha256": "684a249596ccd37696dd664c04feaa4e2257e354d9a2b4eb2dbd4b6d37c144e1",
+      "rows": 80259,
+      "duplicate_rows": 0,
+      "missing_candidates": 3,
+      "schema": [
+        {
+          "name": "year",
+          "type": "int16",
+          "nullable": false
+        },
+        {
+          "name": "post",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "district",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "block",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "reservation_status",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "sr_no",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "candidate_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "father_husband_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "educ",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "mobile_number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "valid_vote",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "remarks",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_row",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "duplicate_of_source_row",
+          "type": "int32",
+          "nullable": true
+        },
+        {
+          "name": "candidate_missing",
+          "type": "bool",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "file": "sarpanch.parquet",
+      "source_csv": "sarpanch.csv",
+      "source_sha256": "0c081d7d6433991a2471a8c78116dd89095f9867e4d3b31a73df839ad8f33a6e",
+      "sha256": "0d60df53514102cd3b5f6189858c69baf558d3719b3c5dbc149faf42b373de44",
+      "rows": 45059,
+      "duplicate_rows": 0,
+      "missing_candidates": 3,
+      "schema": [
+        {
+          "name": "year",
+          "type": "int16",
+          "nullable": false
+        },
+        {
+          "name": "post",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "district",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "block",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "panchayat",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "reservation_status",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "sr_no",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "candidate_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "father_husband_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "educ",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "mobile_number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "valid_vote",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "remarks",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_row",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "duplicate_of_source_row",
+          "type": "int32",
+          "nullable": true
+        },
+        {
+          "name": "candidate_missing",
+          "type": "bool",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "file": "ward_member.parquet",
+      "source_csv": "ward_member.csv",
+      "source_sha256": "1f02588e08cd85860666df73c502e4b3725a5600eff36630ae0048d7941f1167",
+      "sha256": "cff086f3aeb1188c7f87c0d71f27cd9a5eb7f99ff48bbfa8ba1359e0d24a0ad6",
+      "rows": 277219,
+      "duplicate_rows": 2,
+      "missing_candidates": 9,
+      "schema": [
+        {
+          "name": "year",
+          "type": "int16",
+          "nullable": false
+        },
+        {
+          "name": "post",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "district",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "block",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "panchayat",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "ward",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "reservation_status",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "sr_no",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "candidate_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "father_husband_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "educ",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "mobile_number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "valid_vote",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "remarks",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_row",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "duplicate_of_source_row",
+          "type": "int32",
+          "nullable": true
+        },
+        {
+          "name": "candidate_missing",
+          "type": "bool",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "file": "zila_parishad_member.parquet",
+      "source_csv": "zila_parishad_member.csv",
+      "source_sha256": "a95b02f51de403c35ed722ff153fd30e776c821bfa012d10b2881c2531cda736",
+      "sha256": "58d3bdc5461a38e6e704ab2687648721c1fb18e9264690f6cdc19d396b46c89d",
+      "rows": 10126,
+      "duplicate_rows": 0,
+      "missing_candidates": 1,
+      "schema": [
+        {
+          "name": "year",
+          "type": "int16",
+          "nullable": false
+        },
+        {
+          "name": "post",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "district",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "reservation_status",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "sr_no",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "candidate_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "father_husband_name",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "educ",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "mobile_number",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "valid_vote",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "remarks",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_row",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "duplicate_of_source_row",
+          "type": "int32",
+          "nullable": true
+        },
+        {
+          "name": "candidate_missing",
+          "type": "bool",
+          "nullable": false
+        }
+      ]
+    }
+  ]
+}
