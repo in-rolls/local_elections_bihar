@@ -86,10 +86,13 @@ def download(row):
     folder.mkdir(parents=True, exist_ok=True)
     target, meta = folder / "source.pdf", folder / "download.json"
     if target.exists() and meta.exists():
-        saved = json.loads(meta.read_text())
+        try:
+            saved = json.loads(meta.read_text())
+        except json.JSONDecodeError:
+            saved = {}
         if (
-            saved["url"] == row["affidavit_url"]
-            and saved["sha256"] == hashlib.sha256(target.read_bytes()).hexdigest()
+            saved.get("url") == row["affidavit_url"]
+            and saved.get("sha256") == hashlib.sha256(target.read_bytes()).hexdigest()
         ):
             return saved
     if shutil.disk_usage(folder).free < MIN_FREE_BYTES:
@@ -138,9 +141,17 @@ def download(row):
                         cached.unlink()
             part.replace(target)
             event["ok"] = True
-            meta.write_text(json.dumps(event, indent=2) + "\n")
+            temporary_meta = meta.with_suffix(".tmp")
+            temporary_meta.write_text(json.dumps(event, indent=2) + "\n")
+            temporary_meta.replace(meta)
             return event
-        except (requests.RequestException, ValueError, TransientError) as error:
+        except (
+            requests.RequestException,
+            ValueError,
+            TransientError,
+            subprocess.SubprocessError,
+            OSError,
+        ) as error:
             event["reason"] = str(error)
             raise
         finally:
@@ -473,7 +484,10 @@ def download_status(rows, out):
     for row in rows:
         folder = ROOT / row["document_id"]
         meta, failure = folder / "download.json", folder / "failure.json"
-        saved = json.loads(meta.read_text()) if meta.exists() else {}
+        try:
+            saved = json.loads(meta.read_text()) if meta.exists() else {}
+        except json.JSONDecodeError:
+            saved = {}
         pdf = folder / "source.pdf"
         valid = (
             saved.get("ok") is True
@@ -481,7 +495,12 @@ def download_status(rows, out):
             and pdf.exists()
             and pdf.stat().st_size == saved.get("bytes")
         )
-        error = json.loads(failure.read_text()) if failure.exists() else {}
+        try:
+            error = json.loads(failure.read_text()) if failure.exists() else {}
+        except json.JSONDecodeError:
+            error = {"reason": "Incomplete failure metadata; retry"}
+        if meta.exists() and not saved:
+            error = {"reason": "Incomplete download metadata; retry"}
         records.append(
             {
                 **{k: row[k] for k in KEY},

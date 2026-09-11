@@ -228,3 +228,20 @@ def test_downloader_continues_after_source_failure(tmp_path, monkeypatch):
     affidavits.download_all(rows, 1, tmp_path / "status.parquet")
     assert seen == ["0", "1", "2"]
     assert (affidavits.ROOT / "1/failure.json").exists()
+
+
+def test_interrupted_metadata_does_not_stop_status_snapshot(tmp_path, monkeypatch):
+    import affidavits
+
+    monkeypatch.setattr(affidavits, "ROOT", tmp_path / "pdfs")
+    row = {
+        **dict(zip(affidavits.KEY, [1, 2, 3, 1], strict=True)),
+        "document_id": "a",
+        "affidavit_url": "https://example.test/a.pdf",
+    }
+    folder = affidavits.ROOT / "a"
+    folder.mkdir(parents=True)
+    (folder / "download.json").write_text("{")
+    result = affidavits.download_status([row], tmp_path / "status.parquet")
+    assert result["failed"] == 1
+    assert result["downloaded"] == 0
