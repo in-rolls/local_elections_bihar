@@ -73,12 +73,26 @@ The [historical implementation](https://github.com/in-rolls/local_elections_biha
 |---|---|---:|---|
 | Current mukhiya winner index | All 38 districts and 533 blocks listed by the portal | 8,067 winners | [Winners](data/fin/portal_2021_2026/winners.parquet), [seat reservations](data/fin/portal_2021_2026/reservations.parquet), [manifest](data/fin/portal_2021_2026/MANIFEST.json) |
 | Explicit 2021 mukhiya pilot | Arwal: 5 blocks, 64 panchayats | 559 candidacies, 64 winners | [Candidate lists and results](data/fin/2021/mukhiya_2021.parquet), [manifest](data/fin/2021/MANIFEST.json) |
+| 2021 winner qualifications | All 64 Arwal winners inspected | Degree status classified for 57; unresolved for 7 | [Education and prior office](data/fin/2021/education.parquet), [transcriptions](data/fin/2021/education_review.csv), [sources and checksums](data/fin/2021/education.json) |
 
 Sources: SEC [winning candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/WinningCandidates), [seat reservations](https://sec25.bihar.gov.in/sec_new/Panchayat/Reservation), [contesting candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/ContestingCandidates), and [results](https://sec25.bihar.gov.in/sec_new/Panchayat/Result). Responses were collected on September 10, 2026. The statewide collection completed 533 winner requests and 533 reservation requests; it covers the portal's listed blocks, not an independently verified historical census of seats.
 
 **The statewide index has no election-year field.** Its `year` is null: the portal covers the 2021–2026 term and later by-elections. The Arwal pilot explicitly requests phase `2021_1`, displayed by the source as `2021`. Its 1,118 rows comprise 559 candidate-list records and 559 result records, distinguished by `kind`. They are not 1,118 candidacies. Each of the 64 panchayats has one recorded winner.
 
-**Education is in linked documents.** The structured feeds provide age and gender, but no education field. The statewide index includes 8,066 affidavit links. An inspected [2021 affidavit, page 14](https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210913143841096.pdf#page=14) contains a handwritten candidate biography with educational qualifications, profession and prior elected office; page 10 contains criminal-case declarations. Education and experience have not been extracted or analyzed from these scans.
+**The Arwal education pilot is available.** All 64 winners were linked to candidate lists using district, block, panchayat and candidate serial, then their downloaded nomination PDFs were inspected. [The export](data/fin/2021/education.parquet) retains the reported qualification, degree and literacy indicators, prior elected office, document reservation text, source URL, page number and PDF hash. [Inspected pages](data/fin/2021/education_pages) accompany the transcriptions.
+
+Degree status is unresolved for seven winners: two documents lack the candidate's education page, one names a school without a qualification, one says only “EDUCATED,” and three have ambiguous qualification text. Unknowns remain null. Reservation is classified from document text for 51 winners; 13 remain unspecified. Of the 25 document-classified women's reserved seats, 21 have classified degree status; the corresponding counts are 24 of 26 open seats and 12 of 13 seats with unspecified reservation. These are extraction counts, not reservation-effect estimates. [Coverage and provenance](data/fin/2021/education.json).
+
+Codex visually transcribed these records; there has been no independent second coding. Tesseract locates likely pages but does not assign qualifications. Candidate and proposer biographies are distinguished. Qualifications are self-reported, and a blank field is not evidence of illiteracy. The pilot covers Arwal only; statewide education extraction remains incomplete.
+
+<details>
+<summary>Inspect a qualification declaration</summary>
+
+Rajanti Devi's candidate biography reports “इंटर पास” (intermediate passed). The seat-reservation field reads “सामान्य महिला.” [Original PDF, page 12](https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210909141417391.pdf#page=12).
+
+<img src="data/fin/2021/education_pages/33_1_330010011_4_p12.png" alt="Candidate biography showing the education and seat-reservation fields" width="500">
+
+</details>
 
 ### Fields and handling
 
@@ -99,6 +113,19 @@ uv run python scripts/sec_2021.py parse
 ```
 
 Omit `caffeinate -dims` outside macOS. The generic collector accepts post IDs 1–6: ward member, panch, mukhiya, sarpanch, panchayat samiti member and zila parishad member. The published current-portal collection is mukhiya only. Use `--districts` to restrict collection and `--workers` to set concurrency. Parsing is offline and can be rerun against the saved responses.
+
+### Rebuild the qualification pilot
+
+Install Poppler (`pdfinfo`, `pdftoppm`, `pdftotext`) and Tesseract with English and Hindi language data. On macOS, `brew install poppler tesseract tesseract-lang` supplies these tools; Ubuntu uses `poppler-utils tesseract-ocr tesseract-ocr-hin`.
+
+```sh
+uv run python scripts/affidavits.py frame
+caffeinate -dims uv run python scripts/affidavits.py download
+caffeinate -dims uv run python scripts/affidavits.py locate
+uv run python scripts/affidavits.py export
+```
+
+Download and page-location stages resume from `data/derived/affidavits_2021/`. Export combines the checked-in review CSV with downloaded document metadata and page images. It rejects duplicate or missing review keys, invalid binary codes, mismatched source hashes, and pages outside the document. The review CSV is the visual-transcription input; OCR alone cannot regenerate it. `graduate_plus=1` means a reported completed degree, `0` a reported lower qualification, and null an unresolved level. `illiterate` and `prior_elected` likewise preserve unknowns. `quota_document` records women's seat reservation from the document, independently of candidate gender; it is not an official reservation-roll validation.
 
 ## Usage
 

@@ -1,0 +1,713 @@
+{
+  "frame_sha256": "02b18f64655e303bf1831b24bfcc1ebaef657ab5840698c89c868fcd9a586101",
+  "review_sha256": "2344cb78749d42bb68969da550d352cb808f7ca544c9b07c10e2e447bd22dc52",
+  "output_sha256": "6c0ca06fdae188dc22ba925146511112c109a3ad683cdd23514d0d08a549b5f7",
+  "rows": 64,
+  "degree_classified": 57,
+  "quota_classified": 51,
+  "coverage_by_document_reservation": [
+    {
+      "quota_document": 0,
+      "winners": 26,
+      "degree_classified": 24
+    },
+    {
+      "quota_document": 1,
+      "winners": 25,
+      "degree_classified": 21
+    },
+    {
+      "quota_document": null,
+      "winners": 13,
+      "degree_classified": 12
+    }
+  ],
+  "review_method": "Codex inspected candidate biographies and affidavits; no independent second coding. Coverage is not an accuracy estimate.",
+  "locator": "Tesseract eng+hin, psm 11, 110 dpi; embedded text and landscape rotation fallback; qualifications are visually transcribed, not OCR parsed.",
+  "schema": {
+    "district_id": "int64",
+    "block_id": "int64",
+    "panchayat_id": "int64",
+    "candidate_serial": "int64",
+    "document_id": "string",
+    "year": "int64",
+    "post_id": "int64",
+    "candidate_name": "string",
+    "result_name": "string",
+    "name_matches": "bool",
+    "candidate_gender": "string",
+    "candidate_age": "int64",
+    "affidavit_url": "string",
+    "candidate_source_url": "string",
+    "result_source_url": "string",
+    "page": "int64",
+    "education_raw": "string",
+    "education_category": "string",
+    "graduate_plus": "int8",
+    "illiterate": "int8",
+    "prior_elected": "int8",
+    "reservation_raw": "string",
+    "quota_document": "int8",
+    "review_status": "string",
+    "notes": "string",
+    "additional_pages": "list<item: int64>",
+    "page_kind": "string",
+    "review_method": "string",
+    "document_sha256": "string",
+    "document_fetched_at": "string",
+    "source_page_url": "string",
+    "page_artifact": "string",
+    "locator_selected_review_page": "bool"
+  },
+  "documents": {
+    "33_1_330010010_6": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210913143841096.pdf",
+      "fetched_at": "2026-09-11T02:56:20.791076+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 18,
+      "sha256": "1fa6b0b313750ac99cba29531cbfe043cedc40de4f3a566095a7036b80241fea",
+      "bytes": 5653749
+    },
+    "33_1_330010011_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210909141417391.pdf",
+      "fetched_at": "2026-09-11T02:56:20.791028+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "69695abe277193a3060840201f61c6290ae483d2c45a58280f5d9d78ecb3c8f6",
+      "bytes": 1886266
+    },
+    "33_1_330010013_3": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210910141554324.pdf",
+      "fetched_at": "2026-09-11T02:56:20.790953+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 15,
+      "sha256": "dfca8dfab3eb4246c50744217b3ff40666469ba71b90ac5a218f1eb8ba9a469a",
+      "bytes": 5471576
+    },
+    "33_1_330010008_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210912175232317.pdf",
+      "fetched_at": "2026-09-11T02:56:32.340631+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "79c60b528c71e40dcc7c96f10d0601dc23dda6c27a1784a20b877b25edfab61a",
+      "bytes": 6024318
+    },
+    "33_1_330010015_9": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210909131052714.pdf",
+      "fetched_at": "2026-09-11T02:56:40.289892+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 18,
+      "sha256": "05d4f93ebf0af254b5c5614db7a0ee171187ba3cad8c87e80bb6338ccfd9b2ae",
+      "bytes": 4767823
+    },
+    "33_1_330010005_9": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210912183233732.pdf",
+      "fetched_at": "2026-09-11T02:56:41.136115+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 14,
+      "sha256": "8a76896b25aa79ce09acb273999c93f9c53b7b207b5643d760d1ca5c6683b164",
+      "bytes": 4574384
+    },
+    "33_1_330010017_6": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210912171121874.pdf",
+      "fetched_at": "2026-09-11T02:56:48.381252+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 14,
+      "sha256": "7cea4387556f5a3a20406329bbd3b8a7a8b685d54d8331935fb59625608fb779",
+      "bytes": 6261086
+    },
+    "33_1_330010014_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210910151007389.pdf",
+      "fetched_at": "2026-09-11T02:56:52.217137+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "621bc80bf0a80d215f05a708ae363e4d885c374e83ecb5ab82e96da3d5276041",
+      "bytes": 6029985
+    },
+    "33_1_330010004_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210913151400820.pdf",
+      "fetched_at": "2026-09-11T02:56:52.883253+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 17,
+      "sha256": "1a84054c0c88f221c5e810bc3011fbbe3fb716baf89db573b93e114bbc5153ab",
+      "bytes": 5428713
+    },
+    "33_1_330010002_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210907180715636.pdf",
+      "fetched_at": "2026-09-11T02:57:04.959855+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "2336f3fd9829fd34a770a357a9838a667247cc7d97f7887830c7c442097660fc",
+      "bytes": 980799
+    },
+    "33_1_330010012_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210911180525338.pdf",
+      "fetched_at": "2026-09-11T02:57:06.506424+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 14,
+      "sha256": "92f9ff370c2b5e45622581b1d0f234a8411106417f97bb80a5315b4cea86e561",
+      "bytes": 3444969
+    },
+    "33_1_330010001_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210911161208881.pdf",
+      "fetched_at": "2026-09-11T02:57:07.245265+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "9682a359a8ea4f66dd4fdf13a0c114b9f2c8bd7ea97b71535a2612830f170160",
+      "bytes": 4494633
+    },
+    "33_5_330050068_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210921154431812.pdf",
+      "fetched_at": "2026-09-11T02:57:07.767440+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "12c2c7f7f9962e7aa1bfb2ba366793d751fda520019e0989a15f6c9bf9ce87e2",
+      "bytes": 3080268
+    },
+    "33_5_330050058_14": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210916145923976.pdf",
+      "fetched_at": "2026-09-11T02:57:15.316531+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "0202506dafb9980055b91bade05ea54ad0b3c6feb2a45379fd21540cc06532c6",
+      "bytes": 2512908
+    },
+    "33_5_330050061_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210920132841584.pdf",
+      "fetched_at": "2026-09-11T02:57:15.854235+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "6c49e0ed22fe21cf9ba054f632aae92b844ff9547ce27db2f9de44e7a7bc1f68",
+      "bytes": 1202357
+    },
+    "33_5_330050059_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210918131158084.pdf",
+      "fetched_at": "2026-09-11T02:57:19.209611+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "b8603c81df8f016599c9dd94215ae2861614e729a4bf9965270b8ec929f2a38f",
+      "bytes": 1081630
+    },
+    "33_5_330050065_7": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210921143920511.pdf",
+      "fetched_at": "2026-09-11T02:57:21.716059+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "c4e5a127ed2dd1e794fc151a3ec387a257fc9e815acb61d282665701de6805ae",
+      "bytes": 2724370
+    },
+    "33_5_330050067_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210921172716237.pdf",
+      "fetched_at": "2026-09-11T02:57:22.444475+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "e320e1b00ad0a5e45bbae54985f5933607c38e98977041cf9cd06423cc7fecb5",
+      "bytes": 3007379
+    },
+    "33_5_330050060_6": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210916152241115.pdf",
+      "fetched_at": "2026-09-11T02:57:24.848503+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "d10169417bd88a848076a995e67fe6514af263a3e58f01489f0953384f3dac73",
+      "bytes": 3273045
+    },
+    "33_5_330050062_8": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210922190615487.pdf",
+      "fetched_at": "2026-09-11T02:57:28.529143+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "bd49ced8ab483b8323e6a3c1539cfb85441ba018433ba374fa25ca826437aa27",
+      "bytes": 2460128
+    },
+    "33_5_330050066_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210921171755512.pdf",
+      "fetched_at": "2026-09-11T02:57:30.446800+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "d280f7ad92b871b4a424495a3ae728801e897e9305dc28e127906c93b76ef6cb",
+      "bytes": 3119224
+    },
+    "33_5_330050064_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents3/NominationDoc/20210918133806469.pdf",
+      "fetched_at": "2026-09-11T02:57:34.711166+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "09415d0952df565f01f188e812a04e8b916fc5feb39e1a9e03bddaba383e4f33",
+      "bytes": 1096441
+    },
+    "33_3_330030031_3": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211004134325407.pdf",
+      "fetched_at": "2026-09-11T02:57:37.649098+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "3607c62610c760f1bbd275c4a00c68da9e5514db074ac67d239fd3ae4a5a4f82",
+      "bytes": 4174797
+    },
+    "33_3_330030047_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211001124801472.pdf",
+      "fetched_at": "2026-09-11T02:57:38.846325+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "19b68a7e6a087a5e250c7ca7415cca51761c0918e20067aa2ff4560fe5048752",
+      "bytes": 1866478
+    },
+    "33_3_330030042_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211005164348997.pdf",
+      "fetched_at": "2026-09-11T02:57:43.944371+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "13c2ef70cdec99e43ee0a73541b009fbb2e375539f2768b3f6a356755277d53a",
+      "bytes": 1345666
+    },
+    "33_3_330030036_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211004125208152.pdf",
+      "fetched_at": "2026-09-11T02:57:47.622578+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "b0190a940e8e117136da54a4aeddc0cfad5891f6e6ef2cdafb25dd6636dfa2a1",
+      "bytes": 3935103
+    },
+    "33_3_330030034_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211002182651932.pdf",
+      "fetched_at": "2026-09-11T02:57:47.732733+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "87f81d3de330e815e329f822d2cddac2952d2cded92803191703794115361cd3",
+      "bytes": 2818392
+    },
+    "33_3_330030039_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211005144122729.pdf",
+      "fetched_at": "2026-09-11T02:57:48.342043+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "b232198e1ecd39798f972597c93d5025197955099610139cd61875ed6ec9a7ea",
+      "bytes": 1503199
+    },
+    "33_3_330030044_3": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211005181131764.pdf",
+      "fetched_at": "2026-09-11T02:57:52.234904+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "1321190ad5f6fc736ec2c510683b844abc90197de71a4b9c04ef045e98266809",
+      "bytes": 1462900
+    },
+    "33_3_330030041_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211006140858962.pdf",
+      "fetched_at": "2026-09-11T02:57:55.478287+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "feca1d2fb3966533b824a4ce8379e24b1a4f8e62a96c67e970552c7ed622eb9a",
+      "bytes": 5415758
+    },
+    "33_3_330030033_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211001191043619.pdf",
+      "fetched_at": "2026-09-11T02:58:05.613903+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "55fd0098fc0dd6daeaeb772fd6531e275244423b9e96ab7303a2165e4effc220",
+      "bytes": 3591612
+    },
+    "33_3_330030040_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211001165326778.pdf",
+      "fetched_at": "2026-09-11T02:58:10.058362+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "51ce666c54e243874659d10ab3179b243b6662f33505908a2a23a5a6320f8ee7",
+      "bytes": 3426964
+    },
+    "33_3_330030032_7": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211005175951792.pdf",
+      "fetched_at": "2026-09-11T02:58:14.137017+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "e9883ef938c8a458ae830bb506464d1e142e50cb4aacf4574ef3556a3bf34e94",
+      "bytes": 1524021
+    },
+    "33_3_330030043_9": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211001151009863.pdf",
+      "fetched_at": "2026-09-11T02:58:19.602828+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "d0a90e272faacc13ca461750d54cdedcf876310fa0e57404295f03399f1fce55",
+      "bytes": 2771835
+    },
+    "33_3_330030035_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211004200213473.pdf",
+      "fetched_at": "2026-09-11T02:58:27.263049+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "5bdb732902ee631b18f3b990dd98ab64faec737eba591eb52c29b6b710dcb95b",
+      "bytes": 333405
+    },
+    "33_3_330030048_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211001154555418.pdf",
+      "fetched_at": "2026-09-11T02:58:28.337890+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "0461adf1e208452401b5e657dd7fbcd249d1defde67acd66e228c59fe342550a",
+      "bytes": 3464446
+    },
+    "33_3_330030045_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211004122844779.pdf",
+      "fetched_at": "2026-09-11T02:58:28.512044+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "9034c6947c790892bc99aab77985442b58bf57c32d12c2ca33b99a95ef5a4498",
+      "bytes": 3649906
+    },
+    "33_3_330030037_3": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211005170858818.pdf",
+      "fetched_at": "2026-09-11T02:58:29.354121+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 1,
+      "sha256": "cafe601d949778d66ceca5142b36696d8357207c30da09c64c804b189797b977",
+      "bytes": 331403
+    },
+    "33_3_330030049_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211005163817542.pdf",
+      "fetched_at": "2026-09-11T02:58:34.797993+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "3516b03d44245076d6d9bbcbe1f34daad5063f10b3957fcf4982b30cbf2656f1",
+      "bytes": 3203092
+    },
+    "33_3_330030038_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211004111957473.pdf",
+      "fetched_at": "2026-09-11T02:58:37.946772+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "e9b253bb1112409e8a070985c71abb6b01004a50b10a341b585d4d1734c89c2c",
+      "bytes": 6443228
+    },
+    "33_3_330030046_7": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents5/NominationDoc/20211005163020432.pdf",
+      "fetched_at": "2026-09-11T02:58:55.257849+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "642c427e7e8030a6811387e6d55cfec663e0432c0c5e7dcdb91684a4ef1a86ed",
+      "bytes": 3154628
+    },
+    "33_2_330020017_6": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20211001111721483.pdf",
+      "fetched_at": "2026-09-11T02:58:55.874099+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "b2db2af27e83211da5d746640ca61d30f112f6cca8cb7c7c9c9b15a7cf7432e3",
+      "bytes": 2114949
+    },
+    "33_2_330020022_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20211001121423957.pdf",
+      "fetched_at": "2026-09-11T02:58:57.431127+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 8,
+      "sha256": "901fd9ca3407daee12340fe20cc5e878021a31fadaf97b0bd84ef8d421e7edf2",
+      "bytes": 3181589
+    },
+    "33_2_330020029_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20211001114007228.pdf",
+      "fetched_at": "2026-09-11T02:59:03.967292+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 14,
+      "sha256": "bda0a8b593813a9e43bb30584e556003be1ffa80f220993c079de868feefd68c",
+      "bytes": 1756729
+    },
+    "33_2_330020018_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210928084741230.pdf",
+      "fetched_at": "2026-09-11T02:59:08.690232+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "705bcc799c23374e4e93a52531122152f7e79e281a8014345e2796839c450937",
+      "bytes": 2338757
+    },
+    "33_2_330020021_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210927185532861.pdf",
+      "fetched_at": "2026-09-11T02:59:14.983497+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "865a7b770c7fd4372df6431b13ddf78324b3c4f55ca5e0938ef096a198d6542a",
+      "bytes": 4387361
+    },
+    "33_2_330020023_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20211001150127906.pdf",
+      "fetched_at": "2026-09-11T02:59:17.180366+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 15,
+      "sha256": "05ae395f1025ac04d4e33422e374774ac7ce5f04375036263f78bcedbdf7ceb2",
+      "bytes": 6529146
+    },
+    "33_2_330020024_3": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20211001120415201.pdf",
+      "fetched_at": "2026-09-11T02:59:18.726246+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 10,
+      "sha256": "b2ed68a3a73eae36e67900565ac56c7cc3ce49c80604b45214f1f330cadd2f63",
+      "bytes": 3776243
+    },
+    "33_2_330020028_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210929065303626.pdf",
+      "fetched_at": "2026-09-11T02:59:26.821079+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "d8a34d78b59a7211f5d924457a749ef76b67994735a5fcd9ad476d56a79a7e66",
+      "bytes": 1942842
+    },
+    "33_2_330020019_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210930160437577.pdf",
+      "fetched_at": "2026-09-11T02:59:32.081571+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "7ae5c59bbb786f83740d37d1bd6319fb572aa82a50a742fbe240b72b978c71bf",
+      "bytes": 2552125
+    },
+    "33_2_330020025_5": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210929074827430.pdf",
+      "fetched_at": "2026-09-11T02:59:38.887447+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "8a84daa8370cba26c8a39e58e1151653be64a078d55f53bfe5e7b4cc3fa10401",
+      "bytes": 2135565
+    },
+    "33_2_330020030_3": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210929074343231.pdf",
+      "fetched_at": "2026-09-11T02:59:44.642032+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "02d9947e9af655da3340b470b164f07f73a6258f130b98a4973603769d6a5c67",
+      "bytes": 1944274
+    },
+    "33_2_330020027_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210927171102501.pdf",
+      "fetched_at": "2026-09-11T02:59:49.798389+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 14,
+      "sha256": "d1f88126055625f4548f3f48a44428866ba32dd1407721c7da5a5ac9a58002f4",
+      "bytes": 4663249
+    },
+    "33_2_330020016_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20211001204846693.pdf",
+      "fetched_at": "2026-09-11T02:59:57.240235+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 13,
+      "sha256": "23412e733cea70fc7f22f6bca65b1ed56efc95120e91ae4c63ce2ffd5563af54",
+      "bytes": 4704631
+    },
+    "33_2_330020020_2": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210930151007148.pdf",
+      "fetched_at": "2026-09-11T02:59:57.949565+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 19,
+      "sha256": "a786f3fe8cc253911b9ef7a4a916b190779489ce1ad4d5b3a79b06c9901bf66e",
+      "bytes": 658145
+    },
+    "33_2_330020026_3": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents4/NominationDoc/20210927224848414.pdf",
+      "fetched_at": "2026-09-11T03:00:02.485346+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 9,
+      "sha256": "2e858f9f5ddb6f105ece857963926acad085b9938625c644bcbadbf0a1dde894",
+      "bytes": 2871309
+    },
+    "33_4_330040050_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210903151437943.pdf",
+      "fetched_at": "2026-09-11T03:00:04.857778+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "c9f15f0f60f2d732ee6a2bf817c758630e60672033d406d63d55ff66fc6ce8ce",
+      "bytes": 744123
+    },
+    "33_4_330040057_9": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210904165430993.pdf",
+      "fetched_at": "2026-09-11T03:00:10.502987+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 14,
+      "sha256": "1d269811e5fb09691ea4b475dee7b86fe15028195496a0b0a8a2ecc4956a4112",
+      "bytes": 972188
+    },
+    "33_4_330040055_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210903142312529.pdf",
+      "fetched_at": "2026-09-11T03:00:17.319852+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "5ec96b9a1d903f8b25210b05d40bea81015d7b5941ae5a16663e3ea51ee7b346",
+      "bytes": 1442035
+    },
+    "33_4_330040056_7": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210909074534144.pdf",
+      "fetched_at": "2026-09-11T03:00:27.023052+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "1fb4e84afd2929bde0983f50d7dd6dd424c0df9f67a3316356e2700b497efd27",
+      "bytes": 1043945
+    },
+    "33_4_330040054_1": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210902162247682.pdf",
+      "fetched_at": "2026-09-11T03:00:29.862698+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "060d27678a2b870a63ea7852daef9060643a84cf3c9d7a964318fbb2a226a684",
+      "bytes": 1325873
+    },
+    "33_4_330040053_4": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210909121657954.pdf",
+      "fetched_at": "2026-09-11T03:00:35.431926+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "3edc0a220f506d4fdf7075bf599930d0d5bef73341429857dbc92eb1a543eced",
+      "bytes": 1481968
+    },
+    "33_4_330040051_6": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210903195824803.pdf",
+      "fetched_at": "2026-09-11T03:00:35.928602+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 12,
+      "sha256": "b6ddfd6ae5c1264572d2b309a6ca6be10813fc098c320137c326f7e0eb901e4f",
+      "bytes": 1408488
+    },
+    "33_4_330040052_8": {
+      "url": "https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210903220907583.pdf",
+      "fetched_at": "2026-09-11T03:00:42.450739+00:00",
+      "ok": true,
+      "status": 200,
+      "pages": 11,
+      "sha256": "023ecd4d4f44f29025adfcb96f7228868d7225d04962644c056f1f1c6193659c",
+      "bytes": 1073648
+    }
+  },
+  "page_artifact_sha256": {
+    "education_pages/33_1_330010010_6_p12.png": "b656641c1e4c8849d43386d300a8bd5e2c3c8e0ac8771deca40b8346fcd0a5c4",
+    "education_pages/33_1_330010010_6_p14.png": "8795bb3e28441c94421aecb8c30b49435b4d19e15e44edcd9a6f10773d9b785c",
+    "education_pages/33_1_330010011_4_p12.png": "dd1985bcd861e0fb7daf388b90880cbd70c983c42703b2fe3fc960d33d2a7b62",
+    "education_pages/33_1_330010013_3_p12.png": "b1e1dc178335b6cbcb9d09414a693eac5d2a15956ad1f9d6254cc8166576bb56",
+    "education_pages/33_1_330010008_5_p10.png": "9e49e950acf4770cb75349b2c8899748d8af68c14678f9b0cb43627fdf0de162",
+    "education_pages/33_1_330010008_5_p09.png": "1ed24b9cee25bfa8a1da0130f82268a5fbe832a214435a7a46a344aff0c3a186",
+    "education_pages/33_1_330010015_9_p16.png": "679d1c438fc80791e3474bf60aacecff464abf28fee97faf41c1b52445c49756",
+    "education_pages/33_1_330010005_9_p13.png": "a4ed030213adf894ee0d35a12bebab4a32db4ba535fc27afc2d53f8e7334ac39",
+    "education_pages/33_1_330010005_9_p01.png": "5ec39807ce4c15e2450fafe7768b954c06f7f923dd870ce48bf166cecbfa8e7a",
+    "education_pages/33_1_330010017_6_p12.png": "f56aac063f93af372e9c3d01a396e952dd64e56115cd6072d4bc1a1bc2011ca6",
+    "education_pages/33_1_330010014_1_p12.png": "0d48dbce43c58adc74a8b95989fb7a517012f12bfc0d55e3fb65fcfeed480114",
+    "education_pages/33_1_330010004_4_p14.png": "5df0ce642efe19679cd0d7ada80ba6bf29dbe45105e3d639adc0711e16fa684f",
+    "education_pages/33_1_330010002_2_p12.png": "d4f32cb3de99c0757b4ebe5adebd762ea5b46c3d53e0ee120a00b7d102448149",
+    "education_pages/33_1_330010012_4_p12.png": "9f8a712a94abbe8514c30abbd465664a6d1ed16c77bbbdd3d88482adf93711c7",
+    "education_pages/33_1_330010001_2_p12.png": "3c78a8ac321b9213273d2ad5d281002215cd443a929f3efc02938de1176e564f",
+    "education_pages/33_5_330050068_1_p13.png": "8ce7ca5c9485726a05bb5db3ae88d30d130eefe575fddc75f00036a9084fc95c",
+    "education_pages/33_5_330050058_14_p10.png": "82148ca32b38ad31637a0817a96cda184433e7e4f427f25437930e4a43c5bcf9",
+    "education_pages/33_5_330050061_1_p11.png": "58b8a23b2dbf736e76a65a5be0067723a5348767815d691cc0e2745e7aaef920",
+    "education_pages/33_5_330050059_2_p11.png": "1e609c32fb821c4709f5dc758afef85c7df74c5df50e2a129ca190ef6f3987ed",
+    "education_pages/33_5_330050065_7_p10.png": "909fac5ffc43de58112c6f9175db6b2b5733c13a0bb2a19470714aa5dbb99bcd",
+    "education_pages/33_5_330050067_4_p11.png": "c4709578e0736a4559d572b1ff42ebc2055eed3c826602e409cae20e89e71d3d",
+    "education_pages/33_5_330050060_6_p11.png": "cbb876d6c2273d527488ca942050fa8110dc81cd5d4f1c472333703f03ced592",
+    "education_pages/33_5_330050062_8_p11.png": "56a44e0f7dea024560202b5fd0ee5753541e6448c0346d978efc2cdd588c77b4",
+    "education_pages/33_5_330050066_2_p11.png": "b1e5770f3468ccc8f9231457d17e48223a911c9676c2a9a744e0b89d0318c1a2",
+    "education_pages/33_5_330050064_2_p11.png": "215aed917f6f96b5969f1e29a12bf043667a94af41bda6281f50d734e72bc299",
+    "education_pages/33_3_330030031_3_p08.png": "4ea27345045f677ead1a1760544daf3ab8aae6f0ad1f4fc6f35a42ed21171908",
+    "education_pages/33_3_330030047_1_p09.png": "22ae17bfafa2abb99d3cd89a367e4d81d3356a7fea26c3052aa8bbba422729e9",
+    "education_pages/33_3_330030047_1_p08.png": "ca6e0f574a49842949aba7a59024429f94dc2c815b0af3510491d9412ca8fa2b",
+    "education_pages/33_3_330030042_2_p09.png": "d82fc2f65455dfde26329b435b2da265c184bc7e983f33d85b76ab55c3dd862c",
+    "education_pages/33_3_330030036_2_p09.png": "1be8548104b21f9e8c2f688a8e91239d4666eb1d61c3ebb196432b3ddb044621",
+    "education_pages/33_3_330030034_1_p09.png": "2bcd4db587580cbcfd3998f13d84af3ac7f4c227dd888cf9d0febe212e44da15",
+    "education_pages/33_3_330030039_4_p09.png": "6d8354b8bc09f4f75fe846c240588705610edcbf1ad09298f149b2b7f27a3424",
+    "education_pages/33_3_330030044_3_p09.png": "3c1cb05d65cf8b8f8fbf71bc09bb35677e5238fcbf7c4fd6167631a17eee5cb3",
+    "education_pages/33_3_330030041_2_p09.png": "ff137b85b0d1d91b0e204e1bcd850d929f394d7c4e9db30a240e019a64898741",
+    "education_pages/33_3_330030033_5_p11.png": "a615f1b8d5994d1771fb215b886fa82caeece454557b8870c732434fcb96bf92",
+    "education_pages/33_3_330030040_5_p09.png": "a98d65b38831b7563d642340d037ad606ecd36c985b2f53ec7be73fa349da516",
+    "education_pages/33_3_330030032_7_p08.png": "f7d3042b1a16f4b58b02fd706155818ecb94b2f79ad781e58f2b31483209d52a",
+    "education_pages/33_3_330030043_9_p09.png": "c69ccf3aca3ffa4325fdd0f187ccc4b62c8ff6ce69851ca742bdbd9c279cf248",
+    "education_pages/33_3_330030035_4_p09.png": "1efb66ed1ee84eba4a7abb5c9eb14ca95729e2c01fa59c89ff21c265dbdd9829",
+    "education_pages/33_3_330030048_5_p09.png": "7f7fc3d97194f525d473ec529a64e9e398fc5fb801bcef48ccc476644b4588b7",
+    "education_pages/33_3_330030045_4_p09.png": "aa6d310392e884dab04408c3db2f547bd200f9ede431f2a948c4ab974a2aa84b",
+    "education_pages/33_3_330030037_3_p01.png": "44783b4296807f32e948e05906384284556433237e8bc626c04df449cac71047",
+    "education_pages/33_3_330030049_5_p09.png": "c64c541cf8e74b158572ee39b9f5b8526ec26ba7f5660308501d25778fdf8655",
+    "education_pages/33_3_330030038_1_p09.png": "c26cf245102062cfe299fb14e12e21dae7cde46374b8cea8f0f8e5cbb01ed781",
+    "education_pages/33_3_330030046_7_p09.png": "1cc6fc5e3b0fa2918cb0213d0b9272f3ddadc7dc0c04365d20d71b3e1db05b3e",
+    "education_pages/33_2_330020017_6_p07.png": "0391d70fe812f99aaa66ddac16e9027e150937cabe8a8cf08c8b2e9247b702fd",
+    "education_pages/33_2_330020022_2_p07.png": "be0c3106cef2d868ea8250f0ef4efdc8edb6470b946a512d200a2609d54d8c97",
+    "education_pages/33_2_330020029_4_p09.png": "49119c5a03d7c93ca269de2c1b85cc374154eb68c624ab669ebfe3c6d5d9f3a2",
+    "education_pages/33_2_330020018_1_p09.png": "a2f26ca0b005caf7b36d6554b52d6635e235bb70ed6a45a09e525a798b27f2b6",
+    "education_pages/33_2_330020021_5_p09.png": "1f4053cfc4852abd32fb40396c40d14be127c5542d1fc79062c5a1b8dd290e46",
+    "education_pages/33_2_330020023_5_p10.png": "dfde6a51ba9e5a1aea3e455b2a70d6c101a683cbd43d2a87ada29806e358e626",
+    "education_pages/33_2_330020024_3_p08.png": "797907df95faa1a1494ca08f90c614c9acf849f830a00b61e88d0a5744e8a916",
+    "education_pages/33_2_330020028_4_p08.png": "52f0ae97e9a08053cdaf13389375b6b57e09c8811345e8de2d7fdf048f66577f",
+    "education_pages/33_2_330020019_4_p11.png": "b0760b63f04c10c7478bdf6a826493afaf8f8b08e1f06fa6444138683401a0df",
+    "education_pages/33_2_330020025_5_p09.png": "704606bfae7d381356c744decb07ad308a1579e98b5f34673d150bbc4cce1c4e",
+    "education_pages/33_2_330020030_3_p08.png": "2907601463736303a1e17a7682197966fcb4fc14a841f22f7c63f5c73def725a",
+    "education_pages/33_2_330020027_1_p08.png": "afa67bfa84e677916d72efc36fd40d85cacc08d367533f9528d0a98ec00cf213",
+    "education_pages/33_2_330020027_1_p07.png": "6b6dbcc3416e29012120be306bf216f7cbb0892f7cea7a46f985ee842ea61026",
+    "education_pages/33_2_330020016_2_p12.png": "96d59209615148518060a245eee8c73a5ea2587313e29cf76f65a67b0e09f8ec",
+    "education_pages/33_2_330020020_2_p12.png": "307cedd6491fea1a2783d03c266a917e1f0a223d9b491baffa3c475eb58a9cad",
+    "education_pages/33_2_330020020_2_p11.png": "a4488423195f75f62654c0c6081abedb0fd6504f1e155f5d55eff0d5b6a0b3b6",
+    "education_pages/33_2_330020026_3_p08.png": "5fdb23cafeaf420fc7b8edd909a05708cf29e8a8fe803e64dda7cfcab81242cf",
+    "education_pages/33_4_330040050_4_p11.png": "0c36ada8a8fc998ffc36e34ba1ba1cfa6afb1ee0c2a6647559e7c8188963ff20",
+    "education_pages/33_4_330040057_9_p11.png": "149936590d9ddc2a9fe43b4b2db8efe1c1b926265679b5fa86c2d1f94f32f60e",
+    "education_pages/33_4_330040057_9_p10.png": "d2ca784ca799f141af39dd4829a99ae3dcc069cb78f9e7cc7979fc8bd8079a69",
+    "education_pages/33_4_330040055_4_p11.png": "22cb54d1afeb9315fbc862c1e49ebf9cd6c8a6bdb4fc908041ebef6a4b48b765",
+    "education_pages/33_4_330040056_7_p11.png": "d0733c8a76e3e5a21fecacaf5bdb170544622af2f5aaf024ec3e22ffe3b681f4",
+    "education_pages/33_4_330040054_1_p11.png": "f1c38cc2cbd487ba18ced6bd757497503c1c1b5dd464ca2fee2439142c2cb8d9",
+    "education_pages/33_4_330040053_4_p11.png": "d91d5a48813435fe08b2db3285e93f90b8a05d19848b59e18faaf9118d6d7efa",
+    "education_pages/33_4_330040051_6_p11.png": "c3074be696608bfa4c29dda4c180b9a2881fde8cddb11cb8a706db5d1cec8b1c",
+    "education_pages/33_4_330040052_8_p11.png": "2d57e8a19dfce7102350960e41b8c625909635ce91bb69c9c41d741bc0c861e8"
+  }
+}

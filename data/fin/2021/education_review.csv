@@ -1,0 +1,65 @@
+document_id,page,education_raw,education_category,graduate_plus,illiterate,prior_elected,reservation_raw,quota_document,review_status,notes,additional_pages,page_kind
+33_1_330010001_2,12,B.A.,graduate,1,0,0,General Female,1,visually_checked,,,candidate_biography
+33_1_330010002_2,12,नॉन मैट्रिक,below_secondary,0,,1,सामान्य,0,visually_checked,Non-matric does not establish literacy; mukhiya since 2016,,candidate_biography
+33_1_330010004_4,14,B.Sc,graduate,1,0,0,General,0,visually_checked,,,candidate_biography
+33_1_330010005_9,13,INTERMEDIATE,intermediate,0,0,0,GENERAL,0,visually_checked,Candidate name blank on English biography; father Rajendra Singh and panchayat agree with named receipt on page 1,1,candidate_biography
+33_1_330010008_5,10,I.Sc,ambiguous,,0,0,अनारक्षित (महिला),1,needs_review,I.Sc-like initial uncertain on biography and affidavit; degree status unassigned pending second review,9,candidate_biography
+33_1_330010010_6,12,इंटर,intermediate,0,0,1,अतिपिछड़ा वर्ग,,visually_checked,Hindi and English candidate biographies agree on intermediate; reservation sex unspecified,14,candidate_biography
+33_1_330010011_4,12,इंटर पास,intermediate,0,0,0,सामान्य महिला,1,visually_checked,,,candidate_biography
+33_1_330010012_4,12,पांचवा,primary,0,0,1,अनुसूचित महिला,1,visually_checked,,,candidate_biography
+33_1_330010013_3,12,B.Sc. B.ed,graduate,1,0,0,अनुसूचित जाति,,visually_checked,Reservation field gives caste but does not specify women/other,,candidate_biography
+33_1_330010014_1,12,मैट्रिक,secondary,0,0,0,सामान्य महिला,1,visually_checked,Sideways biography,,candidate_biography
+33_1_330010015_9,16,B.ed,graduate,1,0,0,E.B.C. f,1,visually_checked,,,candidate_biography
+33_1_330010017_6,12,स्नातक,graduate,1,0,0,अनारक्षित अन्य,0,visually_checked,,,candidate_biography
+33_2_330020016_2,12,LITERATE,literate,0,0,1,Schedule Cast Leady,1,visually_checked,,,candidate_biography
+33_2_330020017_6,7,Literate,literate,0,0,0,General,0,visually_checked,,,candidate_biography
+33_2_330020018_1,9,NINTH,below_secondary,0,0,0,E.B.C.,,visually_checked,"Biography names MOHAMMAD KAIS ANSARI, consistent with longer result name; reservation sex unspecified",,candidate_biography
+33_2_330020019_4,11,INTER,intermediate,0,0,0,GENERAL,0,visually_checked,,,candidate_biography
+33_2_330020020_2,12,I.Sc,ambiguous,,0,0,General Mahila,1,needs_review,Initial in I.Sc-like qualification uncertain; page 11 repeats same handwriting; degree status unassigned,11,candidate_biography
+33_2_330020021_5,9,साक्षर,literate,0,0,1,पिछड़ा वर्ग महिला,1,visually_checked,Gram kachahari sarpanch in 2006 and 2011,,candidate_biography
+33_2_330020022_2,7,,missing_document,,,,अनारक्षित अन्य,0,source_missing,"All eight pages inspected; candidate biography and education page absent; page 7 is proposer biography, used only for seat reservation",,proposer_biography
+33_2_330020023_5,10,MATRIC,secondary,0,0,0,S.C.,,visually_checked,Reservation sex unspecified,,candidate_biography
+33_2_330020024_3,8,मैट्रिक,secondary,0,0,0,अनारक्षित,0,visually_checked,,,candidate_biography
+33_2_330020025_5,9,MATRIC,secondary,0,0,1,S.C.,,visually_checked,Reservation sex unspecified,,candidate_biography
+33_2_330020026_3,8,साक्षर,literate,0,0,0,सामान्य,0,visually_checked,,,candidate_biography
+33_2_330020027_1,8,स्नातक,graduate,1,0,0,अनारक्षित,0,visually_checked,Education from candidate affidavit,7,candidate_biography
+33_2_330020028_4,8,साक्षर,literate,0,0,0,सामान्य महिला,1,visually_checked,,,candidate_biography
+33_2_330020029_4,9,SAKSHER,literate,0,0,0,GENERAL MAHILA,1,visually_checked,,,candidate_biography
+33_2_330020030_3,8,स्नातक इंजिनियरिंग (B.tech - Biotechnology),graduate,1,0,1,अनारक्षित,0,visually_checked,,,candidate_biography
+33_3_330030031_3,8,स्नातक,graduate,1,0,1,अनारक्षित अन्य,0,visually_checked,Mukhiya in 2006 and 2011,,candidate_biography
+33_3_330030032_7,8,मैट्रिक,secondary,0,0,0,अनारक्षित अन्य,0,visually_checked,,,candidate_biography
+33_3_330030033_5,11,मैट्रिक,secondary,0,0,,,,visually_checked,Education from candidate affidavit,,candidate_affidavit
+33_3_330030034_1,9,मैट्रिक,secondary,0,0,0,अजा आरक्षित महिला,1,visually_checked,,,candidate_biography
+33_3_330030035_4,9,साक्षर,literate,0,0,1,अनु जाति महिला,1,visually_checked,,,candidate_biography
+33_3_330030036_2,9,साक्षर,literate,0,0,0,अनारक्षित महिला,1,visually_checked,,,candidate_biography
+33_3_330030037_3,1,,missing_document,,,,पिछड़ा वर्ग महिला,1,source_missing,Source PDF contains only a one-page nomination fee receipt; no education declaration,,fee_receipt
+33_3_330030038_1,9,स्नातक,graduate,1,0,1,अनारक्षित अन्य,0,visually_checked,,,candidate_biography
+33_3_330030039_4,9,इंटर,intermediate,0,0,1,अनारक्षित महिला,1,visually_checked,,,candidate_biography
+33_3_330030040_5,9,इण्टर,intermediate,0,0,,,,visually_checked,Education from candidate affidavit,,candidate_affidavit
+33_3_330030041_2,9,साक्षर,literate,0,0,,अनुसूचित जाति अन्य,0,visually_checked,Prior-office field blank,,candidate_biography
+33_3_330030042_2,9,इंटर,intermediate,0,0,1,अनारक्षित महिला,1,visually_checked,,,candidate_biography
+33_3_330030043_9,9,मैट्रिक,secondary,0,0,1,अतिपिछड़ा,,visually_checked,Reservation field does not specify women/other,,candidate_biography
+33_3_330030044_3,9,इंटर,intermediate,0,0,0,अनारक्षित महिला,1,visually_checked,,,candidate_biography
+33_3_330030045_4,9,मैट्रिक,secondary,0,0,0,अनारक्षित,0,visually_checked,,,candidate_biography
+33_3_330030046_7,9,इंटरमीडिएट आर्ट्स,intermediate,0,0,1,अन्य महिला,1,visually_checked,,,candidate_biography
+33_3_330030047_1,9,मध्य वि केयाल,school_only,,,0,पिछड़ा वर्ग अन्य,0,needs_review,Biography education blank; affidavit page 8 names a middle school without qualification or completed grade,8,candidate_biography
+33_3_330030048_5,9,मैट्रिक,secondary,0,0,0,अनारक्षित,0,visually_checked,,,candidate_biography
+33_3_330030049_5,9,साक्षर,literate,0,0,1,सामान्य महिला,1,visually_checked,,,candidate_biography
+33_4_330040050_4,11,इंटर,intermediate,0,0,0,अनारक्षित अन्य,0,visually_checked,,,candidate_biography
+33_4_330040051_6,11,मैट्रिक,secondary,0,0,0,सुरक्षित महिला,1,visually_checked,Candidate biography names Sunita Devi; result suffix 1 retained in result_name,,candidate_biography
+33_4_330040052_8,11,सप्तम उत्तीर्ण,below_secondary,0,0,0,महिला सामान्य,1,visually_checked,Grade seven,,candidate_biography
+33_4_330040053_4,11,I.A. Passed out,intermediate,0,0,1,पिछड़ा वर्ग,,visually_checked,"Reservation sex unspecified; ward member 2006, samiti 2011, mukhiya 2016",,candidate_biography
+33_4_330040054_1,11,मैट्रिक,secondary,0,0,1,सामान्य,0,visually_checked,Mukhiya in 2011,,candidate_biography
+33_4_330040055_4,11,स्नातक,graduate,1,0,1,अनारक्षित अन्य,0,visually_checked,,,candidate_biography
+33_4_330040056_7,11,साक्षर,literate,0,0,1,अनारक्षित महिला,1,visually_checked,,,candidate_biography
+33_4_330040057_9,11,स्नातक,graduate,1,0,1,आरक्षित अनु जाति अन्य,0,visually_checked,B.A. pass on affidavit page 10 corroborates graduate biography,10,candidate_biography
+33_5_330050058_14,10,स्नातक,graduate,1,0,0,अनारक्षित अन्य,0,visually_checked,Woman elected to an open seat,,candidate_biography
+33_5_330050059_2,11,इंटर,intermediate,0,0,1,सामान्य,0,visually_checked,Mukhiya in 2006 and 2011,,candidate_biography
+33_5_330050060_6,11,मैट्रिक,secondary,0,0,0,,,visually_checked,Reservation field blank on biography,,candidate_biography
+33_5_330050061_1,11,EDUCATED,unspecified_educated,,0,1,GENERAL FEMALE,1,visually_checked,Degree level unspecified,,candidate_biography
+33_5_330050062_8,11,स्नातक,graduate,1,0,1,सामान्य महिला,1,visually_checked,,,candidate_biography
+33_5_330050064_2,11,साक्षर,literate,0,0,0,अतिपिछड़ा (अन्य),0,visually_checked,,,candidate_biography
+33_5_330050065_7,10,मैट्रिक; अन्तर स्नातक,ambiguous,,0,,,,needs_review,Affidavit lists matric and an ambiguous subsequent qualification; degree status unassigned,,candidate_affidavit
+33_5_330050066_2,11,इंटर,intermediate,0,0,0,अनुसूचित जाति,,visually_checked,Reservation field gives caste but does not specify women/other,,candidate_biography
+33_5_330050067_4,11,SHACHAR,literate,0,0,0,,,visually_checked,Transliteration of sakshar; reservation field blank,,candidate_biography
+33_5_330050068_1,13,मैट्रिक,secondary,0,0,1,सामान्य,0,visually_checked,,,candidate_biography
