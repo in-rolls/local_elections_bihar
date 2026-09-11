@@ -76,7 +76,9 @@ def fetch(raw, key, page, params=None, *, html=False):
     path = raw / f"{key}.jsonl.gz"
     cached = completed(path)
     if cached:
-        if cached["page"] != page or cached["params"] != params:
+        if cached["page"] != page or {
+            k: str(v) for k, v in (cached["params"] or {}).items()
+        } != {k: str(v) for k, v in (params or {}).items()}:
             raise ValueError("Checkpoint request differs from requested unit")
         return base64.b64decode(cached["body_base64"])
     path.parent.mkdir(parents=True, exist_ok=True)

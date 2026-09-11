@@ -122,3 +122,20 @@ def test_2021_requires_explicit_phase(tmp_path):
     archive(path, [row], phase="2026_1")
     with pytest.raises(ValueError, match="phase"):
         sec_2021.parse(raw, tmp_path / "out")
+
+
+def test_cached_request_accepts_equivalent_url_parameter_types(tmp_path):
+    from sec_portal import fetch
+
+    path = tmp_path / "cached.jsonl.gz"
+    event = {
+        "ok": True,
+        "page": "Result",
+        "params": {"panchayatId": "123"},
+        "body_base64": base64.b64encode(b"[]").decode(),
+    }
+    with gzip.open(path, "wt") as stream:
+        stream.write(json.dumps(event) + "\n" + json.dumps({"done": True}) + "\n")
+    assert fetch(tmp_path, "cached", "Result", {"panchayatId": 123}) == b"[]"
+    with pytest.raises(ValueError, match="Checkpoint request"):
+        fetch(tmp_path, "cached", "Result", {"panchayatId": 124})
