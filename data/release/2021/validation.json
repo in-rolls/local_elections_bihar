@@ -1,0 +1,21 @@
+{
+  "candidate_records": 66430,
+  "result_records": 66392,
+  "candidate_only_records": 38,
+  "result_only_records": 0,
+  "panchayats_enumerated": 8067,
+  "districts": 38,
+  "blocks": 533,
+  "winner_records": 8050,
+  "winner_status": {
+    "flagged": 8050,
+    "no_winner_flag": 8,
+    "empty_results": 9
+  },
+  "candidate_gender_raw": {
+    "महिला": 33952,
+    "पुरुष ": 32462,
+    "अन्य": 16
+  },
+  "winner_missing_affidavit_url": 0
+}

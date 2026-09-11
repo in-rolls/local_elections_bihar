@@ -1,0 +1,14 @@
+{
+  "archive": "statewide_2021.tar.gz",
+  "sha256": "1bc11a97596d0b0bfa49f380e4a4af8747870b9fbb3a687cfcc8a4dcd4b1e6d3",
+  "bytes": 34693656,
+  "restore_root": "data/raw/statewide_2021",
+  "contents": [
+    "frame.parquet",
+    "2021/"
+  ],
+  "source": "https://sec25.bihar.gov.in/sec_new/Panchayat/Result",
+  "phase": "2021_1",
+  "collection_date": "2026-09-10",
+  "request_receipts": "../release/2021/MANIFEST.json"
+}

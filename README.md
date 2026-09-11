@@ -3,7 +3,7 @@
 [![CI](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml/badge.svg)](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 
-Bihar local-election records from the State Election Commission: six offices in 2016, a statewide mukhiya index from the current 2021–2026 portal, and an explicitly dated 2021 mukhiya pilot in Arwal. Source responses, typed exports, checksums and collection tools are included.
+Bihar local-election records from the State Election Commission: six offices in 2016, a statewide mukhiya index from the current 2021–2026 portal, and statewide candidate lists and results explicitly dated 2021. Source responses, typed exports, checksums and collection tools are included.
 
 ## 2016 data
 
@@ -72,18 +72,18 @@ The [historical implementation](https://github.com/in-rolls/local_elections_biha
 | Collection | Coverage | Records | Files |
 |---|---|---:|---|
 | Current mukhiya winner index | All 38 districts and 533 blocks listed by the portal | 8,067 winners | [Winners](data/fin/portal_2021_2026/winners.parquet), [seat reservations](data/fin/portal_2021_2026/reservations.parquet), [manifest](data/fin/portal_2021_2026/MANIFEST.json) |
-| Explicit 2021 mukhiya pilot | Arwal: 5 blocks, 64 panchayats | 559 candidacies, 64 winners | [Candidate lists and results](data/fin/2021/mukhiya_2021.parquet), [manifest](data/fin/2021/MANIFEST.json) |
+| Explicit 2021 mukhiya election | 38 districts, 533 blocks, 8,067 enumerated panchayats | 66,430 candidacies; 66,392 result records; 8,050 flagged winners | [Candidates](data/release/2021/gp_head_candidates_2021.parquet), [winners](data/release/2021/gp_head_winner_records_2021.parquet), [coverage](data/release/2021/coverage.parquet), [validation](data/release/2021/validation.json) |
 | 2021 winner qualifications | All 64 Arwal winners inspected | Degree status classified for 57; unresolved for 7 | [CSV](data/fin/2021/education.csv), [Parquet](data/fin/2021/education.parquet), [transcriptions](data/fin/2021/education_review.csv), [sources and checksums](data/fin/2021/education.json) |
 
 Sources: SEC [winning candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/WinningCandidates), [seat reservations](https://sec25.bihar.gov.in/sec_new/Panchayat/Reservation), [contesting candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/ContestingCandidates), and [results](https://sec25.bihar.gov.in/sec_new/Panchayat/Result). Responses were collected on September 10, 2026. The statewide collection completed 533 winner requests and 533 reservation requests; it covers the portal's listed blocks, not an independently verified historical census of seats.
 
-**The statewide index has no election-year field.** Its `year` is null: the portal covers the 2021–2026 term and later by-elections. The Arwal pilot explicitly requests phase `2021_1`, displayed by the source as `2021`. Its 1,118 rows comprise 559 candidate-list records and 559 result records, distinguished by `kind`. They are not 1,118 candidacies. Each of the 64 panchayats has one recorded winner.
+**The statewide index has no election-year field.** Its `year` is null: the portal covers the 2021–2026 term and later by-elections. The separate statewide 2021 release requests phase `2021_1`, displayed as `2021`. All 66,392 result keys match candidate-list keys; 38 candidacies have no result record. Of 8,067 enumerated panchayats, 8,050 have one flagged winner, eight have results without a winner flag, and nine return empty results. All remain in the [coverage table](data/release/2021/coverage.parquet). The frame was retrieved in 2026; it is not an independent census of seats as constituted in 2021.
 
-**The Arwal education pilot is available.** All 64 winners were linked to candidate lists using district, block, panchayat and candidate serial, then their downloaded nomination PDFs were inspected. [The export](data/fin/2021/education.csv) retains the reported qualification, degree and literacy indicators, prior elected office, document reservation text, source URL, page number and PDF hash. [Inspected pages](data/fin/2021/education_pages) accompany the transcriptions.
+**Education has been transcribed for 64 Arwal winners.** All 64 winners were linked to candidate lists using district, block, panchayat and candidate serial, then their downloaded nomination PDFs were inspected. [The export](data/fin/2021/education.csv) retains the reported qualification, degree and literacy indicators, prior elected office, document reservation text, source URL, page number and PDF hash. [Inspected pages](data/fin/2021/education_pages) accompany the transcriptions.
 
 Degree status is unresolved for seven winners: two documents lack the candidate's education page, one names a school without a qualification, one says only “EDUCATED,” and three have ambiguous qualification text. Unknowns remain null. Reservation is classified from document text for 51 winners; 13 remain unspecified. Of the 25 document-classified women's reserved seats, 21 have classified degree status; the corresponding counts are 24 of 26 open seats and 12 of 13 seats with unspecified reservation. These are extraction counts, not reservation-effect estimates. [Coverage and provenance](data/fin/2021/education.json).
 
-Codex visually transcribed these records; there has been no independent second coding. Tesseract locates likely pages but does not assign qualifications. Candidate and proposer biographies are distinguished. Qualifications are self-reported, and a blank field is not evidence of illiteracy. The pilot covers Arwal only; statewide education extraction remains incomplete.
+Codex visually transcribed these records; there has been no independent second coding. Tesseract locates likely pages but does not assign qualifications. Candidate and proposer biographies are distinguished. Qualifications are self-reported, and a blank field is not evidence of illiteracy. These transcriptions cover Arwal; statewide affidavit acquisition is running. Statewide education extraction remains incomplete.
 
 <details>
 <summary>Inspect a qualification declaration</summary>
@@ -98,7 +98,7 @@ Rajanti Devi's candidate biography reports “इंटर पास” (interme
 
 - `district_id`, `block_id`, `post_id` and `panchayat_id` locate records. Candidate serials are scoped to election, office and full geography. IDs from different elections are not assumed to identify the same seat.
 - Winner exports retain `candidate_age`, `candidate_gender`, `candidate_category`, affidavit/photo URLs and source geography. `reservation_for_reported` and `reservation_status_reported` are fields from the winner feed; `seat_reservation` comes from the separate reservation feed. These fields are not interchangeable: the first Arwal block already contains a disagreement between the two feeds' caste-reservation labels.
-- The 2021 file keeps candidate lists and results separately. Candidate lists carry age, gender and document links; results carry votes and `elected`. All 559 geographic/serial keys occur once in each feed. After whitespace normalization, 91 pairs have different name text, including the source's winner suffix and numbered names. No name-based merge is imposed.
+- The 2021 file keeps candidate lists and results separately. Candidate lists carry age, gender and document links; results carry votes and `elected`. All geographic/serial keys are unique within each feed. All 8,050 winner keys match candidate lists, but 242 winner names differ literally after removing the winner suffix and surrounding whitespace. The differing names remain available; no name-based merge is imposed.
 - `source_url`, `fetched_at`, `source_sha256`, `source_row` and `raw_cell` trace each exported row to the saved response. Source cells remain unchanged in `raw_cell`; typed columns facilitate analysis. Schemas and hashes accompany the exports.
 - [Raw responses](data/raw/portal_2021_2026) are gzipped request ledgers with HTTP status, UTC time and the original response bytes encoded as base64. The geographic frame retains district/block/office paths. A completed checkpoint is reused; missing or truncated checkpoints are fetched again. HTML error pages are rejected rather than counted as empty results.
 
@@ -108,13 +108,29 @@ Collection uses three HTTP sessions. A nine-request pilot took 3.8 seconds with 
 uv run python scripts/sec_portal.py list
 caffeinate -dims uv run python scripts/sec_portal.py fetch --posts 3
 uv run python scripts/sec_portal.py parse
-caffeinate -dims uv run python scripts/sec_2021.py fetch --districts 33
-uv run python scripts/sec_2021.py parse
+./crawl.sh
 ```
 
 Omit `caffeinate -dims` outside macOS. The generic collector accepts post IDs 1–6: ward member, panch, mukhiya, sarpanch, panchayat samiti member and zila parishad member. The published current-portal collection is mukhiya only. Use `--districts` to restrict collection and `--workers` to set concurrency. Parsing is offline and can be rerun against the saved responses.
 
-### Rebuild the qualification pilot
+### State release and central import
+
+The [central repository](https://github.com/in-rolls/local_reservations) contract assigns collection, parsing and corrections to this repository. `local_reservations` imports the versioned state release through its Bihar adapter; `quota_elite_quality` consumes the harmonized data for analysis. The central adapter pins the 2021 table hashes and checks row counts, schemas, unique keys and winner/coverage reconciliation. The six 2016 inputs retain their existing paths.
+
+The 2021 release includes an explicit [schema](data/release/2021/SCHEMA.json), [dictionary](data/release/2021/dictionary.csv), [checksums](data/release/2021/CHECKSUMS), and [manifest](data/release/2021/MANIFEST.json) linking rows to saved SEC responses. Candidate and result observations retain separate source URLs, hashes and row locators. Missing results remain null. The undated current reservation feed is excluded from this release.
+
+Restore the complete [raw-response archive](data/raw/statewide_2021.tar.gz), then rebuild offline:
+
+```sh
+mkdir -p data/raw/statewide_2021
+tar -xzf data/raw/statewide_2021.tar.gz -C data/raw/statewide_2021
+make release-data
+make verify-2021
+```
+
+[Archive metadata](data/raw/statewide_2021_archive.json) records its checksum. `./crawl.sh` resumes collection and downloads every flagged winner's affidavit. PDFs are checked for a PDF signature, readable page count and SHA-256; failures are retained and retried on resume. The download stops before consuming the final 5 GiB of disk space. Live progress is saved to `data/interim/2021/download_status.parquet`, with one row for every requested winner, and a matching JSON summary. PDF bytes remain local during acquisition; the response archive and released tables are published.
+
+### Rebuild qualifications
 
 Install Poppler (`pdfinfo`, `pdftoppm`, `pdftotext`) and Tesseract with English and Hindi language data. On macOS, `brew install poppler tesseract tesseract-lang` supplies these tools; Ubuntu uses `poppler-utils tesseract-ocr tesseract-ocr-hin`.
 

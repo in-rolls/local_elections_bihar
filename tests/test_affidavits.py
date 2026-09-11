@@ -169,3 +169,62 @@ def test_changed_pdf_invalidates_cached_ocr(tmp_path, monkeypatch):
     assert not list(folder.glob("page_*"))
     assert not (folder / "pages.json").exists()
     assert affidavits.download(row)["sha256"] == metadata["sha256"]
+
+
+def test_download_status_preserves_pending_failed_and_corrupt_files(
+    tmp_path, monkeypatch
+):
+    import json
+
+    import affidavits
+
+    monkeypatch.setattr(affidavits, "ROOT", tmp_path / "pdfs")
+    rows = [
+        {
+            **dict(zip(affidavits.KEY, [1, 2, p, 1], strict=True)),
+            "document_id": str(p),
+            "affidavit_url": "https://example.test/file.pdf",
+        }
+        for p in range(3)
+    ]
+    for row in rows[1:]:
+        folder = affidavits.ROOT / row["document_id"]
+        folder.mkdir(parents=True)
+        (folder / "failure.json").write_text(json.dumps({"reason": "invalid PDF"}))
+    folder = affidavits.ROOT / "2"
+    (folder / "source.pdf").write_bytes(b"corrupt")
+    (folder / "download.json").write_text(
+        json.dumps(
+            {"ok": True, "url": rows[2]["affidavit_url"], "bytes": 100, "sha256": "x"}
+        )
+    )
+    out = tmp_path / "status.parquet"
+    summary = affidavits.download_status(rows, out)
+    assert summary["pending"] == 1 and summary["failed"] == 2
+    assert summary["downloaded"] == 0
+    assert pq.read_table(out).num_rows == 3
+
+
+def test_downloader_continues_after_source_failure(tmp_path, monkeypatch):
+    import affidavits
+
+    monkeypatch.setattr(affidavits, "ROOT", tmp_path / "pdfs")
+    seen = []
+    rows = [
+        {
+            **dict(zip(affidavits.KEY, [1, 2, p, 1], strict=True)),
+            "document_id": str(p),
+            "affidavit_url": "https://example.test/file.pdf",
+        }
+        for p in range(3)
+    ]
+
+    def download(row):
+        seen.append(row["document_id"])
+        if row["document_id"] == "1":
+            raise ValueError("bad PDF")
+
+    monkeypatch.setattr(affidavits, "download", download)
+    affidavits.download_all(rows, 1, tmp_path / "status.parquet")
+    assert seen == ["0", "1", "2"]
+    assert (affidavits.ROOT / "1/failure.json").exists()

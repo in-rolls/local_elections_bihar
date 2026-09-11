@@ -3,6 +3,7 @@
 import argparse
 import concurrent.futures
 import csv
+import gzip
 import hashlib
 import json
 import os
@@ -11,6 +12,7 @@ import shutil
 import subprocess
 import threading
 import time
+from collections import defaultdict, deque
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -24,6 +26,7 @@ from tenacity import Retrying, retry_if_exception_type, stop_after_delay
 LOCAL = threading.local()
 KEY = ["district_id", "block_id", "panchayat_id", "candidate_serial"]
 ROOT = Path("data/derived/affidavits_2021")
+MIN_FREE_BYTES = 5 * 1024**3
 
 
 def frame(source, out):
@@ -89,6 +92,8 @@ def download(row):
             and saved["sha256"] == hashlib.sha256(target.read_bytes()).hexdigest()
         ):
             return saved
+    if shutil.disk_usage(folder).free < MIN_FREE_BYTES:
+        raise OSError("Disk reserve reached; download paused")
     if not hasattr(LOCAL, "session"):
         LOCAL.session = requests.Session()
         LOCAL.session.headers["User-Agent"] = "local-elections-bihar research archive"
@@ -103,10 +108,13 @@ def download(row):
         try:
             r = LOCAL.session.get(row["affidavit_url"], timeout=(30, 180))
             event["status"] = r.status_code
+            event["final_url"] = getattr(r, "url", row["affidavit_url"])
             if r.status_code == 429 or r.status_code >= 500:
                 raise TransientError(
                     str(r.status_code), retry_after(r.headers.get("Retry-After"))
                 )
+            if r.status_code >= 400:
+                (folder / "http_error_response.bin").write_bytes(r.content)
             r.raise_for_status()
             if not r.content.startswith(b"%PDF"):
                 (folder / "unexpected_response.bin").write_bytes(r.content)
@@ -116,7 +124,13 @@ def download(row):
                 bytes=len(r.content),
             )
             part = target.with_suffix(".part")
+            if shutil.disk_usage(folder).free - len(r.content) < MIN_FREE_BYTES:
+                raise OSError("Disk reserve reached; download paused")
             part.write_bytes(r.content)
+            length = getattr(r, "headers", {}).get("Content-Length")
+            encoding = getattr(r, "headers", {}).get("Content-Encoding")
+            if length and not encoding and int(length) != len(r.content):
+                raise ValueError("PDF length differs from Content-Length")
             event["pages"] = pdf_pages(part)
             if target.exists() and file_hash(target) != event["sha256"]:
                 for pattern in ["page_*.txt", "page_*.png", "pages.json"]:
@@ -131,7 +145,7 @@ def download(row):
             raise
         finally:
             event["seconds"] = time.monotonic() - start
-            with (folder / "requests.jsonl").open("a") as log:
+            with gzip.open(folder / "requests.jsonl.gz", "at", encoding="utf-8") as log:
                 log.write(json.dumps(event) + "\n")
 
     return Retrying(
@@ -453,9 +467,141 @@ def export(frame_path, review_path, out):
     )
 
 
+def download_status(rows, out):
+    """Snapshot every requested document, including pending and failed work."""
+    records = []
+    for row in rows:
+        folder = ROOT / row["document_id"]
+        meta, failure = folder / "download.json", folder / "failure.json"
+        saved = json.loads(meta.read_text()) if meta.exists() else {}
+        pdf = folder / "source.pdf"
+        valid = (
+            saved.get("ok") is True
+            and saved.get("url") == row["affidavit_url"]
+            and pdf.exists()
+            and pdf.stat().st_size == saved.get("bytes")
+        )
+        error = json.loads(failure.read_text()) if failure.exists() else {}
+        records.append(
+            {
+                **{k: row[k] for k in KEY},
+                "document_id": row["document_id"],
+                "affidavit_url": row["affidavit_url"],
+                "download_status": "downloaded"
+                if valid
+                else ("failed" if error else "pending"),
+                "reason": None if valid else error.get("reason"),
+                "source_sha256": saved.get("sha256") if valid else None,
+                "bytes": saved.get("bytes") if valid else None,
+                "pages": saved.get("pages") if valid else None,
+                "fetched_at": saved.get("fetched_at") if valid else None,
+            }
+        )
+    schema = pa.schema(
+        [(k, pa.int64()) for k in KEY]
+        + [
+            (k, pa.string())
+            for k in [
+                "document_id",
+                "affidavit_url",
+                "download_status",
+                "reason",
+                "source_sha256",
+                "fetched_at",
+            ]
+        ]
+        + [(k, pa.int64()) for k in ["bytes", "pages"]]
+    )
+    out.parent.mkdir(parents=True, exist_ok=True)
+    temporary = out.with_suffix(".tmp")
+    pq.write_table(
+        pa.Table.from_pylist(records, schema=schema), temporary, compression="zstd"
+    )
+    temporary.replace(out)
+    summary = {
+        "at": datetime.now(UTC).isoformat(),
+        "documents": len(records),
+        **{
+            status: sum(r["download_status"] == status for r in records)
+            for status in ["downloaded", "failed", "pending"]
+        },
+        "bytes": sum(r["bytes"] or 0 for r in records),
+        "validation": "PDF signature/pages/SHA256 at download; size at snapshot",
+    }
+    out.with_suffix(".json").write_text(json.dumps(summary, indent=2) + "\n")
+    print(json.dumps(summary), flush=True)
+    return summary
+
+
+def download_all(rows, workers, out):
+    """Bound outstanding work; a source failure cannot discard other records."""
+    if workers < 1:
+        raise ValueError("workers must be positive")
+    districts = defaultdict(deque)
+    for row in rows:
+        districts[row["district_id"]].append(row)
+    interleaved = []
+    while any(districts.values()):
+        for queue in districts.values():
+            if queue:
+                interleaved.append(queue.popleft())
+    iterator = iter(interleaved)
+    completed_count = 0
+    last_snapshot = time.monotonic()
+    download_status(rows, out)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+        pending = {}
+
+        def submit():
+            row = next(iterator, None)
+            if row is not None:
+                pending[pool.submit(download, row)] = row
+
+        for _ in range(workers):
+            submit()
+        try:
+            while pending:
+                done, _ = concurrent.futures.wait(
+                    pending, timeout=60, return_when=concurrent.futures.FIRST_COMPLETED
+                )
+                if time.monotonic() - last_snapshot >= 60:
+                    download_status(rows, out)
+                    last_snapshot = time.monotonic()
+                for future in done:
+                    row = pending.pop(future)
+                    failure = ROOT / row["document_id"] / "failure.json"
+                    try:
+                        future.result()
+                        failure.unlink(missing_ok=True)
+                    except (
+                        requests.RequestException,
+                        ValueError,
+                        TransientError,
+                        subprocess.SubprocessError,
+                    ) as error:
+                        record = {
+                            "document_id": row["document_id"],
+                            "at": datetime.now(UTC).isoformat(),
+                            "reason": str(error),
+                            "type": type(error).__name__,
+                        }
+                        failure.parent.mkdir(parents=True, exist_ok=True)
+                        failure.write_text(json.dumps(record) + "\n")
+                        print(json.dumps(record), flush=True)
+                    completed_count += 1
+                    if completed_count % 50 == 0:
+                        download_status(rows, out)
+                        last_snapshot = time.monotonic()
+                    submit()
+        finally:
+            download_status(rows, out)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("stage", choices=["frame", "download", "locate", "export"])
+    parser.add_argument(
+        "stage", choices=["frame", "download", "locate", "export", "status"]
+    )
     parser.add_argument(
         "--frame", type=Path, default=Path("data/fin/2021/affidavit_frame.parquet")
     )
@@ -467,6 +613,11 @@ def main():
     )
     parser.add_argument(
         "--out", type=Path, default=Path("data/fin/2021/education.parquet")
+    )
+    parser.add_argument(
+        "--status-out",
+        type=Path,
+        default=Path("data/interim/2021/download_status.parquet"),
     )
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--limit", type=int)
@@ -480,7 +631,13 @@ def main():
     rows = pq.read_table(args.frame).to_pylist()
     if args.limit:
         rows = rows[: args.limit]
-    operation = download if args.stage == "download" else locate
+    if args.stage == "status":
+        download_status(rows, args.status_out)
+        return
+    if args.stage == "download":
+        download_all(rows, args.workers, args.status_out)
+        return
+    operation = locate
     with concurrent.futures.ProcessPoolExecutor(max_workers=args.workers) as pool:
         for result in pool.map(operation, rows):
             print(json.dumps(result, ensure_ascii=False), flush=True)

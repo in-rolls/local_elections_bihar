@@ -1,4 +1,4 @@
-.PHONY: check test to-parquet verify-data ci-docker
+.PHONY: check test to-parquet verify-data ci-docker release-data verify-2021
 
 check:
 	uv sync --frozen --group dev
@@ -7,6 +7,7 @@ check:
 	uv run pytest -q
 	uv run pre-commit run --all-files
 	$(MAKE) verify-data
+	$(MAKE) verify-2021
 
 test:
 	uv run pytest -q
@@ -22,3 +23,9 @@ ci-docker:
 	  COPYFILE_DISABLE=1 tar --exclude=._* --exclude=__pycache__ --exclude=.DS_Store --exclude=.git --exclude=.venv --exclude=.ruff_cache --exclude=.pytest_cache --exclude=data/derived -cf - . | \
 	  docker run --rm -i python:$$version-slim sh -ec 'mkdir /work; tar -xf - -C /work; cd /work; pip install -q uv; uv sync --frozen --group dev; uv run ruff check .; uv run ruff format --check .; uv run pytest -q; uv run python scripts/to_parquet.py --check' || exit $$?; \
 	done
+
+release-data:
+	uv run python scripts/release_2021.py
+
+verify-2021:
+	uv run python scripts/release_2021.py --check
