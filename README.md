@@ -79,11 +79,13 @@ Sources: SEC [winning candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/W
 
 **The statewide index has no election-year field.** Its `year` is null: the portal covers the 2021–2026 term and later by-elections. The separate statewide 2021 release requests phase `2021_1`, displayed as `2021`. All 66,392 result keys match candidate-list keys; 38 candidacies have no result record. Of 8,067 enumerated panchayats, 8,050 have one flagged winner, eight have results without a winner flag, and nine return empty results. All remain in the [coverage table](data/release/2021/coverage.parquet). The frame was retrieved in 2026; it is not an independent census of seats as constituted in 2021.
 
+**Reservation checks:** the [SEC’s 2021 report](https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx) and the saved feed both contain 8,067 mukhiya seats, including 3,583 women-reserved seats. The feed has one more SC seat and one fewer BC seat. All 8,050 dated winners join by district, block and panchayat IDs. In women-reserved seats, 35 winners are coded male in the 2021 candidate feed; the current winner feed codes 31 of these as female. These are unresolved source conflicts. Matching totals do not verify individual assignments. [Checks](data/fin/reservation_check_2021/validation.json), [flagged records](data/fin/reservation_check_2021/flagged_winners.parquet), [source hashes and schema](data/fin/reservation_check_2021/MANIFEST.json), and [offline audit](scripts/check_reservations_2021.py).
+
 **Education has been transcribed for 64 Arwal winners.** All 64 winners were linked to candidate lists using district, block, panchayat and candidate serial, then their downloaded nomination PDFs were inspected. [The export](data/fin/2021/education.csv) retains the reported qualification, degree and literacy indicators, prior elected office, document reservation text, source URL, page number and PDF hash. [Inspected pages](data/fin/2021/education_pages) accompany the transcriptions.
 
 Degree status is unresolved for seven winners: two documents lack the candidate's education page, one names a school without a qualification, one says only “EDUCATED,” and three have ambiguous qualification text. Unknowns remain null. Reservation is classified from document text for 51 winners; 13 remain unspecified. Of the 25 document-classified women's reserved seats, 21 have classified degree status; the corresponding counts are 24 of 26 open seats and 12 of 13 seats with unspecified reservation. These are extraction counts, not reservation-effect estimates. [Coverage and provenance](data/fin/2021/education.json).
 
-Codex visually transcribed these records; there has been no independent second coding. Tesseract locates likely pages but does not assign qualifications. Candidate and proposer biographies are distinguished. Qualifications are self-reported, and a blank field is not evidence of illiteracy. These transcriptions cover Arwal; statewide affidavit acquisition is running. Statewide education extraction remains incomplete.
+Codex visually transcribed these records; there has been no independent second coding. Tesseract locates likely pages but does not assign qualifications. Candidate and proposer biographies are distinguished. Qualifications are self-reported, and a blank field is not evidence of illiteracy. These transcriptions cover Arwal. Statewide affidavit collection and extraction were stopped at the owner’s request. The public winner table and 2021 candidate-detail page checked for Awgila contain no structured education field; statewide 2021 education remains unavailable in this release.
 
 <details>
 <summary>Inspect a qualification declaration</summary>
@@ -128,7 +130,9 @@ make release-data
 make verify-2021
 ```
 
-[Archive metadata](data/raw/statewide_2021_archive.json) records its checksum. `./crawl.sh` resumes collection and downloads every flagged winner's affidavit. PDFs are checked for a PDF signature, readable page count and SHA-256; failures are retained and retried on resume. The download stops before consuming the final 5 GiB of disk space. Live progress is saved to `data/interim/2021/download_status.parquet`, with one row for every requested winner, and a matching JSON summary. PDF bytes remain local during acquisition; the response archive and released tables are published.
+[Archive metadata](data/raw/statewide_2021_archive.json) records its checksum. `./crawl.sh` resumes collection and downloads every flagged winner's affidavit if explicitly restarted; acquisition is currently stopped. PDFs are checked for a PDF signature, readable page count and SHA-256; failures are retained and retried on resume. The download stops before consuming the final 5 GiB of disk space. Live progress is saved to `data/interim/2021/download_status.parquet`, with one row for every requested winner, and a matching JSON summary. PDF bytes remain local during acquisition; the response archive and released tables are published.
+
+Rebuild the reservation source checks offline with `uv run python scripts/check_reservations_2021.py`.
 
 ### Rebuild qualifications
 

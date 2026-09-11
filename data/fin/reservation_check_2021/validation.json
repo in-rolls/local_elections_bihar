@@ -1,0 +1,52 @@
+{
+  "official_2021_totals": {
+    "total": 8067,
+    "sc": 1338,
+    "st": 90,
+    "bc": 1374,
+    "women": 3583
+  },
+  "current_portal_totals": {
+    "total": 8067,
+    "sc": 1339,
+    "st": 90,
+    "bc": 1373,
+    "women": 3583
+  },
+  "current_minus_official": {
+    "total": 0,
+    "sc": 1,
+    "st": 0,
+    "bc": -1,
+    "women": 0
+  },
+  "reservation_rows_with_explicit_year": 0,
+  "districts": 38,
+  "blocks": 533,
+  "candidates": {
+    "records": 66430,
+    "unmatched_reservation_keys": 0,
+    "records_in_women_reserved_seats": 28801,
+    "reported_gender_in_women_reserved_seats": {
+      "अन्य": 13,
+      "पुरुष": 209,
+      "महिला": 28579
+    }
+  },
+  "winners": {
+    "records": 8050,
+    "unmatched_reservation_keys": 0,
+    "records_in_women_reserved_seats": 3578,
+    "reported_gender_in_women_reserved_seats": {
+      "पुरुष": 35,
+      "महिला": 3543
+    }
+  },
+  "flagged_winners": 35,
+  "flagged_winners_current_gender": {
+    "पुरुष": 4,
+    "महिला": 31
+  },
+  "flagged_winners_same_reported_name": 34,
+  "interpretation": "Matching totals do not validate individual 2021 assignments. Gender disagreements flag source conflicts, not proven reservation violations. No reservation or gender values are corrected or promoted by this check."
+}

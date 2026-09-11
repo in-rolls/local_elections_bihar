@@ -1,0 +1,13 @@
+{
+  "district_id": "int64",
+  "block_id": "int64",
+  "panchayat_id": "int64",
+  "candidate_serial": "int64",
+  "seat_reservation": "string",
+  "gender_2021": "string",
+  "gender_current": "string",
+  "same_reported_name": "bool",
+  "reservation_source_sha256": "string",
+  "candidate_source_sha256": "string",
+  "current_winner_source_sha256": "string"
+}

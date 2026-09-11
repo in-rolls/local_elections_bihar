@@ -1,0 +1,12 @@
+column,type,description
+district_id,int64,Original composite 2021 candidate key component
+block_id,int64,Original composite 2021 candidate key component
+panchayat_id,int64,Original composite 2021 candidate key component
+candidate_serial,int64,Original composite 2021 candidate key component
+seat_reservation,string,Unmodified current reservation-feed label
+gender_2021,string,Unmodified explicitly 2021 candidate-feed gender
+gender_current,string,Current winner-feed gender; null if no seat match
+same_reported_name,bool,Literal name equality after edge whitespace trim; not an identity match
+reservation_source_sha256,string,Respective response-body hash retained in input provenance
+candidate_source_sha256,string,Respective response-body hash retained in input provenance
+current_winner_source_sha256,string,Respective response-body hash retained in input provenance
