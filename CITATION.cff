@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "Please cite the repository and record the commit used."
 type: dataset
-title: "Bihar Panchayat Election Candidate Results, 2016"
+title: "Bihar Local Elections"
 authors:
   - family-names: Sood
     given-names: Gaurav

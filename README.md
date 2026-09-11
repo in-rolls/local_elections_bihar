@@ -1,11 +1,13 @@
-# Bihar Panchayat Election Results, 2016
+# Bihar Local Elections
 
 [![CI](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml/badge.svg)](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 
-Candidate information and valid votes from the 2016 Bihar panchayat elections, collected from the [State Election Commission's historical results form](http://sec.bihar.gov.in/ovc.aspx). The repository preserves the original six CSVs and provides typed Parquet exports with source checksums, row provenance, and explicit duplicate links. The current tools operate offline.
+Bihar local-election records from the State Election Commission: six offices in 2016, a statewide mukhiya index from the current 2021–2026 portal, and an explicitly dated 2021 mukhiya pilot in Arwal. Source responses, typed exports, checksums and collection tools are included.
 
-## Data
+## 2016 data
+
+Candidate information and valid votes collected from the [historical SEC results form](http://sec.bihar.gov.in/ovc.aspx). The original six CSVs are preserved.
 
 | File | Source office | Records | Later exact copies | Missing candidate names |
 |---|---|---:|---:|---:|
@@ -52,7 +54,7 @@ Twenty-two rows have no usable candidate name. They remain in the export with `c
 
 The historical collectors traversed dropdowns for office, district, block, panchayat, and territorial unit, with different paths for each office. They supported manual resume positions and appended results to CSVs. A complete acquisition manifest and saved raw HTML were not retained. Row counts therefore cannot establish complete coverage or explain every duplicate and omission. Original request times and failed units cannot be reconstructed from the published CSVs alone.
 
-The data do not supply a verified cross-office or cross-election person/seat identifier. Do not treat `number` or `sr_no` as globally unique. Historical contact fields and candidate attributes have not been checked for current accuracy. Later elections are not included.
+The data do not supply a verified cross-office or cross-election person/seat identifier. Do not treat `number` or `sr_no` as globally unique. Historical contact fields and candidate attributes have not been checked for current accuracy. The six historical CSVs cover 2016 only; later collections have separate directories.
 
 ## How collected
 
@@ -63,7 +65,40 @@ The data do not supply a verified cross-office or cross-election person/seat ide
 | Publication | Appended CSV rows from the historical collection | Six original CSV files |
 | Parquet export | Offline conversion in batches of 5,000 rows | Typed schemas, source-row provenance, duplicate links, and checksums |
 
-The [historical implementation](https://github.com/in-rolls/local_elections_bihar/tree/1efc650) preserves the six collection scripts. The current environment contains the offline converter and its tests. It makes no requests to the historical SEC form and does not imply that the old form remains available.
+The [historical implementation](https://github.com/in-rolls/local_elections_bihar/tree/1efc650) preserves the six collection scripts. The offline converter makes no requests to the historical SEC form. Later collections use the current portal and separate scripts.
+
+## 2021 and the current portal
+
+| Collection | Coverage | Records | Files |
+|---|---|---:|---|
+| Current mukhiya winner index | All 38 districts and 533 blocks listed by the portal | 8,067 winners | [Winners](data/fin/portal_2021_2026/winners.parquet), [seat reservations](data/fin/portal_2021_2026/reservations.parquet), [manifest](data/fin/portal_2021_2026/MANIFEST.json) |
+| Explicit 2021 mukhiya pilot | Arwal: 5 blocks, 64 panchayats | 559 candidacies, 64 winners | [Candidate lists and results](data/fin/2021/mukhiya_2021.parquet), [manifest](data/fin/2021/MANIFEST.json) |
+
+Sources: SEC [winning candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/WinningCandidates), [seat reservations](https://sec25.bihar.gov.in/sec_new/Panchayat/Reservation), [contesting candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/ContestingCandidates), and [results](https://sec25.bihar.gov.in/sec_new/Panchayat/Result). Responses were collected on September 10, 2026. The statewide collection completed 533 winner requests and 533 reservation requests; it covers the portal's listed blocks, not an independently verified historical census of seats.
+
+**The statewide index has no election-year field.** Its `year` is null: the portal covers the 2021–2026 term and later by-elections. The Arwal pilot explicitly requests phase `2021_1`, displayed by the source as `2021`. Its 1,118 rows comprise 559 candidate-list records and 559 result records, distinguished by `kind`. They are not 1,118 candidacies. Each of the 64 panchayats has one recorded winner.
+
+**Education is in linked documents.** The structured feeds provide age and gender, but no education field. The statewide index includes 8,066 affidavit links. An inspected [2021 affidavit, page 14](https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210913143841096.pdf#page=14) contains a handwritten candidate biography with educational qualifications, profession and prior elected office; page 10 contains criminal-case declarations. Education and experience have not been extracted or analyzed from these scans.
+
+### Fields and handling
+
+- `district_id`, `block_id`, `post_id` and `panchayat_id` locate records. Candidate serials are scoped to election, office and full geography. IDs from different elections are not assumed to identify the same seat.
+- Winner exports retain `candidate_age`, `candidate_gender`, `candidate_category`, affidavit/photo URLs and source geography. `reservation_for_reported` and `reservation_status_reported` are fields from the winner feed; `seat_reservation` comes from the separate reservation feed. These fields are not interchangeable: the first Arwal block already contains a disagreement between the two feeds' caste-reservation labels.
+- The 2021 file keeps candidate lists and results separately. Candidate lists carry age, gender and document links; results carry votes and `elected`. All 559 geographic/serial keys occur once in each feed. After whitespace normalization, 91 pairs have different name text, including the source's winner suffix and numbered names. No name-based merge is imposed.
+- `source_url`, `fetched_at`, `source_sha256`, `source_row` and `raw_cell` trace each exported row to the saved response. Source cells remain unchanged in `raw_cell`; typed columns facilitate analysis. Schemas and hashes accompany the exports.
+- [Raw responses](data/raw/portal_2021_2026) are gzipped request ledgers with HTTP status, UTC time and the original response bytes encoded as base64. The geographic frame retains district/block/office paths. A completed checkpoint is reused; missing or truncated checkpoints are fetched again. HTML error pages are rejected rather than counted as empty results.
+
+Collection uses three HTTP sessions. A nine-request pilot took 3.8 seconds with three sessions; three sequential requests took 3.1 seconds. The statewide mukhiya job requires 1,066 data requests plus frame enumeration. District-only and all-office requests returned no records in reconnaissance, so collection follows the working office/block request pattern.
+
+```sh
+uv run python scripts/sec_portal.py list
+caffeinate -dims uv run python scripts/sec_portal.py fetch --posts 3
+uv run python scripts/sec_portal.py parse
+caffeinate -dims uv run python scripts/sec_2021.py fetch --districts 33
+uv run python scripts/sec_2021.py parse
+```
+
+Omit `caffeinate -dims` outside macOS. The generic collector accepts post IDs 1–6: ward member, panch, mukhiya, sarpanch, panchayat samiti member and zila parishad member. The published current-portal collection is mukhiya only. Use `--districts` to restrict collection and `--workers` to set concurrency. Parsing is offline and can be rerun against the saved responses.
 
 ## Usage
 
@@ -104,7 +139,7 @@ Checks cover all six schemas, separate candidate/seat categories, leading zeroes
 
 ## Citation
 
-Gaurav Sood. *Bihar Panchayat Election Candidate Results, 2016*. Include the repository URL and commit used. [CITATION.cff](CITATION.cff) provides machine-readable metadata. Contact: [contact@gsood.com](mailto:contact@gsood.com).
+Gaurav Sood. *Bihar Local Elections*. Include the repository URL and commit used. [CITATION.cff](CITATION.cff) provides machine-readable metadata. Contact: [contact@gsood.com](mailto:contact@gsood.com).
 
 ## License
 
