@@ -7,6 +7,9 @@
   "gender_2021": "string",
   "gender_current": "string",
   "same_reported_name": "bool",
+  "candidate_document_url": "string",
+  "current_document_url": "string",
+  "same_document_url": "bool",
   "reservation_source_sha256": "string",
   "candidate_source_sha256": "string",
   "current_winner_source_sha256": "string"

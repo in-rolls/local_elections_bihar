@@ -92,6 +92,23 @@ def audit(reservations, candidates, winners, current_winners, official):
         "districts": len({k[0] for k in seats}),
         "blocks": len({k[:2] for k in seats}),
     }
+    common = seats.keys() & current.keys()
+    reservation_agreement = collections.Counter()
+    for k in common:
+        value = current[k]["reservation_for_reported"]
+        if value is None:
+            reservation_agreement["unknown"] += 1
+        elif value.strip() not in {"महिला", "अन्य"}:
+            raise ValueError(f"Unknown winner-feed seat reservation: {value!r}")
+        else:
+            agrees = (value.strip() == "महिला") == codes[k][1]
+            reservation_agreement["agrees" if agrees else "disagrees"] += 1
+    checks["current_feeds_women_reservation"] = {
+        "matched_seats": len(common),
+        "missing_winner_feed_seats": len(seats.keys() - current.keys()),
+        "missing_reservation_feed_seats": len(current.keys() - seats.keys()),
+        **{n: reservation_agreement[n] for n in ["agrees", "disagrees", "unknown"]},
+    }
     flagged = []
     for kind, rows in [("candidates", candidates), ("winners", winners)]:
         missing = sum(key(r, SEAT) not in seats for r in rows)
@@ -128,6 +145,13 @@ def audit(reservations, candidates, winners, current_winners, official):
                         if other
                         else None
                     ),
+                    "candidate_document_url": r["affidavit_url"],
+                    "current_document_url": other["affidavit_url"] if other else None,
+                    "same_document_url": (
+                        r["affidavit_url"] == other["affidavit_url"]
+                        if other and r["affidavit_url"] and other["affidavit_url"]
+                        else None
+                    ),
                     "reservation_source_sha256": seats[k]["source_sha256"],
                     "candidate_source_sha256": r["source_sha256"],
                     "current_winner_source_sha256": other["source_sha256"]
@@ -145,6 +169,9 @@ def audit(reservations, candidates, winners, current_winners, official):
     )
     checks["flagged_winners_same_reported_name"] = sum(
         r["same_reported_name"] is True for r in flagged
+    )
+    checks["flagged_winners_same_document_url"] = sum(
+        r["same_document_url"] is True for r in flagged
     )
     checks["interpretation"] = (
         "Matching totals do not validate individual 2021 assignments. Gender "
@@ -171,6 +198,9 @@ def build(out=OUT):
         ("gender_2021", pa.string()),
         ("gender_current", pa.string()),
         ("same_reported_name", pa.bool_()),
+        ("candidate_document_url", pa.string()),
+        ("current_document_url", pa.string()),
+        ("same_document_url", pa.bool_()),
         ("reservation_source_sha256", pa.string()),
         ("candidate_source_sha256", pa.string()),
         ("current_winner_source_sha256", pa.string()),
@@ -192,6 +222,12 @@ def build(out=OUT):
             "seat_reservation": "Unmodified current reservation-feed label",
             "gender_2021": "Unmodified explicitly 2021 candidate-feed gender",
             "gender_current": ("Current winner-feed gender; null if no seat match"),
+            "candidate_document_url": "Document URL in dated 2021 candidate feed",
+            "current_document_url": "Document URL in current winner feed",
+            "same_document_url": (
+                "Exact equality of nonempty document URLs; null if missing. "
+                "Does not establish the correct gender or reservation label."
+            ),
             "same_reported_name": (
                 "Literal name equality after edge whitespace trim; "
                 "not an identity match"

@@ -7,6 +7,9 @@ seat_reservation,string,Unmodified current reservation-feed label
 gender_2021,string,Unmodified explicitly 2021 candidate-feed gender
 gender_current,string,Current winner-feed gender; null if no seat match
 same_reported_name,bool,Literal name equality after edge whitespace trim; not an identity match
+candidate_document_url,string,Document URL in dated 2021 candidate feed
+current_document_url,string,Document URL in current winner feed
+same_document_url,bool,Exact equality of nonempty document URLs; null if missing. Does not establish the correct gender or reservation label.
 reservation_source_sha256,string,Respective response-body hash retained in input provenance
 candidate_source_sha256,string,Respective response-body hash retained in input provenance
 current_winner_source_sha256,string,Respective response-body hash retained in input provenance

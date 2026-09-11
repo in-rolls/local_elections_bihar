@@ -23,6 +23,14 @@
   "reservation_rows_with_explicit_year": 0,
   "districts": 38,
   "blocks": 533,
+  "current_feeds_women_reservation": {
+    "matched_seats": 8067,
+    "missing_winner_feed_seats": 0,
+    "missing_reservation_feed_seats": 0,
+    "agrees": 8067,
+    "disagrees": 0,
+    "unknown": 0
+  },
   "candidates": {
     "records": 66430,
     "unmatched_reservation_keys": 0,
@@ -48,5 +56,6 @@
     "महिला": 31
   },
   "flagged_winners_same_reported_name": 34,
+  "flagged_winners_same_document_url": 35,
   "interpretation": "Matching totals do not validate individual 2021 assignments. Gender disagreements flag source conflicts, not proven reservation violations. No reservation or gender values are corrected or promoted by this check."
 }

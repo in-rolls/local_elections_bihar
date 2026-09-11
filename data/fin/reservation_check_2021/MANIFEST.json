@@ -20,12 +20,12 @@
     "data/raw/reservation_check_2021/reservation_d33_b1.jsonl.gz": "840a4961df29c9c7040f48b89280594b4041ddc8694ebf6f9fc3b5bc666c6a5c"
   },
   "report_url": "https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx",
-  "parser_sha256": "96ca6efcaeabf0a7136d8713f85cdbbc4020b7dff5d173ae7969270ce84866f8",
+  "parser_sha256": "b9a210f7317b321c0d1a77e5655a51951c5b34e778f5f5b74a96e638c201e4c0",
   "files": [
     {
       "path": "flagged_winners.parquet",
       "rows": 35,
-      "sha256": "5f2cd449c62eaa793f8a1d69a7fc07794f44cbdfa3fec06f7d7370f1ac029243",
+      "sha256": "5f8a086e344a1faf48078062e78143d2c3db9526eed3690931d25ed1a3997f3e",
       "schema": {
         "district_id": "int64",
         "block_id": "int64",
@@ -35,6 +35,9 @@
         "gender_2021": "string",
         "gender_current": "string",
         "same_reported_name": "bool",
+        "candidate_document_url": "string",
+        "current_document_url": "string",
+        "same_document_url": "bool",
         "reservation_source_sha256": "string",
         "candidate_source_sha256": "string",
         "current_winner_source_sha256": "string"
@@ -49,6 +52,9 @@
     "seat_reservation": "Unmodified current reservation-feed label",
     "gender_2021": "Unmodified explicitly 2021 candidate-feed gender",
     "gender_current": "Current winner-feed gender; null if no seat match",
+    "candidate_document_url": "Document URL in dated 2021 candidate feed",
+    "current_document_url": "Document URL in current winner feed",
+    "same_document_url": "Exact equality of nonempty document URLs; null if missing. Does not establish the correct gender or reservation label.",
     "same_reported_name": "Literal name equality after edge whitespace trim; not an identity match",
     "reservation_source_sha256": "Respective response-body hash retained in input provenance",
     "candidate_source_sha256": "Respective response-body hash retained in input provenance",

@@ -33,6 +33,15 @@ def test_real_source_disagreements_are_preserved(sources):
         "bc": -1,
         "women": 0,
     }
+    assert checks["current_feeds_women_reservation"] == {
+        "matched_seats": 8067,
+        "missing_winner_feed_seats": 0,
+        "missing_reservation_feed_seats": 0,
+        "agrees": 8067,
+        "disagrees": 0,
+        "unknown": 0,
+    }
+    assert checks["flagged_winners_same_document_url"] == 35
     assert len(flagged) == 35
     assert checks["flagged_winners_current_gender"] == {"पुरुष": 4, "महिला": 31}
     assert all(r["gender_2021"].strip() == "पुरुष" for r in flagged)
@@ -75,3 +84,23 @@ def test_published_audit_checksums_and_provenance():
     for path, digest in (manifest["inputs"] | manifest["receipts"]).items():
         assert sha(Path(path)) == digest
     assert sha(Path("scripts/check_reservations_2021.py")) == manifest["parser_sha256"]
+
+
+def test_current_reservation_disagreement_is_counted(sources):
+    altered = copy.deepcopy(sources)
+    r = altered["current_winners"][0]
+    r["reservation_for_reported"] = (
+        "अन्य" if r["reservation_for_reported"] == "महिला" else "महिला"
+    )
+    checks, _ = run(altered)
+    assert checks["current_feeds_women_reservation"]["disagrees"] == 1
+    assert checks["current_feeds_women_reservation"]["agrees"] == 8066
+
+
+def test_missing_documents_do_not_prove_identity(sources):
+    altered = copy.deepcopy(sources)
+    for r in altered["winners"] + altered["current_winners"]:
+        r["affidavit_url"] = None
+    checks, flagged = run(altered)
+    assert checks["flagged_winners_same_document_url"] == 0
+    assert all(r["same_document_url"] is None for r in flagged)
