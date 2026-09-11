@@ -2,6 +2,7 @@
   "frame_sha256": "02b18f64655e303bf1831b24bfcc1ebaef657ab5840698c89c868fcd9a586101",
   "review_sha256": "2344cb78749d42bb68969da550d352cb808f7ca544c9b07c10e2e447bd22dc52",
   "output_sha256": "6c0ca06fdae188dc22ba925146511112c109a3ad683cdd23514d0d08a549b5f7",
+  "csv_sha256": "308e7749fa2d0ac932b657832d0a58ac04d502bd65fcf810ee1bf8237a208fd0",
   "rows": 64,
   "degree_classified": 57,
   "quota_classified": 51,

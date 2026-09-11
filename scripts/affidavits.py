@@ -391,6 +391,18 @@ def export(frame_path, review_path, out):
             pa.array([r[field] for r in rows], type=pa.int8()),
         )
     pq.write_table(table, out, compression="zstd")
+    with out.with_suffix(".csv").open("w") as handle:
+        writer = csv.DictWriter(
+            handle, fieldnames=table.column_names, lineterminator="\n"
+        )
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(
+                {
+                    **row,
+                    "additional_pages": ";".join(map(str, row["additional_pages"])),
+                }
+            )
     coverage = []
     for quota in [0, 1, None]:
         group = [r for r in rows if r["quota_document"] == quota]
@@ -405,6 +417,7 @@ def export(frame_path, review_path, out):
         "frame_sha256": file_hash(frame_path),
         "review_sha256": file_hash(review_path),
         "output_sha256": file_hash(out),
+        "csv_sha256": file_hash(out.with_suffix(".csv")),
         "rows": len(rows),
         "degree_classified": sum(r["graduate_plus"] is not None for r in rows),
         "quota_classified": sum(r["quota_document"] is not None for r in rows),

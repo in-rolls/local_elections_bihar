@@ -110,6 +110,7 @@ def test_published_education_matches_reviews_and_source_artifacts():
     root = Path(__file__).resolve().parents[1] / "data/fin/2021"
     manifest = json.loads((root / "education.json").read_text())
     assert file_hash(root / "education.parquet") == manifest["output_sha256"]
+    assert file_hash(root / "education.csv") == manifest["csv_sha256"]
     assert file_hash(root / "affidavit_frame.parquet") == manifest["frame_sha256"]
     assert file_hash(root / "education_review.csv") == manifest["review_sha256"]
     frame_rows = pq.read_table(root / "affidavit_frame.parquet").to_pylist()
