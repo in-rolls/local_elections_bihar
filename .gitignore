@@ -9,5 +9,5 @@ dist/
 *.log
 *.part
 data/derived/
-data/raw/statewide_2021/
+data/raw/statewide_2021
 data/interim/
