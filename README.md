@@ -3,7 +3,16 @@
 [![CI](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml/badge.svg)](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 
-Bihar local-election records from the State Election Commission: six offices in 2016, a statewide mukhiya index from the current 2021–2026 portal, and statewide candidate lists and results explicitly dated 2021. Source responses, typed exports, checksums and collection tools are included.
+Bihar panchayat election records from the State Election Commission (SEC) for 2016 and 2021. Source responses, typed exports, checksums and collection tools are included.
+
+| Election | Offices | Contents | Section |
+|---|---|---|---|
+| 2016 | Mukhiya, sarpanch, ward member, panch, panchayat samiti member, zila parishad member | 645,605 candidate records with attributes, seat reservation and valid votes | [2016 data](#2016-data) |
+| 2021 | Mukhiya only | 66,430 candidacies, 66,392 result records and 8,050 flagged winners across 38 districts, 533 blocks and 8,067 panchayats | [2021 and the current portal](#2021-and-the-current-portal) |
+| 2021–2026 term | Mukhiya only | Current winner index and seat reservations for 8,067 seats; no election-year field | [2021 and the current portal](#2021-and-the-current-portal) |
+| 2021, Arwal | Mukhiya winners | Self-reported education transcribed from nomination papers for 64 winners | [2021 and the current portal](#2021-and-the-current-portal) |
+
+The 2021 collection does not include the other five offices. The portal's office list names all six, and `scripts/sec_portal.py` accepts their post IDs, but only mukhiya records have been requested; the dated 2021 collector (`scripts/sec_2021.py`) is mukhiya-only.
 
 ## 2016 data
 
@@ -164,6 +173,10 @@ import pyarrow.parquet as pq
 table = pq.read_table("data/fin/mukhiya.parquet")
 print(table.num_rows)
 print(table.schema)
+
+candidates = pq.read_table("data/release/2021/gp_head_candidates_2021.parquet")
+winners = pq.read_table("data/release/2021/gp_head_winner_records_2021.parquet")
+print(candidates.num_rows, winners.num_rows)
 ```
 
 Rebuild the six exports:

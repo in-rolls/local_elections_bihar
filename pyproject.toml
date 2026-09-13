@@ -1,7 +1,7 @@
 [project]
 name = "local-elections-bihar"
 version = "1.0.0"
-description = "Historical Bihar local-election records and offline data tools"
+description = "Bihar panchayat election records for 2016 and 2021, with SEC collection and offline data tools"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [{ name = "Gaurav Sood", email = "contact@gsood.com" }]
