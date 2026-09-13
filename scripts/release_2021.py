@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pyarrow as pa
 import pyarrow.parquet as pq
+from matching import match
 from sec_2021 import parse
 from sec_portal import completed
 
@@ -54,8 +55,18 @@ def build(raw, parsed, out):
             raise ValueError("Record outside geographic frame")
         feeds[row["kind"]][k] = row
     c, r = feeds["candidates"], feeds["results"]
-    if r.keys() - c.keys():
-        raise ValueError("Result records without candidate-list matches")
+    by_seat = collections.defaultdict(lambda: ({}, {}))
+    for k, row in c.items():
+        by_seat[k[:3]][0][k[3]] = row["candidate_name"]
+    for k, row in r.items():
+        by_seat[k[:3]][1][k[3]] = row["candidate_name"]
+    matched, methods = {}, collections.Counter()
+    for seat, (names, result_names) in by_seat.items():
+        for result_serial, (serial, method) in match(names, result_names).items():
+            methods[method] += 1
+            if serial is None:
+                raise ValueError(f"Result without candidate-list match: {seat}")
+            matched[(*seat, serial)] = (r[(*seat, result_serial)], method)
     coverage, receipts = [], []
     counts = {
         kind: collections.Counter(k[:3] for k in feed) for kind, feed in feeds.items()
@@ -98,14 +109,16 @@ def build(raw, parsed, out):
         )
     records = []
     for k, candidate in sorted(c.items()):
-        result = r.get(k, {})
+        result, method = matched.get(k, ({}, None))
         unit = units[k[:3]]
         records.append(
             {
                 **candidate,
                 **{n: unit[n] for n in ["district", "block", "panchayat"]},
                 "document_id": "_".join(map(str, k)),
-                "result_present": k in r,
+                "result_present": k in matched,
+                "result_serial": result.get("candidate_serial"),
+                "match_method": method,
                 "votes": result.get("votes"),
                 "elected": result.get("elected"),
                 "result_name": result.get("candidate_name"),
@@ -132,6 +145,7 @@ def build(raw, parsed, out):
         "result_source_url",
         "result_source_sha256",
         "result_raw_cell",
+        "match_method",
     ]
     fields = [
         (n, pa.int64())
@@ -143,6 +157,7 @@ def build(raw, parsed, out):
             "votes",
             "source_row",
             "result_source_row",
+            "result_serial",
         ]
     ]
     fields += [(n, pa.string()) for n in strings]
@@ -175,8 +190,9 @@ def build(raw, parsed, out):
     validation = {
         "candidate_records": len(c),
         "result_records": len(r),
-        "candidate_only_records": len(c.keys() - r.keys()),
-        "result_only_records": len(r.keys() - c.keys()),
+        "candidate_only_records": len(c.keys() - matched.keys()),
+        "result_only_records": methods["result_only"],
+        "result_match_methods": dict(sorted(methods.items())),
         "panchayats_enumerated": len(units),
         "districts": len({k[0] for k in units}),
         "blocks": len({k[:2] for k in units}),
@@ -214,7 +230,15 @@ def build(raw, parsed, out):
             "Source IsWin flag; null when no result record exists. Never "
             "inferred from votes or gender."
         ),
-        "result_present": "Candidate key occurs in the result feed.",
+        "result_present": "A result record was matched to this candidate.",
+        "result_serial": (
+            "OrderBy of the matched result record; can differ from candidate_serial "
+            "because the candidate list is renumbered in name order."
+        ),
+        "match_method": (
+            "How the result was matched: serial_and_name, name, name_contained or "
+            "serial_only (same serial, names differ); null when no result."
+        ),
         "votes": "Source TotalVote; null when no result record exists.",
         "winner_status": (
             "flagged, no_winner_flag, or empty_results; absence is not a "
@@ -286,7 +310,11 @@ def build(raw, parsed, out):
         ).strip(),
         "parser_sha256": {
             p.name: sha(p)
-            for p in [Path(__file__), Path(__file__).with_name("sec_2021.py")]
+            for p in [
+                Path(__file__),
+                Path(__file__).with_name("sec_2021.py"),
+                Path(__file__).with_name("matching.py"),
+            ]
         },
         "grain": {
             files[0][

@@ -3,6 +3,11 @@
   "result_records": 66392,
   "candidate_only_records": 38,
   "result_only_records": 0,
+  "result_match_methods": {
+    "name": 169,
+    "name_contained": 29,
+    "serial_and_name": 66194
+  },
   "panchayats_enumerated": 8067,
   "districts": 38,
   "blocks": 533,

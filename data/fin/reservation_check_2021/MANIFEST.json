@@ -9,8 +9,8 @@
   "inputs": {
     "data/fin/portal_2021_2026/reservations.parquet": "6cfa19ac1f556b4f553379898288815d0753e2dcd138e74f9000a163561dba73",
     "data/fin/portal_2021_2026/winners.parquet": "5a2e693195a9c1533f51970e9394767d374e83c155977bb4b0e82e102a17ef2c",
-    "data/release/2021/gp_head_candidates_2021.parquet": "bb04406261f3f6fb66c408b5a497e43150c30f40074aff69a9a6fd1cc31b9fc3",
-    "data/release/2021/gp_head_winner_records_2021.parquet": "1702c547d77ec2c41fd16c1de840e07e2c81cc9b709ba049d314bff9aaeb9fc4"
+    "data/release/2021/gp_head_candidates_2021.parquet": "03de762fa476a11ac865a8a0f8871443c45cb46137c25c671f00f4ff5f40cee1",
+    "data/release/2021/gp_head_winner_records_2021.parquet": "6ad478a49685833f44a502bfc416405b07047f1a13dfce1dbe3f942bb698c0ad"
   },
   "receipts": {
     "data/raw/reservation_check_2021/btnFilter.jsonl.gz": "d4666f0dd1674cf8a919d990a7016e3c5b9c3e5d76b84abad95433f0b206a8c8",

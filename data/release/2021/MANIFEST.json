@@ -2,10 +2,11 @@
   "schema_version": 1,
   "year": 2021,
   "source_phase": "2021_1",
-  "code_revision": "dc1bf6b69c97711aac0ef870e9a4cf266421569e",
+  "code_revision": "e25ea0c33a825a6fabfae039a8566a8b5c6e686f",
   "parser_sha256": {
-    "release_2021.py": "d78ee658c566817007894ab421941b5e7812d194088e4ed8afcf75635602fbbc",
-    "sec_2021.py": "254d63fc2bbb6be0c1b07f1340c502c6683b251c2d048d88b9c8ccb14562f9b9"
+    "release_2021.py": "f352d9492018f62b3a082b06283b6cb09429397ceceb78dd2062325df68c2e28",
+    "sec_2021.py": "254d63fc2bbb6be0c1b07f1340c502c6683b251c2d048d88b9c8ccb14562f9b9",
+    "matching.py": "fade84beb004c5f1df37582e73a55c6274ff7af5adeaebf07c3639329b483379"
   },
   "grain": {
     "gp_head_candidates_2021.parquet": "candidate within year, office and full geographic/serial key",
@@ -34,7 +35,7 @@
     {
       "path": "gp_head_candidates_2021.parquet",
       "rows": 66430,
-      "sha256": "bb04406261f3f6fb66c408b5a497e43150c30f40074aff69a9a6fd1cc31b9fc3",
+      "sha256": "03de762fa476a11ac865a8a0f8871443c45cb46137c25c671f00f4ff5f40cee1",
       "schema": {
         "district_id": "int64",
         "block_id": "int64",
@@ -46,6 +47,7 @@
         "votes": "int64",
         "source_row": "int64",
         "result_source_row": "int64",
+        "result_serial": "int64",
         "document_id": "string",
         "district": "string",
         "block": "string",
@@ -61,6 +63,7 @@
         "result_source_url": "string",
         "result_source_sha256": "string",
         "result_raw_cell": "string",
+        "match_method": "string",
         "result_present": "bool",
         "elected": "bool"
       }
@@ -68,7 +71,7 @@
     {
       "path": "gp_head_winner_records_2021.parquet",
       "rows": 8050,
-      "sha256": "1702c547d77ec2c41fd16c1de840e07e2c81cc9b709ba049d314bff9aaeb9fc4",
+      "sha256": "6ad478a49685833f44a502bfc416405b07047f1a13dfce1dbe3f942bb698c0ad",
       "schema": {
         "district_id": "int64",
         "block_id": "int64",
@@ -80,6 +83,7 @@
         "votes": "int64",
         "source_row": "int64",
         "result_source_row": "int64",
+        "result_serial": "int64",
         "document_id": "string",
         "district": "string",
         "block": "string",
@@ -95,6 +99,7 @@
         "result_source_url": "string",
         "result_source_sha256": "string",
         "result_raw_cell": "string",
+        "match_method": "string",
         "result_present": "bool",
         "elected": "bool"
       }
@@ -124,6 +129,11 @@
     "result_records": 66392,
     "candidate_only_records": 38,
     "result_only_records": 0,
+    "result_match_methods": {
+      "name": 169,
+      "name_contained": 29,
+      "serial_and_name": 66194
+    },
     "panchayats_enumerated": 8067,
     "districts": 38,
     "blocks": 533,

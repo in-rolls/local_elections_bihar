@@ -109,7 +109,9 @@ def fetch(raw, key, page, params=None, *, html=False):
             start = time.monotonic()
             try:
                 response = LOCAL.session.get(
-                    BASE + page, params=params, timeout=(30, 120)
+                    page if page.startswith("https://") else BASE + page,
+                    params=params,
+                    timeout=(30, 120),
                 )
                 event.update(
                     url=response.url,

@@ -10,6 +10,7 @@
     "votes": "int64",
     "source_row": "int64",
     "result_source_row": "int64",
+    "result_serial": "int64",
     "document_id": "string",
     "district": "string",
     "block": "string",
@@ -25,6 +26,7 @@
     "result_source_url": "string",
     "result_source_sha256": "string",
     "result_raw_cell": "string",
+    "match_method": "string",
     "result_present": "bool",
     "elected": "bool"
   },
@@ -39,6 +41,7 @@
     "votes": "int64",
     "source_row": "int64",
     "result_source_row": "int64",
+    "result_serial": "int64",
     "document_id": "string",
     "district": "string",
     "block": "string",
@@ -54,6 +57,7 @@
     "result_source_url": "string",
     "result_source_sha256": "string",
     "result_raw_cell": "string",
+    "match_method": "string",
     "result_present": "bool",
     "elected": "bool"
   },
