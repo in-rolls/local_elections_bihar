@@ -17,6 +17,7 @@ HONORIFIC = re.compile(
     r"^(?:मो[0Oo\u0966]?|मोहम्मद|मु[0\u0966]|म[0\u0966]|श्रीमती|श्री|बीबी|स्व[0\u0966]|डा[0\u0966]|डॉ[0\u0966]?)\s+"
 )
 SUFFIX = re.compile(r"\s*\d+$")
+SUFFIX_NUMBER = re.compile(r"(\d+)$")
 
 
 def name_key(name):
@@ -34,6 +35,7 @@ def match(candidates, results):
     ``candidates`` and ``results`` map serial -> name. Returns
     ``{result_serial: (candidate_serial | None, method)}``, where method is
     ``serial_and_name``, ``name`` (same person at a different serial),
+    ``namesake_order`` (numbered namesakes paired in list order),
     ``name_contained`` (one remaining candidate's name is contained in the result
     name or vice versa, e.g. an unlisted honorific), ``serial_only`` (same serial,
     names differ and no other candidate matches) or ``result_only`` (no
@@ -58,6 +60,21 @@ def match(candidates, results):
         if len(options) == 1:
             pairs[serial] = (options[0], "name")
             used.add(options[0])
+    # Namesakes: the result feed numbers them ("माया देवी 1", "माया देवी 2"). Where
+    # serials cannot separate them, suffix order follows candidate-list serial order;
+    # that held in 3,468 of 3,469 namesake groups with both serials in 2021.
+    groups = {}
+    for serial, name in results.items():
+        found = SUFFIX_NUMBER.search(name_key(name))
+        if serial not in pairs and found:
+            base = name_key(name)[: found.start()]
+            groups.setdefault(base, []).append((int(found.group(1)), serial))
+    for base, members in groups.items():
+        listed = sorted(s for s in keys if s not in used and keys[s] == base)
+        if len(members) >= 2 and len(listed) == len(members):
+            for (_, serial), candidate in zip(sorted(members), listed, strict=True):
+                pairs[serial] = (candidate, "namesake_order")
+                used.add(candidate)
     for serial, name in results.items():
         if serial in pairs:
             continue

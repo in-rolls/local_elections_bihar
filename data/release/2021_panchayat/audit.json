@@ -1,0 +1,506 @@
+{
+  "seats_vs_portal_totals": {
+    "seats": {
+      "1": 109641,
+      "2": 109641,
+      "3": 8067,
+      "4": 8067,
+      "5": 11095,
+      "6": 1160
+    },
+    "district_office_mismatches": []
+  },
+  "seat_status": {
+    "6": {
+      "no_candidates": 2,
+      "candidates_no_results": 7,
+      "results": 1151
+    },
+    "3": {
+      "no_candidates": 5,
+      "candidates_no_results": 4,
+      "results": 8058
+    },
+    "4": {
+      "candidates_no_results": 6,
+      "no_candidates": 11,
+      "results": 8050
+    },
+    "1": {
+      "no_candidates": 58,
+      "candidates_no_results": 29,
+      "one_candidate_no_results": 1270,
+      "results": 108284
+    },
+    "2": {
+      "one_candidate_no_results": 31420,
+      "no_candidates": 2802,
+      "results": 75259,
+      "candidates_no_results": 160
+    },
+    "5": {
+      "candidates_no_results": 8,
+      "no_candidates": 20,
+      "results": 11067
+    }
+  },
+  "winners": {
+    "by_post_and_basis": [
+      {
+        "post_id": 1,
+        "winner_basis": "result_flag",
+        "len": 108240
+      },
+      {
+        "post_id": 1,
+        "winner_basis": "sole_candidate",
+        "len": 1270
+      },
+      {
+        "post_id": 2,
+        "winner_basis": "result_flag",
+        "len": 75236
+      },
+      {
+        "post_id": 2,
+        "winner_basis": "sole_candidate",
+        "len": 31420
+      },
+      {
+        "post_id": 3,
+        "winner_basis": "result_flag",
+        "len": 8050
+      },
+      {
+        "post_id": 4,
+        "winner_basis": "result_flag",
+        "len": 8044
+      },
+      {
+        "post_id": 5,
+        "winner_basis": "result_flag",
+        "len": 11065
+      },
+      {
+        "post_id": 6,
+        "winner_basis": "result_flag",
+        "len": 1150
+      }
+    ],
+    "winner_not_in_candidate_list": 100,
+    "flagged_winner_below_top_vote": 0,
+    "examples_below_top": [],
+    "partial_winner_flags": 4
+  },
+  "sec_report_candidates_by_office": {
+    "1": {
+      "report": {
+        "male": 239123,
+        "female": 266340,
+        "total": 505463
+      },
+      "release": {
+        "male": 239111,
+        "female": 266147,
+        "other": 178,
+        "unlisted_gender_unknown": 2,
+        "total": 505438
+      }
+    },
+    "2": {
+      "report": {
+        "male": 89257,
+        "female": 127794,
+        "total": 217051
+      },
+      "release": {
+        "male": 88922,
+        "female": 127456,
+        "other": 51,
+        "unlisted_gender_unknown": 0,
+        "total": 216429
+      }
+    },
+    "3": {
+      "report": {
+        "male": 32464,
+        "female": 33971,
+        "total": 66435
+      },
+      "release": {
+        "male": 32462,
+        "female": 33952,
+        "other": 16,
+        "unlisted_gender_unknown": 0,
+        "total": 66430
+      }
+    },
+    "4": {
+      "report": {
+        "male": 26345,
+        "female": 23364,
+        "total": 49709
+      },
+      "release": {
+        "male": 26341,
+        "female": 23353,
+        "other": 4,
+        "unlisted_gender_unknown": 0,
+        "total": 49698
+      }
+    },
+    "5": {
+      "report": {
+        "male": 35321,
+        "female": 38477,
+        "total": 73798
+      },
+      "release": {
+        "male": 34370,
+        "female": 37602,
+        "other": 12,
+        "unlisted_gender_unknown": 1794,
+        "total": 73778
+      }
+    },
+    "6": {
+      "report": {
+        "male": 6405,
+        "female": 6532,
+        "total": 12937
+      },
+      "release": {
+        "male": 6277,
+        "female": 6440,
+        "other": 3,
+        "unlisted_gender_unknown": 215,
+        "total": 12935
+      }
+    }
+  },
+  "sec_report_candidates_by_block": {
+    "report_blocks": 2136,
+    "name_matched": 2126,
+    "equal": 1753,
+    "absolute_difference_total": 673,
+    "largest_differences": [
+      {
+        "post": 2,
+        "district": "कैमूर(भभुआ)",
+        "block": "कुदरा",
+        "report": 292,
+        "release": 285
+      },
+      {
+        "post": 2,
+        "district": "दरभंगा",
+        "block": "दरभंगा",
+        "report": 618,
+        "release": 612
+      },
+      {
+        "post": 2,
+        "district": "गोपालगंज",
+        "block": "बरौली",
+        "report": 567,
+        "release": 561
+      },
+      {
+        "post": 2,
+        "district": "मधुबनी",
+        "block": "जयनगर",
+        "report": 406,
+        "release": 400
+      },
+      {
+        "post": 2,
+        "district": "लखीसराय",
+        "block": "सूरजगढ़ा",
+        "report": 541,
+        "release": 536
+      },
+      {
+        "post": 2,
+        "district": "समस्तीपुर",
+        "block": "विद्यापतिनगर",
+        "report": 397,
+        "release": 392
+      },
+      {
+        "post": 2,
+        "district": "गोपालगंज",
+        "block": "कुचायकोट",
+        "report": 797,
+        "release": 792
+      },
+      {
+        "post": 2,
+        "district": "औरंगाबाद",
+        "block": "कुटुम्बा",
+        "report": 553,
+        "release": 548
+      },
+      {
+        "post": 2,
+        "district": "सिवान",
+        "block": "बड़हरिया",
+        "report": 590,
+        "release": 585
+      },
+      {
+        "post": 2,
+        "district": "मुजफ्फरपुर",
+        "block": "औराई",
+        "report": 654,
+        "release": 649
+      }
+    ],
+    "unmatched_report_blocks": 10
+  },
+  "sec_report_elected_by_office": {
+    "1": {
+      "report": {
+        "female": 57153,
+        "total": 109554
+      },
+      "release": {
+        "total": 109510,
+        "female": 57145,
+        "gender_unknown": 1,
+        "sole_candidate": 1270
+      }
+    },
+    "3": {
+      "report": {
+        "female": 4209,
+        "total": 8058
+      },
+      "release": {
+        "total": 8050,
+        "female": 4206,
+        "gender_unknown": 0,
+        "sole_candidate": 0
+      }
+    },
+    "5": {
+      "report": {
+        "female": 5982,
+        "total": 11092
+      },
+      "release": {
+        "total": 11065,
+        "female": 5917,
+        "gender_unknown": 93,
+        "sole_candidate": 0
+      }
+    },
+    "6": {
+      "report": {
+        "female": 654,
+        "total": 1159
+      },
+      "release": {
+        "total": 1150,
+        "female": 648,
+        "gender_unknown": 6,
+        "sole_candidate": 0
+      }
+    },
+    "2": {
+      "report": {
+        "female": 63974,
+        "total": 107431
+      },
+      "release": {
+        "total": 106656,
+        "female": 63620,
+        "gender_unknown": 0,
+        "sole_candidate": 31420
+      }
+    },
+    "4": {
+      "report": {
+        "female": 3833,
+        "total": 8059
+      },
+      "release": {
+        "total": 8044,
+        "female": 3827,
+        "gender_unknown": 0,
+        "sole_candidate": 0
+      }
+    }
+  },
+  "dated_vs_current_winner": {
+    "p1_different_name": 2279,
+    "p1_same_name": 107223,
+    "p1_vacant_now": 8,
+    "p2_different_name": 1460,
+    "p2_same_name": 105192,
+    "p2_vacant_now": 4,
+    "p3_different_name": 236,
+    "p3_same_name": 7814,
+    "p4_different_name": 231,
+    "p4_same_name": 7813,
+    "p5_different_name": 227,
+    "p5_same_name": 10838,
+    "p6_different_name": 47,
+    "p6_same_name": 1103
+  },
+  "current_feeds": {
+    "current_winners": {
+      "rows": 247671,
+      "unmatched_to_seats": 0,
+      "repeated_seats": 0
+    },
+    "current_reservations": {
+      "rows": 247671,
+      "unmatched_to_seats": 0,
+      "repeated_seats": 0
+    },
+    "vacant_placeholders": 362
+  },
+  "portal_gender_statistics": {
+    "1": {
+      "portal": {
+        "c01": 47.21,
+        "c02": 52.79,
+        "c03": 0.0
+      },
+      "release": {
+        "c01": 47.2,
+        "c02": 52.79,
+        "c03": 0.0
+      }
+    },
+    "2": {
+      "portal": {
+        "c01": 39.53,
+        "c02": 60.14,
+        "c03": 0.01
+      },
+      "release": {
+        "c01": 39.53,
+        "c02": 60.15,
+        "c03": 0.0
+      }
+    },
+    "3": {
+      "portal": {
+        "c01": 47.18,
+        "c02": 52.81,
+        "c03": 0.0
+      },
+      "release": {
+        "c01": 47.18,
+        "c02": 52.81,
+        "c03": 0.0
+      }
+    },
+    "4": {
+      "portal": {
+        "c01": 52.0,
+        "c02": 47.97,
+        "c03": 0.02
+      },
+      "release": {
+        "c01": 52.0,
+        "c02": 48.0,
+        "c03": 0.0
+      }
+    },
+    "5": {
+      "portal": {
+        "c01": 45.4,
+        "c02": 54.6,
+        "c03": 0.0
+      },
+      "release": {
+        "c01": 45.4,
+        "c02": 54.6,
+        "c03": 0.0
+      }
+    },
+    "6": {
+      "portal": {
+        "c01": 43.19,
+        "c02": 56.81,
+        "c03": 0.0
+      },
+      "release": {
+        "c01": 43.19,
+        "c02": 56.81,
+        "c03": 0.0
+      }
+    }
+  },
+  "resample": {
+    "seats": 200,
+    "changed": []
+  },
+  "distributions": {
+    "candidates_by_post": {
+      "1": 505438,
+      "2": 216429,
+      "3": 66430,
+      "4": 49698,
+      "5": 73778,
+      "6": 12935
+    },
+    "result_only_candidates": {
+      "5": 1794,
+      "6": 215,
+      "1": 2
+    },
+    "implausible_ages": 93,
+    "age_quantiles": {
+      "0": 21.0,
+      "0.01": 21.0,
+      "0.5": 41.0,
+      "0.99": 74.0,
+      "1": 1987.0
+    },
+    "result_votes_max": 5900,
+    "result_votes_null": 531,
+    "match_methods": {
+      "serial_only": 16,
+      "null": 3367,
+      "name_contained": 1430,
+      "name": 16676,
+      "serial_and_name": 946905,
+      "namesake_order": 168
+    },
+    "candidates_per_seat": {
+      "0": 2898,
+      "1": 32690,
+      "2": 60681,
+      "3": 43542,
+      "4": 32580,
+      "5": 25279,
+      "6": 18257,
+      "7": 12151,
+      "8": 7639,
+      "9": 4677,
+      "10": 3610,
+      "11": 1266,
+      "12": 830,
+      "13": 534,
+      "14": 333,
+      "15": 242,
+      "16": 168,
+      "17": 68,
+      "18": 68,
+      "19": 49,
+      "20": 79,
+      "21": 9,
+      "22": 8,
+      "23": 3,
+      "24": 2,
+      "26": 4,
+      "27": 1,
+      "28": 1,
+      "30": 2
+    }
+  },
+  "flags": []
+}

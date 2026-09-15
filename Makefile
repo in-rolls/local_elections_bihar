@@ -1,4 +1,5 @@
-.PHONY: check test to-parquet verify-data ci-docker release-data verify-2021
+.PHONY: check test to-parquet verify-data ci-docker release-data verify-2021 \
+	build-2021 verify-2021-panchayat audit-2021
 
 check:
 	uv sync --frozen --group dev
@@ -8,6 +9,7 @@ check:
 	uv run pre-commit run --all-files
 	$(MAKE) verify-data
 	$(MAKE) verify-2021
+	$(MAKE) verify-2021-panchayat
 
 test:
 	uv run pytest -q
@@ -29,3 +31,12 @@ release-data:
 
 verify-2021:
 	uv run python scripts/release_2021.py --check
+
+build-2021:
+	uv run python scripts/build_2021.py
+
+verify-2021-panchayat:
+	uv run python scripts/build_2021.py --check
+
+audit-2021:
+	uv run python scripts/audit_2021.py

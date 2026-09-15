@@ -42,15 +42,22 @@ def decode_records(body):
     return data
 
 
-def completed(path):
+def completed_bytes(data):
+    """The successful request event of a finished gzipped ledger, else None."""
     try:
-        with gzip.open(path, "rt", encoding="utf-8") as stream:
-            rows = [json.loads(line) for line in stream]
+        rows = [json.loads(line) for line in gzip.decompress(data).splitlines()]
         if len(rows) >= 2 and rows[-1].get("done") and rows[-2].get("ok"):
             return rows[-2]
-    except (FileNotFoundError, EOFError, OSError, zlib.error, ValueError):
+    except (EOFError, OSError, zlib.error, ValueError):
         pass
     return None
+
+
+def completed(path):
+    try:
+        return completed_bytes(Path(path).read_bytes())
+    except FileNotFoundError:
+        return None
 
 
 def retry_wait(state):

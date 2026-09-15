@@ -26,5 +26,17 @@ passes() {
 passes current
 passes dated --posts 4 5 6
 passes dated --posts 1 2
-uv run python scripts/offices_2021.py parse
-uv run python scripts/audit_offices_2021.py
+
+# Reading ~560k small files in crawl order is slow on a spinning disk; pack each
+# feed once, in directory order, and build from the archives.
+archive=data/interim/2021/archive
+mkdir -p "$archive"
+for feed in 2021/offices/frame 2021/offices/p1 2021/offices/p2 2021/offices/p4 \
+    2021/offices/p5 2021/offices/p6 current/winners current/reservations; do
+    name=$(echo "$feed" | tr / _)
+    COPYFILE_DISABLE=1 tar -cf "$archive/$name.tar.part" -C data/raw/statewide_2021 "$feed"
+    mv "$archive/$name.tar.part" "$archive/$name.tar"
+done
+cp data/raw/statewide_2021/2021/offices/frame.parquet "$archive/offices_frame.parquet"
+uv run python scripts/build_2021.py
+uv run python scripts/audit_2021.py

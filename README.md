@@ -8,11 +8,55 @@ Bihar panchayat election records from the State Election Commission (SEC) for 20
 | Election | Offices | Contents | Section |
 |---|---|---|---|
 | 2016 | Mukhiya, sarpanch, ward member, panch, panchayat samiti member, zila parishad member | 645,605 candidate records with attributes, seat reservation and valid votes | [2016 data](#2016-data) |
-| 2021 | Mukhiya only | 66,430 candidacies, 66,392 result records and 8,050 flagged winners across 38 districts, 533 blocks and 8,067 panchayats | [2021 and the current portal](#2021-and-the-current-portal) |
-| 2021–2026 term | Mukhiya only | Current winner index and seat reservations for 8,067 seats; no election-year field | [2021 and the current portal](#2021-and-the-current-portal) |
+| 2021 | All six offices | 247,671 seats, 924,708 candidates, 968,562 result rows and 244,475 winners, validated against a declared schema | [2021 panchayat release](#2021-panchayat-release) |
+| 2021–2026 term | All six offices | Current winner and seat-reservation feeds, one row per seat; no election-year field | [2021 panchayat release](#2021-panchayat-release) |
 | 2021, Arwal | Mukhiya winners | Self-reported education transcribed from nomination papers for 64 winners | [2021 and the current portal](#2021-and-the-current-portal) |
 
-The 2021 collection does not include the other five offices. The portal's office list names all six, and `scripts/sec_portal.py` accepts their post IDs, but only mukhiya records have been requested; the dated 2021 collector (`scripts/sec_2021.py`) is mukhiya-only.
+## 2021 panchayat release
+
+[`data/release/2021_panchayat/`](data/release/2021_panchayat) holds the 2021 general election for every office: ward member, panch, mukhiya, sarpanch, panchayat samiti member and zila parishad member. It is built offline from saved SEC responses (candidate lists, results and the election rounds listed for each seat) by [`scripts/build_2021.py`](scripts/build_2021.py).
+
+| Table | Grain | Rows |
+|---|---|---:|
+| [seats](data/release/2021_panchayat/seats.parquet) | One seat per office, with candidate, result and winner counts and an outcome status | 247,671 |
+| [candidates](data/release/2021_panchayat/candidates.parquet) | Every contestant, with all candidate-list fields and the matched votes and win flag | 924,708 |
+| [result_rows](data/release/2021_panchayat/result_rows.parquet) | Every result record; samiti and zila parishad seats report one row per candidate per panchayat | 968,562 |
+| [winners](data/release/2021_panchayat/winners.parquet) | One winner per decided seat | 244,475 |
+| [current_winners](data/release/2021_panchayat/current_winners.parquet) | The portal's undated 2021–2026 winner feed, one row per seat | 247,671 |
+| [current_reservations](data/release/2021_panchayat/current_reservations.parquet) | The undated seat-reservation feed, one row per seat | 247,671 |
+
+**Every column is declared.** [`scripts/schemas_2021.py`](scripts/schemas_2021.py) defines each table's types, nullability, allowed values, ranges, unique keys and link format with [pandera](https://pandera.readthedocs.io/). The build validates all tables before writing any; [`dictionary.csv`](data/release/2021_panchayat/dictionary.csv) and [`SCHEMA.json`](data/release/2021_panchayat/SCHEMA.json) are generated from the same models, and [`MANIFEST.json`](data/release/2021_panchayat/MANIFEST.json) records row counts, checksums, source-archive hashes and code hashes. Every source field becomes a column except `MobileNo`, which is excluded from the release; an unrecognised field stops the build.
+
+**Coverage against independent counts.** Seats match the portal's published totals in every district and office. Candidates and winners compare with the SEC's [2021 election report](https://sec.bihar.gov.in/PanchayatRpt/ch13.aspx):
+
+| Office | Seats | Candidates | Report candidates | Winners | Report elected | Sole candidates |
+|---|---:|---:|---:|---:|---:|---:|
+| Ward member | 109,641 | 505,438 | 505,463 | 109,510 | 109,554 | 1,270 |
+| Panch | 109,641 | 216,429 | 217,051 | 106,656 | 107,431 | 31,420 |
+| Mukhiya | 8,067 | 66,430 | 66,435 | 8,050 | 8,058 | 0 |
+| Sarpanch | 8,067 | 49,698 | 49,709 | 8,044 | 8,059 | 0 |
+| Samiti member | 11,095 | 73,778 | 73,798 | 11,065 | 11,092 | 0 |
+| Zila parishad member | 1,160 | 12,935 | 12,937 | 1,150 | 1,159 | 0 |
+
+A sole candidate is the only nominee for a seat with no result records; `winner_basis` marks these winners as inferred rather than flagged. [`audit.json`](data/release/2021_panchayat/audit.json) holds the full comparison, including block-level candidate counts (1,753 of 2,126 name-matched blocks equal), winner gender shares within 0.03 percentage points of the portal's statistics API, and a fresh re-download of 200 seats with no changes.
+
+**Source problems the build handles explicitly:**
+
+- The candidate list is renumbered in name order, so results are matched by name, not serial; `match_method` records how. 16,113 ward-member result rows have no serial at all. Numbered namesakes ("माया देवी 1", "माया देवी 2") are paired in list order, which held in 3,468 of 3,469 namesake groups where both serials exist; for all 29 winners matched this way, guardian and age agree with the current winner feed.
+- 1,794 samiti, 215 zila parishad and 2 ward-member candidates appear only in results. They are kept with `in_candidate_list=false`; the report's candidate totals include them. 100 winners are among them, so their age, gender and nomination link are unknown here.
+- In four samiti seats the win flag is set on only some of the winner's panchayat rows (`winner_flag_partial`). Each flagged winner has the highest summed vote, in these and every other seat.
+- 362 current-feed rows are vacant-seat placeholders with no name, age 55 and a date in the photo field; they are flagged `vacant_placeholder` and their person fields are null.
+- Nine zila parishad seats list the 2021 round but return no results. Reported ages include 93 outside 21–100 (maximum 1,987); they are kept and flagged `candidate_age_implausible`. One panch candidate has a blank name.
+- Election rounds after 2021 (by-elections in 2023 and 2025) are listed in `seats.phases_listed` for offices whose rounds were requested; their results are not in this release.
+
+Rebuild from the response archives and verify:
+
+```sh
+./crawl_offices.sh          # resumes collection, packs archives, builds and audits
+make build-2021             # offline build from data/interim/2021/archive
+make verify-2021-panchayat  # checksums, row counts, schemas and seat joins
+make audit-2021             # independent comparisons (makes requests)
+```
 
 ## 2016 data
 

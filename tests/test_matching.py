@@ -39,3 +39,14 @@ def test_same_serial_kept_only_when_no_name_matches():
     listed = {1: "पुनम देवी", 2: "सीता देवी"}
     results = {1: "पूनम देवी", 2: "सीता देवी"}
     assert match(listed, results)[1] == (1, "serial_only")
+
+
+def test_numbered_namesakes_without_serials_follow_list_order():
+    # Ward d38_b10_p380100140_w14: result rows carry no OrderBy.
+    listed = {5: "नरेश राय", 6: "पवन कुमार राय", 7: "पवन कुमार राय"}
+    results = {-1: "नरेश राय", -2: "पवन कुमार राय 1", -3: "पवन कुमार राय 2 (विजेता)"}
+    assert match(listed, results) == {
+        -1: (5, "name"),
+        -2: (6, "namesake_order"),
+        -3: (7, "namesake_order"),
+    }
