@@ -1,0 +1,375 @@
+"""Build the validated 2016 panchayat release from re-collected results-form pages.
+
+Reads only the frame and result ledgers saved by sec_2016.py (as ledger files or a
+tar of them). Every page element that carries data is mapped explicitly; an
+unknown label, table header or value outside a declared vocabulary stops the build.
+"""
+
+import argparse
+import csv
+import gzip
+import hashlib
+import json
+import tarfile
+from collections import defaultdict
+from pathlib import Path
+
+import polars as pl
+import pyarrow.parquet as pq
+from bs4 import BeautifulSoup
+from schemas_2016 import TABLES, dictionary_rows, polars_schema
+from sec_2016 import OFFICES, current_page, html_of
+
+HEADER = (
+    "Sr No.",
+    "Candidate Name",
+    "Father/Hubs Name",
+    "Gender",
+    "Age",
+    "Category",
+    "Educational Qualification",
+    "Mobile No.",
+    "Address",
+    "Email Id",
+    "Obtained Valid Vote",
+    "Remarks",
+)
+COLUMNS = (
+    "sr_no",
+    "candidate_name",
+    "father_husband_name",
+    "gender_raw",
+    "age",
+    "category",
+    "education",
+    "mobile_number",
+    "address",
+    "email",
+    "votes_raw",
+    "remarks",
+)
+GENDER = {"पुरुष": "male", "महिला": "female", "--": None}
+SPANS = {
+    "lblPNKS",
+    "lblPradesikForMukhiya",
+    "lblReservationStatusForMukhiya",
+    "lblResevationShow",
+    "lblMsg",
+}
+NO_RECORD = "Record not Found..!"
+KEY = ("office", "district_code", "block_code", "panchayat_code", "unit_code")
+
+
+def ledgers(source):
+    """Yield (name, events) for finished version-2 result ledgers."""
+
+    def events_of(data):
+        rows = [json.loads(line) for line in gzip.decompress(data).splitlines()]
+        if not rows or not rows[-1].get("done") or rows[-1].get("version") != 2:
+            return None
+        return rows[:-1]
+
+    paths = [source] if source.is_file() else sorted(source.glob("*"))
+    for path in paths:
+        if path.suffix == ".tar":
+            with tarfile.open(path) as tar:
+                for member in tar:
+                    name = member.name.rsplit("/", 1)[-1]
+                    if name.endswith(".jsonl.gz") and not name.startswith("._"):
+                        yield name, events_of(tar.extractfile(member).read())
+        elif path.name.endswith(".jsonl.gz"):
+            yield path.name, events_of(path.read_bytes())
+
+
+def parse_page(html, where):
+    soup = BeautifulSoup(html, "html.parser")
+    spans = {
+        s["id"]: " ".join(s.get_text(" ").split())
+        for s in soup.select("span[id]")
+        if s.get_text(strip=True)
+    }
+    unknown = set(spans) - SPANS
+    if unknown:
+        raise ValueError(f"Unmapped page labels {sorted(unknown)} in {where}")
+    grid = soup.select_one("#gvVoterListDetails")
+    rows = []
+    if grid is not None:
+        header = tuple(
+            c.get_text(" ", strip=True) for c in grid.select("tr")[0].select("th,td")
+        )
+        if header != HEADER:
+            raise ValueError(f"Unexpected results header in {where}: {header}")
+        for tr in grid.select("tr")[1:]:
+            cells = [
+                td.get_text(" ", strip=True)
+                for td in tr.find_all("td", recursive=False)
+            ]
+            if len(cells) == len(HEADER):
+                rows.append(dict(zip(COLUMNS, cells, strict=True)))
+            elif not tr.select("a[href*='Page$'], span"):
+                raise ValueError(f"Unexpected results row in {where}: {cells}")
+    if spans.get("lblMsg") not in (None, NO_RECORD):
+        raise ValueError(f"Unexpected message in {where}: {spans['lblMsg']}")
+    if bool(rows) == (spans.get("lblMsg") == NO_RECORD):
+        raise ValueError(f"Page has both or neither results and no-record: {where}")
+    return {
+        "seat_label": spans.get("lblPradesikForMukhiya"),
+        "seat_reservation": spans.get("lblReservationStatusForMukhiya")
+        or spans.get("lblResevationShow"),
+        "rows": rows,
+    }
+
+
+def number(value, name, where):
+    value = value.strip()
+    if value in ("", "--"):
+        return None
+    if not value.isdigit():
+        raise ValueError(f"Non-numeric {name} {value!r} in {where}")
+    return int(value)
+
+
+def text(value):
+    value = value.strip()
+    return None if value in ("", "--") else value
+
+
+def build(frame_path, results, out, partial=False):
+    frame = pq.read_table(frame_path).to_pylist()
+    pages = defaultdict(dict)
+    for name, events in ledgers(results):
+        if events is None:
+            if partial:
+                continue
+            raise ValueError(f"Unfinished or page-1-only ledger: {name}")
+        for index, event in enumerate(events):
+            key = (
+                OFFICES[event["office_code"]],
+                event["district"],
+                event["block"],
+                event["panchayat"],
+                event["unit"],
+            )
+            html = html_of(event)
+            if current_page(html) != event["page"]:
+                raise ValueError(
+                    f"Saved page differs from requested page: {name} {index}"
+                )
+            pages[key][event["page"]] = (name, index, event["fetched_at"], html)
+    seats, candidates, winners = [], [], []
+    missing, emitted = [], set()
+    for unit in frame:
+        key = (
+            unit["office"],
+            unit["district"],
+            unit["block"],
+            unit["panchayat"],
+            unit["unit"],
+        )
+        seat_pages = pages.get(key)
+        if not seat_pages:
+            missing.append(key)
+            continue
+        if sorted(seat_pages) != list(range(1, len(seat_pages) + 1)):
+            raise ValueError(f"Non-consecutive pages for {key}")
+        parsed, rows = [], []
+        for page, (name, index, fetched_at, html) in sorted(seat_pages.items()):
+            where = f"{name}#{index}"
+            info = parse_page(html, where)
+            parsed.append(info)
+            sha = hashlib.sha256(html.encode()).hexdigest()
+            for row in info["rows"]:
+                if row["remarks"] not in ("0", "Uncontested", "Vacant"):
+                    raise ValueError(f"Unknown remark {row['remarks']!r} in {where}")
+                if row["gender_raw"] not in GENDER:
+                    raise ValueError(f"Unknown gender {row['gender_raw']!r} in {where}")
+                rows.append(
+                    {
+                        **dict(zip(KEY, key, strict=True)),
+                        "sr_no": number(row["sr_no"], "Sr No.", where),
+                        "candidate_name": text(row["candidate_name"]),
+                        "father_husband_name": text(row["father_husband_name"]),
+                        "gender_raw": row["gender_raw"],
+                        "gender": GENDER[row["gender_raw"]],
+                        "age": number(row["age"], "Age", where),
+                        "category": text(row["category"]),
+                        "education": text(row["education"]),
+                        "mobile_number": text(row["mobile_number"]),
+                        "address": text(row["address"]),
+                        "email": text(row["email"]),
+                        "votes": number(row["votes_raw"], "votes", where),
+                        "votes_raw": row["votes_raw"] or None,
+                        "remarks": row["remarks"],
+                        "page": page,
+                        "source_file": name,
+                        "source_event": index,
+                        "fetched_at": fetched_at,
+                        "page_sha256": sha,
+                    }
+                )
+        labels = {(p["seat_label"], p["seat_reservation"]) for p in parsed}
+        if len(labels) != 1:
+            raise ValueError(f"Seat label changes across pages for {key}")
+        seat_label, reservation = labels.pop()
+        seats.append(
+            {
+                **dict(zip(KEY, key, strict=True)),
+                "district": unit["district_label"],
+                "block": unit["block_label"],
+                "panchayat": unit["panchayat_label"],
+                "unit": unit["unit_label"],
+                "code_repeated": unit["code_repeated"],
+                "seat_label": seat_label,
+                "seat_reservation": reservation,
+                "status": "results" if rows else "no_record",
+                "pages": len(seat_pages),
+                "candidate_rows": len(rows),
+            }
+        )
+        # A repeated code is fetched once; its rows are emitted once, not per label.
+        if key in emitted:
+            continue
+        emitted.add(key)
+        candidates.extend(rows)
+        winner = decide(rows, key)
+        if winner:
+            winners.append(winner)
+    if missing and not partial:
+        raise ValueError(
+            f"{len(missing)} frame seats have no saved page, e.g. {missing[:3]}"
+        )
+    return write(out, {"seats": seats, "candidates": candidates, "winners": winners})
+
+
+def decide(rows, key):
+    """Winner: the uncontested candidate, else the highest vote; none if vacant."""
+    uncontested = [r for r in rows if r["remarks"] == "Uncontested"]
+    if len(uncontested) > 1:
+        raise ValueError(f"Several uncontested candidates in {key}")
+    base = dict(zip(KEY, key, strict=True))
+    if uncontested:
+        r = uncontested[0]
+        return {
+            **base,
+            **pick(r),
+            "winner_basis": "uncontested",
+            "tied": False,
+            "votes": None,
+            "margin": None,
+        }
+    voted = sorted(
+        (r for r in rows if r["votes"] is not None), key=lambda r: -r["votes"]
+    )
+    if not voted:
+        return None
+    top = voted[0]
+    runner = voted[1]["votes"] if len(voted) > 1 else None
+    return {
+        **base,
+        **pick(top),
+        "winner_basis": "top_vote",
+        "tied": runner == top["votes"],
+        "votes": top["votes"],
+        "margin": None if runner is None else top["votes"] - runner,
+    }
+
+
+def pick(row):
+    return {k: row[k] for k in ("sr_no", "candidate_name", "gender", "age", "category")}
+
+
+def write(out, tables):
+    out.mkdir(parents=True, exist_ok=True)
+    frames = {}
+    for name, model in TABLES.items():
+        schema = polars_schema(model)
+        rows = [{c: r.get(c) for c in schema} for r in tables[name]]
+        frames[name] = model.validate(
+            pl.DataFrame(rows, schema=schema, orient="row"), lazy=True
+        )
+    files = []
+    for name, df in frames.items():
+        path = out / f"{name}.parquet"
+        temp = path.with_suffix(".tmp")
+        df.write_parquet(temp, compression="zstd", statistics=True)
+        temp.replace(path)
+        files.append(
+            {
+                "path": path.name,
+                "rows": df.height,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                "schema": {c: str(t) for c, t in df.schema.items()},
+            }
+        )
+    with (out / "dictionary.csv").open("w", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            ["table", "column", "type", "nullable", "checks", "description"],
+            lineterminator="\n",
+        )
+        writer.writeheader()
+        for name, model in TABLES.items():
+            writer.writerows(dictionary_rows(name, model))
+    (out / "SCHEMA.json").write_text(
+        json.dumps({f["path"]: f["schema"] for f in files}, indent=2) + "\n"
+    )
+    (out / "CHECKSUMS").write_text(
+        "".join(f"{f['sha256']}  {f['path']}\n" for f in files)
+    )
+    return files
+
+
+def verify(out):
+    manifest = json.loads((out / "MANIFEST.json").read_text())
+    for info in manifest["files"]:
+        path = out / info["path"]
+        if hashlib.sha256(path.read_bytes()).hexdigest() != info["sha256"]:
+            raise ValueError(f"Checksum differs from manifest: {path}")
+        df = TABLES[path.stem].validate(pl.read_parquet(path), lazy=True)
+        if df.height != info["rows"]:
+            raise ValueError(f"Row count differs from manifest: {path}")
+    seats = pl.read_parquet(out / "seats.parquet").unique(list(KEY))
+    for name in ("candidates", "winners"):
+        rows = pl.read_parquet(out / f"{name}.parquet")
+        orphans = rows.join(seats, on=list(KEY), how="anti", nulls_equal=True)
+        if orphans.height:
+            raise ValueError(f"{name} rows without a seat: {orphans.height}")
+    print(json.dumps({"verified": True, "files": len(manifest["files"])}))
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--frame", type=Path, default=Path("data/raw/statewide_2016/2016/frame.parquet")
+    )
+    parser.add_argument(
+        "--results", type=Path, default=Path("data/interim/2016/archive")
+    )
+    parser.add_argument("--out", type=Path, default=Path("data/release/2016_panchayat"))
+    parser.add_argument("--check", action="store_true")
+    # Development only: build from the pages saved so far, skipping unfetched seats.
+    parser.add_argument("--partial", action="store_true")
+    args = parser.parse_args()
+    if args.check:
+        verify(args.out)
+        return
+    files = build(args.frame, args.results, args.out, args.partial)
+    manifest = {
+        "year": 2016,
+        "source": "https://sec.bihar.gov.in/old-sec/ovc.aspx",
+        "files": files,
+        "frame_sha256": hashlib.sha256(args.frame.read_bytes()).hexdigest(),
+        "code_sha256": {
+            name: hashlib.sha256(
+                (Path(__file__).parent / name).read_bytes()
+            ).hexdigest()
+            for name in ("build_2016.py", "schemas_2016.py", "sec_2016.py")
+        },
+    }
+    (args.out / "MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    print(json.dumps({f["path"]: f["rows"] for f in files}))
+    verify(args.out)
+
+
+if __name__ == "__main__":
+    main()
