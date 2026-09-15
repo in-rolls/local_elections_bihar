@@ -85,7 +85,11 @@ def request(method, data=None):
                 response = session().get(URL, timeout=(30, 180))
             else:
                 response = session().post(URL, data=data, timeout=(30, 180))
-        except (requests.ConnectionError, requests.Timeout) as error:
+        except (
+            requests.ConnectionError,
+            requests.Timeout,
+            requests.exceptions.ChunkedEncodingError,
+        ) as error:
             raise Transient(str(error)) from error
         if response.status_code == 429 or response.status_code >= 500:
             raise Transient(f"HTTP {response.status_code}")

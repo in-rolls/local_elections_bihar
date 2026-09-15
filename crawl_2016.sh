@@ -7,7 +7,7 @@ if command -v caffeinate >/dev/null 2>&1 && [ "${BIHAR_AWAKE:-0}" != 1 ]; then
 fi
 passes() {
     for pass in 1 2 3 4 5; do
-        if uv run python scripts/sec_2016.py "$@"; then
+        if uv run python scripts/sec_2016.py "$@" --workers 2; then
             return 0
         fi
         echo "pass $pass of '$*' left failures; retrying in 10 minutes" >&2
