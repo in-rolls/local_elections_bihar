@@ -9,6 +9,7 @@ Bihar panchayat election records from the State Election Commission (SEC) for 20
 |---|---|---|---|
 | 2016 | Mukhiya, sarpanch, ward member, panch, panchayat samiti member, zila parishad member | 645,605 candidate records with attributes, seat reservation and valid votes | [2016 data](#2016-data) |
 | 2021 | All six offices | 247,671 seats, 924,708 candidates, 968,562 result rows and 244,475 winners, validated against a declared schema | [2021 panchayat release](#2021-panchayat-release) |
+| 2023 and 2025 by-elections | All six offices | 5,749 by-election seats, 8,449 candidates and 5,749 winners | [2021 panchayat release](#2021-panchayat-release) |
 | 2021–2026 term | All six offices | Current winner and seat-reservation feeds, one row per seat; no election-year field | [2021 panchayat release](#2021-panchayat-release) |
 | 2021, Arwal | Mukhiya winners | Self-reported education transcribed from nomination papers for 64 winners | [2021 and the current portal](#2021-and-the-current-portal) |
 
@@ -24,6 +25,10 @@ Bihar panchayat election records from the State Election Commission (SEC) for 20
 | [winners](data/release/2021_panchayat/winners.parquet) | One winner per decided seat | 244,475 |
 | [current_winners](data/release/2021_panchayat/current_winners.parquet) | The portal's undated 2021–2026 winner feed, one row per seat | 247,671 |
 | [current_reservations](data/release/2021_panchayat/current_reservations.parquet) | The undated seat-reservation feed, one row per seat | 247,671 |
+| [byelection_seats](data/release/2021_panchayat/byelection_seats.parquet) | One seat per by-election round (2023 phase 1, 2023 phase 2, 2025) | 5,749 |
+| [byelection_candidates](data/release/2021_panchayat/byelection_candidates.parquet) | Every by-election contestant | 8,449 |
+| [byelection_result_rows](data/release/2021_panchayat/byelection_result_rows.parquet) | Every by-election result record | 4,643 |
+| [byelection_winners](data/release/2021_panchayat/byelection_winners.parquet) | One winner per by-election seat | 5,749 |
 
 **Every column is declared.** [`scripts/schemas_2021.py`](scripts/schemas_2021.py) defines each table's types, nullability, allowed values, ranges, unique keys and link format with [pandera](https://pandera.readthedocs.io/). The build validates all tables before writing any; [`dictionary.csv`](data/release/2021_panchayat/dictionary.csv) and [`SCHEMA.json`](data/release/2021_panchayat/SCHEMA.json) are generated from the same models, and [`MANIFEST.json`](data/release/2021_panchayat/MANIFEST.json) records row counts, checksums, source-archive hashes and code hashes. Every source field becomes a column except `MobileNo`, which is excluded from the release; an unrecognised field stops the build.
 
@@ -47,7 +52,7 @@ A sole candidate is the only nominee for a seat with no result records; `winner_
 - In four samiti seats the win flag is set on only some of the winner's panchayat rows (`winner_flag_partial`). Each flagged winner has the highest summed vote, in these and every other seat.
 - 362 current-feed rows are vacant-seat placeholders with no name, age 55 and a date in the photo field; they are flagged `vacant_placeholder` and their person fields are null.
 - Nine zila parishad seats list the 2021 round but return no results. Reported ages include 93 outside 21–100 (maximum 1,987); they are kept and flagged `candidate_age_implausible`. One panch candidate has a blank name.
-- Election rounds after 2021 (by-elections in 2023 and 2025) are listed in `seats.phases_listed` for offices whose rounds were requested; their results are not in this release.
+- By-elections come from the portal's by-election page, which lists 5,749 seats across the three rounds; the collected seats match its totals in every district, office and round, and every one is a seat of the 2021 frame. 4,499 by-election seats (3,498 of them panch) had a single nominee and no result records, so their winners are `sole_candidate` inferences; the other 1,250 have flagged winners, each with the highest summed vote.
 
 Rebuild from the response archives and verify:
 

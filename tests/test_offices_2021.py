@@ -31,3 +31,8 @@ def test_request_parameters_follow_portal_form():
     assert offices_2021.request_params(zila)["blockId"] == ""
     assert offices_2021.request_params(zila)["jpn"] == 3
     assert zila["unit_id"] == "d33_z3"
+
+
+def test_mukhiya_and_sarpanch_seats_are_panchayats():
+    assert seat(3, None, 12)["unit_id"] == "d33_b1_p12"
+    assert seat(4, None, 12)["unit_id"] == "d33_b1_p12"

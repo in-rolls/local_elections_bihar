@@ -12,36 +12,36 @@
   },
   "seat_status": {
     "6": {
-      "no_candidates": 2,
       "candidates_no_results": 7,
-      "results": 1151
+      "results": 1151,
+      "no_candidates": 2
     },
     "3": {
-      "no_candidates": 5,
+      "results": 8058,
       "candidates_no_results": 4,
-      "results": 8058
+      "no_candidates": 5
     },
     "4": {
-      "candidates_no_results": 6,
       "no_candidates": 11,
+      "candidates_no_results": 6,
       "results": 8050
     },
     "1": {
-      "no_candidates": 58,
       "candidates_no_results": 29,
+      "no_candidates": 58,
       "one_candidate_no_results": 1270,
       "results": 108284
     },
+    "5": {
+      "results": 11067,
+      "no_candidates": 20,
+      "candidates_no_results": 8
+    },
     "2": {
-      "one_candidate_no_results": 31420,
       "no_candidates": 2802,
+      "one_candidate_no_results": 31420,
       "results": 75259,
       "candidates_no_results": 160
-    },
-    "5": {
-      "candidates_no_results": 8,
-      "no_candidates": 20,
-      "results": 11067
     }
   },
   "winners": {
@@ -193,10 +193,10 @@
       },
       {
         "post": 2,
-        "district": "दरभंगा",
-        "block": "दरभंगा",
-        "report": 618,
-        "release": 612
+        "district": "मधुबनी",
+        "block": "जयनगर",
+        "report": 406,
+        "release": 400
       },
       {
         "post": 2,
@@ -207,10 +207,24 @@
       },
       {
         "post": 2,
-        "district": "मधुबनी",
-        "block": "जयनगर",
-        "report": 406,
-        "release": 400
+        "district": "दरभंगा",
+        "block": "दरभंगा",
+        "report": 618,
+        "release": 612
+      },
+      {
+        "post": 2,
+        "district": "समस्तीपुर",
+        "block": "विद्यापतिनगर",
+        "report": 397,
+        "release": 392
+      },
+      {
+        "post": 2,
+        "district": "मुजफ्फरपुर",
+        "block": "औराई",
+        "report": 654,
+        "release": 649
       },
       {
         "post": 2,
@@ -221,10 +235,10 @@
       },
       {
         "post": 2,
-        "district": "समस्तीपुर",
-        "block": "विद्यापतिनगर",
-        "report": 397,
-        "release": 392
+        "district": "सिवान",
+        "block": "बड़हरिया",
+        "report": 590,
+        "release": 585
       },
       {
         "post": 2,
@@ -239,20 +253,6 @@
         "block": "कुटुम्बा",
         "report": 553,
         "release": 548
-      },
-      {
-        "post": 2,
-        "district": "सिवान",
-        "block": "बड़हरिया",
-        "report": 590,
-        "release": 585
-      },
-      {
-        "post": 2,
-        "district": "मुजफ्फरपुर",
-        "block": "औराई",
-        "report": 654,
-        "release": 649
       }
     ],
     "unmatched_report_blocks": 10
@@ -438,6 +438,109 @@
     "seats": 200,
     "changed": []
   },
+  "byelections": {
+    "seats": [
+      {
+        "phase": "2023_1",
+        "post_id": 1,
+        "len": 533
+      },
+      {
+        "phase": "2023_1",
+        "post_id": 2,
+        "len": 2002
+      },
+      {
+        "phase": "2023_1",
+        "post_id": 3,
+        "len": 48
+      },
+      {
+        "phase": "2023_1",
+        "post_id": 4,
+        "len": 54
+      },
+      {
+        "phase": "2023_1",
+        "post_id": 5,
+        "len": 44
+      },
+      {
+        "phase": "2023_1",
+        "post_id": 6,
+        "len": 7
+      },
+      {
+        "phase": "2023_2",
+        "post_id": 1,
+        "len": 321
+      },
+      {
+        "phase": "2023_2",
+        "post_id": 2,
+        "len": 788
+      },
+      {
+        "phase": "2023_2",
+        "post_id": 3,
+        "len": 20
+      },
+      {
+        "phase": "2023_2",
+        "post_id": 4,
+        "len": 34
+      },
+      {
+        "phase": "2023_2",
+        "post_id": 5,
+        "len": 20
+      },
+      {
+        "phase": "2023_2",
+        "post_id": 6,
+        "len": 4
+      },
+      {
+        "phase": "2025_1",
+        "post_id": 1,
+        "len": 733
+      },
+      {
+        "phase": "2025_1",
+        "post_id": 2,
+        "len": 915
+      },
+      {
+        "phase": "2025_1",
+        "post_id": 3,
+        "len": 63
+      },
+      {
+        "phase": "2025_1",
+        "post_id": 4,
+        "len": 83
+      },
+      {
+        "phase": "2025_1",
+        "post_id": 5,
+        "len": 72
+      },
+      {
+        "phase": "2025_1",
+        "post_id": 6,
+        "len": 8
+      }
+    ],
+    "status": {
+      "one_candidate_no_results": 4499,
+      "results": 1250
+    },
+    "winners_by_basis": {
+      "result_flag": 1250,
+      "sole_candidate": 4499
+    },
+    "flagged_winner_below_top_vote": 0
+  },
   "distributions": {
     "candidates_by_post": {
       "1": 505438,
@@ -448,8 +551,8 @@
       "6": 12935
     },
     "result_only_candidates": {
-      "5": 1794,
       "6": 215,
+      "5": 1794,
       "1": 2
     },
     "implausible_ages": 93,
@@ -463,11 +566,11 @@
     "result_votes_max": 5900,
     "result_votes_null": 531,
     "match_methods": {
-      "serial_only": 16,
+      "name": 16676,
       "null": 3367,
       "name_contained": 1430,
-      "name": 16676,
       "serial_and_name": 946905,
+      "serial_only": 16,
       "namesake_order": 168
     },
     "candidates_per_seat": {

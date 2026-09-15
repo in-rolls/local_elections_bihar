@@ -28,7 +28,7 @@ def unit_id(u):
     d, b, p, s = u["district_id"], u["block_id"], u["panchayat_id"], u["seat_no"]
     if u["post_id"] in WARD_POSTS:
         return f"d{d}_b{b}_p{p}_w{s}"
-    if u["post_id"] == 4:
+    if u["post_id"] in (3, 4):
         return f"d{d}_b{b}_p{p}"
     if u["post_id"] == 5:
         return f"d{d}_b{b}_s{s}"

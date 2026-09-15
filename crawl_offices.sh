@@ -26,13 +26,20 @@ passes() {
 passes current
 passes dated --posts 4 5 6
 passes dated --posts 1 2
+[ -f data/raw/statewide_2021/byelections/frame.parquet ] ||
+    uv run python scripts/byelections_2021.py frame
+for pass in 1 2 3 4 5; do
+    uv run python scripts/byelections_2021.py fetch && break
+    echo "pass $pass of by-election fetch left failures; retrying in 10 minutes" >&2
+    sleep 600
+done
 
 # Reading ~560k small files in crawl order is slow on a spinning disk; pack each
 # feed once, in directory order, and build from the archives.
 archive=data/interim/2021/archive
 mkdir -p "$archive"
 for feed in 2021/offices/frame 2021/offices/p1 2021/offices/p2 2021/offices/p4 \
-    2021/offices/p5 2021/offices/p6 current/winners current/reservations; do
+    2021/offices/p5 2021/offices/p6 current/winners current/reservations byelections; do
     name=$(echo "$feed" | tr / _)
     COPYFILE_DISABLE=1 tar -cf "$archive/$name.tar.part" -C data/raw/statewide_2021 "$feed"
     mv "$archive/$name.tar.part" "$archive/$name.tar"

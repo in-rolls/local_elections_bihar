@@ -15,7 +15,7 @@ seats.parquet,result_only_candidates,Int32,False,<Check greater_than_or_equal_to
 seats.parquet,result_candidates,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Distinct candidates in the results.
 seats.parquet,winners_flagged,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>; <Check less_than_or_equal_to: less_than_or_equal_to(1)>,Candidates with IsWin true on any result row.
 seats.parquet,winner_flag_partial,Boolean,False,,IsWin differs across the winner's panchayat rows in the source.
-seats.parquet,status,String,False,"<Check isin: isin(['results', 'one_candidate_no_results', 'candidates_no_results', 'no_candidates', 'no_2021_phase'])>",Seat outcome class; see SEAT_STATUS.
+seats.parquet,status,String,False,"<Check isin: isin(['results', 'one_candidate_no_results', 'candidates_no_results', 'no_candidates', 'phase_not_listed'])>",Seat outcome class; see SEAT_STATUS.
 candidates.parquet,post_id,Int8,False,"<Check isin: isin([1, 2, 3, 4, 5, 6])>",SEC post ID.
 candidates.parquet,unit_id,String,False,,Seat key; joins to seats.
 candidates.parquet,in_candidate_list,Boolean,False,,"Listed in the candidate list; false for candidates named only in results, whose list attributes are null."
@@ -113,3 +113,79 @@ current_reservations.parquet,source_url,String,False,,"SEC request URL, includin
 current_reservations.parquet,fetched_at,String,False,,UTC time the response was retrieved.
 current_reservations.parquet,source_sha256,String,False,<Check str_length: str_length(64)>,SHA-256 of the saved response body.
 current_reservations.parquet,source_row,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,One-based position of the record in that response.
+byelection_seats.parquet,post_id,Int8,False,"<Check isin: isin([1, 2, 3, 4, 5, 6])>",SEC post ID; see POSTS.
+byelection_seats.parquet,district_id,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>; <Check less_than_or_equal_to: less_than_or_equal_to(38)>,SEC district ID.
+byelection_seats.parquet,block_id,Int32,True,,SEC block ID; null for zila parishad seats.
+byelection_seats.parquet,panchayat_id,Int64,True,,SEC panchayat ID; null for samiti and zila parishad seats.
+byelection_seats.parquet,seat_no,Int32,True,,"Ward, samiti or zila parishad seat number; null for mukhiya and sarpanch."
+byelection_seats.parquet,unit_id,String,False,,"Seat key within the office, built from the IDs."
+byelection_seats.parquet,district,String,False,,District name from the portal frame.
+byelection_seats.parquet,block,String,True,,Block name from the portal frame.
+byelection_seats.parquet,panchayat,String,True,,Panchayat name from the portal frame.
+byelection_seats.parquet,phases_listed,String,True,,"Election rounds the portal lists for the seat, ';'-joined (e.g. 2021_1;2023_1); null when not requested."
+byelection_seats.parquet,candidate_records,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Rows in the 2021 candidate list.
+byelection_seats.parquet,result_records,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Rows in the 2021 result feed; samiti and zila parishad seats have one row per candidate per panchayat.
+byelection_seats.parquet,result_only_candidates,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Candidates named in results but missing from the candidate list.
+byelection_seats.parquet,result_candidates,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Distinct candidates in the results.
+byelection_seats.parquet,winners_flagged,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>; <Check less_than_or_equal_to: less_than_or_equal_to(1)>,Candidates with IsWin true on any result row.
+byelection_seats.parquet,winner_flag_partial,Boolean,False,,IsWin differs across the winner's panchayat rows in the source.
+byelection_seats.parquet,status,String,False,"<Check isin: isin(['results', 'one_candidate_no_results', 'candidates_no_results', 'no_candidates', 'phase_not_listed'])>",Seat outcome class; see SEAT_STATUS.
+byelection_seats.parquet,phase,String,False,"<Check isin: isin(['2023_1', '2023_2', '2025_1'])>","By-election round: 2023_1, 2023_2 or 2025_1."
+byelection_candidates.parquet,post_id,Int8,False,"<Check isin: isin([1, 2, 3, 4, 5, 6])>",SEC post ID.
+byelection_candidates.parquet,unit_id,String,False,,Seat key; joins to seats.
+byelection_candidates.parquet,in_candidate_list,Boolean,False,,"Listed in the candidate list; false for candidates named only in results, whose list attributes are null."
+byelection_candidates.parquet,candidate_serial,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,OrderBy in the candidate list (renumbered in name order); null if unlisted.
+byelection_candidates.parquet,candidate_name,String,True,,"CandidateName, verbatim; the result-feed name without the winner mark when unlisted; null when blank in the source (one panch candidate)."
+byelection_candidates.parquet,guardian_name,String,True,,"GaurdianName (father or husband), verbatim."
+byelection_candidates.parquet,candidate_age,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Age as reported; not corrected.
+byelection_candidates.parquet,candidate_age_implausible,Boolean,True,,Age below 21 or above 100.
+byelection_candidates.parquet,candidate_gender_raw,String,True,,"Gender, verbatim."
+byelection_candidates.parquet,candidate_gender,String,True,"<Check isin: isin(['male', 'female', 'other'])>",Gender mapped to male/female/other.
+byelection_candidates.parquet,candidate_address,String,True,,"CandidateAddress, verbatim."
+byelection_candidates.parquet,symbol_name,String,True,,"SymbolName, the allotted election symbol."
+byelection_candidates.parquet,symbol_file,String,True,,"SymbolUrl, the symbol image file name."
+byelection_candidates.parquet,photo_url,String,True,<Check str_startswith: str_startswith('http')>,CandidatePhoto link.
+byelection_candidates.parquet,affidavit_url,String,True,<Check str_startswith: str_startswith('http')>,CandidateDoc nomination PDF link.
+byelection_candidates.parquet,result_present,Boolean,False,,A result record was matched to this candidate.
+byelection_candidates.parquet,result_serial,Int32,True,,OrderBy of the matched result record.
+byelection_candidates.parquet,match_method,String,True,"<Check isin: isin(['serial_and_name', 'name', 'namesake_order', 'name_contained', 'serial_only'])>",How the result was matched; null without a result.
+byelection_candidates.parquet,votes,Int64,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,TotalVote summed over the seat's result rows; null without results.
+byelection_candidates.parquet,elected,Boolean,True,,IsWin from the result feed; null without results.
+byelection_candidates.parquet,source_url,String,False,,"SEC request URL, including election phase and seat parameters."
+byelection_candidates.parquet,fetched_at,String,False,,UTC time the response was retrieved.
+byelection_candidates.parquet,source_sha256,String,False,<Check str_length: str_length(64)>,SHA-256 of the saved response body.
+byelection_candidates.parquet,source_row,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,One-based position of the record in that response.
+byelection_candidates.parquet,phase,String,False,"<Check isin: isin(['2023_1', '2023_2', '2025_1'])>","By-election round: 2023_1, 2023_2 or 2025_1."
+byelection_result_rows.parquet,post_id,Int8,False,"<Check isin: isin([1, 2, 3, 4, 5, 6])>",SEC post ID.
+byelection_result_rows.parquet,unit_id,String,False,,Seat key; joins to seats.
+byelection_result_rows.parquet,result_record_id,Int64,False,,"SlNo, the portal's result record number."
+byelection_result_rows.parquet,post_name,String,False,,"PostName, verbatim."
+byelection_result_rows.parquet,result_district_id,Int32,False,,Dist; equals the requested district.
+byelection_result_rows.parquet,result_district,String,False,,"DistrictName, verbatim."
+byelection_result_rows.parquet,result_block_id,Int32,True,,BlockID of the reporting panchayat.
+byelection_result_rows.parquet,result_block,String,True,,"BlockName, verbatim."
+byelection_result_rows.parquet,result_panchayat_id,Int64,True,,PanchayatNo of the reporting panchayat.
+byelection_result_rows.parquet,result_panchayat,String,True,,"PanchayatName, verbatim."
+byelection_result_rows.parquet,result_seat_no,Int32,True,,"WardNo: ward, samiti or zila parishad number."
+byelection_result_rows.parquet,result_serial,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,"OrderBy in the result feed; null in 16,113 ward-member rows."
+byelection_result_rows.parquet,result_name,String,False,,"CandidateName in the result feed, verbatim."
+byelection_result_rows.parquet,votes,Int64,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,TotalVote in this panchayat; null when blank.
+byelection_result_rows.parquet,elected,Boolean,False,,IsWin.
+byelection_result_rows.parquet,candidate_serial,Int32,True,,Matched candidate-list serial; null when the candidate is not listed.
+byelection_result_rows.parquet,match_method,String,True,"<Check isin: isin(['serial_and_name', 'name', 'namesake_order', 'name_contained', 'serial_only'])>",How the match was made; null when unlisted.
+byelection_result_rows.parquet,source_url,String,False,,"SEC request URL, including election phase and seat parameters."
+byelection_result_rows.parquet,fetched_at,String,False,,UTC time the response was retrieved.
+byelection_result_rows.parquet,source_sha256,String,False,<Check str_length: str_length(64)>,SHA-256 of the saved response body.
+byelection_result_rows.parquet,source_row,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,One-based position of the record in that response.
+byelection_result_rows.parquet,phase,String,False,"<Check isin: isin(['2023_1', '2023_2', '2025_1'])>","By-election round: 2023_1, 2023_2 or 2025_1."
+byelection_winners.parquet,post_id,Int8,False,"<Check isin: isin([1, 2, 3, 4, 5, 6])>",SEC post ID.
+byelection_winners.parquet,unit_id,String,False,,Seat key; joins to seats.
+byelection_winners.parquet,winner_basis,String,False,"<Check isin: isin(['result_flag', 'sole_candidate'])>","result_flag (IsWin) or sole_candidate (one candidate, no results; inferred as elected unopposed)."
+byelection_winners.parquet,candidate_serial,Int32,True,,Candidate-list serial; null if unlisted.
+byelection_winners.parquet,result_serial,Int32,True,,Result serial; null for sole candidates.
+byelection_winners.parquet,winner_name,String,False,,"Candidate-list name, else the result name."
+byelection_winners.parquet,candidate_gender,String,True,"<Check isin: isin(['male', 'female', 'other'])>",Mapped gender; null if unlisted.
+byelection_winners.parquet,candidate_age,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Reported age; null if unlisted.
+byelection_winners.parquet,votes,Int64,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Votes summed over result rows.
+byelection_winners.parquet,affidavit_url,String,True,<Check str_startswith: str_startswith('http')>,Nomination PDF link; null if unlisted.
+byelection_winners.parquet,phase,String,False,"<Check isin: isin(['2023_1', '2023_2', '2025_1'])>","By-election round: 2023_1, 2023_2 or 2025_1."

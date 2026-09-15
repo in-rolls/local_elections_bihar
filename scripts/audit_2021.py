@@ -318,7 +318,34 @@ def audit(release, archives, report_dir, resample, seed):
     if changed:
         flags.append("resample_changed")
 
-    # 7. Distributions that would expose a wrong parse.
+    # 7. By-elections: listed totals, and winners against summed votes.
+    bye_seats, bye_rows = t["byelection_seats"], t["byelection_result_rows"]
+    bye_totals = bye_rows.group_by("phase", "post_id", "unit_id", "result_serial").agg(
+        pl.col("votes").sum(), pl.col("elected").any()
+    )
+    bye_top = bye_totals.group_by("phase", "post_id", "unit_id").agg(
+        pl.col("votes").max().alias("top")
+    )
+    bye_low = (
+        bye_totals.filter("elected")
+        .join(bye_top, on=["phase", "post_id", "unit_id"])
+        .filter(pl.col("votes") < pl.col("top"))
+    )
+    report["byelections"] = {
+        "seats": bye_seats.group_by("phase", "post_id")
+        .len()
+        .sort("phase", "post_id")
+        .to_dicts(),
+        "status": dict(bye_seats.group_by("status").len().iter_rows()),
+        "winners_by_basis": dict(
+            t["byelection_winners"].group_by("winner_basis").len().iter_rows()
+        ),
+        "flagged_winner_below_top_vote": bye_low.height,
+    }
+    if bye_low.height:
+        flags.append("byelection_winner_below_top_vote")
+
+    # 8. Distributions that would expose a wrong parse.
     report["distributions"] = {
         "candidates_by_post": dict(
             cands.group_by("post_id").len().sort("post_id").iter_rows()

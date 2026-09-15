@@ -199,6 +199,134 @@
         "source_url",
         "source_row"
       ]
+    },
+    {
+      "path": "byelection_seats.parquet",
+      "rows": 5749,
+      "bytes": 113676,
+      "sha256": "a6bf0939e4e50c79161efb0d03b6425a7499b792a676d4f6db77049f817b6aef",
+      "schema": {
+        "post_id": "Int8",
+        "district_id": "Int32",
+        "block_id": "Int32",
+        "panchayat_id": "Int64",
+        "seat_no": "Int32",
+        "unit_id": "String",
+        "district": "String",
+        "block": "String",
+        "panchayat": "String",
+        "phases_listed": "String",
+        "candidate_records": "Int32",
+        "result_records": "Int32",
+        "result_only_candidates": "Int32",
+        "result_candidates": "Int32",
+        "winners_flagged": "Int32",
+        "winner_flag_partial": "Boolean",
+        "status": "String",
+        "phase": "String"
+      },
+      "unique_key": [
+        "phase",
+        "post_id",
+        "unit_id"
+      ]
+    },
+    {
+      "path": "byelection_candidates.parquet",
+      "rows": 8449,
+      "bytes": 751776,
+      "sha256": "c2686d60f0678ca3dbb8e79e1127d78bc9aa19f03570084ce6ae2c20aa99f4f8",
+      "schema": {
+        "post_id": "Int8",
+        "unit_id": "String",
+        "in_candidate_list": "Boolean",
+        "candidate_serial": "Int32",
+        "candidate_name": "String",
+        "guardian_name": "String",
+        "candidate_age": "Int32",
+        "candidate_age_implausible": "Boolean",
+        "candidate_gender_raw": "String",
+        "candidate_gender": "String",
+        "candidate_address": "String",
+        "symbol_name": "String",
+        "symbol_file": "String",
+        "photo_url": "String",
+        "affidavit_url": "String",
+        "result_present": "Boolean",
+        "result_serial": "Int32",
+        "match_method": "String",
+        "votes": "Int64",
+        "elected": "Boolean",
+        "source_url": "String",
+        "fetched_at": "String",
+        "source_sha256": "String",
+        "source_row": "Int32",
+        "phase": "String"
+      },
+      "unique_key": [
+        "source_url",
+        "source_row"
+      ]
+    },
+    {
+      "path": "byelection_result_rows.parquet",
+      "rows": 4643,
+      "bytes": 193150,
+      "sha256": "5f29cf8519c15e059a5e4c5d5975305807c1a5a6e9a9c162d922a396b65c9ce5",
+      "schema": {
+        "post_id": "Int8",
+        "unit_id": "String",
+        "result_record_id": "Int64",
+        "post_name": "String",
+        "result_district_id": "Int32",
+        "result_district": "String",
+        "result_block_id": "Int32",
+        "result_block": "String",
+        "result_panchayat_id": "Int64",
+        "result_panchayat": "String",
+        "result_seat_no": "Int32",
+        "result_serial": "Int32",
+        "result_name": "String",
+        "votes": "Int64",
+        "elected": "Boolean",
+        "candidate_serial": "Int32",
+        "match_method": "String",
+        "source_url": "String",
+        "fetched_at": "String",
+        "source_sha256": "String",
+        "source_row": "Int32",
+        "phase": "String"
+      },
+      "unique_key": [
+        "phase",
+        "post_id",
+        "unit_id",
+        "source_row"
+      ]
+    },
+    {
+      "path": "byelection_winners.parquet",
+      "rows": 5749,
+      "bytes": 131630,
+      "sha256": "c6445333c4109b108bb36681e530bce0de9f31e343d9e7636ca9bb258cf0153b",
+      "schema": {
+        "post_id": "Int8",
+        "unit_id": "String",
+        "winner_basis": "String",
+        "candidate_serial": "Int32",
+        "result_serial": "Int32",
+        "winner_name": "String",
+        "candidate_gender": "String",
+        "candidate_age": "Int32",
+        "votes": "Int64",
+        "affidavit_url": "String",
+        "phase": "String"
+      },
+      "unique_key": [
+        "phase",
+        "post_id",
+        "unit_id"
+      ]
     }
   ],
   "source_archives_sha256": {
@@ -208,13 +336,14 @@
     "2021_offices_p6.tar": "fd99413c3e0c644aeda3b3676daad7e26bb75e619260fb2bc4de505ee166671c",
     "2021_offices_p2.tar": "c3855634ca02adbade05aed07a0838ccfb2305b295e8c1ded0809c9f6c282340",
     "2021_offices_p1.tar": "ac537d392993c3d1356b4484acaa8da3e6997da96e85de946c078197000581b3",
+    "byelections.tar": "7534f2514dc9b79a139cdfdb7f0c6477ec31f134c83debc50b9dde99626ebf15",
     "current_winners.tar": "60e4eaa37d73a6ddbf39d3a05f61954e7ea8daf8fa096a75715cb447544db204",
     "current_reservations.tar": "3c3af9edbd296aad36891e71e401ab912361270f1e7cd708ad15ee2c6d38bc22"
   },
   "code_sha256": {
-    "build_2021.py": "b73f4454fdece6035499e6e947ff36af7dd857dabebed49c636f03369ead1a84",
+    "build_2021.py": "d8a5380337408fdb777ac86b20344fb9b3be05bf7c0d14724ab92336a348ef50",
     "matching.py": "eb4b553c6be1265febb7fbe30553b863cf3900c7be88da88a4b8fd80373e7aaa",
-    "schemas_2021.py": "fa69cdb81f568234fc1576843dac4d5c5ead7e4a845a281d3b6d33967e9dc282",
+    "schemas_2021.py": "37df6e99af4af9de801da795a078cad7391840a04961fffd5a69103af88b3431",
     "sec_portal.py": "c0a9e8c74688e32890224abddca8c2134464c8b36b85720c0c087e8653856811"
   }
 }

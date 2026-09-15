@@ -177,6 +177,8 @@ def mukhiya_frame(archive):
 
 
 def ledger_key(u, kind):
+    if u.get("phase"):
+        return f"byelections/{u['phase']}/p{u['post_id']}/{kind}/{u['unit_id']}"
     if u["post_id"] == 3:
         return f"2021/{kind}/{u['unit_id']}"
     return f"2021/offices/p{u['post_id']}/{kind}/{u['unit_id']}"
@@ -205,12 +207,13 @@ def check_seat(u, r, where):
 def build_post(units, responses):
     seats, candidates, results, winners = [], [], [], []
     for u in units:
-        where = f"p{u['post_id']} {u['unit_id']}"
+        phase = u.get("phase") or PHASE
+        where = f"{phase} p{u['post_id']} {u['unit_id']}"
         _, _, phases = responses.records(ledger_key(u, "phases"))
         c_event, c_sha, c_rows = responses.records(ledger_key(u, "candidates"))
         r_event, r_sha, r_rows = responses.records(ledger_key(u, "results"))
         for event in (c_event, r_event):
-            if event is not None and event["params"]["phase"] != PHASE:
+            if event is not None and event["params"]["phase"] != phase:
                 raise ValueError(f"Unexpected election phase in {where}")
         listed = []
         for i, row in enumerate(c_rows or [], 1):
@@ -361,8 +364,8 @@ def build_post(units, responses):
             )
         phase_ids = None if phases is None else [x["i"] for x in phases]
         if c_event is None or r_event is None:
-            if phase_ids is not None and PHASE not in phase_ids:
-                status = "no_2021_phase"
+            if phase_ids is not None and phase not in phase_ids:
+                status = "phase_not_listed"
             else:
                 raise ValueError(f"Missing saved response for {where}")
         elif reported:
@@ -373,7 +376,7 @@ def build_post(units, responses):
             status = "candidates_no_results"
         else:
             status = "no_candidates"
-        if not reported and status != "no_2021_phase" and phase_ids is None:
+        if not reported and status != "phase_not_listed" and phase_ids is None:
             raise ValueError(f"Seat without results lacks phase evidence: {where}")
         seats.append(
             {
@@ -540,16 +543,32 @@ def verify(out):
         df = TABLES[path.stem].validate(pl.read_parquet(path), lazy=True)
         if df.height != info["rows"]:
             raise ValueError(f"Row count differs from manifest: {path}")
-    names = {info["path"] for info in manifest["files"]}
-    if names != {f"{name}.parquet" for name in TABLES}:
+    files = {info["path"] for info in manifest["files"]}
+    if files != {f"{name}.parquet" for name in TABLES}:
         raise ValueError("Release files differ from the declared tables")
-    seats = pl.read_parquet(out / "seats.parquet")
-    for name in ("candidates", "result_rows", "winners", "current_winners"):
-        rows = pl.read_parquet(out / f"{name}.parquet").drop_nulls("unit_id")
-        orphans = rows.join(seats, on=["post_id", "unit_id"], how="anti")
-        if orphans.height:
-            raise ValueError(f"{name} rows without a seat: {orphans.height}")
-    print(json.dumps({"verified": True, "files": len(names)}))
+    for prefix, keys in (
+        ("", ["post_id", "unit_id"]),
+        ("byelection_", ["phase", "post_id", "unit_id"]),
+    ):
+        seats = pl.read_parquet(out / f"{prefix}seats.parquet")
+        names = ["candidates", "result_rows", "winners"]
+        names += ["current_winners"] if not prefix else []
+        for name in names:
+            rows = pl.read_parquet(out / f"{prefix}{name}.parquet").drop_nulls(
+                "unit_id"
+            )
+            orphans = rows.join(seats, on=keys, how="anti")
+            if orphans.height:
+                raise ValueError(
+                    f"{prefix}{name} rows without a seat: {orphans.height}"
+                )
+    # Every by-election seat is a seat of the 2021 frame.
+    unknown = pl.read_parquet(out / "byelection_seats.parquet").join(
+        pl.read_parquet(out / "seats.parquet"), on=["post_id", "unit_id"], how="anti"
+    )
+    if unknown.height:
+        raise ValueError(f"By-election seats outside the 2021 frame: {unknown.height}")
+    print(json.dumps({"verified": True, "files": len(files)}))
 
 
 def main():
@@ -618,6 +637,32 @@ def main():
                     "candidates": len(candidates),
                     "result_rows": len(results),
                     "winners": len(winners),
+                }
+            ),
+            flush=True,
+        )
+    # By-elections: seats listed per round by the portal's by-election page.
+    byelections = Responses([args.archives / "byelections.tar"])
+    receipts.update(byelections.archives)
+    with tarfile.open(args.archives / "byelections.tar") as tar:
+        member = tar.getmember("byelections/frame.parquet")
+        bye_frame = pq.read_table(
+            io.BytesIO(tar.extractfile(member).read())
+        ).to_pylist()
+    for phase in sorted({u["phase"] for u in bye_frame}):
+        units = [u for u in bye_frame if u["phase"] == phase]
+        built = build_post(units, byelections)
+        for name, rows in zip(
+            ("seats", "candidates", "result_rows", "winners"), built, strict=True
+        ):
+            tables[f"byelection_{name}"].extend({**r, "phase": phase} for r in rows)
+        print(
+            json.dumps(
+                {
+                    "phase": phase,
+                    "seats": len(built[0]),
+                    "candidates": len(built[1]),
+                    "winners": len(built[3]),
                 }
             ),
             flush=True,

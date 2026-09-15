@@ -23,7 +23,7 @@ SEAT_STATUS = [
     "one_candidate_no_results",
     "candidates_no_results",
     "no_candidates",
-    "no_2021_phase",
+    "phase_not_listed",
 ]
 MATCH_METHODS = [
     "serial_and_name",
@@ -262,6 +262,41 @@ class CurrentReservation(pa.DataFrameModel):
         unique: ClassVar[list[str]] = ["source_url", "source_row"]
 
 
+BYELECTION_PHASES = ["2023_1", "2023_2", "2025_1"]
+
+
+def phase_field():
+    return field("By-election round: 2023_1, 2023_2 or 2025_1.", isin=BYELECTION_PHASES)
+
+
+class ByelectionSeat(Seat):
+    phase: pl.Utf8 = phase_field()
+
+    class Config:
+        strict = True
+        unique: ClassVar[list[str]] = ["phase", "post_id", "unit_id"]
+
+
+class ByelectionCandidate(Candidate):
+    phase: pl.Utf8 = phase_field()
+
+
+class ByelectionResultRow(ResultRow):
+    phase: pl.Utf8 = phase_field()
+
+    class Config:
+        strict = True
+        unique: ClassVar[list[str]] = ["phase", "post_id", "unit_id", "source_row"]
+
+
+class ByelectionWinner(Winner):
+    phase: pl.Utf8 = phase_field()
+
+    class Config:
+        strict = True
+        unique: ClassVar[list[str]] = ["phase", "post_id", "unit_id"]
+
+
 TABLES = {
     "seats": Seat,
     "candidates": Candidate,
@@ -269,6 +304,10 @@ TABLES = {
     "winners": Winner,
     "current_winners": CurrentWinner,
     "current_reservations": CurrentReservation,
+    "byelection_seats": ByelectionSeat,
+    "byelection_candidates": ByelectionCandidate,
+    "byelection_result_rows": ByelectionResultRow,
+    "byelection_winners": ByelectionWinner,
 }
 
 
