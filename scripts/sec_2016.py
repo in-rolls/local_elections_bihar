@@ -11,6 +11,7 @@ import argparse
 import base64
 import concurrent.futures
 import gzip
+import hashlib
 import json
 import threading
 import time
@@ -240,17 +241,25 @@ def build_frame(raw, workers):
     jobs = [(office, d) for office in OFFICES for d in districts]
     run_jobs(lambda job: frame_unit(raw, *job), jobs, workers)
     rows = frame_rows(raw)
-    keys = [
-        (r["office"], r["district"], r["block"], r["panchayat"], r["unit"])
-        for r in rows
-    ]
-    if len(keys) != len(set(keys)):
-        raise ValueError("Repeated unit in 2016 frame")
+    labels = {}
+    for r in rows:
+        key = (r["office"], r["district"], r["block"], r["panchayat"], r["unit"])
+        labels.setdefault(key, []).append((r["panchayat_label"], r["unit_label"]))
+    # The form reuses a code for two places in one parent (Siwan, Ziradei: two
+    # panchayats coded 10). Such units cannot be requested separately, so they are
+    # kept and flagged; an identical repeated row would be a parse error instead.
+    for key, seen in labels.items():
+        if len(seen) != len(set(seen)):
+            raise ValueError(f"Identical repeated unit in 2016 frame: {key}")
+    for r in rows:
+        key = (r["office"], r["district"], r["block"], r["panchayat"], r["unit"])
+        r["code_repeated"] = len(labels[key]) > 1
     pq.write_table(pa.Table.from_pylist(rows), raw / "2016/frame.parquet")
     counts = {}
     for r in rows:
         counts[r["office"]] = counts.get(r["office"], 0) + 1
-    print(json.dumps({"units": counts}))
+    repeated = sum(r["code_repeated"] for r in rows)
+    print(json.dumps({"units": counts, "code_repeated": repeated}))
 
 
 def results_unit(raw, office, district, block, units):
@@ -288,12 +297,16 @@ def results_unit(raw, office, district, block, units):
 
 def collect_results(raw, workers, offices):
     frame = pq.read_table(raw / "2016/frame.parquet").to_pylist()
-    groups = {}
+    groups, seen = {}, set()
     for u in frame:
-        if u["office_code"] in offices:
-            key = (u["office_code"], u["district"], u["block"])
-            groups.setdefault(key, []).append(u)
-    jobs = sorted(groups.items(), key=lambda item: hash(item[0]) % 9973)
+        code = (u["office_code"], u["district"], u["block"], u["panchayat"], u["unit"])
+        if u["office_code"] in offices and code not in seen:
+            seen.add(code)
+            groups.setdefault(code[:3], []).append(u)
+    jobs = sorted(
+        groups.items(),
+        key=lambda item: hashlib.sha256(repr(item[0]).encode()).digest(),
+    )
     run_jobs(lambda job: results_unit(raw, *job[0], job[1]), jobs, workers)
 
 
