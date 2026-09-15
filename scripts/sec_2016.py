@@ -13,6 +13,7 @@ import concurrent.futures
 import gzip
 import hashlib
 import json
+import re
 import threading
 import time
 from datetime import UTC, datetime
@@ -124,21 +125,26 @@ class Ledger:
     def __init__(self, path):
         self.path = path
 
-    def completed(self):
+    def completed(self, version=None):
         try:
             with gzip.open(self.path, "rt", encoding="utf-8") as stream:
                 rows = [json.loads(line) for line in stream]
         except (FileNotFoundError, EOFError, OSError, ValueError):
             return None
-        return rows[:-1] if rows and rows[-1].get("done") else None
+        if not rows or not rows[-1].get("done"):
+            return None
+        if version is not None and rows[-1].get("version") != version:
+            return None
+        return rows[:-1]
 
-    def write(self, events):
+    def write(self, events, version=None):
         self.path.parent.mkdir(parents=True, exist_ok=True)
         temp = self.path.with_suffix(".part")
         with gzip.open(temp, "wt", encoding="utf-8") as stream:
             for event in events:
                 stream.write(json.dumps(event, ensure_ascii=False) + "\n")
-            stream.write(json.dumps({"done": True, "at": now()}) + "\n")
+            done = {"done": True, "at": now(), "version": version}
+            stream.write(json.dumps(done) + "\n")
         temp.replace(self.path)
 
 
@@ -262,6 +268,44 @@ def build_frame(raw, workers):
     print(json.dumps({"units": counts, "code_repeated": repeated}))
 
 
+# Version 2 follows the results grid's pages; version-1 ledgers kept page 1 only.
+RESULTS_VERSION = 2
+PAGE_LINK = re.compile(r"__doPostBack\('gvVoterListDetails','Page\$(\d+)'\)")
+
+
+def current_page(html):
+    """Page number the results grid shows as selected (1 when unpaged)."""
+    soup = BeautifulSoup(html, "html.parser")
+    grid = soup.select_one("#gvVoterListDetails")
+    pager = grid.select("tr td table span") if grid else []
+    return int(pager[0].get_text(strip=True)) if pager else 1
+
+
+def result_pages(first):
+    """The results grid's pages after the first, requested from the grid's pager."""
+    pages, html = {}, first
+    while True:
+        links = BeautifulSoup(html, "html.parser").select("#gvVoterListDetails a[href]")
+        numbers = {int(n) for a in links for n in PAGE_LINK.findall(a["href"])}
+        targets = sorted(numbers - {1} - set(pages))
+        if not targets:
+            return pages
+        target = targets[0]
+        hidden, _, chosen = form_state(html)
+        data = {
+            **hidden,
+            **chosen,
+            "__EVENTTARGET": "gvVoterListDetails",
+            "__EVENTARGUMENT": f"Page${target}",
+        }
+        html = request("POST", data)
+        if current_page(html) != target:
+            raise ValueError(
+                f"Requested results page {target}, got {current_page(html)}"
+            )
+        pages[target] = html
+
+
 def results_unit(raw, office, district, block, units):
     """View every unit under one block (or district, for zila parishad)."""
     if any(
@@ -271,7 +315,7 @@ def results_unit(raw, office, district, block, units):
         raise ValueError("Units outside the requested office, district and block")
     name = f"{OFFICES[office]}_d{district}" + (f"_b{block}" if block else "")
     ledger = Ledger(raw / f"2016/results/{name}.jsonl.gz")
-    if ledger.completed() is not None:
+    if ledger.completed(RESULTS_VERSION) is not None:
         return {"unit": name, "cached": True}
     events = []
     page = district_page(office, district)
@@ -290,8 +334,10 @@ def results_unit(raw, office, district, block, units):
                 k: u[k]
                 for k in ("office_code", "district", "block", "panchayat", "unit")
             }
-            events.append(record("view", values, result))
-    ledger.write(events)
+            events.append(record("view", {**values, "page": 1}, result))
+            for number, html in result_pages(result).items():
+                events.append(record("view", {**values, "page": number}, html))
+    ledger.write(events, RESULTS_VERSION)
     return {"unit": name, "views": len(events)}
 
 
