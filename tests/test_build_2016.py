@@ -145,3 +145,72 @@ def test_seat_without_saved_page_fails(tmp_path):
     pq.write_table(pa.Table.from_pylist(rows), frame)
     with pytest.raises(ValueError, match="no saved page"):
         b.build(frame, results, tmp_path / "out")
+
+
+def test_lot_mark_third_gender_and_unset_reservation(tmp_path):
+    tie = [
+        candidate("1", "A", "136"),
+        candidate("2", "B", "136+1", gender="तृतीय लिंग"),
+        candidate("3", "C", "90"),
+    ]
+    unset = page([candidate("1", "D", "7", age="229525839157")]).replace(
+        ">अनारक्षित<", ">--select--<"
+    )
+    frame, results = write_inputs(tmp_path, [("01", 1, page(tie)), ("02", 1, unset)])
+    b.build(frame, results, tmp_path / "out")
+    winner = pl.read_parquet(tmp_path / "out/winners.parquet").sort("unit_code")
+    first = winner.row(0, named=True)
+    assert (first["sr_no"], first["winner_basis"], first["votes"]) == (2, "lot", 136)
+    assert first["tied"] and first["margin"] == 0 and first["gender"] == "other"
+    rows = pl.read_parquet(tmp_path / "out/candidates.parquet").sort(
+        "unit_code", "sr_no"
+    )
+    assert rows["won_by_lot"].to_list() == [False, True, False, False]
+    assert rows["votes_raw"][1] == "136+1"
+    assert rows["age"].to_list() == [40, 40, 40, None]
+    assert rows["age_raw"][3] == "229525839157"
+    seats = pl.read_parquet(tmp_path / "out/seats.parquet").sort("unit_code")
+    assert seats["seat_reservation"].to_list() == ["अनारक्षित", None]
+
+
+def test_lot_mark_below_the_top_vote_stops_the_build(tmp_path):
+    rows = [candidate("1", "A", "200"), candidate("2", "B", "136+1")]
+    frame, results = write_inputs(tmp_path, [("01", 1, page(rows))])
+    with pytest.raises(ValueError, match="Lot mark without a tie"):
+        b.build(frame, results, tmp_path / "out")
+
+
+def test_repeated_serials_keep_rows_and_name_no_winner_when_votes_differ(tmp_path):
+    differs = [candidate("1", "A", "19"), candidate("1", "A", "314")]
+    same = [
+        candidate("1", "A", "07"),
+        candidate("1", "A", "7"),
+        candidate("2", "B", "3"),
+    ]
+    two = [
+        candidate("1", "A", "--", "Uncontested"),
+        candidate("2", "B", "--", "Uncontested"),
+    ]
+    views = [("01", 1, page(differs)), ("02", 1, page(same)), ("03", 1, page(two))]
+    frame, results = write_inputs(tmp_path, views)
+    b.build(frame, results, tmp_path / "out")
+    seats = pl.read_parquet(tmp_path / "out/seats.parquet").sort("unit_code")
+    assert seats["winner_note"].to_list() == [
+        "repeated_serial_differs",
+        None,
+        "several_uncontested",
+    ]
+    assert seats["candidate_rows"].to_list() == [2, 3, 2]
+    winners = pl.read_parquet(tmp_path / "out/winners.parquet")
+    assert winners["unit_code"].to_list() == ["02"]
+    assert not winners["tied"][0] and winners["margin"][0] == 4
+    rows = pl.read_parquet(tmp_path / "out/candidates.parquet").sort("unit_code", "row")
+    assert rows["sr_no_repeated"].to_list() == [
+        True,
+        True,
+        True,
+        True,
+        False,
+        False,
+        False,
+    ]

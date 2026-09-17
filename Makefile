@@ -1,5 +1,6 @@
 .PHONY: check test to-parquet verify-data ci-docker release-data verify-2021 \
-	build-2021 verify-2021-panchayat audit-2021
+	build-2021 verify-2021-panchayat audit-2021 archive-2016 build-2016 \
+	verify-2016-panchayat audit-2016
 
 check:
 	uv sync --frozen --group dev
@@ -40,3 +41,19 @@ verify-2021-panchayat:
 
 audit-2021:
 	uv run python scripts/audit_2021.py
+
+# One tar in directory order: the build reads it far faster than 2,705 small files.
+archive-2016:
+	mkdir -p data/interim/2016/archive
+	COPYFILE_DISABLE=1 tar -cf data/interim/2016/archive/2016_results.tar.part \
+	  -C data/raw/statewide_2016 2016/results
+	mv data/interim/2016/archive/2016_results.tar.part data/interim/2016/archive/2016_results.tar
+
+build-2016:
+	uv run python scripts/build_2016.py
+
+verify-2016-panchayat:
+	uv run python scripts/build_2016.py --check
+
+audit-2016:
+	uv run python scripts/audit_2016.py

@@ -20,6 +20,7 @@ import requests
 from bs4 import BeautifulSoup
 from sec_2016 import AGENT
 
+DISTRICTS = 38
 PAGE = "https://sec.bihar.gov.in/old-sec/Reservation.aspx"
 BASE = "https://sec.bihar.gov.in/old-sec/"
 # KrutiDev spellings of the roster's reservation labels, with their Unicode text.
@@ -48,6 +49,8 @@ def download(raw):
         i["name"]: i.get("value", "") for i in soup.select("input[type=hidden][name]")
     }
     buttons = [(i["name"], i["value"]) for i in soup.select("input[type=submit][name]")]
+    if len(buttons) != DISTRICTS:
+        raise ValueError(f"Expected {DISTRICTS} district buttons, found {len(buttons)}")
     folder = raw / "2016/reservation"
     folder.mkdir(parents=True, exist_ok=True)
     listing = []
@@ -79,6 +82,8 @@ def download(raw):
                     else None,
                 }
             )
+    if not listing:
+        raise ValueError("The archive page listed no roster PDFs")
     (folder / "listing.json").write_text(
         json.dumps(listing, indent=1, ensure_ascii=False)
     )
@@ -93,7 +98,10 @@ def download(raw):
 def parse(raw, out):
     folder = raw / "2016/reservation"
     rows, unread = [], []
-    for item in json.loads((folder / "listing.json").read_text()):
+    listing = json.loads((folder / "listing.json").read_text())
+    if not listing:
+        raise ValueError("Empty roster listing; run the download stage")
+    for item in listing:
         if item["file"] is None:
             continue
         text = subprocess.run(

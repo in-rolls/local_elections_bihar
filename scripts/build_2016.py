@@ -10,6 +10,7 @@ import csv
 import gzip
 import hashlib
 import json
+import re
 import tarfile
 from collections import defaultdict
 from pathlib import Path
@@ -48,7 +49,13 @@ COLUMNS = (
     "votes_raw",
     "remarks",
 )
-GENDER = {"पुरुष": "male", "महिला": "female", "--": None}
+GENDER = {"पुरुष": "male", "महिला": "female", "तृतीय लिंग": "other", "--": None}
+# A tie broken by drawing lots is shown as the tied count "+1" on the winner's row
+# (Nalanda ward: 136+1 against 136); the votes cast are the count before the plus.
+MAX_AGE = 120
+LOT = re.compile(r"(\d+)\+1")
+# The form's own unset dropdown text, shown where no reservation was recorded.
+UNSET_RESERVATION = "--select--"
 SPANS = {
     "lblPNKS",
     "lblPradesikForMukhiya",
@@ -112,10 +119,12 @@ def parse_page(html, where):
         raise ValueError(f"Unexpected message in {where}: {spans['lblMsg']}")
     if bool(rows) == (spans.get("lblMsg") == NO_RECORD):
         raise ValueError(f"Page has both or neither results and no-record: {where}")
+    reservation = spans.get("lblReservationStatusForMukhiya") or spans.get(
+        "lblResevationShow"
+    )
     return {
         "seat_label": spans.get("lblPradesikForMukhiya"),
-        "seat_reservation": spans.get("lblReservationStatusForMukhiya")
-        or spans.get("lblResevationShow"),
+        "seat_reservation": None if reservation == UNSET_RESERVATION else reservation,
         "rows": rows,
     }
 
@@ -127,6 +136,13 @@ def number(value, name, where):
     if not value.isdigit():
         raise ValueError(f"Non-numeric {name} {value!r} in {where}")
     return int(value)
+
+
+def age(value, where):
+    """Age as typed, except values no person has: the cell sometimes holds the
+    age run into the phone number (229525839157) or a slip such as 4321."""
+    years = number(value, "Age", where)
+    return None if years is None or years > MAX_AGE else years
 
 
 def text(value):
@@ -183,22 +199,27 @@ def build(frame_path, results, out, partial=False):
                     raise ValueError(f"Unknown remark {row['remarks']!r} in {where}")
                 if row["gender_raw"] not in GENDER:
                     raise ValueError(f"Unknown gender {row['gender_raw']!r} in {where}")
+                lot = LOT.fullmatch(row["votes_raw"].strip())
+                votes = lot.group(1) if lot else row["votes_raw"]
                 rows.append(
                     {
                         **dict(zip(KEY, key, strict=True)),
+                        "row": len(rows) + 1,
                         "sr_no": number(row["sr_no"], "Sr No.", where),
                         "candidate_name": text(row["candidate_name"]),
                         "father_husband_name": text(row["father_husband_name"]),
                         "gender_raw": row["gender_raw"],
                         "gender": GENDER[row["gender_raw"]],
-                        "age": number(row["age"], "Age", where),
+                        "age": age(row["age"], where),
+                        "age_raw": text(row["age"]),
                         "category": text(row["category"]),
                         "education": text(row["education"]),
                         "mobile_number": text(row["mobile_number"]),
                         "address": text(row["address"]),
                         "email": text(row["email"]),
-                        "votes": number(row["votes_raw"], "votes", where),
+                        "votes": number(votes, "votes", where),
                         "votes_raw": row["votes_raw"] or None,
+                        "won_by_lot": bool(lot),
                         "remarks": row["remarks"],
                         "page": page,
                         "source_file": name,
@@ -207,6 +228,12 @@ def build(frame_path, results, out, partial=False):
                         "page_sha256": sha,
                     }
                 )
+        serials = [r["sr_no"] for r in rows]
+        for r in rows:
+            r["sr_no_repeated"] = (
+                r["sr_no"] is not None and serials.count(r["sr_no"]) > 1
+            )
+        note = undecidable(rows)
         labels = {(p["seat_label"], p["seat_reservation"]) for p in parsed}
         if len(labels) != 1:
             raise ValueError(f"Seat label changes across pages for {key}")
@@ -224,6 +251,7 @@ def build(frame_path, results, out, partial=False):
                 "status": "results" if rows else "no_record",
                 "pages": len(seat_pages),
                 "candidate_rows": len(rows),
+                "winner_note": note,
             }
         )
         # A repeated code is fetched once; its rows are emitted once, not per label.
@@ -231,7 +259,7 @@ def build(frame_path, results, out, partial=False):
             continue
         emitted.add(key)
         candidates.extend(rows)
-        winner = decide(rows, key)
+        winner = None if note else decide(rows, key)
         if winner:
             winners.append(winner)
     if missing and not partial:
@@ -241,11 +269,34 @@ def build(frame_path, results, out, partial=False):
     return write(out, {"seats": seats, "candidates": candidates, "winners": winners})
 
 
+def person(row):
+    return (row["sr_no"], row["candidate_name"], row["father_husband_name"])
+
+
+def undecidable(rows):
+    """Why the saved rows cannot name a winner, or None.
+
+    The source repeats some candidates within a seat with different vote counts
+    (Sitamarhi mukhiya: each of six candidates twice, 19 and 314, 1147 and 18).
+    Whether those are partial counts to add or a superseded entry is not stated,
+    so such seats keep every row and get no winner.
+    """
+    if len({person(r) for r in rows if r["remarks"] == "Uncontested"}) > 1:
+        return "several_uncontested"
+    votes = {}
+    for r in rows:
+        if r["sr_no"] is not None:
+            votes.setdefault(r["sr_no"], set()).add((person(r), r["votes"]))
+    if any(len(v) > 1 for v in votes.values()):
+        return "repeated_serial_differs"
+    return None
+
+
 def decide(rows, key):
-    """Winner: the uncontested candidate, else the highest vote; none if vacant."""
+    """Winner: uncontested, else drawn by lot, else highest vote; none if vacant."""
+    # Rows repeated with the same person and votes count once.
+    rows = list({(person(r), r["votes"], r["remarks"]): r for r in rows}.values())
     uncontested = [r for r in rows if r["remarks"] == "Uncontested"]
-    if len(uncontested) > 1:
-        raise ValueError(f"Several uncontested candidates in {key}")
     base = dict(zip(KEY, key, strict=True))
     if uncontested:
         r = uncontested[0]
@@ -262,12 +313,17 @@ def decide(rows, key):
     )
     if not voted:
         return None
-    top = voted[0]
-    runner = voted[1]["votes"] if len(voted) > 1 else None
+    drawn = [r for r in voted if r["won_by_lot"]]
+    if drawn:
+        level = [r for r in voted if r["votes"] == voted[0]["votes"]]
+        if len(drawn) > 1 or drawn[0] not in level or len(level) < 2:
+            raise ValueError(f"Lot mark without a tie for the top vote in {key}")
+    top = drawn[0] if drawn else voted[0]
+    runner = next((r["votes"] for r in voted if r is not top), None)
     return {
         **base,
         **pick(top),
-        "winner_basis": "top_vote",
+        "winner_basis": "lot" if drawn else "top_vote",
         "tied": runner == top["votes"],
         "votes": top["votes"],
         "margin": None if runner is None else top["votes"] - runner,
@@ -275,7 +331,8 @@ def decide(rows, key):
 
 
 def pick(row):
-    return {k: row[k] for k in ("sr_no", "candidate_name", "gender", "age", "category")}
+    columns = ("sr_no", "row", "candidate_name", "gender", "age", "category")
+    return {k: row[k] for k in columns}
 
 
 def write(out, tables):
