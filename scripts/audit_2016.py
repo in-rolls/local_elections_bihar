@@ -12,6 +12,7 @@ import http.cookiejar
 import json
 import random
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -69,6 +70,15 @@ LAST_FIELD = {
     "0109": "ddlWard",
     "0110": "ddlWard",
 }
+# Roster file names, lower-cased, to offices; samiti heads (pramukh) are not seats
+# of the results form.
+ROSTER_OFFICES = {
+    "zila": "zila_parishad_member",
+    "sadasya": "panchayat_samiti_member",
+    "mukhi": "mukhiya",
+    "sarpanch": "sarpanch",
+}
+ROSTER_DISTRICTS = {"KAIMUR": "KAIMUR (BHABUA)"}
 WOMEN = "(महिला)"
 SEAT_CATEGORY = {"अनुसूचित जाति", "अनुसूचित जनजाति"}
 PAGE_SIZE = 20
@@ -277,6 +287,103 @@ def consistency(seats, candidates, winners, examples=20):
     return report, flags
 
 
+def nfc(column):
+    return pl.col(column).map_elements(
+        lambda text: unicodedata.normalize("NFC", text), return_dtype=pl.Utf8
+    )
+
+
+def roster_office(name):
+    name = name.lower()
+    if "pramukh" in name:
+        return None
+    return next((v for k, v in ROSTER_OFFICES.items() if k in name), None)
+
+
+def compare_roster(seats, roster, examples=20):
+    """The SEC's reservation roster PDFs against the form's reservation label.
+
+    Only rosters with a text layer are read (others are scans). Zila parishad seats
+    are numbered within the district, so they are compared seat by seat; the other
+    rosters name blocks in a legacy font encoding, so they are compared as counts
+    of each label in districts where the roster lists as many seats as the form.
+    """
+    roster = roster.with_columns(
+        pl.col("office").map_elements(roster_office, return_dtype=pl.Utf8),
+        pl.col("district_button").replace(ROSTER_DISTRICTS).alias("name"),
+        label=pl.col("category")
+        + pl.when(pl.col("women") == "महिला").then(pl.lit(WOMEN)).otherwise(pl.lit("")),
+    ).filter(pl.col("office").is_not_null())
+    roster = roster.unique(["office", "name", "block_krutidev", "seat_no", "label"])
+    # The form writes ड़ as one code point and the roster table as two.
+    roster = roster.with_columns(nfc("label"))
+    mine = seats.with_columns(
+        pl.col("district").str.split(" - ").list.get(1).alias("name"),
+        nfc("seat_reservation"),
+    )
+    zila = "zila_parishad_member"
+    pairs = (
+        mine.filter(pl.col("office") == zila)
+        # A few seat codes carry trailing spaces ("40 ").
+        .with_columns(
+            pl.col("unit_code").str.strip_chars().cast(pl.Int64).alias("seat_no")
+        )
+        .join(roster.filter(pl.col("office") == zila), on=["name", "seat_no"])
+    )
+    differs = pairs.filter(
+        pl.col("seat_reservation").is_not_null()
+        & (pl.col("seat_reservation") != pl.col("label"))
+    )
+    counted = []
+    for office in ("panchayat_samiti_member", "mukhiya", "sarpanch"):
+        theirs = roster.filter(pl.col("office") == office)
+        ours = mine.filter(pl.col("office") == office)
+        sizes = (
+            theirs.group_by("name")
+            .len("roster")
+            .join(ours.group_by("name").len("release"), on="name")
+        )
+        full = sizes.filter(pl.col("roster") == pl.col("release"))["name"]
+        tally = (
+            theirs.filter(pl.col("name").is_in(full.to_list()))
+            .group_by("name", "label")
+            .len("roster")
+            .join(
+                ours.filter(pl.col("name").is_in(full.to_list()))
+                .group_by("name", pl.col("seat_reservation").alias("label"))
+                .len("release"),
+                on=["name", "label"],
+                how="full",
+                coalesce=True,
+            )
+            .fill_null(0)
+        )
+        counted.append(
+            {
+                "office": office,
+                "districts_with_roster_text": sizes.height,
+                "districts_with_equal_seat_counts": full.len(),
+                "seats_compared": int(tally["roster"].sum()),
+                # Half the summed gaps: seats that would have to change label.
+                "seats_off": int((tally["roster"] - tally["release"]).abs().sum() // 2),
+                "release_without_label": int(
+                    tally.filter(pl.col("label").is_null())["release"].sum()
+                ),
+            }
+        )
+    report = {
+        "zila_parishad_seats_compared": pairs.height,
+        "zila_parishad_seats_differing": differs.height,
+        "zila_parishad_examples": differs.select(
+            "district", "unit_code", "seat_reservation", pl.col("label").alias("roster")
+        )
+        .head(examples)
+        .to_dicts(),
+        "label_counts": counted,
+    }
+    return report, (["roster_differs_zila_parishad"] if differs.height else [])
+
+
 def distributions(seats, candidates, winners):
     top = candidates.sort("votes", descending=True, nulls_last=True).head(10)
     return {
@@ -397,7 +504,7 @@ def refetch(seats, candidates, sample, seed):
     return report, (["refetch_differs"] if differing else [])
 
 
-def audit(release, frame_path, legacy, sample, seed):
+def audit(release, frame_path, legacy, roster, sample, seed):
     seats = pl.read_parquet(release / "seats.parquet")
     candidates = pl.read_parquet(release / "candidates.parquet")
     winners = pl.read_parquet(release / "winners.parquet")
@@ -407,6 +514,7 @@ def audit(release, frame_path, legacy, sample, seed):
         "seats_vs_frame": lambda: compare_frame(seats, frame),
         "legacy_files": lambda: compare_legacy(seats, candidates, legacy),
         "consistency": lambda: consistency(seats, candidates, winners),
+        "roster": lambda: compare_roster(seats, pl.read_parquet(roster)),
         "refetch": lambda: refetch(seats, candidates, sample, seed),
     }
     for name, section in sections.items():
@@ -428,10 +536,17 @@ def main():
         "--frame", type=Path, default=Path("data/raw/statewide_2016/2016/frame.parquet")
     )
     parser.add_argument("--legacy", type=Path, default=Path("data/fin"))
+    parser.add_argument(
+        "--roster",
+        type=Path,
+        default=Path("data/interim/2016/reservation_roster.parquet"),
+    )
     parser.add_argument("--refetch", type=int, default=30)
     parser.add_argument("--seed", type=int, default=2016)
     args = parser.parse_args()
-    report = audit(args.release, args.frame, args.legacy, args.refetch, args.seed)
+    report = audit(
+        args.release, args.frame, args.legacy, args.roster, args.refetch, args.seed
+    )
     text = json.dumps(report, indent=2, ensure_ascii=False, default=str)
     (args.release / "audit.json").write_text(text + "\n")
     print(text)
