@@ -51,6 +51,10 @@ LAST = {
     "0110": "ddlWard",
 }
 LOCAL = threading.local()
+# Longest a single request may take before its connection is closed and retried,
+# and how long a request keeps being retried before the unit is left to a later pass.
+DEADLINE = 600
+RETRY_BUDGET = 3600
 
 
 class Transient(Exception):
@@ -80,19 +84,37 @@ def form_state(html):
     return hidden, options, chosen
 
 
+def fetch(current, method, data, out):
+    try:
+        if method == "GET":
+            out.append(current.get(URL, timeout=(30, 180)))
+        else:
+            out.append(current.post(URL, data=data, timeout=(30, 180)))
+    # Anything the request raises is handed to the caller waiting on the thread.
+    except BaseException as error:
+        out.append(error)
+
+
 def request(method, data=None):
     def attempt():
-        try:
-            if method == "GET":
-                response = session().get(URL, timeout=(30, 180))
-            else:
-                response = session().post(URL, data=data, timeout=(30, 180))
-        except (
-            requests.ConnectionError,
-            requests.Timeout,
-            requests.exceptions.ChunkedEncodingError,
-        ) as error:
-            raise Transient(str(error)) from error
+        # A read timeout only fires when nothing arrives at all, so a server that
+        # trickles a response, or a socket that somehow carries no timeout, can hold
+        # a worker indefinitely (one held this crawl for six hours). The request runs
+        # in its own thread so that waiting for it is capped by the clock alone.
+        current, out = session(), []
+        worker = threading.Thread(
+            target=fetch, args=(current, method, data, out), daemon=True
+        )
+        worker.start()
+        worker.join(DEADLINE)
+        if worker.is_alive():
+            # Abandoned, not cancelled: it keeps this session until its socket gives
+            # up, so the next attempt opens a fresh one rather than sharing it.
+            del LOCAL.session
+            raise Transient(f"No response within {DEADLINE}s")
+        response = out[0]
+        if isinstance(response, BaseException):
+            raise Transient(f"{type(response).__name__}: {response}") from response
         if response.status_code == 429 or response.status_code >= 500:
             raise Transient(f"HTTP {response.status_code}")
         response.raise_for_status()
@@ -102,7 +124,7 @@ def request(method, data=None):
 
     policy = Retrying(
         retry=retry_if_exception_type(Transient),
-        stop=stop_after_delay(3600),
+        stop=stop_after_delay(RETRY_BUDGET),
         wait=wait_exponential(multiplier=5, max=600),
         reraise=True,
     )
