@@ -21,7 +21,7 @@ OFFICES = [
 GENDERS = ["male", "female", "other"]
 REMARKS = ["0", "Uncontested", "Vacant"]
 SEAT_STATUS = ["results", "no_record"]
-WINNER_NOTE = ["several_uncontested", "repeated_serial_differs"]
+WINNER_NOTE = ["several_uncontested", "repeated_serial_differs", "tied_top_vote"]
 WINNER_BASIS = ["uncontested", "lot", "top_vote"]
 KEY = ["office", "district_code", "block_code", "panchayat_code", "unit_code"]
 
@@ -79,7 +79,8 @@ class Seat(pa.DataFrameModel):
     candidate_rows: pl.Int32 = field("Candidate rows across all pages.", ge=0)
     winner_note: pl.Utf8 = nullable(
         "Why no winner is derived although rows exist: several distinct uncontested "
-        "candidates, or a serial repeated with a different person or vote count.",
+        "candidates, a serial repeated with a different person or vote count, or a "
+        "top vote shared by two candidates with no lot mark.",
         isin=WINNER_NOTE,
     )
 
@@ -157,7 +158,10 @@ class Winner(pa.DataFrameModel):
         "Obtained Valid Vote; the 2016 form has no winner flag).",
         isin=WINNER_BASIS,
     )
-    tied: pl.Boolean = field("Another candidate has the same top vote.")
+    tied: pl.Boolean = field(
+        "Another candidate has the same top vote; true only for wins by lot, since a "
+        "tie with no lot mark names no winner."
+    )
     candidate_name: pl.Utf8 = nullable("Candidate Name.")
     gender: pl.Utf8 = nullable("Mapped gender.", isin=GENDERS)
     age: pl.Int32 = nullable("Reported age.", ge=0)

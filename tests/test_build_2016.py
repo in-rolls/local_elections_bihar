@@ -214,3 +214,65 @@ def test_repeated_serials_keep_rows_and_name_no_winner_when_votes_differ(tmp_pat
         False,
         False,
     ]
+
+
+@pytest.mark.parametrize(
+    ("cell", "votes"),
+    [("136+1", 136), ("951+1=952", 951), ("986+1 (BY LAUTARI)=987", 986)],
+)
+def test_every_written_form_of_a_lot_win(tmp_path, cell, votes):
+    rows = [candidate("1", "A", str(votes)), candidate("2", "B", cell)]
+    frame, results = write_inputs(tmp_path, [("01", 1, page(rows))])
+    b.build(frame, results, tmp_path / "out")
+    winner = pl.read_parquet(tmp_path / "out/winners.parquet").row(0, named=True)
+    assert (winner["sr_no"], winner["winner_basis"], winner["votes"]) == (
+        2,
+        "lot",
+        votes,
+    )
+
+
+def test_a_lot_total_that_is_not_count_plus_one_stops_the_build(tmp_path):
+    rows = [candidate("1", "A", "951"), candidate("2", "B", "951+1=960")]
+    frame, results = write_inputs(tmp_path, [("01", 1, page(rows))])
+    with pytest.raises(ValueError, match="Lot total"):
+        b.build(frame, results, tmp_path / "out")
+
+
+def test_a_single_dash_is_blank(tmp_path):
+    rows = [candidate("1", "A", "-", age="-"), candidate("2", "B", "5")]
+    frame, results = write_inputs(tmp_path, [("01", 1, page(rows))])
+    b.build(frame, results, tmp_path / "out")
+    out = pl.read_parquet(tmp_path / "out/candidates.parquet").sort("sr_no")
+    assert out["votes"].to_list() == [None, 5]
+    assert out["age"].to_list() == [None, 40]
+
+
+def test_a_top_vote_tie_without_a_lot_mark_names_no_winner(tmp_path):
+    tie = [
+        candidate("1", "A", "141"),
+        candidate("2", "B", "141"),
+        candidate("3", "C", "72"),
+    ]
+    below = [
+        candidate("1", "A", "141"),
+        candidate("2", "B", "72"),
+        candidate("3", "C", "72"),
+    ]
+    frame, results = write_inputs(
+        tmp_path, [("01", 1, page(tie)), ("02", 1, page(below))]
+    )
+    b.build(frame, results, tmp_path / "out")
+    seats = pl.read_parquet(tmp_path / "out/seats.parquet").sort("unit_code")
+    assert seats["winner_note"].to_list() == ["tied_top_vote", None]
+    winners = pl.read_parquet(tmp_path / "out/winners.parquet")
+    assert winners["unit_code"].to_list() == ["02"]
+    assert winners.row(0, named=True)["margin"] == 69
+
+
+def test_a_nul_inside_a_name_is_removed(tmp_path):
+    rows = [candidate("1", "रामच\x00न्द्र", "5")]
+    frame, results = write_inputs(tmp_path, [("01", 1, page(rows))])
+    b.build(frame, results, tmp_path / "out")
+    name = pl.read_parquet(tmp_path / "out/candidates.parquet")["candidate_name"][0]
+    assert name == "रामचन्द्र"

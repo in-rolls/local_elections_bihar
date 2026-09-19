@@ -87,7 +87,8 @@ RETRIES = 4
 
 def clean(column):
     """Cell text as both collections can be compared: spacing and the form's
-    '--' blank are presentation, and the legacy files kept a serial's leading zero."""
+    '-' and '--' blanks are presentation, and the legacy files kept a serial's
+    leading zero."""
     text = (
         pl.col(column)
         .cast(pl.Utf8)
@@ -95,7 +96,9 @@ def clean(column):
         .str.replace_all(r"\s+", " ")
         .str.strip_chars()
     )
-    text = pl.when(text.is_in(["--", "--select--"])).then(pl.lit("")).otherwise(text)
+    text = (
+        pl.when(text.is_in(["-", "--", "--select--"])).then(pl.lit("")).otherwise(text)
+    )
     if column == "sr_no":
         text = text.str.replace(r"^0+(\d)", "$1")
     return text.alias(column)

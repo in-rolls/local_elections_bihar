@@ -50,10 +50,14 @@ COLUMNS = (
     "remarks",
 )
 GENDER = {"पुरुष": "male", "महिला": "female", "तृतीय लिंग": "other", "--": None}
-# A tie broken by drawing lots is shown as the tied count "+1" on the winner's row
-# (Nalanda ward: 136+1 against 136); the votes cast are the count before the plus.
 MAX_AGE = 120
-LOT = re.compile(r"(\d+)\+1")
+# A tie broken by drawing lots is shown as the tied count "+1" on the winner's row,
+# written three ways: "136+1" (Nalanda ward), "951+1=952" (Supaul sarpanch) and
+# "986+1 (BY LAUTARI)=987" (Siwan mukhiya). The votes cast are the count before
+# the plus; a stated total must be that count plus one.
+LOT = re.compile(r"(\d+)\+1(?: \(BY LAUTARI\))?(?:=(\d+))?")
+# Blank cells: the form's "--", and a single "-" in a few rows.
+BLANK = ("", "-", "--")
 # The form's own unset dropdown text, shown where no reservation was recorded.
 UNSET_RESERVATION = "--select--"
 SPANS = {
@@ -131,7 +135,7 @@ def parse_page(html, where):
 
 def number(value, name, where):
     value = value.strip()
-    if value in ("", "--"):
+    if value in BLANK:
         return None
     if not value.isdigit():
         raise ValueError(f"Non-numeric {name} {value!r} in {where}")
@@ -146,8 +150,10 @@ def age(value, where):
 
 
 def text(value):
-    value = value.strip()
-    return None if value in ("", "--") else value
+    # 13 cells carry a NUL inside a word ("रामच\x00न्द्र"); without it they read as
+    # the name (रामचन्द्र), and a NUL breaks most tools that read text.
+    value = value.replace("\x00", "").strip()
+    return None if value in BLANK else value
 
 
 def build(frame_path, results, out, partial=False):
@@ -200,6 +206,8 @@ def build(frame_path, results, out, partial=False):
                 if row["gender_raw"] not in GENDER:
                     raise ValueError(f"Unknown gender {row['gender_raw']!r} in {where}")
                 lot = LOT.fullmatch(row["votes_raw"].strip())
+                if lot and lot.group(2) and int(lot.group(2)) != int(lot.group(1)) + 1:
+                    raise ValueError(f"Lot total is not count + 1 in {where}")
                 votes = lot.group(1) if lot else row["votes_raw"]
                 rows.append(
                     {
@@ -279,7 +287,8 @@ def undecidable(rows):
     The source repeats some candidates within a seat with different vote counts
     (Sitamarhi mukhiya: each of six candidates twice, 19 and 314, 1147 and 18).
     Whether those are partial counts to add or a superseded entry is not stated,
-    so such seats keep every row and get no winner.
+    so such seats keep every row and get no winner. Nor does a seat whose top
+    vote is shared with no lot mark: the form does not say how that tie ended.
     """
     if len({person(r) for r in rows if r["remarks"] == "Uncontested"}) > 1:
         return "several_uncontested"
@@ -289,6 +298,13 @@ def undecidable(rows):
             votes.setdefault(r["sr_no"], set()).add((person(r), r["votes"]))
     if any(len(v) > 1 for v in votes.values()):
         return "repeated_serial_differs"
+    counted = sorted(
+        {(person(r), r["votes"]) for r in rows if r["votes"] is not None},
+        key=lambda pair: -pair[1],
+    )
+    drawn = any(r["won_by_lot"] for r in rows)
+    if len(counted) > 1 and counted[0][1] == counted[1][1] and not drawn:
+        return "tied_top_vote"
     return None
 
 
