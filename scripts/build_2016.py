@@ -52,8 +52,8 @@ COLUMNS = (
 GENDER = {"पुरुष": "male", "महिला": "female", "तृतीय लिंग": "other", "--": None}
 MAX_AGE = 120
 # A tie broken by drawing lots is shown as the tied count "+1" on the winner's row,
-# written three ways: "136+1" (Nalanda ward), "951+1=952" (Supaul sarpanch) and
-# "986+1 (BY LAUTARI)=987" (Siwan mukhiya). The votes cast are the count before
+# written three ways: "136+1" (Samastipur ward), "951+1=952" (Supaul sarpanch) and
+# "986+1 (BY LAUTARI)=987" (Gopalganj mukhiya). The votes cast are the count before
 # the plus; a stated total must be that count plus one.
 LOT = re.compile(r"(\d+)\+1(?: \(BY LAUTARI\))?(?:=(\d+))?")
 # Blank cells: the form's "--", and a single "-" in a few rows.
