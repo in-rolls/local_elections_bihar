@@ -17,3 +17,10 @@ passes() {
 }
 passes frame
 passes results
+
+# Build offline from one tar of the ledgers (2,705 small files read slowly from
+# the staging disk), then compare the release with independent sources.
+make archive-2016
+uv run python scripts/roster_2016.py parse
+make build-2016
+make audit-2016

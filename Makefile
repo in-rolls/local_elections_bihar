@@ -11,6 +11,7 @@ check:
 	$(MAKE) verify-data
 	$(MAKE) verify-2021
 	$(MAKE) verify-2021-panchayat
+	$(MAKE) verify-2016-panchayat
 
 test:
 	uv run pytest -q
@@ -23,7 +24,7 @@ verify-data:
 
 ci-docker:
 	@for version in 3.12 3.14; do \
-	  COPYFILE_DISABLE=1 tar --exclude=._* --exclude=__pycache__ --exclude=.DS_Store --exclude=.git --exclude=.venv --exclude=.ruff_cache --exclude=.pytest_cache --exclude=data/derived -cf - . | \
+	  COPYFILE_DISABLE=1 tar --exclude=._* --exclude=__pycache__ --exclude=.DS_Store --exclude=.git --exclude=.venv --exclude=.ruff_cache --exclude=.pytest_cache --exclude=data/derived --exclude=data/interim -cf - . | \
 	  docker run --rm -i python:$$version-slim sh -ec 'mkdir /work; tar -xf - -C /work; cd /work; pip install -q uv; uv sync --frozen --group dev; uv run ruff check .; uv run ruff format --check .; uv run pytest -q; uv run python scripts/to_parquet.py --check' || exit $$?; \
 	done
 

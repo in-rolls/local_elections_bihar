@@ -7,7 +7,8 @@ Bihar panchayat election records from the State Election Commission (SEC) for 20
 
 | Election | Offices | Contents | Section |
 |---|---|---|---|
-| 2016 | Mukhiya, sarpanch, ward member, panch, panchayat samiti member, zila parishad member | 645,605 candidate records with attributes, seat reservation and valid votes | [2016 data](#2016-data) |
+| 2016 | All six offices | 258,095 seats, 644,865 candidates and 210,717 winners, re-collected with every source page saved and validated against a declared schema | [2016 panchayat release](#2016-panchayat-release) |
+| 2016 (original collection) | All six offices | 645,605 candidate records with attributes, seat reservation and valid votes | [2016 data](#2016-data) |
 | 2021 | All six offices | 247,671 seats, 924,708 candidates, 968,562 result rows and 244,475 winners, validated against a declared schema | [2021 panchayat release](#2021-panchayat-release) |
 | 2023 and 2025 by-elections | All six offices | 5,749 by-election seats, 8,449 candidates and 5,749 winners | [2021 panchayat release](#2021-panchayat-release) |
 | 2021–2026 term | All six offices | Current winner and seat-reservation feeds, one row per seat; no election-year field | [2021 panchayat release](#2021-panchayat-release) |
@@ -63,9 +64,56 @@ make verify-2021-panchayat  # checksums, row counts, schemas and seat joins
 make audit-2021             # independent comparisons (makes requests)
 ```
 
+## 2016 panchayat release
+
+[`data/release/2016_panchayat/`](data/release/2016_panchayat) holds the 2016 general election for every office, re-collected in September 2026 from the SEC's archived [results form](https://sec.bihar.gov.in/old-sec/ovc.aspx). [`scripts/sec_2016.py`](scripts/sec_2016.py) walks the form's office, district, block, panchayat and seat dropdowns and saves every response page; [`scripts/build_2016.py`](scripts/build_2016.py) builds the release offline from those pages.
+
+| Table | Grain | Rows |
+|---|---|---:|
+| [seats](data/release/2016_panchayat/seats.parquet) | One row per seat in the form's dropdowns, with its reservation, page count and outcome | 258,095 |
+| [candidates](data/release/2016_panchayat/candidates.parquet) | Every row of every seat's results table, with the saved page it came from | 644,865 |
+| [winners](data/release/2016_panchayat/winners.parquet) | One winner per seat whose rows name one | 210,717 |
+
+| Office | Seats | Record not found | Candidate rows | Winners | Uncontested winners |
+|---|---:|---:|---:|---:|---:|
+| Ward member | 114,583 | 16,473 | 277,148 | 97,515 | 11,547 |
+| Panch | 114,583 | 21,248 | 136,021 | 85,692 | 50,237 |
+| Mukhiya | 8,402 | 405 | 96,257 | 7,942 | 11 |
+| Sarpanch | 8,402 | 486 | 45,054 | 7,881 | 27 |
+| Samiti member | 11,142 | 303 | 80,259 | 10,793 | 17 |
+| Zila parishad member | 983 | 88 | 10,126 | 894 | 3 |
+
+**Every column is declared.** [`scripts/schemas_2016.py`](scripts/schemas_2016.py) defines each table's types, nullability, allowed values and unique keys with [pandera](https://pandera.readthedocs.io/); [`dictionary.csv`](data/release/2016_panchayat/dictionary.csv) and [`SCHEMA.json`](data/release/2016_panchayat/SCHEMA.json) are generated from the same models, and [`MANIFEST.json`](data/release/2016_panchayat/MANIFEST.json) records row counts, checksums and code hashes. Every cell of the results table becomes a column, kept verbatim alongside any typed version (`votes_raw` and `votes`, `age_raw` and `age`). Mobile number, address and email are included as the form published them. An unrecognised page label, table header, remark or gender stops the build.
+
+**Checked against sources that share no code with it.** [`scripts/audit_2016.py`](scripts/audit_2016.py) writes [`audit.json`](data/release/2016_panchayat/audit.json):
+
+- Seats equal the form's own frame for every office.
+- 644,849 of the 644,958 distinct rows in the [original collection](#2016-data) are identical, cell for cell. The 109 others are 106 rows in Siwan's Ziradei block, where the original collectors filed one code's results under both panchayats that share it (below), and 3 names where they kept a space in place of a stray NUL. The release adds 4 candidates for one ward seat (Purvi Champaran, Kalyanpur, ward 16) that the original collection lacks.
+- 30 seats re-requested with separate code on the day of the build returned the saved rows unchanged.
+- The SEC's 2016 reservation rosters list the same number of seats of each reservation type as the release for mukhiya, sarpanch and samiti seats in every district whose roster is readable (8,609 seats; 83 of the 228 roster PDFs are scans without text). For zila parishad seats, compared one by one, 11 of 409 differ.
+
+**Winners are derived, not flagged.** The 2016 form has no winner marker. `winner_basis` is `uncontested` when Remarks says so, `lot` when a tie was decided by drawing lots (shown on the winner's row as `136+1`, `951+1=952` or `986+1 (BY LAUTARI)=987`; 3 seats), and otherwise `top_vote`. No winner is named for 402 seats, recorded in `winner_note`: 163 where two candidates share the top vote with no lot mark, 206 where a candidate is listed twice with different vote counts (a Sitamarhi mukhiya seat lists each of six candidates twice, one with 19 and 314) and it is not stated whether those are parts to add or an entry that replaced another, and 33 with two different uncontested candidates.
+
+**Source problems, kept as recorded:**
+
+- 39,003 seats answer "Record not Found". They are kept with `status=no_record`; the original collection has no rows for them either. They cluster: over half the panch seats in Nawada, Saran and Purvi Champaran, and over half the ward seats in Nawada and Saran, are among them.
+- Siwan's Ziradei block codes two panchayats as 10, so the form returns one set of results for both and which panchayat it belongs to cannot be told; the 48 seat rows involved are flagged `code_repeated` and their candidates appear once.
+- 4,823 of 266,589 candidates in seats reserved for women are recorded as male; 2,733 of them have names such as DEVI, KUMARI or KHATOON, so the gender field was mis-entered. In seats reserved for Scheduled Tribes, one candidate in six carries another category, mostly Scheduled Caste.
+- The form's reservation label for 90 samiti and 10 zila parishad seats differs from the one in the original collection.
+- Ages are kept as typed (`age_raw`), with values above 120 (ages run into phone numbers, such as `229525839157`) nulled in `age`; 796 candidates are recorded as under 21. Serial numbers are sometimes blank, zero or repeated (`sr_no_repeated`); `row` gives each row's position.
+
+Rebuild from the saved pages and verify:
+
+```sh
+./crawl_2016.sh             # resumes collection, packs the pages, builds and audits
+make build-2016             # offline build from data/interim/2016/archive
+make verify-2016-panchayat  # checksums, row counts, schemas and seat joins
+make audit-2016             # independent comparisons (makes requests)
+```
+
 ## 2016 data
 
-Candidate information and valid votes collected from the [historical SEC results form](http://sec.bihar.gov.in/ovc.aspx). The original six CSVs are preserved.
+Candidate information and valid votes collected from the [historical SEC results form](http://sec.bihar.gov.in/ovc.aspx). The original six CSVs are preserved. The [2016 panchayat release](#2016-panchayat-release) re-collects the same form with every page saved and is compared with these files row by row.
 
 | File | Source office | Records | Later exact copies | Missing candidate names |
 |---|---|---:|---:|---:|

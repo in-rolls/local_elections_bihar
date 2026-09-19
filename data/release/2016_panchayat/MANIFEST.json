@@ -1,0 +1,92 @@
+{
+  "year": 2016,
+  "source": "https://sec.bihar.gov.in/old-sec/ovc.aspx",
+  "files": [
+    {
+      "path": "seats.parquet",
+      "rows": 258095,
+      "sha256": "5f234dad9afc7603e37aa34401ff4210fee31e6448cb8f94d79737a667d1761c",
+      "schema": {
+        "office": "String",
+        "district_code": "String",
+        "block_code": "String",
+        "panchayat_code": "String",
+        "unit_code": "String",
+        "district": "String",
+        "block": "String",
+        "panchayat": "String",
+        "unit": "String",
+        "code_repeated": "Boolean",
+        "seat_label": "String",
+        "seat_reservation": "String",
+        "status": "String",
+        "pages": "Int16",
+        "candidate_rows": "Int32",
+        "winner_note": "String"
+      }
+    },
+    {
+      "path": "candidates.parquet",
+      "rows": 644865,
+      "sha256": "0b73373fce5b29292c61399b3308d44b95f850f17127f5c2e6bfef3e162f65ca",
+      "schema": {
+        "office": "String",
+        "district_code": "String",
+        "block_code": "String",
+        "panchayat_code": "String",
+        "unit_code": "String",
+        "row": "Int32",
+        "sr_no": "Int32",
+        "sr_no_repeated": "Boolean",
+        "candidate_name": "String",
+        "father_husband_name": "String",
+        "gender_raw": "String",
+        "gender": "String",
+        "age": "Int32",
+        "age_raw": "String",
+        "category": "String",
+        "education": "String",
+        "mobile_number": "String",
+        "address": "String",
+        "email": "String",
+        "votes": "Int64",
+        "votes_raw": "String",
+        "won_by_lot": "Boolean",
+        "remarks": "String",
+        "page": "Int16",
+        "source_file": "String",
+        "source_event": "Int32",
+        "fetched_at": "String",
+        "page_sha256": "String"
+      }
+    },
+    {
+      "path": "winners.parquet",
+      "rows": 210717,
+      "sha256": "1f1712f0a91370cb3db6a4b891d419a60cd81a4a7dbc00c57ea04e4fc14aeb13",
+      "schema": {
+        "office": "String",
+        "district_code": "String",
+        "block_code": "String",
+        "panchayat_code": "String",
+        "unit_code": "String",
+        "sr_no": "Int32",
+        "row": "Int32",
+        "winner_basis": "String",
+        "tied": "Boolean",
+        "candidate_name": "String",
+        "gender": "String",
+        "age": "Int32",
+        "category": "String",
+        "votes": "Int64",
+        "margin": "Int64"
+      }
+    }
+  ],
+  "frame_sha256": "36f60ee0a136011f99255ef804d6fff28739a657ab60f86756d331bbc7402386",
+  "code_sha256": {
+    "build_2016.py": "6f6971820cffd117396df7f7dde0552c2c7a08efa0d4b4c5a7ea167bcc6338d5",
+    "schemas_2016.py": "f0caa6a8ab39f25637dc0f7da07d37444e8fdb3deadc56622590debd0a5b6657",
+    "sec_2016.py": "a80c4957d0fd9b8ece6d28ba3b239eec8fbe2b51c89d16a667398a0d1ca67a6f"
+  }
+}

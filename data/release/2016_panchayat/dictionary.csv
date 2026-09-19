@@ -1,0 +1,60 @@
+table,column,type,nullable,checks,description
+seats.parquet,office,String,False,"<Check isin: isin(['ward_member', 'panch', 'mukhiya', 'sarpanch', 'panchayat_samiti_member', 'zila_parishad_member'])>","Office, from the form's post list."
+seats.parquet,district_code,String,False,,Form district code.
+seats.parquet,block_code,String,True,,Form block code; null for zila parishad.
+seats.parquet,panchayat_code,String,True,,Form panchayat code; set for ward member and panch.
+seats.parquet,unit_code,String,False,,"Form code of the seat: ward, panchayat, or territorial number."
+seats.parquet,district,String,False,,District label from the form.
+seats.parquet,block,String,True,,Block label from the form.
+seats.parquet,panchayat,String,True,,Panchayat label (ward member and panch seats).
+seats.parquet,unit,String,False,,Seat label from the form dropdown.
+seats.parquet,code_repeated,Boolean,False,,"The form uses this code for more than one place in the same parent (Siwan, Ziradei panchayat 10); its page cannot be tied to one label."
+seats.parquet,seat_label,String,True,,Territorial seat shown on the results page (lblPradesikForMukhiya).
+seats.parquet,seat_reservation,String,True,,Seat reservation shown on the results page; null on no-record pages and where the form shows its unset '--select--'.
+seats.parquet,status,String,False,"<Check isin: isin(['results', 'no_record'])>","results, or no_record when the form answers 'Record not Found'."
+seats.parquet,pages,Int16,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,Results-grid pages saved (20 candidates per page).
+seats.parquet,candidate_rows,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Candidate rows across all pages.
+seats.parquet,winner_note,String,True,"<Check isin: isin(['several_uncontested', 'repeated_serial_differs', 'tied_top_vote'])>","Why no winner is derived although rows exist: several distinct uncontested candidates, a serial repeated with a different person or vote count, or a top vote shared by two candidates with no lot mark."
+candidates.parquet,office,String,False,"<Check isin: isin(['ward_member', 'panch', 'mukhiya', 'sarpanch', 'panchayat_samiti_member', 'zila_parishad_member'])>","Office, from the form's post list."
+candidates.parquet,district_code,String,False,,Form district code.
+candidates.parquet,block_code,String,True,,Form block code; null for zila parishad.
+candidates.parquet,panchayat_code,String,True,,Form panchayat code; set for ward member and panch.
+candidates.parquet,unit_code,String,False,,"Form code of the seat: ward, panchayat, or territorial number."
+candidates.parquet,row,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,"Position of the row in the seat's table, across pages."
+candidates.parquet,sr_no,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,"Sr No., the candidate serial in the seat; the source repeats some, starts some at 0 and leaves some blank."
+candidates.parquet,sr_no_repeated,Boolean,False,,Another row of the seat has this Sr No.
+candidates.parquet,candidate_name,String,True,,"Candidate Name, verbatim."
+candidates.parquet,father_husband_name,String,True,,"Father/Hubs Name, verbatim."
+candidates.parquet,gender_raw,String,False,,"Gender, verbatim ('--' for vacant rows)."
+candidates.parquet,gender,String,True,"<Check isin: isin(['male', 'female', 'other'])>",Gender mapped to male/female/other (तृतीय लिंग); null for '--'.
+candidates.parquet,age,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>; <Check less_than_or_equal_to: less_than_or_equal_to(120)>,"Age as reported, implausibly low values included; null for '--', blank, or a number above 120 (see age_raw)."
+candidates.parquet,age_raw,String,True,,"Age, verbatim."
+candidates.parquet,category,String,True,,"Category, verbatim; null for '--'."
+candidates.parquet,education,String,True,,"Educational Qualification, verbatim."
+candidates.parquet,mobile_number,String,True,,"Mobile No., verbatim (text, leading zeros kept)."
+candidates.parquet,address,String,True,,"Address, verbatim."
+candidates.parquet,email,String,True,,"Email Id, verbatim."
+candidates.parquet,votes,Int64,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Obtained Valid Vote; null for '--' (uncontested or vacant) or blank. For a tie drawn by lot ('136+1') the count before the plus.
+candidates.parquet,votes_raw,String,True,,"Obtained Valid Vote, verbatim."
+candidates.parquet,won_by_lot,Boolean,False,,The vote cell carries '+1': the form's mark for a tie decided by lot.
+candidates.parquet,remarks,String,False,"<Check isin: isin(['0', 'Uncontested', 'Vacant'])>","Remarks: 0, Uncontested or Vacant."
+candidates.parquet,page,Int16,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,Results-grid page the row was on.
+candidates.parquet,source_file,String,False,,Result ledger holding the saved page.
+candidates.parquet,source_event,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Zero-based position of the page in that ledger.
+candidates.parquet,fetched_at,String,False,,UTC time the page was retrieved.
+candidates.parquet,page_sha256,String,False,<Check str_length: str_length(64)>,SHA-256 of the saved page HTML.
+winners.parquet,office,String,False,"<Check isin: isin(['ward_member', 'panch', 'mukhiya', 'sarpanch', 'panchayat_samiti_member', 'zila_parishad_member'])>","Office, from the form's post list."
+winners.parquet,district_code,String,False,,Form district code.
+winners.parquet,block_code,String,True,,Form block code; null for zila parishad.
+winners.parquet,panchayat_code,String,True,,Form panchayat code; set for ward member and panch.
+winners.parquet,unit_code,String,False,,"Form code of the seat: ward, panchayat, or territorial number."
+winners.parquet,sr_no,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Winner's candidate serial.
+winners.parquet,row,Int32,False,<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>,Winner's row in candidates.
+winners.parquet,winner_basis,String,False,"<Check isin: isin(['uncontested', 'lot', 'top_vote'])>","uncontested (Remarks), lot ('+1' vote mark on a tie) or top_vote (highest Obtained Valid Vote; the 2016 form has no winner flag)."
+winners.parquet,tied,Boolean,False,,"Another candidate has the same top vote; true only for wins by lot, since a tie with no lot mark names no winner."
+winners.parquet,candidate_name,String,True,,Candidate Name.
+winners.parquet,gender,String,True,"<Check isin: isin(['male', 'female', 'other'])>",Mapped gender.
+winners.parquet,age,Int32,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Reported age.
+winners.parquet,category,String,True,,Category.
+winners.parquet,votes,Int64,True,<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>,Obtained Valid Vote; null when uncontested.
+winners.parquet,margin,Int64,True,,Votes ahead of the runner-up; null when uncontested.
