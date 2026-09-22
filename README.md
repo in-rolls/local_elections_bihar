@@ -102,6 +102,14 @@ make audit-2021             # independent comparisons (makes requests)
 - The form's reservation label for 90 samiti and 10 zila parishad seats differs from the one in the original collection.
 - Ages are kept as typed (`age_raw`), with values above 120 (ages run into phone numbers, such as `229525839157`) nulled in `age`; 796 candidates are recorded as under 21. Serial numbers are sometimes blank, zero or repeated (`sr_no_repeated`); `row` gives each row's position.
 
+**The saved pages are deposited.** Every page the form returned, the seat frame,
+the reservation rosters and the three release tables are archived at
+[10.5281/zenodo.22852474](https://doi.org/10.5281/zenodo.22852474) under CC0:
+2.79 GB, with a checksum for every file. The 2.5 GB page archive is deposited as
+48 parts that concatenate back into it, because Zenodo will not accept an upload
+that large in one piece. A candidate row's `page_sha256` is the digest of the
+page in that archive, so the tables can be rebuilt from the deposit alone.
+
 Rebuild from the saved pages and verify:
 
 ```sh
@@ -126,7 +134,7 @@ Candidate information and valid votes collected from the [historical SEC results
 
 There are 645,605 collected rows across the six files. Each file contains labels for 38 districts. These are candidate-record counts, not unique seats, people, or independently verified election totals. Mukhiya and Sarpanch are separate source offices, as are Ward Member and Panch; the converter does not combine them.
 
-Original files remain in [data/](data/). [MANIFEST.json](data/fin/MANIFEST.json) records input/output checksums, schemas, row counts, later duplicate counts, and missing-name counts. [schemas.json](schemas.json) declares the exact columns and office expected for each file. No dataset DOI is recorded in this repository.
+Original files remain in [data/](data/). [MANIFEST.json](data/fin/MANIFEST.json) records input/output checksums, schemas, row counts, later duplicate counts, and missing-name counts. [schemas.json](schemas.json) declares the exact columns and office expected for each file.
 
 ## Column dictionary
 

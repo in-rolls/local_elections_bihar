@@ -5,6 +5,10 @@ title: "Bihar Local Elections"
 authors:
   - family-names: Sood
     given-names: Gaurav
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22852474
+    description: The 2016 saved source pages and validated release
 repository-code: "https://github.com/in-rolls/local_elections_bihar"
 url: "https://github.com/in-rolls/local_elections_bihar"
 keywords:
