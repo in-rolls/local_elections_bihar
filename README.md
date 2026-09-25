@@ -231,7 +231,7 @@ Omit `caffeinate -dims` outside macOS. The generic collector accepts post IDs 1â
 
 ### State release and central import
 
-The [central repository](https://github.com/in-rolls/local_elections) contract assigns collection, parsing and corrections to this repository. `local_reservations` imports the versioned state release through its Bihar adapter; `quota_elite_quality` consumes the harmonized data for analysis. The central adapter pins the 2021 table hashes and checks row counts, schemas, unique keys and winner/coverage reconciliation. The six 2016 inputs retain their existing paths.
+The [central repository](https://github.com/in-rolls/local_elections) contract assigns collection, parsing and corrections to this repository. `local_elections` imports the versioned state release through its Bihar adapter; `quota_elite_quality` consumes the harmonized data for analysis. The central `data/sources.json` pins this repository at a commit, with SHA-256 for every file the adapter reads (the 2021 tables, their manifest and the six 2016 inputs); the adapter then checks row counts, schemas, unique keys and winner/coverage reconciliation.
 
 The 2021 release includes an explicit [schema](data/release/2021/SCHEMA.json), [dictionary](data/release/2021/dictionary.csv), [checksums](data/release/2021/CHECKSUMS), and [manifest](data/release/2021/MANIFEST.json) linking rows to saved SEC responses. Candidate and result observations retain separate source URLs, hashes and row locators. Missing results remain null. The undated current reservation feed is excluded from this release.
 
