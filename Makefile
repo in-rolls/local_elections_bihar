@@ -58,3 +58,10 @@ verify-2016-panchayat:
 
 audit-2016:
 	uv run python scripts/audit_2016.py
+
+.PHONY: raw-verify raw-archive
+raw-verify:
+	python3 scripts/raw_archive.py verify
+
+raw-archive:
+	python3 scripts/raw_archive.py pack $(if $(OUT),--out $(OUT),)
