@@ -3,6 +3,7 @@
     python scripts/raw_archive.py index   # (re)write data/raw_archive/MANIFEST.csv
     python scripts/raw_archive.py verify  # check the files against MANIFEST.csv
     python scripts/raw_archive.py pack    # dist/raw_archive/<repo>_raw_<date>.tar.gz
+    python scripts/raw_archive.py pack --out /Volumes/External  # somewhere with room
 
 Raw source material is too large for git, so it lives in data/raw_archive/,
 git-ignored except for MANIFEST.csv and README.md, and is shared as a tarball
@@ -88,10 +89,10 @@ def verify():
     return 0
 
 
-def pack():
+def pack(out=None):
     if verify():
         return 1
-    out = ROOT / "dist" / "raw_archive"
+    out = Path(out) if out else ROOT / "dist" / "raw_archive"
     out.mkdir(parents=True, exist_ok=True)
     stamp = datetime.date.today().isoformat()
     target = out / f"{ROOT.name}_raw_{stamp}.tar.gz"
@@ -101,7 +102,7 @@ def pack():
             tar.add(path, arcname=relative.as_posix())
     digest = sha256(target)
     (out / f"{target.name}.sha256").write_text(f"{digest}  {target.name}\n")
-    print(f"{target.relative_to(ROOT)}  sha256 {digest}")
+    print(f"{target}  sha256 {digest}")
     return 0
 
 
@@ -109,10 +110,11 @@ def main():
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("action", choices=["index", "verify", "pack"])
     parser.add_argument("--origin", default="", help="origin note for new entries")
+    parser.add_argument("--out", help="tarball directory (default dist/raw_archive)")
     args = parser.parse_args()
     if args.action == "index":
         return index(args.origin)
-    return verify() if args.action == "verify" else pack()
+    return verify() if args.action == "verify" else pack(args.out)
 
 
 if __name__ == "__main__":

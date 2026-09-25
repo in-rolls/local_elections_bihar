@@ -64,4 +64,4 @@ raw-verify:
 	python3 scripts/raw_archive.py verify
 
 raw-archive:
-	python3 scripts/raw_archive.py pack
+	python3 scripts/raw_archive.py pack $(if $(OUT),--out $(OUT),)
