@@ -244,6 +244,8 @@ make release-data
 make verify-2021
 ```
 
+Unparsed 2006 and 2011 source lists, handed off from the central repository, are in the [raw-data archive](data/raw_archive/README.md): git-ignored files, a tracked SHA-256 manifest, and a tarball for download.
+
 [Archive metadata](data/raw/statewide_2021_archive.json) records its checksum. `./crawl.sh` resumes collection and downloads every flagged winner's affidavit if explicitly restarted; acquisition is currently stopped. PDFs are checked for a PDF signature, readable page count and SHA-256; failures are retained and retried on resume. The download stops before consuming the final 5 GiB of disk space. Live progress is saved to `data/interim/2021/download_status.parquet`, with one row for every requested winner, and a matching JSON summary. PDF bytes remain local during acquisition; the response archive and released tables are published.
 
 Rebuild the reservation source checks offline with `uv run python scripts/check_reservations_2021.py`.
