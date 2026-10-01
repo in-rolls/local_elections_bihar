@@ -31,13 +31,13 @@ def legacy(tmp_path, seats, candidates, change=None):
     rows = rows.rename({"unit": "panchayat"}).with_columns(pl.lit(" ").alias("email"))
     if change is not None:
         rows = change(rows)
-    folder = tmp_path / "fin"
+    folder = tmp_path / "legacy_2016"
     folder.mkdir()
     for office, unit in a.LEGACY_UNIT.items():
         table = rows if office == "mukhiya" else rows.clear()
         if unit != "panchayat":
             table = table.with_columns(pl.col("panchayat").alias(unit))
-        table.write_parquet(folder / f"{office}.parquet")
+        table.write_csv(folder / f"{office}.csv")
     return folder
 
 

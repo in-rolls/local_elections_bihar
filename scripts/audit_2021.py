@@ -377,9 +377,7 @@ def audit(release, archives, report_dir, resample, seed):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--release", type=Path, default=Path("data/release/2021_panchayat")
-    )
+    parser.add_argument("--release", type=Path, default=Path("data/2021"))
     parser.add_argument(
         "--archives", type=Path, default=Path("data/interim/2021/archive")
     )

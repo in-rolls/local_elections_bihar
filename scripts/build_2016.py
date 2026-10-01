@@ -418,7 +418,7 @@ def main():
     parser.add_argument(
         "--results", type=Path, default=Path("data/interim/2016/archive")
     )
-    parser.add_argument("--out", type=Path, default=Path("data/release/2016_panchayat"))
+    parser.add_argument("--out", type=Path, default=Path("data/2016"))
     parser.add_argument("--check", action="store_true")
     # Development only: build from the pages saved so far, skipping unfetched seats.
     parser.add_argument("--partial", action="store_true")

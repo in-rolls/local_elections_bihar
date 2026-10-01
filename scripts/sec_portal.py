@@ -1,10 +1,9 @@
-"""Archive Bihar SEC's 2021–2026 portal and export winner/reservation records."""
+"""Archive Bihar SEC's 2021–2026 portal winner and reservation feeds."""
 
 import argparse
 import base64
 import concurrent.futures
 import gzip
-import hashlib
 import json
 import threading
 import time
@@ -256,125 +255,10 @@ def collect(raw, posts, districts, workers):
             print(json.dumps(result), flush=True)
 
 
-SOURCE_FIELDS = {
-    "district": "District",
-    "block": "Block",
-    "panchayat": "Panchayat",
-    "panchayat_id": "PanchayatNo",
-    "ward": "WardNo",
-    "post": "Post",
-    "candidate_name": "CandidateName",
-    "candidate_gender": "Gender",
-    "candidate_category": "Category",
-    "reservation_for_reported": "ReservationFor",
-    "reservation_status_reported": "ReservationStatus",
-    "seat_reservation": "Reservation",
-    "affidavit_url": "Affidavit",
-    "photo_url": "CandidatePhotos",
-}
-
-
-def attributes(row):
-    result = {
-        name: None if row.get(source) is None else str(row[source])
-        for name, source in SOURCE_FIELDS.items()
-    }
-    age = row.get("Age")
-    if age is not None and (isinstance(age, bool) or not isinstance(age, int)):
-        raise ValueError("Unexpected age type")
-    result["candidate_age"] = age
-    return result
-
-
-def parse(raw, out):
-    out.mkdir(parents=True, exist_ok=True)
-    frame = pq.read_table(raw / "frame.parquet").to_pylist()
-    schema = pa.schema(
-        [
-            ("district_id", pa.int32()),
-            ("block_id", pa.int32()),
-            ("post_id", pa.int8()),
-            ("year", pa.int16()),
-            ("source_row", pa.int32()),
-            ("source_url", pa.string()),
-            ("fetched_at", pa.string()),
-            ("source_sha256", pa.string()),
-            ("raw_cell", pa.string()),
-            ("candidate_age", pa.int32()),
-        ]
-        + [(name, pa.string()) for name in SOURCE_FIELDS]
-    )
-    manifest = {
-        "election_year": None,
-        "portal_window": "2021–2026",
-        "files": {},
-        "coverage": [],
-    }
-    for kind in ENDPOINTS:
-        output = []
-        for u in frame:
-            path = (
-                raw
-                / kind
-                / f"d{u['district_id']}_b{u['block_id']}_p{u['post_id']}.jsonl.gz"
-            )
-            event = completed(path)
-            if event is None:
-                continue
-            body = base64.b64decode(event["body_base64"])
-            records = decode_records(body)
-            manifest["coverage"].append({**u, "kind": kind, "records": len(records)})
-            for i, row in enumerate(records, 1):
-                if (
-                    int(row["Dist"]) != u["district_id"]
-                    or int(row["BlockID"]) != u["block_id"]
-                    or row["Post"].strip() != u["post"].strip()
-                ):
-                    raise ValueError(f"Response outside requested geography: {path}")
-                output.append(
-                    {
-                        "district_id": u["district_id"],
-                        "block_id": u["block_id"],
-                        "post_id": u["post_id"],
-                        "year": None,
-                        "source_row": i,
-                        "source_url": event["url"],
-                        "fetched_at": event["fetched_at"],
-                        "source_sha256": hashlib.sha256(body).hexdigest(),
-                        "raw_cell": json.dumps(row, ensure_ascii=False),
-                        **attributes(row),
-                    }
-                )
-        table = pa.Table.from_pylist(output, schema=schema)
-        path = out / f"{kind}.parquet"
-        pq.write_table(table, path, compression="zstd")
-        manifest["files"][path.name] = {
-            "records": len(output),
-            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-        }
-        print(
-            json.dumps(
-                {
-                    "kind": kind,
-                    "records": len(output),
-                    "districts": len({r["district_id"] for r in output}),
-                    "age_missing": sum(r["candidate_age"] is None for r in output),
-                }
-            )
-        )
-    (out / "MANIFEST.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
-    )
-    (out / "SCHEMA.json").write_text(
-        json.dumps({f.name: str(f.type) for f in schema}, indent=2) + "\n"
-    )
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("stage", choices=["list", "fetch", "parse"])
+    parser.add_argument("stage", choices=["list", "fetch"])
     parser.add_argument("--raw", type=Path, default=Path("data/raw/portal_2021_2026"))
-    parser.add_argument("--out", type=Path, default=Path("data/fin/portal_2021_2026"))
     parser.add_argument("--posts", type=int, nargs="+", default=[3])
     parser.add_argument("--districts", type=int, nargs="+")
     parser.add_argument("--workers", type=int, default=3)
@@ -383,10 +267,8 @@ def main():
         parser.error("Positive workers and post IDs 1–6 required")
     if args.stage == "list":
         enumerate_frame(args.raw, args.workers)
-    elif args.stage == "fetch":
-        collect(args.raw, args.posts, args.districts, args.workers)
     else:
-        parse(args.raw, args.out)
+        collect(args.raw, args.posts, args.districts, args.workers)
 
 
 if __name__ == "__main__":

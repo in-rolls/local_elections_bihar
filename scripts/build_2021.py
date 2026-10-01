@@ -587,7 +587,7 @@ def main():
     parser.add_argument(
         "--current-mukhiya", type=Path, default=Path("data/raw/portal_2021_2026")
     )
-    parser.add_argument("--out", type=Path, default=Path("data/release/2021_panchayat"))
+    parser.add_argument("--out", type=Path, default=Path("data/2021"))
     args = parser.parse_args()
     if args.check:
         verify(args.out)

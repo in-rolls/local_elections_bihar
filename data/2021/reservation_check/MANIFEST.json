@@ -7,10 +7,10 @@
     "candidate_serial"
   ],
   "inputs": {
-    "data/fin/portal_2021_2026/reservations.parquet": "6cfa19ac1f556b4f553379898288815d0753e2dcd138e74f9000a163561dba73",
-    "data/fin/portal_2021_2026/winners.parquet": "5a2e693195a9c1533f51970e9394767d374e83c155977bb4b0e82e102a17ef2c",
-    "data/release/2021/gp_head_candidates_2021.parquet": "03de762fa476a11ac865a8a0f8871443c45cb46137c25c671f00f4ff5f40cee1",
-    "data/release/2021/gp_head_winner_records_2021.parquet": "6ad478a49685833f44a502bfc416405b07047f1a13dfce1dbe3f942bb698c0ad"
+    "data/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
+    "data/2021/candidates.parquet": "8e6fda01045edf245cc0c7d46665f3496c5e41323775a3900300a9ae0b9537be",
+    "data/2021/current_winners.parquet": "55d47177250629cd87f35413645feb613a682bba3308898894b6204732c35cd4",
+    "data/2021/current_reservations.parquet": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073"
   },
   "receipts": {
     "data/raw/reservation_check_2021/btnFilter.jsonl.gz": "d4666f0dd1674cf8a919d990a7016e3c5b9c3e5d76b84abad95433f0b206a8c8",
@@ -20,12 +20,12 @@
     "data/raw/reservation_check_2021/reservation_d33_b1.jsonl.gz": "840a4961df29c9c7040f48b89280594b4041ddc8694ebf6f9fc3b5bc666c6a5c"
   },
   "report_url": "https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx",
-  "parser_sha256": "b9a210f7317b321c0d1a77e5655a51951c5b34e778f5f5b74a96e638c201e4c0",
+  "parser_sha256": "fd9976340a0cf9524e21134bb8797ee2a9972e192da1e0069bb4cded10191a1c",
   "files": [
     {
       "path": "flagged_winners.parquet",
       "rows": 35,
-      "sha256": "5f8a086e344a1faf48078062e78143d2c3db9526eed3690931d25ed1a3997f3e",
+      "sha256": "b3ef5d686c7013309d4cca290faf38fead063db96b2c71a7b31b7e5e9e2826ee",
       "schema": {
         "district_id": "int64",
         "block_id": "int64",

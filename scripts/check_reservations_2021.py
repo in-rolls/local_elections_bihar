@@ -9,19 +9,20 @@ import hashlib
 import json
 from pathlib import Path
 
+import polars as pl
 import pyarrow as pa
 import pyarrow.parquet as pq
 from bs4 import BeautifulSoup
-from release_2021 import KEY, SEAT, key, sha, table
 
 RAW = Path("data/raw/reservation_check_2021")
-OUT = Path("data/fin/reservation_check_2021")
+RELEASE = Path("data/2021")
+OUT = RELEASE / "reservation_check"
 INPUTS = {
-    "reservations": Path("data/fin/portal_2021_2026/reservations.parquet"),
-    "current_winners": Path("data/fin/portal_2021_2026/winners.parquet"),
-    "candidates": Path("data/release/2021/gp_head_candidates_2021.parquet"),
-    "winners": Path("data/release/2021/gp_head_winner_records_2021.parquet"),
+    name: RELEASE / f"{name}.parquet"
+    for name in ["seats", "candidates", "current_winners", "current_reservations"]
 }
+KEY = ["district_id", "block_id", "panchayat_id", "candidate_serial"]
+SEAT = KEY[:-1]
 CATEGORIES = {
     f"{caste} ({gender})": (code, gender == "महिला")
     for caste, code in [
@@ -32,6 +33,56 @@ CATEGORIES = {
     ]
     for gender in ["महिला", "अन्य"]
 }
+
+
+def key(row, fields=KEY):
+    return tuple(int(row[n]) for n in fields)
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def table(out, name, rows, fields):
+    schema = pa.schema(fields)
+    path = out / f"{name}.parquet"
+    temp = path.with_suffix(".tmp")
+    pq.write_table(pa.Table.from_pylist(rows, schema=schema), temp, compression="zstd")
+    temp.replace(path)
+    return {
+        "path": path.name,
+        "rows": len(rows),
+        "sha256": sha(path),
+        "schema": {f.name: str(f.type) for f in schema},
+    }
+
+
+def load(inputs=INPUTS):
+    """Mukhiya (post 3) rows of the 2021 release, keyed by geography as the
+    checks expect. Genders stay as the source wrote them."""
+
+    def mukhiya(name):
+        return pl.read_parquet(inputs[name]).filter(pl.col("post_id") == 3)
+
+    ids = mukhiya("seats").select("unit_id", *SEAT)
+    gender = pl.col("candidate_gender_raw").alias("candidate_gender")
+    person = [gender, "candidate_name", "affidavit_url", "source_sha256"]
+    candidates = (
+        mukhiya("candidates")
+        .join(ids, on="unit_id", how="left")
+        .select(*KEY, "post_id", pl.lit(2021).alias("year"), *person, "elected")
+    )
+    return {
+        "reservations": mukhiya("current_reservations")
+        .with_columns(year=pl.lit(None, pl.Int64))
+        .select(*SEAT, "post_id", "year", "seat_reservation", "source_sha256")
+        .to_dicts(),
+        "current_winners": mukhiya("current_winners")
+        .select(*SEAT, "post_id", "reservation_for_reported", *person)
+        .to_dicts(),
+        "candidates": candidates.drop("elected").to_dicts(),
+        "winners": candidates.filter("elected").drop("elected").to_dicts(),
+    }
 
 
 def category(value):
@@ -189,10 +240,7 @@ def build(out=OUT):
     body = base64.b64decode(event["body_base64"])
     if event["status"] != 200 or hashlib.sha256(body).hexdigest() != event["sha256"]:
         raise ValueError("Invalid report receipt")
-    checks, flagged = audit(
-        **{name: pq.read_table(path).to_pylist() for name, path in INPUTS.items()},
-        official=report_totals(body),
-    )
+    checks, flagged = audit(**load(), official=report_totals(body))
     fields = [(f, pa.int64()) for f in KEY] + [
         ("seat_reservation", pa.string()),
         ("gender_2021", pa.string()),

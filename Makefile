@@ -1,6 +1,5 @@
-.PHONY: check test to-parquet verify-data ci-docker release-data verify-2021 \
-	build-2021 verify-2021-panchayat audit-2021 archive-2016 build-2016 \
-	verify-2016-panchayat audit-2016
+.PHONY: check test verify verify-2016 verify-2021 ci-docker archive-2016 build-2016 \
+	audit-2016 build-2021 audit-2021 reservation-check-2021 raw-verify raw-archive
 
 check:
 	uv sync --frozen --group dev
@@ -8,40 +7,24 @@ check:
 	uv run ruff format --check .
 	uv run pytest -q
 	uv run pre-commit run --all-files
-	$(MAKE) verify-data
-	$(MAKE) verify-2021
-	$(MAKE) verify-2021-panchayat
-	$(MAKE) verify-2016-panchayat
+	$(MAKE) verify
 
 test:
 	uv run pytest -q
 
-to-parquet:
-	uv run python scripts/to_parquet.py
+verify: verify-2016 verify-2021
 
-verify-data:
-	uv run python scripts/to_parquet.py --check
+verify-2016:
+	uv run python scripts/build_2016.py --check
+
+verify-2021:
+	uv run python scripts/build_2021.py --check
 
 ci-docker:
 	@for version in 3.12 3.14; do \
 	  COPYFILE_DISABLE=1 tar --exclude=._* --exclude=__pycache__ --exclude=.DS_Store --exclude=.git --exclude=.venv --exclude=.ruff_cache --exclude=.pytest_cache --exclude=data/derived --exclude=data/interim -cf - . | \
-	  docker run --rm -i python:$$version-slim sh -ec 'mkdir /work; tar -xf - -C /work; cd /work; pip install -q uv; uv sync --frozen --group dev; uv run ruff check .; uv run ruff format --check .; uv run pytest -q; uv run python scripts/to_parquet.py --check' || exit $$?; \
+	  docker run --rm -i python:$$version-slim sh -ec 'mkdir /work; tar -xf - -C /work; cd /work; pip install -q uv; uv sync --frozen --group dev; uv run ruff check .; uv run ruff format --check .; uv run pytest -q; uv run python scripts/build_2016.py --check; uv run python scripts/build_2021.py --check' || exit $$?; \
 	done
-
-release-data:
-	uv run python scripts/release_2021.py
-
-verify-2021:
-	uv run python scripts/release_2021.py --check
-
-build-2021:
-	uv run python scripts/build_2021.py
-
-verify-2021-panchayat:
-	uv run python scripts/build_2021.py --check
-
-audit-2021:
-	uv run python scripts/audit_2021.py
 
 # One tar in directory order: the build reads it far faster than 2,705 small files.
 archive-2016:
@@ -53,13 +36,18 @@ archive-2016:
 build-2016:
 	uv run python scripts/build_2016.py
 
-verify-2016-panchayat:
-	uv run python scripts/build_2016.py --check
-
 audit-2016:
 	uv run python scripts/audit_2016.py
 
-.PHONY: raw-verify raw-archive
+build-2021:
+	uv run python scripts/build_2021.py
+
+audit-2021:
+	uv run python scripts/audit_2021.py
+
+reservation-check-2021:
+	uv run python scripts/check_reservations_2021.py
+
 raw-verify:
 	python3 scripts/raw_archive.py verify
 
