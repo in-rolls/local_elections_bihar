@@ -2,9 +2,7 @@
 
 import base64
 import gzip
-import io
 import json
-import tarfile
 
 import build_2021 as b
 import polars as pl
@@ -27,14 +25,13 @@ def ledger(records, phase=None):
     return gzip.compress(lines.encode())
 
 
-def archive(tmp_path, members):
-    path = tmp_path / "a.tar"
-    with tarfile.open(path, "w") as tar:
-        for name, data in members.items():
-            info = tarfile.TarInfo(name)
-            info.size = len(data)
-            tar.addfile(info, io.BytesIO(data))
-    return b.Responses([path])
+def sources(tmp_path, members):
+    for name, data in members.items():
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+    directories = sorted({name.split("/")[0] for name in members})
+    return b.Responses(tmp_path, directories)
 
 
 def seat(post=5, seat_no=8):
@@ -87,7 +84,7 @@ def result(serial, name, panchayat, votes, won):
 
 def build(tmp_path, candidates, results):
     root = "2021/offices/p5"
-    responses = archive(
+    responses = sources(
         tmp_path,
         {
             f"{root}/phases/d2_b11_s8.jsonl.gz": ledger([{"i": "2021_1", "n": "2021"}]),
@@ -179,7 +176,7 @@ def test_vacant_placeholder_fields_are_not_a_person(tmp_path):
         "CandidatePhotos": "01-Nov-2023",
         "Affidavit": "ok",
     }
-    responses = archive(
+    responses = sources(
         tmp_path, {"current/winners/p1/d2_b11_p20110182.jsonl.gz": ledger([row])}
     )
     frame = [seat(1, 6) | {"panchayat_id": 20110182, "unit_id": "d2_b11_p20110182_w6"}]

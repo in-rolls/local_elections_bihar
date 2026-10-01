@@ -1,0 +1,31 @@
+{
+  "winner_rows": 338,
+  "alternate_rows": 338,
+  "spreadsheet_rows": 331,
+  "summary_total": 338,
+  "runner_name_rows": 338,
+  "runner_names_also_in_winner_spreadsheet": 38,
+  "runner_spreadsheet_comparison_pairs": 40,
+  "year_assignment": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
+  "review_needed": "Extracted PDF/workbook names and outcomes need review",
+  "coverage_all_blocks_match": true,
+  "source_serials_consecutive": true,
+  "spreadsheet_matching": {
+    "unmatched": 281,
+    "unique_name_within_block": 56,
+    "ambiguous": 1
+  },
+  "alternate_identity_matches": 338,
+  "issues_by_kind": {
+    "alternate_difference": 370,
+    "spreadsheet_difference": 193,
+    "non_numeric": 27,
+    "age_out_of_range": 6,
+    "repeated_seat_label": 25,
+    "unmapped_gender": 1
+  },
+  "primary_blocks": 24,
+  "rows_with_repeated_seat_labels": 25,
+  "rows_with_repeated_names_within_block": 16,
+  "scope": "Gaya Mukhiya reported winners only; not statewide or a complete seat frame"
+}

@@ -169,9 +169,9 @@ def parse(raw, out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["download", "parse"])
-    parser.add_argument("--raw", type=Path, default=Path("data/raw/statewide_2016"))
+    parser.add_argument("--raw", type=Path, default=Path("data/2016/raw/statewide"))
     parser.add_argument(
-        "--out", type=Path, default=Path("data/interim/2016/reservation_roster.parquet")
+        "--out", type=Path, default=Path("data/2016/interim/reservation_roster.parquet")
     )
     args = parser.parse_args()
     if args.stage == "download":

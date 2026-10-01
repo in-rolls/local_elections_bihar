@@ -413,10 +413,10 @@ def verify(out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--frame", type=Path, default=Path("data/raw/statewide_2016/2016/frame.parquet")
+        "--frame", type=Path, default=Path("data/2016/raw/statewide/2016/frame.parquet")
     )
     parser.add_argument(
-        "--results", type=Path, default=Path("data/interim/2016/archive")
+        "--results", type=Path, default=Path("data/2016/raw/statewide/2016/results")
     )
     parser.add_argument("--out", type=Path, default=Path("data/2016"))
     parser.add_argument("--check", action="store_true")

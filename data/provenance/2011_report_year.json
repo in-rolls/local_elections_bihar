@@ -1,0 +1,16 @@
+{
+  "election_year": 2011,
+  "classification": "maintainer_confirmed",
+  "confirmed_on": "2026-10-01",
+  "scope": "PDF reports in the 2011 central handoff collection, including primary and alternate winners and the companion runner lists",
+  "year_basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
+  "confirmation": "these are all for 2011. there is a 'purva nirvachit' for 2001/2006 so 2011",
+  "files_opened_for_review": [
+    "winners/GAYA/GAYA_GPM.pdf",
+    "alternate_winners/GAYA/GAYA_GPM.pdf",
+    "winners/BHOJPUR/BHOJPUR_GPM.pdf"
+  ],
+  "heading_evidence": "पूर्व निर्वाचित labels prior elected office in 2001 and 2006, rather than the election being reported",
+  "additional_evidence": "Historical collection is labeled 2011; the Khajuria judgment independently corroborates one Bhojpur winner's 2011 election",
+  "limits": "The assignment records the maintainer's collection identification, not a printed 2011 date verified on every PDF page. The 2001/2006 columns support the identification but do not alone logically exclude every later year. Gaya workbook/PDF identity and outcome discrepancies remain unresolved within the assigned 2011 election. Unrelated undated Excel collections are not reclassified."
+}

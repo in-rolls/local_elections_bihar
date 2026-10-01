@@ -1,0 +1,22 @@
+{
+  "checked_at": "2026-10-01T16:41:09.900734+00:00",
+  "archive_url": "https://sec.bihar.gov.in/archive",
+  "winner_url": "https://sec.bihar.gov.in/old-sec/wcl.aspx",
+  "year_evidence": "Linked under 2016 by the official SEC archive; not independently inferred from individual rows",
+  "scope": {
+    "office": "Mukhiya",
+    "district_code": "33",
+    "district": "Arwal",
+    "block_code": "001",
+    "block": "Arwal",
+    "requests": 5
+  },
+  "winner_rows": 12,
+  "published_winner_rows": 12,
+  "candidate_name_set_equal": true,
+  "comparison_limit": "Exact candidate-name sets within one block; not a seat-key comparison or statewide completeness test",
+  "receipt": "sec_2016_winner_probe.jsonl.gz",
+  "receipt_encoding": "Each event stores base64 UTF-8 decoded response HTML, with its SHA-256; not raw HTTP wire bytes",
+  "receipt_sha256": "0e03738cb76311444661411e1a876acbd720883f1e903257bd2233a027d785fd",
+  "affidavit_links_followed": false
+}

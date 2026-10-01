@@ -3,7 +3,72 @@
 [![CI](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml/badge.svg)](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 
-Bihar panchayat election records from the State Election Commission (SEC). Each election has one folder; every table in it is declared, checksummed and traced to saved SEC responses.
+This repository records **which Bihar panchayat seats were reserved, who contested
+those seats, and who won**. The aim is to cover all recoverable general elections
+and by-elections, with candidate attributes and an evidence-backed history of
+seats across elections. Sources come from the State Election Commission (SEC)
+and preserved historical collections.
+
+## Scope and collection priorities
+
+The six offices are **ward member, panch, mukhiya, sarpanch, panchayat samiti
+member and zila parishad member**. All candidates are in scope, including losing
+and uncontested candidates. Municipal elections, indirectly elected leadership
+posts, affidavits, turnout and polling logistics are deferred.
+
+Collect sources that add one or more of the following:
+
+- **Seats and reservations:** office, election, district/block/panchayat, seat
+  identifiers and labels, reservation category and women's reservation.
+- **Candidates and outcomes:** names, votes, winner status and its basis, and
+  reported gender, category, age, education, occupation and other available
+  attributes from ordinary election records.
+- **Seat history and evidence:** source dates, geography and boundary records
+  needed to establish election vintage, link seats across years or resolve
+  conflicting reservation and result records.
+
+Keep seat reservation distinct from candidate category and gender. Preserve
+source labels alongside standardized values, and record unknowns and conflicts.
+Never infer a candidate's category or gender from their name or the reservation
+of the seat. Distinguish official winner declarations from winners inferred from
+votes or uncontested status.
+
+General elections and each by-election round are separate events. Later
+occupation of a seat must not overwrite its election winner. An undated term
+snapshot is not an election-specific reservation roster. Cross-year seat links
+require geographic evidence: matching codes or names alone do not establish
+continuity. Record renaming, boundary changes, splits, mergers and unresolved
+matches explicitly.
+
+A source need not supply every field to be useful. Retain candidate records with
+missing reservation links, known seats with missing results and winner-only
+sources with explicit limits on candidate coverage. Preserve one canonical copy
+of each necessary original, final tables and compact receipts; disposable
+intermediates are not archival assets. See the [data guide](data/README.md) for
+storage and reproducibility.
+
+### What exists and what remains
+
+The [coverage report](data/coverage.csv), with [definitions and source hashes](data/coverage.json),
+is generated from the parsed tables by `make coverage`. It reports frame seats,
+ambiguous seat codes, seats with candidates and winners, reservation-label
+coverage, candidate records with votes and winner determination by election and
+office. Empty numeric cells mean unavailable, not zero.
+
+2016 has reservation labels in election result pages. The 2021-term reservation
+feed is reported separately as a snapshot; linking its labels to specific
+elections remains an evidence task. General-election seat links between years
+have not been established. By-election seats already have membership in the
+2021 term frame; that does not establish continuity with the 2016 frame.
+
+The current priorities are to resolve historical source dates, parse useful
+reservation/candidate/winner records, close gaps in election-specific reservation
+linkage and outcomes, and establish supported seat links across years. For 2011,
+use the confirmed 2011 report collection while checking the Gaya workbook/PDF
+name differences against the originals before combining their records. The SEC
+turnout table and the indirect-leadership rosters are not collection priorities.
+
+## Available data
 
 | Folder | Election | Contents |
 |---|---|---|
@@ -12,10 +77,12 @@ Bihar panchayat election records from the State Election Commission (SEC). Each 
 | | 2023 and 2025 by-elections | 5,749 seats, 8,449 candidates, 5,749 winners |
 | | 2021–2026 term | Current winner and seat-reservation feeds, one row per seat |
 | [`data/2021/reservation_check/`](data/2021/reservation_check) | 2021 mukhiya seats | Reservation totals checked against the SEC report; 35 source conflicts flagged |
-| [`data/2021/affidavits/`](data/2021/affidavits) | 2021 mukhiya winners, Arwal | Candidate affidavits (nomination papers): education and prior office transcribed for 64 winners |
-| [`data/raw/`](data/raw) | | Saved SEC responses the releases are built from |
+| [`data/2011/gaya_mukhiya/`](data/2011/gaya_mukhiya) | 2011 workbook and PDF collection | 331 workbook winner records; 338 PDF winner records and 338 runner names, kept separate |
+| [`data/2011/mukhiya_reports/`](data/2011/mukhiya_reports) | 2011, maintainer-confirmed PDF collection | 4,320 winner records across 23 districts, with 4,318 reservation labels; includes the 338 Gaya PDF records |
+| [`data/2011/khajuria_judgment/`](data/2011/khajuria_judgment) | Explicitly dated 2011 contest | 11 candidates and votes for Khajuria, Bhojpur, manually transcribed from a court judgment |
+| [`data/README.md`](data/README.md) | All years | Local source layout, size catalog, receipts, and restore instructions |
 
-The six offices are ward member, panch, mukhiya (gram panchayat head), sarpanch (gram kachahari head), panchayat samiti member and zila parishad member. 2006 and 2011 lists exist but are not parsed; see [Earlier elections](#earlier-elections).
+The [Gaya Mukhiya pilot](data/2011/gaya_mukhiya/README.md) keeps workbook and PDF records separate pending review of extracted name differences. The PDF collection is assigned to 2011 using maintainer confirmation and its prior-election headings; the [year receipt](data/provenance/2011_report_year.json) records that evidence. See [Earlier elections](#earlier-elections).
 
 ## 2016
 
@@ -41,7 +108,7 @@ The six offices are ward member, panch, mukhiya (gram panchayat head), sarpanch 
 **Checked against sources that share no code with it.** [`scripts/audit_2016.py`](scripts/audit_2016.py) writes [`audit.json`](data/2016/audit.json):
 
 - Seats equal the form's own frame for every office.
-- An earlier collection of the same form, six CSVs from 2016 kept in [`data/raw/legacy_2016/`](data/raw/legacy_2016), agrees cell for cell on 644,849 of its 644,958 distinct rows. The 109 others are 106 rows in Siwan's Ziradei block, where the earlier collectors filed one code's results under both panchayats that share it (below), and 3 names where they kept a space in place of a stray NUL. The release adds 4 candidates for one ward seat (Purvi Champaran, Kalyanpur, ward 16) that the earlier collection lacks.
+- An earlier collection of the same form, six CSVs from 2016 kept in `data/2016/raw/legacy`, agrees cell for cell on 644,849 of its 644,958 distinct rows. The 109 others are 106 rows in Siwan's Ziradei block, where the earlier collectors filed one code's results under both panchayats that share it (below), and 3 names where they kept a space in place of a stray NUL. The release adds 4 candidates for one ward seat (Purvi Champaran, Kalyanpur, ward 16) that the earlier collection lacks.
 - 30 seats re-requested with separate code on the day of the build returned the saved rows unchanged.
 - The SEC's 2016 reservation rosters list the same number of seats of each reservation type as the release for mukhiya, sarpanch and samiti seats in every district whose roster is readable (8,609 seats; 83 of the 228 roster PDFs are scans without text). For zila parishad seats, compared one by one, 11 of 409 differ.
 
@@ -55,15 +122,15 @@ The six offices are ward member, panch, mukhiya (gram panchayat head), sarpanch 
 - The form's reservation label for 90 samiti and 10 zila parishad seats differs from the one in the earlier collection.
 - Ages are kept as typed (`age_raw`), with values above 120 (ages run into phone numbers, such as `229525839157`) nulled in `age`; 796 candidates are recorded as under 21. Serial numbers are sometimes blank, zero or repeated (`sr_no_repeated`); `row` gives each row's position.
 
-**The saved pages are deposited.** Every page the form returned, the seat frame, the reservation rosters and the three tables are archived at [10.5281/zenodo.22852474](https://doi.org/10.5281/zenodo.22852474) under CC0: 2.79 GB, with a checksum for every file. The 2.5 GB page archive is deposited as 48 parts that concatenate back into it, because Zenodo will not accept an upload that large in one piece. A candidate row's `page_sha256` is the digest of the page in that archive, so the tables can be rebuilt from the deposit alone.
+**The saved pages are deposited.** [Zenodo record 22852474](https://doi.org/10.5281/zenodo.22852474) holds 60 files totaling 2.79 GB under CC0: 48 result-archive chunks, frame-page and reservation-roster archives, the three tables, and documentation. Public file sizes and MD5 checksums match the local export; the tables match this repository byte for byte. The generated seat frame is rebuilt offline from the deposited pages. See [verified contents and restore commands](data/README.md#what-zenodo-contains).
 
-**The earlier collection.** The [`legacy_2016`](data/raw/legacy_2016) CSVs were collected from the same form before the re-collection, without saving the pages; the [historical implementation](https://github.com/in-rolls/local_elections_bihar/tree/1efc650) has their scripts. They hold one file per office (645,605 rows, including 642 exact repeats) with the form's columns as text, and are kept as the audit's independent comparison. Use `data/2016/` for analysis: it has every column they have, plus the seats with no record, page provenance and typed values.
+**The earlier collection.** The `data/2016/raw/legacy` CSVs were collected from the same form before the re-collection, without saving the pages; the [historical implementation](https://github.com/in-rolls/local_elections_bihar/tree/1efc650) has their scripts. They hold one file per office (645,605 rows, including 642 exact repeats) with the form's columns as text, and are kept as the audit's independent comparison. Use `data/2016/` for analysis: it has every column they have, plus the seats with no record, page provenance and typed values.
 
 Rebuild from the saved pages and verify:
 
 ```sh
-scripts/crawl_2016.sh   # resumes collection, packs the pages, builds and audits
-make build-2016         # offline build from data/interim/2016/archive
+scripts/crawl_2016.sh   # resumes collection and updates tables and audits
+make build-2016         # reads saved pages in data/2016/raw/statewide
 make verify-2016        # checksums, row counts, schemas and seat joins
 make audit-2016         # independent comparisons (makes requests)
 ```
@@ -117,7 +184,14 @@ A sole candidate is the only nominee for a seat with no result records; `winner_
 
 The [SEC's 2021 report](https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx) and the reservation feed both contain 8,067 mukhiya seats, including 3,583 women-reserved seats. The current reservation and winner feeds agree on women's reservation for all 8,067 seats. Caste totals differ from the report by one seat (SC +1, BC −1). Of 35 winners coded male in women-reserved seats, 31 are coded female in the current winner feed; both feeds link to the same nomination document for all 35. These gender conflicts do not establish reservation errors, and matching totals do not verify every assignment. [Checks](data/2021/reservation_check/validation.json), [flagged records](data/2021/reservation_check/flagged_winners.parquet), [inputs and schema](data/2021/reservation_check/MANIFEST.json), [script](scripts/check_reservations_2021.py).
 
-### Affidavits
+### Existing affidavit work (deferred)
+
+Affidavits are outside the current collection scope. Existing files and their
+receipts are retained separately; the general collection scripts do not run
+this workflow.
+
+<details>
+<summary>Existing Arwal transcription and optional affidavit commands</summary>
 
 [`data/2021/affidavits/`](data/2021/affidavits) holds a different kind of record from the rest of `data/2021`. The tables above come from the SEC's structured feeds: one row per candidate or result, the same fields everywhere. An affidavit is the nomination paper a candidate files: a scanned PDF of sworn self-declarations, including education, prior office and seat reservation, in whatever layout and handwriting the candidate used. The candidate list links each candidate's PDF (`affidavit_url`), but its contents exist only as page images, so every value here was read off a page and carries the PDF hash and page number it came from. Nothing in it was checked against another source.
 
@@ -136,7 +210,7 @@ Rajanti Devi's candidate biography reports "इंटर पास" (intermediat
 
 </details>
 
-Install Poppler (`pdfinfo`, `pdftoppm`, `pdftotext`) and Tesseract with English and Hindi language data to rebuild it (`brew install poppler tesseract tesseract-lang` on macOS; `poppler-utils tesseract-ocr tesseract-ocr-hin` on Ubuntu):
+Affidavit work is deferred. These commands are a separate optional pipeline. Install Poppler (`pdfinfo`, `pdftoppm`, `pdftotext`) and Tesseract with English and Hindi language data before running it (`brew install poppler tesseract tesseract-lang` on macOS; `poppler-utils tesseract-ocr tesseract-ocr-hin` on Ubuntu):
 
 ```sh
 uv run python scripts/affidavits.py frame
@@ -145,25 +219,29 @@ caffeinate -dims uv run python scripts/affidavits.py locate
 uv run python scripts/affidavits.py export
 ```
 
-Download and page-location stages resume from `data/derived/affidavits_2021/`. PDFs are checked for a PDF signature, readable page count and SHA-256; failures are retained and retried on resume, and the download stops before consuming the final 5 GiB of disk space. Export combines the checked-in review CSV with downloaded document metadata and page images. It rejects duplicate or missing review keys, invalid binary codes, mismatched source hashes, and pages outside the document. The review CSV is the visual-transcription input; OCR alone cannot regenerate it. `graduate_plus=1` means a reported completed degree, `0` a reported lower qualification, and null an unresolved level. `illiterate` and `prior_elected` likewise preserve unknowns. `quota_document` records women's seat reservation from the document, independently of candidate gender; it is not an official reservation-roll validation.
+Already-collected PDFs and download receipts are in `data/2021/raw/affidavits/`; page-location text, images and caches are in `data/2021/interim/affidavits/`. Further acquisition and extraction are deferred; the general crawl does not run them. PDFs are checked for a PDF signature, readable page count and SHA-256; failures are retained and retried on resume, and the download stops before consuming the final 5 GiB of disk space. Export combines the checked-in review CSV with downloaded document metadata and page images. It rejects duplicate or missing review keys, invalid binary codes, mismatched source hashes, and pages outside the document. The review CSV is the visual-transcription input; OCR alone cannot regenerate it. `graduate_plus=1` means a reported completed degree, `0` a reported lower qualification, and null an unresolved level. `illiterate` and `prior_elected` likewise preserve unknowns. `quota_document` records women's seat reservation from the document, independently of candidate gender; it is not an official reservation-roll validation.
+
+</details>
 
 ### Collection and rebuild
 
-Sources: SEC [winning candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/WinningCandidates), [seat reservations](https://sec25.bihar.gov.in/sec_new/Panchayat/Reservation), [contesting candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/ContestingCandidates), and [results](https://sec25.bihar.gov.in/sec_new/Panchayat/Result), collected in September 2026. [Raw responses](data/raw) are gzipped request ledgers with HTTP status, UTC time and the original response bytes encoded as base64. A completed checkpoint is reused; missing or truncated checkpoints are fetched again. HTML error pages are rejected rather than counted as empty results. The mukhiya responses are in the tracked [`statewide_2021.tar.gz`](data/raw/statewide_2021.tar.gz); [its metadata](data/raw/statewide_2021_archive.json) and [request receipts](data/raw/statewide_2021_receipts.json) record checksums.
+Sources: SEC [winning candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/WinningCandidates), [seat reservations](https://sec25.bihar.gov.in/sec_new/Panchayat/Reservation), [contesting candidates](https://sec25.bihar.gov.in/sec_new/Panchayat/ContestingCandidates), and [results](https://sec25.bihar.gov.in/sec_new/Panchayat/Result), collected in September 2026. Raw responses under `data/2021/raw/` are gzipped request ledgers with HTTP status, UTC time and the original response bytes encoded as base64. A completed checkpoint is reused; missing or truncated checkpoints are fetched again. HTML error pages are rejected rather than counted as empty results. The mukhiya responses are under `data/2021/raw/statewide/2021/`. The historical archive checksums and request summary remain in `data/2021/raw/mukhiya_archive/`; the duplicate tarball has been pruned.
 
 ```sh
-scripts/crawl_2021.sh   # resumes collection, packs archives, builds, audits, checks reservations
-make build-2021         # offline build from data/interim/2021/archive
+scripts/crawl_2021.sh   # resumes collection and updates tables and checks
+make build-2021         # reads saved responses in data/2021/raw/statewide
 make verify-2021        # checksums, row counts, schemas and seat joins
 make audit-2021         # independent comparisons (makes requests)
 make reservation-check-2021
 ```
 
-The crawl ends by downloading every mukhiya winner's nomination papers; stop it there to skip them.
+Affidavit collection is a separate, explicitly invoked step and remains deferred.
 
 ## Earlier elections
 
-Unparsed 2006 and 2011 lists, handed off from the central repository, are in the [raw-data archive](data/raw_archive/README.md): git-ignored files, a tracked SHA-256 manifest, and a tarball for download.
+The central handoff is organized under `data/2006/raw/`, `data/2011/raw/`, and `data/undated/raw/`. Winner, runner-up and summary reports are separated. Ambiguous years remain unresolved: one workbook in the former `Mukhiya_2006` folder explicitly says 2011. The [data guide](data/README.md) explains the classification, canonical locations and checksum receipts. No download is promised for unpublished local assets.
+
+The [Gaya Mukhiya pilot](data/2011/gaya_mukhiya/README.md) supplies 331 workbook winner records, 338 PDF winner records and 338 runner-name records, with source hashes, page/row references, a dictionary and discrepancy receipts. The workbook explicitly says 2011; the PDF collection is confirmed as 2011 by the maintainer, with prior-election columns for 2001/2006. Extracted name differences still need review against the originals before combining records. The [district Mukhiya reports](data/2011/mukhiya_reports/README.md) expand extraction to 4,320 winner records across 23 districts, including the pilot’s 338 primary PDF rows. Run `make parse-2011` with the original files mounted. A separate [court-judgment transcription](data/2011/khajuria_judgment/README.md) adds all 11 candidates and votes for one explicitly dated 2011 contest; its initial winner overlaps one Bhojpur PDF record.
 
 ## Central import
 
@@ -181,11 +259,32 @@ make verify
 ```python
 import polars as pl
 
-seats = pl.read_parquet("data/2021/seats.parquet")
-winners = pl.read_parquet("data/2021/winners.parquet")
-mukhiya = winners.filter(pl.col("post_id") == 3).join(seats, on=["post_id", "unit_id"])
-print(mukhiya.select("district", "block", "panchayat", "winner_name", "votes"))
+keys = ["office", "district_code", "block_code", "panchayat_code", "unit_code"]
+seats = pl.read_parquet("data/2016/seats.parquet").filter(pl.col("office") == "mukhiya")
+winners = pl.read_parquet("data/2016/winners.parquet")
+mukhiya = seats.join(
+    winners.select(*keys, "candidate_name", "winner_basis", "votes"),
+    on=keys,
+    how="left",
+    nulls_equal=True,
+    validate="m:1",
+)
+print(
+    mukhiya.select(
+        "district",
+        "block",
+        "unit",
+        "seat_reservation",
+        "candidate_name",
+        "winner_basis",
+        "votes",
+    )
+)
 ```
+
+The left join retains seats with missing winners or reservation labels. For 2021,
+use election-specific candidates and winners separately from
+`current_reservations.parquet`, whose labels describe an undated term snapshot.
 
 ## Development
 

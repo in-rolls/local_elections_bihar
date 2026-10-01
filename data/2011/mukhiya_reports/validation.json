@@ -1,0 +1,18 @@
+{
+  "districts": 23,
+  "pages": 311,
+  "winner_records": 4320,
+  "election_year": 2011,
+  "year_basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
+  "source_serials": "Consecutive from 1 within each PDF; checked before output",
+  "record_ids_unique": true,
+  "missing_block_records": 46,
+  "decode_issue_cells": 5,
+  "duplicate_content_records": 300,
+  "reservation_labels_present": 4318,
+  "reservation_category_mapped": 3336,
+  "women_reservation_mapped": 2983,
+  "rows_with_repeated_seat_labels": 841,
+  "scope": "Source winner records, not all candidates, unique seats or statewide completeness",
+  "overlap": "Includes the same 338 primary Gaya PDF records as the pilot; do not add the two counts"
+}

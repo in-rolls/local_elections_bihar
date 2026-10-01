@@ -1,4 +1,6 @@
 import copy
+import csv
+import gzip
 import json
 from pathlib import Path
 
@@ -79,8 +81,18 @@ def test_published_audit_checksums_and_provenance():
         digest, name = line.split()
         assert sha(root / name) == digest
     manifest = json.loads((root / "MANIFEST.json").read_text())
-    for path, digest in (manifest["inputs"] | manifest["receipts"]).items():
+    for path, digest in manifest["inputs"].items():
         assert sha(Path(path)) == digest
+    expected = manifest["receipts"]
+    recorded = {}
+    with gzip.open("data/MIGRATION.csv.gz", "rt", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row["canonical_path"] in expected:
+                recorded[row["canonical_path"]] = row["sha256"]
+    assert recorded == expected
+    for path, digest in expected.items():
+        if Path(path).is_file():
+            assert sha(Path(path)) == digest
     assert sha(Path("scripts/check_reservations_2021.py")) == manifest["parser_sha256"]
 
 

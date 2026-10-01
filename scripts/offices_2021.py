@@ -281,7 +281,7 @@ def collect(raw, stage, posts, districts, workers):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["frame", "current", "dated"])
-    parser.add_argument("--raw", type=Path, default=Path("data/raw/statewide_2021"))
+    parser.add_argument("--raw", type=Path, default=Path("data/2021/raw/statewide"))
     parser.add_argument("--posts", type=int, nargs="+", default=list(POSTS))
     parser.add_argument("--districts", type=int, nargs="+", default=list(range(1, 39)))
     parser.add_argument("--workers", type=int, default=4)

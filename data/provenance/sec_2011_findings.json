@@ -1,0 +1,154 @@
+{
+  "checked_at": "2026-10-01T18:28:04.256317+00:00",
+  "receipt": "data/provenance/sec_2011_probe.jsonl.gz",
+  "receipt_sha256": "e555ed8fa3e7d7040dad0968a3a314cddcd94f13ba838fef74796a5123c6d7d5",
+  "pages": [
+    {
+      "url": "https://sec.bihar.gov.in/old-sec/",
+      "status": 200,
+      "final_url": "https://sec.bihar.gov.in",
+      "sha256": "11c25ee6a96ab3617ea58f85e89e5a5acc2eb7c5909e07a414c7b9834f5bae33"
+    },
+    {
+      "url": "https://sec.bihar.gov.in/PanchayatRpt/ch15.aspx",
+      "status": 200,
+      "final_url": "https://sec.bihar.gov.in/PanchayatRpt/ch15.aspx",
+      "sha256": "0cad6ac72e4e3cdecd4e8d168cea77df893ce0a9e8cb393cc39c95accd5d6dce"
+    },
+    {
+      "url": "https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx",
+      "status": 200,
+      "final_url": "https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx",
+      "sha256": "4afe0f6814ef0861bcc03b79eae2daa1391d2a55ff2992dd8b0113c960077417"
+    },
+    {
+      "url": "https://sec.bihar.gov.in/PanchayatRpt/ch13.aspx",
+      "status": 200,
+      "final_url": "https://sec.bihar.gov.in/PanchayatRpt/ch13.aspx",
+      "sha256": "9f027452bfaecf982ea91db9b222c90777dc5b9a508a1883fbb540e667d8b497"
+    },
+    {
+      "url": "https://sec.bihar.gov.in/archive",
+      "status": 200,
+      "final_url": "https://sec.bihar.gov.in/archive",
+      "sha256": "0e23e52150f5118ca3d7a1cae75e918a5309bbbb1db33f251ee00e097a712508"
+    }
+  ],
+  "confirmed_2011_addition": {
+    "url": "https://sec.bihar.gov.in/PanchayatRpt/ch15.aspx",
+    "location": "Final comparison table, under 2011 column group",
+    "unit": "Statewide election phase",
+    "columns": [
+      "phase_raw",
+      "polling_date_raw",
+      "turnout_percentage_raw",
+      "repoll_booths_raw"
+    ],
+    "rows": [
+      [
+        "प्रथम चरण",
+        "20-04-2011",
+        "55-00",
+        "156"
+      ],
+      [
+        "द्वितीय चरण",
+        "24-04-2011",
+        "58-80",
+        "72"
+      ],
+      [
+        "तृतीय चरण",
+        "27-04-2011",
+        "60-53",
+        "22"
+      ],
+      [
+        "चतुर्थ  चरण",
+        "30-05-2011",
+        "61-41",
+        "43"
+      ],
+      [
+        "पंचम चरण",
+        "03-05-2011",
+        "62-60",
+        "60"
+      ],
+      [
+        "पष्टम चरण",
+        "06-05-2011",
+        "62-37",
+        "23"
+      ],
+      [
+        "सप्तम चरण",
+        "09-05-2016",
+        "62-80",
+        "36"
+      ],
+      [
+        "अष्टम्  चरण",
+        "12-05-2016",
+        "61-82",
+        "87"
+      ],
+      [
+        "नवम् चरण",
+        "15-05-2011",
+        "61-93",
+        "150"
+      ],
+      [
+        "दसम् चरण",
+        "18.05.2011",
+        "63-00",
+        "8"
+      ]
+    ],
+    "reported_overall_turnout_percentage_raw": "61-02",
+    "reported_repoll_booths": 657,
+    "date_issues": [
+      "Phase 4 prints 30-05-2011, out of sequence",
+      "Phases 7 and 8 print dates in 2016 under the 2011 heading"
+    ],
+    "interpretation": "2011 aggregate data quoted in a later SEC report; does not establish the vintage of local candidate PDFs",
+    "collection_status": "Deferred: turnout and polling logistics are outside the agreed current scope"
+  },
+  "candidate_search": {
+    "finding": "No verified 2011 candidate-results endpoint found in the inspected pages and targeted searches",
+    "archive_labels": "Panchayat candidates, votes and winners are explicitly labeled 2016",
+    "old_sec_root": "Redirects to current homepage",
+    "limit": "Not a claim that no 2011 endpoint or archived capture exists"
+  },
+  "local_sources": {
+    "winner_pdfs": 138,
+    "winner_district_folders": 23,
+    "winner_offices_per_district": 6,
+    "undated_workbooks_scanned": 72,
+    "literal_ascii_2011_matches_any_cell": 0,
+    "indirect_pdfs": [
+      "Pramukh-Uppramukh.pdf",
+      "Adhyaksh-Upadhyaksh.pdf"
+    ],
+    "indirect_pages": [
+      16,
+      2
+    ],
+    "indirect_creation_date": "2012-02-17",
+    "indirect_year_limit": "PDF metadata supports follow-up; does not by itself establish election year",
+    "indirect_collection_status": "Deferred: indirectly elected leadership posts are outside the six-office scope"
+  },
+  "suggested_priority": [
+    "Establish the election vintage of local reservation, winner and runner reports before pooling",
+    "Extract seat reservation, candidate and winner fields for the six directly elected panchayat offices",
+    "Pursue dated SEC reservation rosters and candidate/results sources to fill the linked election tables"
+  ],
+  "affidavit_links_followed": false,
+  "scope_decision": {
+    "scope_reference": "README.md#scope-and-collection-priorities",
+    "turnout": "Do not extend collection or parse as a project dataset; retain this discovery receipt",
+    "indirect_leadership": "Defer acquisition and parsing; retain existing sources",
+    "affidavits": "Deferred; existing assets untouched"
+  }
+}

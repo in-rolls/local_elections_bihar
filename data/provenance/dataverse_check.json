@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-01T16:55:52.877094+00:00",
+  "server": "https://dataverse.harvard.edu",
+  "authenticated_account": "@soodoku",
+  "role_id": 14,
+  "accessible_datasets": 83,
+  "pages": 9,
+  "included_states": [
+    "Published",
+    "Unpublished",
+    "Draft",
+    "Deaccessioned",
+    "In Review"
+  ],
+  "bihar_local_election_deposit_found": false,
+  "public_bihar_dataset_search_count": 119,
+  "project_filename_search": {
+    "query": "local_elections_bihar OR bihar_2016 OR statewide_2021",
+    "results": 0
+  },
+  "related_deposit": {
+    "doi": "10.7910/DVN/PQZVCO",
+    "title": "PRI Seat Reservation Data",
+    "files": [
+      "haryana_mau_1995_2021.gz"
+    ]
+  },
+  "limits": "Search and current account access cannot rule out deleted uploads, unrelated filenames inside other deposits, or deposits in another account/server.",
+  "remote_mutations": false,
+  "owned_dataset_ids_sha256": "425bac9f5f36848187ed15f55ca99d0bdb2d60eec938f4569297396e9a060c97"
+}

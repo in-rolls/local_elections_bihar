@@ -1,0 +1,74 @@
+{
+  "year_assignment": {
+    "path": "data/provenance/2011_report_year.json",
+    "sha256": "d4ac3b1bf2148eac690728787be4624b99de5489d30a8fefadc7c94df4e7eae6"
+  },
+  "sources": {
+    "winners": {
+      "path": "data/2011/raw/central_handoff/winners/GAYA/GAYA_GPM.pdf",
+      "sha256": "4a3d89964b07a713b13848c8b27aaa3d7b3a1563fd0b2d3020db0115baf92b4d"
+    },
+    "alternate": {
+      "path": "data/2011/raw/central_handoff/alternate_winners/GAYA/GAYA_GPM.pdf",
+      "sha256": "d1b3d170aa9a0691c19ae3020624d60f9132ef71d5dec549161a40f4e208d92f"
+    },
+    "spreadsheet": {
+      "path": "data/2011/raw/central_handoff/mukhiya_spreadsheets/Gaya.xls",
+      "sha256": "484ad9a2dd0f8ec6af6b604d81758db66b47ff0fce8c2c179cd6fd93f41f211e"
+    },
+    "runners": {
+      "path": "data/2011/raw/central_handoff/runners/GAYA/GAYA_gpm.pdf",
+      "sha256": "466dee40ce85a3faae20425223859cc50713e8af9ffa5efcaebbae219f6dff5d"
+    },
+    "summary": {
+      "path": "data/2011/raw/central_handoff/summaries/alternate_winners/GAYA/GAYA_WMFcount_on_post.pdf",
+      "sha256": "38f762757bfe6ecb9745d4e5db4b5980f150393ddd646f474eaf4af0e1f84749"
+    }
+  },
+  "code_sha256": {
+    "parse_2011.py": "23e9175eee49999caf45fad9149c42fa95db736d1ffb869dd0ece8d5eba56f8b",
+    "hindi_2011.py": "bfc40074a40f6506202c7e5eaf3cee6e3cfb537467b7dea00cafcb6d7e8065dd",
+    "font_map_2011.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb",
+    "kruti_dev_010.json": "0840b26d1523a4bcb03b16d1edc68b475ea4b3212c19892cf846a0d0c7e23550",
+    "gaya_visual_review.csv": "8a9a63094367359234d600322e9739de92bcf3de137142458ad0f2c260c39019",
+    "uv.lock": "5eae98d836a0ccb3ec62b7b58729d1bcd40104268377f32702fd1927a59e2277"
+  },
+  "files": {
+    "SCHEMA.json": {
+      "bytes": 7307,
+      "sha256": "3f23ff5e0de9246cdbc54ab5efda820d3a5cae4d704a3b68c680a7f0fbcd145c"
+    },
+    "coverage.csv": {
+      "bytes": 726,
+      "sha256": "54702138433acbf07fb5a7808d51350e54a4f061d7a596e16f8c2b76f0f4765a"
+    },
+    "dictionary.csv": {
+      "bytes": 14299,
+      "sha256": "4b9c04f72ebf0c70153458412514e3bdda5bd99600d53a385fa6acc48260bf9d"
+    },
+    "issues.csv": {
+      "bytes": 100784,
+      "sha256": "ba706c69017361d27f50d4ed480de385fe7d8ae19acda62ecc2855dc158b5fc6"
+    },
+    "pdf_winner_records.parquet": {
+      "bytes": 39993,
+      "sha256": "a64ad8983a5d37703d4a6f4e001e1e9e5ec9f9a9c3dd7d6f21f9ab284c3a078b"
+    },
+    "runner_name_records.parquet": {
+      "bytes": 11039,
+      "sha256": "0e28037ab1e68ef3fd3420c604b9e44b9739b99fb36638d6a376e0a1e0bfa25d"
+    },
+    "runner_spreadsheet_conflicts.csv": {
+      "bytes": 15691,
+      "sha256": "f4594e421b4ced81b5920ca79220d1a58315e9339dacad4696e88230ccab1f55"
+    },
+    "spreadsheet_winner_records.parquet": {
+      "bytes": 27622,
+      "sha256": "556be867fead9a5565805f788f08e4e16d1805ea30dbe14a2b38b32cbfac476b"
+    },
+    "validation.json": {
+      "bytes": 1042,
+      "sha256": "0ce79fb489ae04b006fb598691ca2ec0f92782bcaf37915495c589495c950160"
+    }
+  }
+}

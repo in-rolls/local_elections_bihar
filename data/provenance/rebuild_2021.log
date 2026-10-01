@@ -1,0 +1,11 @@
+{"post": 3, "seats": 8067, "candidates": 66430, "result_rows": 66392, "winners": 8050}
+{"post": 4, "seats": 8067, "candidates": 49698, "result_rows": 49663, "winners": 8044}
+{"post": 5, "seats": 11095, "candidates": 73778, "result_rows": 73957, "winners": 11065}
+{"post": 6, "seats": 1160, "candidates": 12935, "result_rows": 89915, "winners": 1150}
+{"post": 2, "seats": 109641, "candidates": 216429, "result_rows": 184623, "winners": 106656}
+{"post": 1, "seats": 109641, "candidates": 505438, "result_rows": 504012, "winners": 109510}
+{"phase": "2023_1", "seats": 2688, "candidates": 4044, "winners": 2688}
+{"phase": "2023_2", "seats": 1187, "candidates": 1681, "winners": 1187}
+{"phase": "2025_1", "seats": 1874, "candidates": 2724, "winners": 1874}
+{"seats.parquet": 247671, "candidates.parquet": 924708, "result_rows.parquet": 968562, "winners.parquet": 244475, "current_winners.parquet": 247671, "current_reservations.parquet": 247671, "byelection_seats.parquet": 5749, "byelection_candidates.parquet": 8449, "byelection_result_rows.parquet": 4643, "byelection_winners.parquet": 5749}
+{"verified": true, "files": 10}

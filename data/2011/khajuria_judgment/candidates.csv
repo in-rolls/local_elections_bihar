@@ -1,0 +1,12 @@
+record_id,election_year,district,block,panchayat,office,source_table_label,candidate_name_raw,votes,initial_outcome,result_date,source_url,source_paragraph
+khajuria_2011_a,2011,Bhojpur,Ara,Khajuria,mukhiya,a,Ghanshyam Tiwari,45,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_b,2011,Bhojpur,Ara,Khajuria,mukhiya,b,Prameshwar Singh,397,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_c,2011,Bhojpur,Ara,Khajuria,mukhiya,c,Poona Devi,26,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_d,2011,Bhojpur,Ara,Khajuria,mukhiya,d,Madan Mohan Pandey,79,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_e,2011,Bhojpur,Ara,Khajuria,mukhiya,e,Ravi Kumar Singh,200,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_f,2011,Bhojpur,Ara,Khajuria,mukhiya,f,Rajendra Singh,862,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_g,2011,Bhojpur,Ara,Khajuria,mukhiya,g,Laxmi Devi,48,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_h,2011,Bhojpur,Ara,Khajuria,mukhiya,h,Birendra Rai,28,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_i,2011,Bhojpur,Ara,Khajuria,mukhiya,i,Shrikant Pandey,369,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_j,2011,Bhojpur,Ara,Khajuria,mukhiya,j,Santosh Paswan,52,not_elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6
+khajuria_2011_k,2011,Bhojpur,Ara,Khajuria,mukhiya,k,Santosh Kr. Singh,1268,elected,2011-05-19,https://indiankanoon.org/doc/198387463/,6

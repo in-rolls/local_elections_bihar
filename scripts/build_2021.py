@@ -1,6 +1,6 @@
 """Build the validated 2021 panchayat release for all six offices from saved responses.
 
-Reads only archives of saved SEC responses (no network). Every source field is
+Reads saved SEC responses directly (no network). Every source field is
 either mapped to a typed column or listed in EXCLUDED with a reason; an unknown
 field stops the build, so a portal change cannot silently drop data.
 """
@@ -10,10 +10,8 @@ import base64
 import collections
 import csv
 import hashlib
-import io
 import json
 import re
-import tarfile
 from pathlib import Path
 
 import polars as pl
@@ -126,25 +124,25 @@ def typed(row, fields, where):
 
 
 class Responses:
-    """Finished request events from tar archives, keyed by ledger path."""
+    """Finished request events from source directories, keyed by ledger path."""
 
-    def __init__(self, archives):
-        self.events, self.archives = {}, {}
-        for path in archives:
+    def __init__(self, root, directories):
+        self.events, self.sources = {}, {}
+        for directory in directories:
+            source = root / directory
+            if not source.is_dir():
+                raise FileNotFoundError(source)
             digest = hashlib.sha256()
-            with path.open("rb") as handle:
-                for block in iter(lambda: handle.read(1 << 20), b""):
-                    digest.update(block)
-            self.archives[path.name] = digest.hexdigest()
-            with tarfile.open(path) as tar:
-                for member in tar:
-                    name = member.name.removeprefix("./")
-                    base = name.rsplit("/", 1)[-1]
-                    if not name.endswith(".jsonl.gz") or base.startswith("._"):
-                        continue
-                    event = completed_bytes(tar.extractfile(member).read())
-                    if event is not None:
-                        self.events[name.removesuffix(".jsonl.gz")] = event
+            for path in sorted(source.rglob("*.jsonl.gz")):
+                if path.name.startswith("._"):
+                    continue
+                name = path.relative_to(root).as_posix()
+                data = path.read_bytes()
+                digest.update(name.encode() + b"\0" + hashlib.sha256(data).digest())
+                event = completed_bytes(data)
+                if event is not None:
+                    self.events[name.removesuffix(".jsonl.gz")] = event
+            self.sources[directory] = digest.hexdigest()
 
     def records(self, key):
         event = self.events.get(key)
@@ -154,10 +152,8 @@ class Responses:
         return event, hashlib.sha256(body).hexdigest(), decode_records(body)
 
 
-def mukhiya_frame(archive):
-    with tarfile.open(archive) as tar:
-        member = tar.getmember("2021/frame.parquet")
-        rows = pq.read_table(io.BytesIO(tar.extractfile(member).read())).to_pylist()
+def mukhiya_frame(raw):
+    rows = pq.read_table(raw / "2021/frame.parquet").to_pylist()
     return [
         {
             "post_id": 3,
@@ -578,14 +574,11 @@ def verify(out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--raw", type=Path, default=Path("data/2021/raw/statewide"))
     parser.add_argument(
-        "--archives", type=Path, default=Path("data/interim/2021/archive")
-    )
-    parser.add_argument(
-        "--mukhiya", type=Path, default=Path("data/raw/statewide_2021.tar.gz")
-    )
-    parser.add_argument(
-        "--current-mukhiya", type=Path, default=Path("data/raw/portal_2021_2026")
+        "--current-mukhiya",
+        type=Path,
+        default=Path("data/2021/raw/portal_snapshot_2026"),
     )
     parser.add_argument("--out", type=Path, default=Path("data/2021"))
     args = parser.parse_args()
@@ -594,8 +587,8 @@ def main():
         return
 
     frame = (
-        mukhiya_frame(args.mukhiya)
-        + pq.read_table(args.archives / "offices_frame.parquet").to_pylist()
+        mukhiya_frame(args.raw)
+        + pq.read_table(args.raw / "2021/offices/frame.parquet").to_pylist()
     )
     frame = [
         {
@@ -617,13 +610,13 @@ def main():
     tables = collections.defaultdict(list)
     receipts = {}
     for post in (3, 4, 5, 6, 2, 1):
-        archive = (
-            [args.mukhiya]
+        directories = (
+            ["2021/candidates", "2021/results", "2021/phases"]
             if post == 3
-            else [args.archives / f"2021_offices_p{post}.tar"]
+            else [f"2021/offices/p{post}"]
         )
-        responses = Responses(archive)
-        receipts.update(responses.archives)
+        responses = Responses(args.raw, directories)
+        receipts.update(responses.sources)
         units = [u for u in frame if u["post_id"] == post]
         seats, candidates, results, winners = build_post(units, responses)
         for name, rows in [
@@ -646,13 +639,9 @@ def main():
             flush=True,
         )
     # By-elections: seats listed per round by the portal's by-election page.
-    byelections = Responses([args.archives / "byelections.tar"])
-    receipts.update(byelections.archives)
-    with tarfile.open(args.archives / "byelections.tar") as tar:
-        member = tar.getmember("byelections/frame.parquet")
-        bye_frame = pq.read_table(
-            io.BytesIO(tar.extractfile(member).read())
-        ).to_pylist()
+    byelections = Responses(args.raw, ["byelections"])
+    receipts.update(byelections.sources)
+    bye_frame = pq.read_table(args.raw / "byelections/frame.parquet").to_pylist()
     for phase in sorted({u["phase"] for u in bye_frame}):
         units = [u for u in bye_frame if u["phase"] == phase]
         built = build_post(units, byelections)
@@ -671,13 +660,8 @@ def main():
             ),
             flush=True,
         )
-    current = Responses(
-        [
-            args.archives / "current_winners.tar",
-            args.archives / "current_reservations.tar",
-        ]
-    )
-    receipts.update(current.archives)
+    current = Responses(args.raw, ["current/winners", "current/reservations"])
+    receipts.update(current.sources)
     legacy = {}
     for kind in ("winners", "reservations"):
         for path in sorted((args.current_mukhiya / kind).glob("*_p3.jsonl.gz")):
@@ -696,7 +680,10 @@ def main():
         "offices": sorted({u["post_id"] for u in frame}),
         "excluded_source_fields": EXCLUDED,
         "files": files,
-        "source_archives_sha256": receipts,
+        "source_directory_digests": receipts,
+        "source_digest_method": (
+            "SHA-256 of sorted relative ledger paths + NUL + each file SHA-256 digest"
+        ),
         "code_sha256": {
             p.name: hashlib.sha256(p.read_bytes()).hexdigest()
             for p in sorted(Path(__file__).parent.glob("*.py"))

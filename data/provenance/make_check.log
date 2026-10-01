@@ -1,0 +1,23 @@
+uv sync --frozen --group dev
+Audited 37 packages in 1ms
+uv run ruff check .
+All checks passed!
+uv run ruff format --check .
+29 files already formatted
+uv run pytest -q
+............................................................             [100%]
+60 passed in 7.32s
+uv run pre-commit run --all-files
+ruff check...............................................................Passed
+ruff format..............................................................Passed
+trim trailing whitespace.................................................Passed
+fix end of files.........................................................Passed
+check yaml...............................................................Passed
+check toml...............................................................Passed
+check for added large files..............................................Passed
+check for merge conflicts................................................Passed
+/Library/Developer/CommandLineTools/usr/bin/make verify
+uv run python scripts/build_2016.py --check
+{"verified": true, "files": 3}
+uv run python scripts/build_2021.py --check
+{"verified": true, "files": 10}

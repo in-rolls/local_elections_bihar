@@ -534,13 +534,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--release", type=Path, default=Path("data/2016"))
     parser.add_argument(
-        "--frame", type=Path, default=Path("data/raw/statewide_2016/2016/frame.parquet")
+        "--frame", type=Path, default=Path("data/2016/raw/statewide/2016/frame.parquet")
     )
-    parser.add_argument("--legacy", type=Path, default=Path("data/raw/legacy_2016"))
+    parser.add_argument("--legacy", type=Path, default=Path("data/2016/raw/legacy"))
     parser.add_argument(
         "--roster",
         type=Path,
-        default=Path("data/interim/2016/reservation_roster.parquet"),
+        default=Path("data/2016/interim/reservation_roster.parquet"),
     )
     parser.add_argument("--refetch", type=int, default=30)
     parser.add_argument("--seed", type=int, default=2016)

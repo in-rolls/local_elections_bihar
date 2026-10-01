@@ -1,0 +1,23 @@
+{
+  "files": 638376,
+  "duplicates": 11,
+  "bytes_saved": 4926186968,
+  "completed_at": "2026-10-01T16:26:46.283015+00:00",
+  "receipt_sha256": "b2bc6d5effa191b4af8a53dce9955ffa7b6e24df38364d1e81ed72bc68b4bf7e",
+  "verification": "Every original file SHA-256 recorded before migration and verified at the destination; identical archive copies rehashed before consolidation; no source bytes transformed",
+  "storage_root": "/Volumes/Staging/local_elections_bihar",
+  "former_links": {
+    "data/raw/statewide_2016": {
+      "target": "storage/statewide_2016",
+      "current": "data/2016/raw/statewide"
+    },
+    "data/raw/statewide_2021": {
+      "target": "storage/statewide_2021",
+      "current": "data/2021/raw/statewide"
+    },
+    "data/derived": {
+      "target": "storage/derived",
+      "current": "Split between data/2021/raw and data/2021/interim; see per-file receipt"
+    }
+  }
+}
