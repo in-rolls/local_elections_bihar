@@ -26,7 +26,7 @@ from tenacity import Retrying, retry_if_exception_type, stop_after_delay
 LOCAL = threading.local()
 KEY = ["district_id", "block_id", "panchayat_id", "candidate_serial"]
 ROOT = Path("data/derived/affidavits_2021")
-ARWAL = Path("data/2021/arwal_education")
+AFFIDAVITS = Path("data/2021/affidavits")
 MIN_FREE_BYTES = 5 * 1024**3
 
 
@@ -622,10 +622,16 @@ def main():
     parser.add_argument(
         "stage", choices=["frame", "download", "locate", "export", "status"]
     )
-    parser.add_argument("--frame", type=Path, default=ARWAL / "affidavit_frame.parquet")
-    parser.add_argument("--source", type=Path, default=ARWAL / "mukhiya_2021.parquet")
-    parser.add_argument("--review", type=Path, default=ARWAL / "education_review.csv")
-    parser.add_argument("--out", type=Path, default=ARWAL / "education.parquet")
+    parser.add_argument(
+        "--frame", type=Path, default=AFFIDAVITS / "affidavit_frame.parquet"
+    )
+    parser.add_argument(
+        "--source", type=Path, default=AFFIDAVITS / "mukhiya_2021.parquet"
+    )
+    parser.add_argument(
+        "--review", type=Path, default=AFFIDAVITS / "education_review.csv"
+    )
+    parser.add_argument("--out", type=Path, default=AFFIDAVITS / "education.parquet")
     parser.add_argument(
         "--status-out",
         type=Path,

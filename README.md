@@ -12,7 +12,7 @@ Bihar panchayat election records from the State Election Commission (SEC). Each 
 | | 2023 and 2025 by-elections | 5,749 seats, 8,449 candidates, 5,749 winners |
 | | 2021–2026 term | Current winner and seat-reservation feeds, one row per seat |
 | [`data/2021/reservation_check/`](data/2021/reservation_check) | 2021 mukhiya seats | Reservation totals checked against the SEC report; 35 source conflicts flagged |
-| [`data/2021/arwal_education/`](data/2021/arwal_education) | 2021 mukhiya winners, Arwal | Education transcribed from nomination papers for 64 winners |
+| [`data/2021/affidavits/`](data/2021/affidavits) | 2021 mukhiya winners, Arwal | Candidate affidavits (nomination papers): education and prior office transcribed for 64 winners |
 | [`data/raw/`](data/raw) | | Saved SEC responses the releases are built from |
 
 The six offices are ward member, panch, mukhiya (gram panchayat head), sarpanch (gram kachahari head), panchayat samiti member and zila parishad member. 2006 and 2011 lists exist but are not parsed; see [Earlier elections](#earlier-elections).
@@ -117,11 +117,13 @@ A sole candidate is the only nominee for a seat with no result records; `winner_
 
 The [SEC's 2021 report](https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx) and the reservation feed both contain 8,067 mukhiya seats, including 3,583 women-reserved seats. The current reservation and winner feeds agree on women's reservation for all 8,067 seats. Caste totals differ from the report by one seat (SC +1, BC −1). Of 35 winners coded male in women-reserved seats, 31 are coded female in the current winner feed; both feeds link to the same nomination document for all 35. These gender conflicts do not establish reservation errors, and matching totals do not verify every assignment. [Checks](data/2021/reservation_check/validation.json), [flagged records](data/2021/reservation_check/flagged_winners.parquet), [inputs and schema](data/2021/reservation_check/MANIFEST.json), [script](scripts/check_reservations_2021.py).
 
-### Arwal mukhiya education
+### Affidavits
 
-**Education has been transcribed for 64 Arwal winners.** All 64 winners were linked to candidate lists using district, block, panchayat and candidate serial, then their downloaded nomination PDFs were inspected. [The export](data/2021/arwal_education/education.csv) retains the reported qualification, degree and literacy indicators, prior elected office, document reservation text, source URL, page number and PDF hash. [Inspected pages](data/2021/arwal_education/education_pages) accompany the transcriptions.
+[`data/2021/affidavits/`](data/2021/affidavits) holds a different kind of record from the rest of `data/2021`. The tables above come from the SEC's structured feeds: one row per candidate or result, the same fields everywhere. An affidavit is the nomination paper a candidate files: a scanned PDF of sworn self-declarations, including education, prior office and seat reservation, in whatever layout and handwriting the candidate used. The candidate list links each candidate's PDF (`affidavit_url`), but its contents exist only as page images, so every value here was read off a page and carries the PDF hash and page number it came from. Nothing in it was checked against another source.
 
-Degree status is unresolved for seven winners: two documents lack the candidate's education page, one names a school without a qualification, one says only "EDUCATED," and three have ambiguous qualification text. Unknowns remain null. Reservation is classified from document text for 51 winners; 13 remain unspecified. Of the 25 document-classified women's reserved seats, 21 have classified degree status; the corresponding counts are 24 of 26 open seats and 12 of 13 seats with unspecified reservation. These are extraction counts, not reservation-effect estimates. [Coverage and provenance](data/2021/arwal_education/education.json).
+**Education has been transcribed for 64 Arwal winners.** All 64 winners were linked to candidate lists using district, block, panchayat and candidate serial, then their downloaded nomination PDFs were inspected. [The export](data/2021/affidavits/education.csv) retains the reported qualification, degree and literacy indicators, prior elected office, document reservation text, source URL, page number and PDF hash. [Inspected pages](data/2021/affidavits/education_pages) accompany the transcriptions.
+
+Degree status is unresolved for seven winners: two documents lack the candidate's education page, one names a school without a qualification, one says only "EDUCATED," and three have ambiguous qualification text. Unknowns remain null. Reservation is classified from document text for 51 winners; 13 remain unspecified. Of the 25 document-classified women's reserved seats, 21 have classified degree status; the corresponding counts are 24 of 26 open seats and 12 of 13 seats with unspecified reservation. These are extraction counts, not reservation-effect estimates. [Coverage and provenance](data/2021/affidavits/education.json).
 
 Codex visually transcribed these records; there has been no independent second coding. Tesseract locates likely pages but does not assign qualifications. Candidate and proposer biographies are distinguished. Qualifications are self-reported, and a blank field is not evidence of illiteracy. Statewide affidavit collection and extraction were stopped at the owner's request. The public winner table and 2021 candidate-detail page checked for Awgila contain no structured education field; statewide 2021 education remains unavailable.
 
@@ -130,7 +132,7 @@ Codex visually transcribed these records; there has been no independent second c
 
 Rajanti Devi's candidate biography reports "इंटर पास" (intermediate passed). The seat-reservation field reads "सामान्य महिला." [Original PDF, page 12](https://sec2021.bihar.gov.in/ForPublicPDF_P/Documents1n2/NominationDoc/20210909141417391.pdf#page=12).
 
-<img src="data/2021/arwal_education/education_pages/33_1_330010011_4_p12.png" alt="Candidate biography showing the education and seat-reservation fields" width="500">
+<img src="data/2021/affidavits/education_pages/33_1_330010011_4_p12.png" alt="Candidate biography showing the education and seat-reservation fields" width="500">
 
 </details>
 
@@ -202,10 +204,16 @@ Gaurav Sood. *Bihar Local Elections*. Include the repository URL and commit used
 
 Code is [MIT licensed](LICENSE). The election results were published by the Bihar State Election Commission. No separate data license is asserted in this repository.
 
+<!-- adjacent:start -->
+
 ## 🔗 Adjacent Repositories
 
-- [in-rolls/local_elections_kerala](https://github.com/in-rolls/local_elections_kerala) — Kerala Local Government Seat Reservation Data and Winner Attributes
-- [in-rolls/local_elections_up](https://github.com/in-rolls/local_elections_up) — UP Local Election Data --- GP and ULB. Seat reservation, winner, and candidates for some elections
 - [in-rolls/local_elections_uttarakhand](https://github.com/in-rolls/local_elections_uttarakhand) — Data on Local Elections from Uttarakhand
-- [in-rolls/ration_bihar](https://github.com/in-rolls/ration_bihar) — Scripts for scraping Ration Card Data From Bihar
-- [in-rolls/parse_unsearchable_rolls](https://github.com/in-rolls/parse_unsearchable_rolls) — Parse Unsearchable Electoral Rolls
+- [in-rolls/local_elections_up](https://github.com/in-rolls/local_elections_up) — UP Local Election Data --- GP and ULB. Seat reservation, winner, and candidates for some elections
+- [in-rolls/local_elections_kerala](https://github.com/in-rolls/local_elections_kerala) — Kerala Local Government Seat Reservation Data and Winner Attributes
+- [in-rolls/local_elections_rajasthan](https://github.com/in-rolls/local_elections_rajasthan) — Rajasthan GP Election Reservation Status and Results for 2020--2022
+- [in-rolls/electoral_rolls_bihar_2020](https://github.com/in-rolls/electoral_rolls_bihar_2020) — Bihar Electoral Rolls 2020
+
+_Powered by [Adjacent](https://github.com/gojiplus/adjacent)_
+
+<!-- adjacent:end -->
