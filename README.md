@@ -13,9 +13,9 @@ The list is generated from the published files by `make data-summary`.
 
 | File | Rows | Each row represents |
 | --- | ---: | --- |
-| [2011/gaya_mukhiya/runner_name_records.parquet](data/2011/gaya_mukhiya/runner_name_records.parquet) | 338 | 2011 Gaya runner-list record |
-| [2011/gaya_mukhiya/spreadsheet_winner_records.parquet](data/2011/gaya_mukhiya/spreadsheet_winner_records.parquet) | 331 | 2011 Gaya workbook winner record |
-| [2011/mukhiya_reports/winner_records.parquet](data/2011/mukhiya_reports/winner_records.parquet) | 4,320 | 2011 Mukhiya winner-list record |
+| [2011/gaya_mukhiya/runner_up_records.parquet](data/2011/gaya_mukhiya/runner_up_records.parquet) | 337 | Gaya Mukhiya runner-up with GP linked from the companion winner PDF |
+| [2011/gaya_mukhiya/spreadsheet_winner_records.parquet](data/2011/gaya_mukhiya/spreadsheet_winner_records.parquet) | 330 | Gaya Mukhiya winner with GP and block (Excel) |
+| [2011/mukhiya_reports/winner_records.parquet](data/2011/mukhiya_reports/winner_records.parquet) | 3,973 | Mukhiya winner reported in a 2011 district PDF (23 districts, including Gaya) |
 | [2016/candidates.parquet](data/2016/candidates.parquet) | 644,865 | Candidate record |
 | [2016/seats.parquet](data/2016/seats.parquet) | 258,095 | Seat in the election frame |
 | [2016/winners.parquet](data/2016/winners.parquet) | 210,717 | Winner record, with determination basis |
@@ -36,8 +36,19 @@ The [Khajuria judgment transcription](data/2011/khajuria_judgment/) supplies ele
 candidates and their votes for one 2011 contest. Its CSV is the manually reviewed
 input, with source references in its manifest.
 
-The [Gaya comparison](data/2011/gaya_mukhiya/) and
-[2021 reservation comparison](data/2021/reservation_check/) retain supporting
+For **2011**, start with `2011/mukhiya_reports/winner_records.parquet`: winner
+names and seat-reservation labels transcribed from district PDFs, including Gaya.
+Every published row has district, block, GP and winner name. Exact content
+repeats and records with unresolved locations are excluded; other repeated seat
+labels remain flagged.
+
+The [Gaya files](data/2011/gaya_mukhiya/) add workbook winners with GP labels and
+runner-up records whose GP labels are **inferred from the companion winner PDF**.
+The runner links require matching serials, blocks and exact reservation text
+throughout both reports, with corroborating GP headings. Each row records the
+link basis and its sources. Workbook and PDF winner claims remain separate.
+
+The [2021 reservation comparison](data/2021/reservation_check/) retains supporting
 records and unresolved differences. Existing [affidavit work](data/2021/affidavits/README.md)
 is separate; further collection and extraction are deferred.
 
@@ -50,8 +61,10 @@ not zero, male, unreserved or an inferred winner.
 
 - **2011:** Mukhiya winner lists from 23 districts, not statewide candidate
   coverage. The district collection already includes Gaya's PDF records. The
-  workbook and runner list remain separate; extracted-name differences need
-  review before combining sources. Repeated source records remain identifiable.
+  workbook winners remain separate pending review of extracted-name differences.
+  Runner GP links are inferred and explicitly labeled. Records with unresolved
+  locations or missing names are excluded, as are exact content repeats. Other
+  repeated seat labels remain flagged; counts are not verified unique seats.
 - **2016:** Election-specific reservation labels are available. Some source
   geography codes identify multiple seats; ambiguity is retained in the tables.
 - **2021:** Election results and undated current-term feeds are distinct.

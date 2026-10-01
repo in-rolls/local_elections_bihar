@@ -125,15 +125,15 @@ def test_report_preserves_elections_and_provisional_source_limits():
     assert by["event"].n_unique() == 3
     assert by["seat_frame_rows"].sum() == 5749
     claims = table.filter(
-        pl.col("coverage_basis").is_in(["winner_list", "runner_name_list"])
+        pl.col("coverage_basis").is_in(["winner_list", "runner_up_list"])
     )
     assert claims["seat_frame_rows"].null_count() == 3
     assert claims["candidate_records"].null_count() == 3
     dated = claims.filter(pl.col("election_year") == 2011)
-    assert dated["winner_claim_records"].drop_nulls().to_list() == [331, 4320]
+    assert dated["winner_claim_records"].drop_nulls().to_list() == [330, 3973]
     assert claims["election_year"].null_count() == 0
     district = claims.filter(pl.col("collection") == "mukhiya_reports_winner_records")
-    assert district["winner_claim_records"].to_list() == [4320]
+    assert district["winner_claim_records"].to_list() == [3973]
     court = table.filter(pl.col("collection") == "khajuria_judgment")
     assert court["candidate_records"].to_list() == [11]
     assert court["winner_records"].to_list() == [1]
@@ -164,7 +164,7 @@ def test_summary_preserves_counts_and_counts_storage_once(tmp_path):
     assert text.count("`2021/raw/statewide`") == 1
     assert (
         "| Parsed source list | 2011 / mukhiya reports winner records / "
-        "mukhiya | Unknown | 4,318 | Unknown | 4,320 |" in text
+        "mukhiya | Unknown | 3,971 | Unknown | 3,973 |" in text
     )
     assert "Undated 2021-term feed / mukhiya" in text
     path = tmp_path / "README.md"

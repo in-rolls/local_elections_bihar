@@ -106,6 +106,51 @@ def reservation(value):
     return category, women
 
 
+def release_records(records):
+    """Keep located, named winners once; retain source-row evidence for exclusions."""
+    kept, exclusions = [], []
+    duplicates = 0
+    for row in records:
+        missing = [
+            key
+            for key in ["district_raw", "block_raw", "panchayat_raw", "candidate_name"]
+            if not (row[key] or "").strip()
+        ]
+        if missing:
+            exclusions.append(
+                {
+                    "source_file": row["source_file"],
+                    "source_serial": row["source_serial"],
+                    "source_page": row["source_page"],
+                    "field": ",".join(missing),
+                    "kind": "excluded_missing_location_or_name",
+                    "detail": (
+                        "Required source label missing; "
+                        "no verified replacement supplied"
+                    ),
+                    "source_box": row["source_box"],
+                }
+            )
+        elif row["duplicate_of_record_id"] is not None:
+            duplicates += 1
+        else:
+            kept.append(dict(row))
+    seats = collections.Counter(
+        (r["district_raw"], r["block_raw"], r["panchayat_raw"]) for r in kept
+    )
+    names = collections.Counter(
+        (r["district_raw"], r["block_raw"], r["candidate_name"]) for r in kept
+    )
+    for row in kept:
+        row["seat_label_repeated"] = (
+            seats[(row["district_raw"], row["block_raw"], row["panchayat_raw"])] > 1
+        )
+        row["name_within_block_repeated"] = (
+            names[(row["district_raw"], row["block_raw"], row["candidate_name"])] > 1
+        )
+    return kept, exclusions, duplicates
+
+
 def write_outputs(raw, out):
     files = sorted(raw.glob("winners/*/*GPM.pdf"))
     if not files:
@@ -224,6 +269,9 @@ def write_outputs(raw, out):
             }
         )
         print(file.parent.name, len(rows), flush=True)
+    source_record_count = len(records)
+    records, exclusions, duplicate_count = release_records(records)
+    issues.extend(exclusions)
     schema = pa.schema(
         [
             (
@@ -271,6 +319,9 @@ def write_outputs(raw, out):
     ]
     write_csv(out / "reservation_labels.csv", label_rows, list(label_rows[0]))
     validation = {
+        "source_records": source_record_count,
+        "excluded_missing_location_or_name": len(exclusions),
+        "excluded_exact_repeats": duplicate_count,
         "districts": len(files),
         "pages": sum(r["pages"] for r in coverage),
         "winner_records": len(records),

@@ -235,6 +235,7 @@ def spreadsheet(root):
 
 def runner_names(root):
     records, block = [], None
+    pending_heading = None
     with decoded_pdf(root / SOURCES["runners"]) as pdf:
         for page in pdf.pages:
             tables = page.find_tables()
@@ -252,6 +253,13 @@ def runner_names(root):
                 for c in page.chars
                 if c["fontname"].endswith("+Arial-Bold") and c["top"] > 110
             ]
+            heading_names = {
+                round(c["top"], 1): cell_text(
+                    page, (675, c["top"] - 1, page.width, c["top"] + 15)
+                )
+                for c in headers
+            }
+            used_headers = set()
             for table in tables:
                 for serial, cells, box in grid_rows(page, table, 16, xs):
                     previous = [c for c in headers if c["top"] < box[1]]
@@ -260,6 +268,16 @@ def runner_names(root):
                         block = "".join(
                             c["text"] for c in previous if abs(c["top"] - top) < 1
                         )
+                    heading = (
+                        heading_names[round(top, 1)]
+                        if previous and round(top, 1) not in used_headers
+                        else pending_heading
+                        if not previous
+                        else None
+                    )
+                    pending_heading = None
+                    if previous:
+                        used_headers.add(round(top, 1))
                     if block not in BLOCKS:
                         raise ValueError(f"Unknown runner block: {block!r}")
                     records.append(
@@ -268,6 +286,8 @@ def runner_names(root):
                             "block_raw": block,
                             "block": BLOCKS[block],
                             "candidate_name": cells[1],
+                            "reservation_raw": cells[4],
+                            "block_first_panchayat_heading": heading,
                             "source_page": page.page_number,
                             "source_file": SOURCES["runners"],
                         }
@@ -275,9 +295,63 @@ def runner_names(root):
             if headers:
                 top = max(c["top"] for c in headers)
                 block = "".join(c["text"] for c in headers if abs(c["top"] - top) < 1)
+                pending_heading = (
+                    heading_names[round(top, 1)]
+                    if round(top, 1) not in used_headers
+                    else None
+                )
     if [r["source_serial"] for r in records] != list(range(1, len(records) + 1)):
         raise ValueError("Runner source serials are not consecutive")
     return records
+
+
+def link_runner_seats(runners, winners):
+    """Infer GP labels from the paired reports, requiring complete alignment."""
+    by_serial = {r["serial"]: r for r in winners}
+    serials = [r["source_serial"] for r in runners]
+    if (
+        len(by_serial) != len(winners)
+        or len(set(serials)) != len(serials)
+        or set(serials) != set(by_serial)
+    ):
+        raise ValueError("Runner/winner serials must have a complete one-to-one match")
+    heads = 0
+    linked = []
+    for runner in runners:
+        winner = by_serial[runner["source_serial"]]
+        if any(runner[key] != winner[key] for key in ["block_raw", "reservation_raw"]):
+            raise ValueError("Runner/winner block or reservation alignment changed")
+        heading = runner["block_first_panchayat_heading"]
+        if heading is not None:
+            if not heading or heading != winner["panchayat_raw"]:
+                raise ValueError("Runner GP heading disagrees with companion winner")
+            heads += 1
+        if not winner["panchayat_raw"]:
+            raise ValueError("Companion winner has no GP label")
+        linked.append(
+            {
+                **runner,
+                "panchayat_raw": winner["panchayat_raw"],
+                "seat_link_basis": "inferred_paired_report_order",
+                "seat_source_file": winner["source_file"],
+                "seat_source_page": winner["source_page"],
+                "seat_source_record_id": f"gaya_mukhiya_{winner['serial']:03}",
+            }
+        )
+    if heads != len({r["block_raw"] for r in runners}):
+        raise ValueError("Expected one corroborating GP heading per printed block")
+    return linked, {
+        "basis": "inferred_paired_report_order",
+        "aligned_source_rows": len(linked),
+        "corroborating_gp_headings": heads,
+        "checks": (
+            "Complete unique serials; exact block and reservation text; GP headings"
+        ),
+        "limitation": (
+            "GP inferred from companion report, not individually printed for runners; "
+            "serial is not an official seat identifier"
+        ),
+    }
 
 
 def summaries(root):
@@ -327,6 +401,21 @@ def name_key(value):
     return re.sub(r"[\s.\u0966]", "", re.sub(r"^(श्रीमती|श्री|सुश्री)\s*", "", value))
 
 
+def minimum_records(records):
+    kept, excluded = [], []
+    for record in records:
+        missing = [
+            field
+            for field in ["district", "block", "panchayat_raw", "candidate_name"]
+            if not (record.get(field) or "").strip()
+        ]
+        if missing:
+            excluded.append({"record_id": record["record_id"], "missing": missing})
+        else:
+            kept.append(record)
+    return kept, excluded
+
+
 def write_csv(path, rows, columns):
     with path.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=columns)
@@ -359,7 +448,22 @@ DESCRIPTIONS = {
     "source_box": "JSON [left, top, right, bottom] in PDF points, top-origin",
     "block_raw": "English block label as printed; capitalization retained",
     "block": "Hindi block label; PDF labels mapped explicitly to workbook block names",
-    "panchayat_raw": "Printed panchayat name; no fuzzy geography correction",
+    "panchayat_raw": (
+        "GP label from this source or the linked companion winner PDF; "
+        "runner links are identified by seat_link_basis"
+    ),
+    "block_first_panchayat_heading": (
+        "GP printed at the block heading, attached only to its first row for "
+        "alignment checking; null on other rows, not a group-wide GP assignment"
+    ),
+    "seat_link_basis": (
+        "inferred_paired_report_order: complete serial, block and exact reservation "
+        "alignment with winner PDF, corroborated by block-first GP headings"
+    ),
+    "seat_source_file": "Companion PDF supplying the GP; relative to central_handoff",
+    "seat_source_page": "One-based page supplying the GP in the companion PDF",
+    "seat_source_record_id": "Row in pdf_winner_records supplying the GP",
+    "seat_source_sha256": "SHA-256 of the companion PDF supplying the GP",
     "candidate_name": "Decoded candidate name, preserving spelling and honorifics",
     "relative_name": "Printed father/husband name; relationship not distinguished",
     "address_raw": (
@@ -414,7 +518,7 @@ def metadata(out):
     for name in [
         "pdf_winner_records",
         "spreadsheet_winner_records",
-        "runner_name_records",
+        "runner_up_records",
     ]:
         table = pq.read_table(out / f"{name}.parquet")
         columns[f"{name}.parquet"] = {
@@ -439,7 +543,7 @@ def metadata(out):
 def run(root, out):
     winners, alternate = pdf_winners(root, "winners"), pdf_winners(root, "alternate")
     excel, totals = spreadsheet(root), summaries(root)
-    runners = runner_names(root)
+    runners, seat_linkage = link_runner_seats(runner_names(root), winners)
     source_hashes = {
         path: hashlib.sha256((root / path).read_bytes()).hexdigest()
         for path in SOURCES.values()
@@ -454,6 +558,7 @@ def run(root, out):
             office="mukhiya",
             outcome="runner_up",
             source_sha256=source_hashes[r["source_file"]],
+            seat_source_sha256=source_hashes[r["seat_source_file"]],
         )
     out.mkdir(parents=True, exist_ok=True)
     issues = []
@@ -688,6 +793,7 @@ def run(root, out):
             )
             record["age"] = None
         excel_rows.append(record)
+    excel_rows, excluded_excel = minimum_records(excel_rows)
     excel_schema = pa.schema(
         [
             (
@@ -728,9 +834,10 @@ def run(root, out):
         runner_links,
         [*runners[0], "spreadsheet_row", "spreadsheet_name", "match_basis"],
     )
+    published_runners, excluded_runners = minimum_records(runners)
     pq.write_table(
         pa.Table.from_pylist(
-            runners,
+            published_runners,
             schema=pa.schema(
                 [
                     (
@@ -740,6 +847,7 @@ def run(root, out):
                         in {
                             "source_serial",
                             "source_page",
+                            "seat_source_page",
                             "collection_year",
                             "election_year",
                         }
@@ -749,7 +857,7 @@ def run(root, out):
                 ]
             ),
         ),
-        out / "runner_name_records.parquet",
+        out / "runner_up_records.parquet",
         compression="zstd",
     )
     coverage = []
@@ -780,6 +888,10 @@ def run(root, out):
         "spreadsheet_rows": len(excel),
         "summary_total": sum(r["total"] for r in totals),
         "runner_name_rows": len(runners),
+        "published_spreadsheet_winners": len(excel_rows),
+        "published_runners": len(published_runners),
+        "excluded_records": excluded_excel + excluded_runners,
+        "runner_seat_linkage": seat_linkage,
         "runner_names_also_in_winner_spreadsheet": len(
             {r["source_serial"] for r in runner_links}
         ),

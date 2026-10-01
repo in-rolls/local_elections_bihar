@@ -1,4 +1,13 @@
-# Gaya Mukhiya: provisional source records
+# Gaya Mukhiya, 2011: supporting source transcriptions
+
+For the main 2011 winner data, use
+[`mukhiya_reports/winner_records.parquet`](../mukhiya_reports/winner_records.parquet).
+It already includes Gaya's 338 PDF winner records.
+
+The workbook supplies GP and block labels directly. The runner-up file now links
+GP labels from the companion winner PDF using the checked alignment described
+below. Both published files require a nonblank person name, district, block and
+GP. A printed report serial identifies a source row, not an official seat.
 
 The workbook explicitly identifies the 2011 election. The maintainer also
 confirmed the PDF collection as 2011, noting its “पूर्व निर्वाचित” columns for
@@ -10,16 +19,44 @@ These files do not yet establish a reconciled roster or complete seat frame.
 
 | File | Rows | One row represents |
 | --- | ---: | --- |
-| `spreadsheet_winner_records.parquet` | 331 | A winner record in the explicitly dated workbook |
-| `pdf_winner_records.parquet` | 338 | A record in the primary winner PDF; 2011 collection confirmed |
-| `runner_name_records.parquet` | 338 | A name and block in the runner-up PDF; 2011 collection confirmed |
+| `spreadsheet_winner_records.parquet` | 330 | A reported winner with GP and block from `Gaya.xls` |
+| `pdf_winner_records.parquet` | 338 | A reported winner from the Gaya PDF; already included in the main 2011 file |
+| `runner_up_records.parquet` | 337 | A runner-up with GP inferred from the companion winner PDF; `seat_link_basis` records this |
 | `runner_spreadsheet_conflicts.csv` | 40 | A name/block comparison pair: 38 distinct runner records matched to workbook winners |
 
 The winner tables include names, geography labels, age, education, occupation,
 reported annual income, and children. The PDF also reports gender, reservation,
 candidate category, relatives and previous offices. No vote totals, vote shares,
-margins or inferred demographic classifications are supplied. Runner extraction
-is limited to names, blocks and source references for the comparison above.
+margins or inferred demographic classifications are supplied. Runner records
+include names, block, reservation text, linked GP and references to both PDFs.
+
+## Recovering the runner-up seats
+
+The runner-up PDF prints a GP name only at each block heading. Its rows span
+different reservation labels, so that heading cannot supply the GP for every
+person below it. Residential villages are not treated as GP names.
+
+The companion winner PDF prints a GP on each row. All **338 source rows** align
+one-to-one between the two PDFs on serial, block and exact reservation text,
+including spelling quirks. All **25 block-first GP headings** also agree. The
+parser requires the entire alignment to pass before linking any GP labels; a
+missing or repeated serial, differing block/reservation, or disagreeing GP
+heading stops parsing. Headers at page ends are carried to the first following
+row for this check.
+
+This is an **inference from paired report ordering**, not a printed seat code or
+independent verification of each pairing. `seat_link_basis` records that fact.
+`seat_source_file`, `seat_source_sha256`, `seat_source_page` and
+`seat_source_record_id` locate the companion evidence. The GP is not copied from
+the workbook or inferred from a person's name. Repeated GP labels in the winner
+PDF remain repeated; this linkage does not establish unique official seats.
+
+One runner source row has a blank name (serial 107, Imamganj, linked GP मंझौली),
+and one workbook row has a blank winner name (Sheet1 row 94, Wazirganj, GP विच्छा).
+They are excluded from the person tables, leaving 337 runners and 330 workbook
+winners. Their identifiers and exclusion reasons are recorded in the existing
+manifest. The originals retain both rows. The workbook has no repeated
+block–GP combination.
 
 ## Extracted differences to review
 
@@ -44,7 +81,7 @@ source serials nor `record_id` are seat or person identifiers.
 `coverage.csv` reconciles all 338 PDF records with the companion summary by
 printed block label. It retains zero-count summary labels and the separate
 Vajirganj/Wazirganj labels. The explicit Hindi crosswalk in
-[`parse_2011.py`](../../../scripts/year2011/parse_gaya.py) maps these two to the same block;
+[`parse_gaya.py`](../../../scripts/year2011/parse_gaya.py) maps these two to the same block;
 there are 24 distinct mapped blocks. This agreement tests extraction coverage,
 not the correctness of the report, its year or its population coverage.
 
@@ -70,7 +107,7 @@ counterparts provide a row-level recode record. The rules are:
   This broad plausibility rule is not a legal eligibility classification.
 - Six PDF ages are invalid: 0, 0, 1980, 1972, 1966 and 15. Do not convert apparent
   birth years to ages without a verified election year. PDF typed age has six
-  missing values; workbook typed age has 13.
+  missing values; published workbook typed age has 12.
 - Map the printed gender labels महिला/महीला to `female` and पुरुष/पुरूष to `male`.
   One blank label remains null. Printed labels are retained even when a name might
   suggest otherwise. Workbook gender is unavailable and is not inferred.
@@ -95,7 +132,7 @@ and explicitly does not establish a seat match.
 Originals reside in `/Volumes/Staging/local_elections_bihar/2011/raw/central_handoff/`,
 exposed locally through `data/2011/raw/central_handoff/`. The handoff originates in
 `in-rolls/local_elections` at commit `fa4c4e79`; see the [data guide](../../README.md)
-for migration and original checksum receipts. The source files are:
+for source storage and availability. The source files are:
 
 | Role | Path within `central_handoff/` | Locator |
 | --- | --- | --- |
@@ -112,14 +149,14 @@ comparisons use the same serial; summary page references appear in `coverage.csv
 sample and dependency lock. The same manifest records output hashes, reconciliation and issue counts.
 
 The PDF text uses embedded glyph encodings whose original Unicode maps scramble
-Hindi. `font_map_2011.json` maps reviewed glyphs, keyed by the embedded font's
-SHA-256. `hindi_2011.py` repairs text maps in memory and restores short-i and reph
+Hindi. `font_map.json` maps reviewed glyphs, keyed by the embedded font's
+SHA-256. `hindi.py` repairs text maps in memory and restores short-i and reph
 ordering. It preserves PDF drawing order within cells. Header column boundaries
 recover last rows where truncated table rules otherwise merge cells. Summary
 parsing carries block headers across page breaks. No OCR is used.
 
 The committed glyph map is sufficient for normal parsing. For its derivation,
-`map_fonts_2011.py` records exact outline matching, GSUB decomposition and reviewed
+`map_fonts.py` records exact outline matching, GSUB decomposition and reviewed
 contextual glyph overrides. Re-derivation requires the specific SHA-pinned Arial
 Unicode reference font, which is proprietary and not redistributed. It also reads
 `alternate_winners/GAYA/GAYA_w_count.pdf` to map its summary font. For example:
@@ -134,7 +171,7 @@ Workbook text is decoded only in cells marked Kruti Dev 010. The ordered mapping
 comes from the MIT-licensed
 [Kruti Dev converter](https://github.com/ravitaak/krutidevtounicode/blob/main/lib/src/krutidevtounicode.dart),
 with an explicit local correction for चौ. Attribution and the license are in
-`LICENSE.krutidevtounicode`; the exact mapping is committed.
+the repository [LICENSE](../../../LICENSE); the exact mapping is committed.
 
 ## Validation and reproduction
 

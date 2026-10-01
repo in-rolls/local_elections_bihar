@@ -11,7 +11,7 @@ import pyarrow.parquet as pq
 import pytest
 
 from scripts.year2011 import parse_gaya as p
-from scripts.year2011.parse_reports import reservation
+from scripts.year2011.parse_reports import release_records, reservation
 
 OUT = Path("data/2011/mukhiya_reports")
 
@@ -64,38 +64,35 @@ def test_bad_cell_is_null_with_receipt_or_fails_in_strict_mode(monkeypatch):
 
 def test_district_records_and_visual_transcription():
     rows = pq.read_table(OUT / "winner_records.parquet").to_pylist()
-    assert len(rows) == 4320
-    assert len({r["record_id"] for r in rows}) == 4320
+    assert len(rows) == 3973
+    assert len({r["record_id"] for r in rows}) == 3973
     assert len({r["district_raw"] for r in rows}) == 23
     assert {r["election_year"] for r in rows} == {2011}
     assert {r["year_basis"] for r in rows} == {p.YEAR_ASSIGNMENT["year_basis"]}
-    assert sum(r["missing_block"] for r in rows) == 46
+    assert not any(r["missing_block"] for r in rows)
     assert sum(r["decode_issue_count"] for r in rows) == 5
     serials = collections.defaultdict(list)
     for row in rows:
+        assert all(
+            (row[key] or "").strip()
+            for key in ["district_raw", "block_raw", "panchayat_raw", "candidate_name"]
+        )
         serials[row["source_file"]].append(row["source_serial"])
         assert bool(row["block_raw"]) != row["missing_block"]
         if row["missing_block"]:
             assert row["seat_label_repeated"] is None
             assert row["name_within_block_repeated"] is None
     for values in serials.values():
-        assert values == list(range(1, len(values) + 1))
+        assert values == sorted(set(values))
     indexed = {(r["district_raw"], str(r["source_serial"])): r for r in rows}
-    by_id = {r["record_id"]: r for r in rows}
-    for row in rows:
-        if row["duplicate_of_record_id"] is not None:
-            original = by_id[row["duplicate_of_record_id"]]
-            assert original["source_serial"] < row["source_serial"]
-            assert original["source_file"] == row["source_file"]
-            assert original["decode_issue_count"] == row["decode_issue_count"] == 0
-            for field in ["block_raw", *p.FIELDS[1:]]:
-                assert original[field] == row[field]
-    saharsa = [r for r in rows if r["district_raw"] == "SAHARSA"]
-    assert sum(r["duplicate_of_record_id"] is not None for r in saharsa) == 151
+    assert not any(r["duplicate_of_record_id"] for r in rows)
     with Path("tests/fixtures/2011/district_visual_review.csv").open() as stream:
         reviewed = list(csv.DictReader(stream))
     assert len(reviewed) == 16
     for expected in reviewed:
+        if (expected["district_raw"], expected["source_serial"]) == ("BHOJPUR", "16"):
+            assert (expected["district_raw"], expected["source_serial"]) not in indexed
+            continue
         actual = indexed[(expected["district_raw"], expected["source_serial"])]
         for field, value in expected.items():
             assert str(actual[field]) == value, (expected["source_serial"], field)
@@ -113,6 +110,23 @@ def test_district_records_and_visual_transcription():
             "reservation_raw",
         ]:
             assert actual[field] == row[field]
+    manifest = json.loads((OUT / "MANIFEST.json").read_text())["validation"]
+    assert manifest["source_records"] == len(rows) + 47 + 300
+    assert manifest["excluded_missing_location_or_name"] == 47
+    assert manifest["excluded_exact_repeats"] == 300
+    with (OUT / "issues.csv").open() as stream:
+        excluded = [
+            row
+            for row in csv.DictReader(stream)
+            if row["kind"] == "excluded_missing_location_or_name"
+        ]
+    assert len(excluded) == 47
+    assert any(
+        r["source_file"] == "winners/BHOJPUR/BHOJPUR_GPM.pdf"
+        and r["source_serial"] == "16"
+        and r["field"] == "panchayat_raw"
+        for r in excluded
+    )
 
 
 def test_output_receipts_and_dated_contest():
@@ -154,3 +168,27 @@ def test_output_receipts_and_dated_contest():
     winner = next(r for r in report if r["record_id"] == match["record_id"])
     assert all(winner[k] == v for k, v in match.items())
     assert winner["election_year"] == 2011
+
+
+def test_release_requires_location_and_removes_only_exact_repeats():
+    row = {
+        "record_id": "first",
+        "district_raw": "Gaya",
+        "block_raw": "Amas",
+        "panchayat_raw": "कलवन",
+        "candidate_name": "विगनी देवी",
+        "source_file": "original.pdf",
+        "source_serial": 1,
+        "source_page": 1,
+        "source_box": "[0,0,1,1]",
+        "duplicate_of_record_id": None,
+    }
+    repeat = {**row, "record_id": "repeat", "duplicate_of_record_id": "first"}
+    different = {**row, "record_id": "different", "candidate_name": "different"}
+    missing = {**row, "record_id": "missing", "block_raw": ""}
+    kept, excluded, duplicates = release_records([row, repeat, different, missing])
+    assert [r["record_id"] for r in kept] == ["first", "different"]
+    assert all(r["seat_label_repeated"] for r in kept)
+    assert duplicates == 1
+    assert len(excluded) == 1
+    assert excluded[0]["field"] == "block_raw"
