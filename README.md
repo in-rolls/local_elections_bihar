@@ -1,6 +1,5 @@
 # Bihar Local Elections
 
-[![CI](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml/badge.svg)](https://github.com/in-rolls/local_elections_bihar/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 
 This repository records **which Bihar panchayat seats were reserved, who contested
@@ -288,18 +287,7 @@ use election-specific candidates and winners separately from
 
 ## Development
 
-```sh
-make check
-```
-
-`make check` runs Ruff, formatting checks and tests once in the local environment.
-For a small code change, run the affected tests while editing and the full check
-once before the PR. Documentation-only edits need a diff review, not a data rebuild.
-
-`make verify` checks published table checksums, schemas and joins; run it locally
-when those tables or their validation code change. CI runs both commands in one
-Python 3.14 job per PR, with manual runs available. There is no Docker step,
-version matrix, scheduled CI run, duplicate run after merge or pre-commit layer.
+Run affected parser tests after code changes. `make check` is available for a full local lint/format/test pass. Run `make verify` when the published tables or their validators change.
 
 ## Citation
 
@@ -322,3 +310,7 @@ Code is [MIT licensed](LICENSE). The election results were published by the Biha
 _Powered by [Adjacent](https://github.com/gojiplus/adjacent)_
 
 <!-- adjacent:end -->
+
+## Maintenance
+
+This is a point-in-time data collection; see the [shared maintenance policy](https://github.com/soodoku/data-repos#maintenance-policy). Run the affected parser tests when code changes and the relevant data validators when inputs or outputs change. Full-data checks and publication are explicit operations. Routine edits do not require hosted CI, Docker, a Python-version matrix, Preen or pre-commit.
