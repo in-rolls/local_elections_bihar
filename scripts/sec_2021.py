@@ -173,7 +173,9 @@ def parse(raw, out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["fetch", "parse"])
-    parser.add_argument("--raw", type=Path, default=Path("data/raw/portal_2021_2026"))
+    parser.add_argument(
+        "--raw", type=Path, default=Path("data/2021/raw/portal_snapshot_2026")
+    )
     parser.add_argument("--out", type=Path, default=Path("data/2021/affidavits"))
     parser.add_argument("--districts", type=int, nargs="+", default=[33])
     parser.add_argument("--workers", type=int, default=3)

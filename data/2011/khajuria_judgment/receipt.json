@@ -1,0 +1,32 @@
+{
+  "source_url": "https://indiankanoon.org/doc/198387463/",
+  "source_title": "Santosh Kumar Singh v. State of Bihar & Ors",
+  "court": "Patna High Court",
+  "case": "LPA 2142/2015",
+  "judgment_date": "2016-04-26",
+  "checked_date": "2026-10-01",
+  "access_method": "Web tool text extraction; manually transcribed factual election table",
+  "original_document_archived": false,
+  "original_sha256": null,
+  "direct_http_status": 403,
+  "evidence": {
+    "election_dates": "paragraph 5",
+    "candidate_names_and_votes": "paragraph 6",
+    "initial_winner": "paragraph 7",
+    "block_and_district": "paragraph 10",
+    "later_annulment_and_remand": "paragraph 38"
+  },
+  "matched_report": {
+    "record_id": "BHOJPUR_mukhiya_0021",
+    "source_file": "winners/BHOJPUR/BHOJPUR_GPM.pdf",
+    "source_sha256": "4455725c6fae64134b6c951c8fe2cadc68c045ac714f5907d6a86fdfb6457528",
+    "source_page": 2,
+    "source_serial": 21,
+    "candidate_name": "संतोष कुमार सिंह",
+    "relative_name": "राम एकराम सिंह",
+    "block_raw": "Ara",
+    "panchayat_raw": "खजुरियॉ"
+  },
+  "match_basis": "Manual comparison of candidate, father, block and panchayat; Hindi/English transliteration and spelling variants.",
+  "limits": "Corroborates one initial 2011 winner identity; does not date the whole PDF or verify its reservation assignment. Later replacement winner not established."
+}

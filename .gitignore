@@ -7,16 +7,9 @@ __pycache__/
 build/
 dist/
 *.log
+!data/provenance/*.log
 *.part
-data/derived
-data/raw/statewide_2021
-data/interim/
-data/raw/statewide_2016
+data/*/raw
+data/*/interim
 Desktop.ini
 Thumbs.db
-# Raw-data archive: files ship as a tarball (see data/raw_archive/README.md)
-data/raw_archive/**
-!data/raw_archive/
-!data/raw_archive/MANIFEST.csv
-!data/raw_archive/README.md
-dist/raw_archive/

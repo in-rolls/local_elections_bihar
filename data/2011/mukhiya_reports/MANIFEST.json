@@ -1,0 +1,258 @@
+{
+  "year_assignment": {
+    "path": "data/provenance/2011_report_year.json",
+    "sha256": "d4ac3b1bf2148eac690728787be4624b99de5489d30a8fefadc7c94df4e7eae6"
+  },
+  "sources": {
+    "winners/Aurangabad/Aurangabad_GPM.pdf": "67f323b7ccaca9089c7434307b48280d124f519dcd062d5405e992fd8444b1f8",
+    "winners/BEGUSARAI/BEGUSARAI_GPM.pdf": "af12da0f8775511c374d4b5af1baaff7495bbcbb719254241fad4269794bb8e7",
+    "winners/BHAGALPUR/BHAGALPUR_GPM.pdf": "19aff4c1c545c19791ca9a3a1ee20d389206542dc796682492e09ca672c7c59d",
+    "winners/BHOJPUR/BHOJPUR_GPM.pdf": "4455725c6fae64134b6c951c8fe2cadc68c045ac714f5907d6a86fdfb6457528",
+    "winners/BUXAR/BUXAR_GPM.pdf": "9d18d18fb063fa7d20dcd52a5a58eb37066e1aeca255d4b9cc8fc5c30fea64d7",
+    "winners/GAYA/GAYA_GPM.pdf": "4a3d89964b07a713b13848c8b27aaa3d7b3a1563fd0b2d3020db0115baf92b4d",
+    "winners/GOPALGANJ/GOPALGANJ_GPM.pdf": "949de44fe95c71d15d3ac41266d1195f0a508ed26cb06af2ee35e682f9e73261",
+    "winners/JAMUI/JAMUI_GPM.pdf": "6b4eedb01dcc4dc8ad77ace27aa32ed217cee1d80b64adae4e5e84e4a2ee45e2",
+    "winners/JEHANABAD/JEHANABAD_GPM.pdf": "318937ee9aa2f00c72032e7c7cb45bf7d1454388a027d6c399b01f188273b69b",
+    "winners/KAIMUR/KAIMUR_GPM.pdf": "4757d89e6d637bd880e8b82e7349ef46c7a22374b8ed1cc80387bb89d664ac4c",
+    "winners/KATIHAR/KATIHAR_GPM.pdf": "0dd188f88eceae15a37ad9bd73e7174b5d6915439fed3463c39f8931e6b3b95a",
+    "winners/KHAGARIA/KHAGARIA_GPM.pdf": "44ebfc4d0b859c9ff9c09628ff7d430c148bc8ea59e56981ee4b975821f98dae",
+    "winners/KISHANGANJ/KISHANGANJ_GPM.pdf": "180c1ef0f06e095bd5588c0bc5ad6b0aee124e9bf2d4f67e74d03a78d330992c",
+    "winners/Lakhisaray/Lakhisaray_GPM.pdf": "c6e444212d874f4fa5c911ceb2fb720a6b84b830a87d2532751d376b8bbcb63e",
+    "winners/MADHUBANI/MADHUBANI_GPM.pdf": "fb0ca2a0ff0b00ea61288e9fb8f79c3c2a793ccc33604a95022bb0d9ddb4024e",
+    "winners/NALANDA/NALANDA_GPM.pdf": "e0206112ba9a05ded994ff494ac09e2e948d8c5c425e8e5191e11be1e30e6602",
+    "winners/PATNA/PATNA_GPM.pdf": "c88eca221d56ff27a9d2419926d7fd717b7c86ab43d70a006bd63948a1d0ba15",
+    "winners/ROHTAS/ROHTAS_GPM.pdf": "20ade9b30396c47c6ab180373ace9d29e3f6def52d7c75582016280542605b28",
+    "winners/SAHARSA/SAHARSA_GPM.pdf": "654dac0b54659dd3e6db29af706d3d022ec7c7d02fc329b808da7f477eda74cb",
+    "winners/SAMASTIPUR/SAMASTIPUR_GPM.pdf": "f6fb1d1b402363e7b59e3f2a28575320291efe36d2838f0126279c464566a3d0",
+    "winners/SARAN/SARAN_GPM.pdf": "e764d7b7a0f4efe76ef8be7fa5b18422d8db1c462078b409cbd78712e2264321",
+    "winners/SIWAN/SIWAN_GPM.pdf": "d6322569c2a32c4683cf9905191564e236ca4e1560669e52abcde6bc43ce63b8",
+    "winners/W.CHAMPARAN/W.CHAMPARAN_GPM.pdf": "fe954c610d131857d826b1d8b24df32bd8f24807a248831f3daa7c44af20b6ca"
+  },
+  "source_root": "data/2011/raw/central_handoff",
+  "code_sha256": {
+    "parse_2011_reports.py": "53fb33cda2f81cc64c78cb7607eac2c6b0f09ed3f448a7db153e5fc80d663f29",
+    "parse_2011.py": "23e9175eee49999caf45fad9149c42fa95db736d1ffb869dd0ece8d5eba56f8b",
+    "hindi_2011.py": "bfc40074a40f6506202c7e5eaf3cee6e3cfb537467b7dea00cafcb6d7e8065dd",
+    "font_map_2011.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb"
+  },
+  "schema": [
+    {
+      "name": "panchayat_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "candidate_name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "relative_name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "address_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "reservation_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "gender_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "age_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "category_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "phone_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "occupation_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "annual_income_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "sons_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "daughters_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "previous_office_2001_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "previous_office_2006_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "education_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "block_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "block",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "source_file",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "source_page",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "source_box",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "record_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "collection_year",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "election_year",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "year_basis",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "district_raw",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "office",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "outcome",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "source_serial",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "source_sha256",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "decode_issue_count",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "missing_block",
+      "type": "bool",
+      "nullable": true
+    },
+    {
+      "name": "seat_label_repeated",
+      "type": "bool",
+      "nullable": true
+    },
+    {
+      "name": "name_within_block_repeated",
+      "type": "bool",
+      "nullable": true
+    },
+    {
+      "name": "gender",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "reservation_category",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "reservation_women",
+      "type": "bool",
+      "nullable": true
+    },
+    {
+      "name": "duplicate_of_record_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "age",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "annual_income",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "sons",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "daughters",
+      "type": "int64",
+      "nullable": true
+    }
+  ],
+  "files": {
+    "coverage.csv": "16447564413128a74a7ce08e51f19b48d2b91f5a06f27ffd74ad5341865931ca",
+    "dictionary.csv": "fe9f0564e77528fd33a4066f2bd819f59755f07692d367079b9a8815a64252ba",
+    "issues.csv": "2daee2052f4a2a58d079e00730923fe1842705da0448ddf48f88620dbd4773a8",
+    "reservation_labels.csv": "64298ad7d53b2f5116c3fcf9862a0741a53c030a2dc7937323bd18fc820413b5",
+    "validation.json": "ffa99a032193abf5eaed0115f2c450fcdcf1c57c9c4c0199c054d2dcc580980d",
+    "winner_records.parquet": "97625b13b5e1198bd4a5ebdfabbdbbceb2f50beb0bb2f8622014519f94d18379"
+  }
+}

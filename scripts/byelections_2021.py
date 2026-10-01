@@ -175,7 +175,7 @@ def collect(raw, workers):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["frame", "fetch"])
-    parser.add_argument("--raw", type=Path, default=Path("data/raw/statewide_2021"))
+    parser.add_argument("--raw", type=Path, default=Path("data/2021/raw/statewide"))
     parser.add_argument("--workers", type=int, default=4)
     args = parser.parse_args()
     if args.stage == "frame":

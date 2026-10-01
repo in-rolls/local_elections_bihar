@@ -258,7 +258,9 @@ def collect(raw, posts, districts, workers):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["list", "fetch"])
-    parser.add_argument("--raw", type=Path, default=Path("data/raw/portal_2021_2026"))
+    parser.add_argument(
+        "--raw", type=Path, default=Path("data/2021/raw/portal_snapshot_2026")
+    )
     parser.add_argument("--posts", type=int, nargs="+", default=[3])
     parser.add_argument("--districts", type=int, nargs="+")
     parser.add_argument("--workers", type=int, default=3)

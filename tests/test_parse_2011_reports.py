@@ -1,0 +1,156 @@
+"""District extraction, conservative reservation mapping and dated corroboration."""
+
+import collections
+import csv
+import hashlib
+import json
+from pathlib import Path
+from types import SimpleNamespace
+
+import parse_2011 as p
+import pyarrow.parquet as pq
+import pytest
+from parse_2011_reports import reservation
+
+OUT = Path("data/2011/mukhiya_reports")
+
+
+@pytest.mark.parametrize(
+    ("raw", "category", "women"),
+    [
+        ("अनारक्षित", "unreserved", None),
+        ("अना0 अन् य", "unreserved", False),
+        ("अनु0 महिला", None, True),
+        ("अनु0 जाति महिला", "SC", True),
+        ("अनुसूचित जनजाति अन्य", "ST", False),
+        ("पिछडा वर्ग", "BC", None),
+        ("अति पिछडा वर्ग", "EBC", None),
+        ("आरक्षित", None, None),
+        (None, None, None),
+        ("अनारक्षित महिला अन्य", None, None),
+    ],
+)
+def test_reservation_preserves_unknowns(raw, category, women):
+    assert reservation(raw) == (category, women)
+
+
+def test_bad_cell_is_null_with_receipt_or_fails_in_strict_mode(monkeypatch):
+    table = SimpleNamespace(
+        bbox=(0, 0, 90, 20),
+        rows=[SimpleNamespace(cells=[(0, 0, 30, 10), (30, 0, 90, 10)])],
+    )
+    page = SimpleNamespace(
+        page_number=3,
+        edges=[{"top": y, "orientation": "h", "width": 90} for y in (0, 10, 20)],
+        chars=[{"text": "1", "x0": 5, "x1": 7, "top": 15, "bottom": 17}],
+    )
+
+    def decode(_, box):
+        if box[0] == 0:
+            return "1"
+        raise ValueError("Unresolved reph")
+
+    monkeypatch.setattr(p, "cell_text", decode)
+    with pytest.raises(ValueError, match="Unresolved reph"):
+        list(p.grid_rows(page, table, 2))
+    issues = []
+    assert next(p.grid_rows(page, table, 2, decode_issues=issues))[1] == ["1", None]
+    assert issues[0]["source_page"] == 3
+    assert issues[0]["source_serial"] == 1
+    assert issues[0]["column"] == 1
+    assert json.loads(issues[0]["source_box"]) == [30, 10, 90, 20]
+
+
+def test_district_records_and_visual_transcription():
+    rows = pq.read_table(OUT / "winner_records.parquet").to_pylist()
+    assert len(rows) == 4320
+    assert len({r["record_id"] for r in rows}) == 4320
+    assert len({r["district_raw"] for r in rows}) == 23
+    assert {r["election_year"] for r in rows} == {2011}
+    assert {r["year_basis"] for r in rows} == {p.YEAR_ASSIGNMENT["year_basis"]}
+    assert sum(r["missing_block"] for r in rows) == 46
+    assert sum(r["decode_issue_count"] for r in rows) == 5
+    serials = collections.defaultdict(list)
+    for row in rows:
+        serials[row["source_file"]].append(row["source_serial"])
+        assert bool(row["block_raw"]) != row["missing_block"]
+        if row["missing_block"]:
+            assert row["seat_label_repeated"] is None
+            assert row["name_within_block_repeated"] is None
+    for values in serials.values():
+        assert values == list(range(1, len(values) + 1))
+    indexed = {(r["district_raw"], str(r["source_serial"])): r for r in rows}
+    by_id = {r["record_id"]: r for r in rows}
+    for row in rows:
+        if row["duplicate_of_record_id"] is not None:
+            original = by_id[row["duplicate_of_record_id"]]
+            assert original["source_serial"] < row["source_serial"]
+            assert original["source_file"] == row["source_file"]
+            assert original["decode_issue_count"] == row["decode_issue_count"] == 0
+            for field in ["block_raw", *p.FIELDS[1:]]:
+                assert original[field] == row[field]
+    saharsa = [r for r in rows if r["district_raw"] == "SAHARSA"]
+    assert sum(r["duplicate_of_record_id"] is not None for r in saharsa) == 151
+    with Path("tests/fixtures/2011/district_visual_review.csv").open() as stream:
+        reviewed = list(csv.DictReader(stream))
+    assert len(reviewed) == 16
+    for expected in reviewed:
+        actual = indexed[(expected["district_raw"], expected["source_serial"])]
+        for field, value in expected.items():
+            assert str(actual[field]) == value, (expected["source_serial"], field)
+    assert indexed[("BEGUSARAI", "43")]["reservation_raw"] is None
+    # Overlap is exact source identity, not another 338 winners.
+    pilot = pq.read_table(
+        "data/2011/gaya_mukhiya/pdf_winner_records.parquet"
+    ).to_pylist()
+    for row in pilot:
+        actual = indexed[("GAYA", str(row["source_serial"]))]
+        for field in [
+            "candidate_name",
+            "source_sha256",
+            "source_page",
+            "reservation_raw",
+        ]:
+            assert actual[field] == row[field]
+
+
+def test_output_receipts_and_dated_contest():
+    court = Path("data/2011/khajuria_judgment")
+    for directory in [OUT, Path("data/2011/gaya_mukhiya")]:
+        manifest = json.loads((directory / "MANIFEST.json").read_text())
+        assignment = manifest["year_assignment"]
+        evidence = Path(assignment["path"])
+        assert hashlib.sha256(evidence.read_bytes()).hexdigest() == assignment["sha256"]
+        assert (
+            json.loads(evidence.read_text())["classification"] == "maintainer_confirmed"
+        )
+    for directory in [OUT, court]:
+        for line in (directory / "CHECKSUMS").read_text().splitlines():
+            digest, name = line.split("  ", 1)
+            assert hashlib.sha256((directory / name).read_bytes()).hexdigest() == digest
+    with (court / "candidates.csv").open() as stream:
+        rows = list(csv.DictReader(stream))
+    assert [r["source_table_label"] for r in rows] == list("abcdefghijk")
+    assert [int(r["votes"]) for r in rows] == [
+        45,
+        397,
+        26,
+        79,
+        200,
+        862,
+        48,
+        28,
+        369,
+        52,
+        1268,
+    ]
+    assert {r["election_year"] for r in rows} == {"2011"}
+    assert [
+        r["source_table_label"] for r in rows if r["initial_outcome"] == "elected"
+    ] == ["k"]
+    receipt = json.loads((court / "receipt.json").read_text())
+    match = receipt["matched_report"]
+    report = pq.read_table(OUT / "winner_records.parquet").to_pylist()
+    winner = next(r for r in report if r["record_id"] == match["record_id"])
+    assert all(winner[k] == v for k, v in match.items())
+    assert winner["election_year"] == 2011

@@ -80,3 +80,33 @@ def test_a_prompt_response_is_returned_and_the_alarm_does_not_fire(monkeypatch):
         assert "__VIEWSTATE" in s.request("GET")
     finally:
         stop.set()
+
+
+def test_offline_frame_retains_repeated_codes_without_network(tmp_path, monkeypatch):
+    import pyarrow.parquet as pq
+
+    def no_network(*args, **kwargs):
+        raise AssertionError("Offline reconstruction attempted a request")
+
+    monkeypatch.setattr(s, "request", no_network)
+    row = {
+        "office": "mukhiya",
+        "district": "1",
+        "block": "2",
+        "panchayat": "3",
+        "unit": "4",
+        "panchayat_label": "A",
+        "unit_label": "Seat",
+    }
+    monkeypatch.setattr(
+        s, "frame_rows", lambda raw: [row, {**row, "panchayat_label": "B"}]
+    )
+    out = tmp_path / "frame.parquet"
+    s.write_frame(tmp_path, out)
+    assert [r["code_repeated"] for r in pq.read_table(out).to_pylist()] == [True, True]
+    monkeypatch.setattr(s, "frame_rows", lambda raw: [row, row])
+    with pytest.raises(ValueError, match="Identical repeated unit"):
+        s.write_frame(tmp_path, out)
+    monkeypatch.setattr(s, "frame_rows", lambda raw: [])
+    with pytest.raises(ValueError, match="No saved"):
+        s.write_frame(tmp_path, out)

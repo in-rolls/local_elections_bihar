@@ -268,7 +268,14 @@ def build_frame(raw, workers):
         raise ValueError(f"Expected 38 districts, found {len(districts)}")
     jobs = [(office, d) for office in OFFICES for d in districts]
     run_jobs(lambda job: frame_unit(raw, *job), jobs, workers)
+    write_frame(raw)
+
+
+def write_frame(raw, out=None):
+    """Reconstruct the seat frame from saved pages, without making requests."""
     rows = frame_rows(raw)
+    if not rows:
+        raise ValueError("No saved 2016 frame pages found")
     labels = {}
     for r in rows:
         key = (r["office"], r["district"], r["block"], r["panchayat"], r["unit"])
@@ -282,7 +289,9 @@ def build_frame(raw, workers):
     for r in rows:
         key = (r["office"], r["district"], r["block"], r["panchayat"], r["unit"])
         r["code_repeated"] = len(labels[key]) > 1
-    pq.write_table(pa.Table.from_pylist(rows), raw / "2016/frame.parquet")
+    out = out if out is not None else raw / "2016/frame.parquet"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    pq.write_table(pa.Table.from_pylist(rows), out)
     counts = {}
     for r in rows:
         counts[r["office"]] = counts.get(r["office"], 0) + 1
@@ -415,12 +424,17 @@ def run_jobs(function, jobs, workers):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("stage", choices=["frame", "results"])
-    parser.add_argument("--raw", type=Path, default=Path("data/raw/statewide_2016"))
+    parser.add_argument("stage", choices=["frame", "frame-offline", "results"])
+    parser.add_argument("--raw", type=Path, default=Path("data/2016/raw/statewide"))
+    parser.add_argument("--frame-out", type=Path)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--offices", nargs="+", default=list(OFFICES))
     args = parser.parse_args()
-    if args.stage == "frame":
+    if args.frame_out is not None and args.stage != "frame-offline":
+        parser.error("--frame-out requires frame-offline")
+    if args.stage == "frame-offline":
+        write_frame(args.raw, args.frame_out)
+    elif args.stage == "frame":
         build_frame(args.raw, args.workers)
     else:
         collect_results(args.raw, args.workers, set(args.offices))

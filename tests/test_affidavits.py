@@ -140,16 +140,19 @@ def test_changed_pdf_invalidates_cached_ocr(tmp_path, monkeypatch):
 
     import affidavits
 
-    monkeypatch.setattr(affidavits, "ROOT", tmp_path)
-    folder = tmp_path / "a"
-    folder.mkdir()
+    monkeypatch.setattr(affidavits, "ROOT", tmp_path / "raw")
+    monkeypatch.setattr(affidavits, "CACHE_ROOT", tmp_path / "interim")
+    folder = affidavits.ROOT / "a"
+    folder.mkdir(parents=True)
+    cache = affidavits.CACHE_ROOT / "a"
+    cache.mkdir(parents=True)
     source = folder / "source.pdf"
     source.write_bytes(b"%PDF-old")
     (folder / "download.json").write_text(
         json.dumps({"url": "https://example.test/old", "sha256": "old"})
     )
     for filename in ["page_01.txt", "page_01.png", "pages.json"]:
-        (folder / filename).write_text("stale")
+        (cache / filename).write_text("stale")
     response = SimpleNamespace(
         status_code=200,
         content=b"%PDF-new",
@@ -166,8 +169,8 @@ def test_changed_pdf_invalidates_cached_ocr(tmp_path, monkeypatch):
     assert metadata["sha256"] == hashlib.sha256(b"%PDF-new").hexdigest()
     assert metadata["pages"] == 2
     assert metadata["ok"] is True
-    assert not list(folder.glob("page_*"))
-    assert not (folder / "pages.json").exists()
+    assert not list(cache.glob("page_*"))
+    assert not (cache / "pages.json").exists()
     assert affidavits.download(row)["sha256"] == metadata["sha256"]
 
 

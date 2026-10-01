@@ -379,9 +379,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--release", type=Path, default=Path("data/2021"))
     parser.add_argument(
-        "--archives", type=Path, default=Path("data/interim/2021/archive")
+        "--archives", type=Path, default=Path("data/2021/interim/archive")
     )
-    parser.add_argument("--report", type=Path, default=Path("data/raw/report_2021"))
+    parser.add_argument("--report", type=Path, default=Path("data/2021/raw/report"))
     parser.add_argument("--resample", type=int, default=200)
     parser.add_argument("--seed", type=int, default=2021)
     args = parser.parse_args()

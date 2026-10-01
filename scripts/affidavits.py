@@ -25,7 +25,8 @@ from tenacity import Retrying, retry_if_exception_type, stop_after_delay
 
 LOCAL = threading.local()
 KEY = ["district_id", "block_id", "panchayat_id", "candidate_serial"]
-ROOT = Path("data/derived/affidavits_2021")
+ROOT = Path("data/2021/raw/affidavits")
+CACHE_ROOT = Path("data/2021/interim/affidavits")
 AFFIDAVITS = Path("data/2021/affidavits")
 MIN_FREE_BYTES = 5 * 1024**3
 
@@ -138,7 +139,7 @@ def download(row):
             event["pages"] = pdf_pages(part)
             if target.exists() and file_hash(target) != event["sha256"]:
                 for pattern in ["page_*.txt", "page_*.png", "pages.json"]:
-                    for cached in folder.glob(pattern):
+                    for cached in (CACHE_ROOT / row["document_id"]).glob(pattern):
                         cached.unlink()
             part.replace(target)
             event["ok"] = True
@@ -213,15 +214,17 @@ def render_page(source, page, prefix, dpi=110):
 
 
 def locate(row):
-    folder = ROOT / row["document_id"]
+    source = ROOT / row["document_id"] / "source.pdf"
+    folder = CACHE_ROOT / row["document_id"]
+    folder.mkdir(parents=True, exist_ok=True)
     output = folder / "pages.json"
     if output.exists() and all(
         "rotation_checked" in x for x in json.loads(output.read_text())
     ):
         return json.loads(output.read_text())
-    count = pdf_pages(folder / "source.pdf")
+    count = pdf_pages(source)
     info = subprocess.run(
-        ["pdfinfo", "-f", "1", "-l", str(count), str(folder / "source.pdf")],
+        ["pdfinfo", "-f", "1", "-l", str(count), str(source)],
         capture_output=True,
         text=True,
         check=True,
@@ -231,16 +234,16 @@ def locate(row):
         for n, w, h in re.findall(r"Page\s+(\d+) size:\s+([\d.]+) x ([\d.]+)", info)
     }
     embedded = subprocess.run(
-        ["pdftotext", "-layout", str(folder / "source.pdf"), "-"],
+        ["pdftotext", "-layout", str(source), "-"],
         capture_output=True,
         text=True,
         check=True,
     ).stdout.split("\f")
     found = []
-    for page in range(1, pdf_pages(folder / "source.pdf") + 1):
+    for page in range(1, pdf_pages(source) + 1):
         target = folder / f"page_{page:02d}.txt"
         if not target.exists():
-            image = render_page(folder / "source.pdf", page, folder / "ocr_page")
+            image = render_page(source, page, folder / "ocr_page")
             result = subprocess.run(
                 ["tesseract", str(image), "stdout", "-l", "eng+hin", "--psm", "11"],
                 capture_output=True,
@@ -254,9 +257,7 @@ def locate(row):
         embedded_score = page_score(embedded[page - 1]) if page <= len(embedded) else 0
         rotation = 0
         if score < 4 and sizes.get(page, (0, 1))[0] > sizes.get(page, (0, 1))[1]:
-            image = render_page(
-                folder / "source.pdf", page, folder / "orientation_page"
-            )
+            image = render_page(source, page, folder / "orientation_page")
             with Image.open(image) as original:
                 for angle in [-90, 90]:
                     rotated = folder / "rotated.png"
@@ -294,7 +295,7 @@ def locate(row):
     selected = [x for x in found if max(x["score"], x["embedded_score"]) >= 4]
     for item in selected:
         image = render_page(
-            folder / "source.pdf",
+            source,
             item["page"],
             folder / f"page_{item['page']:02d}",
             dpi=140,
@@ -388,9 +389,9 @@ def export(frame_path, review_path, out):
             if not 1 <= selected <= meta["pages"]:
                 raise ValueError(f"Review page outside document: {doc}")
             target = pages_out / f"{doc}_p{selected:02d}.png"
-            shutil.copyfile(folder / f"page_{selected:02d}.png", target)
+            shutil.copyfile(CACHE_ROOT / doc / f"page_{selected:02d}.png", target)
             artifacts[str(target.relative_to(out.parent))] = file_hash(target)
-        scores = json.loads((folder / "pages.json").read_text())
+        scores = json.loads((CACHE_ROOT / doc / "pages.json").read_text())
         selected = [
             s["page"]
             for s in scores
@@ -635,7 +636,7 @@ def main():
     parser.add_argument(
         "--status-out",
         type=Path,
-        default=Path("data/interim/2021/download_status.parquet"),
+        default=Path("data/2021/interim/download_status.parquet"),
     )
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--limit", type=int)
