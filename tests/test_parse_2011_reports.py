@@ -17,6 +17,16 @@ OUT = Path("data/2011/mukhiya_reports")
 
 
 @pytest.mark.parametrize(
+    ("folder", "parser"),
+    [("gaya_mukhiya", "parse_gaya.py"), ("mukhiya_reports", "parse_reports.py")],
+)
+def test_release_parser_receipt(folder, parser):
+    manifest = json.loads(Path(f"data/2011/{folder}/MANIFEST.json").read_text())
+    code = Path("scripts/year2011") / parser
+    assert manifest["code_sha256"][parser] == hashlib.sha256(code.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize(
     ("raw", "category", "women"),
     [
         ("अनारक्षित", "unreserved", None),
