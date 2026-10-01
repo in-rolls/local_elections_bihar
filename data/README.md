@@ -73,9 +73,9 @@ datasets do not require that drive. Do not edit the generated section by hand.
 | Published records | 2025 1 byelection / sarpanch | 83 | Unknown | 282 | 83 | — | — | [Dataset](2021/) |
 | Published records | 2025 1 byelection / panchayat samiti member | 72 | Unknown | 204 | 72 | — | — | [Dataset](2021/) |
 | Published records | 2025 1 byelection / zila parishad member | 8 | Unknown | 34 | 8 | — | — | [Dataset](2021/) |
-| Parsed source list | 2011 / gaya mukhiya spreadsheet winner records / mukhiya | Unknown | Unknown | Unknown | 331 | — | — | [Dataset](2011/gaya_mukhiya/) |
-| Parsed source list | 2011 / mukhiya reports winner records / mukhiya | Unknown | 4,318 | Unknown | 4,320 | — | — | [Dataset](2011/mukhiya_reports/) |
-| Parsed source list | 2011 / gaya mukhiya runner name records / mukhiya | Unknown | Unknown | Unknown | 338 runners | — | — | [Dataset](2011/gaya_mukhiya/) |
+| Parsed source list | 2011 / gaya mukhiya spreadsheet winner records / mukhiya | Unknown | Unknown | Unknown | 330 | — | — | [Dataset](2011/gaya_mukhiya/) |
+| Parsed source list | 2011 / mukhiya reports winner records / mukhiya | Unknown | 3,971 | Unknown | 3,973 | — | — | [Dataset](2011/mukhiya_reports/) |
+| Parsed source list | 2011 / gaya mukhiya runner up records / mukhiya | Unknown | 337 | Unknown | 337 runners | — | — | [Dataset](2011/gaya_mukhiya/) |
 | Manual transcription | 2011 / khajuria judgment / mukhiya | Unknown | Unknown | 11 | 1 | — | — | [Dataset](2011/khajuria_judgment/) |
 | Published snapshot | Undated 2021-term feed / ward member | Unknown | 109,641 | Unknown | 109,641 | — | — | [Dataset](2021/) |
 | Published snapshot | Undated 2021-term feed / panch | Unknown | 109,641 | Unknown | 109,641 | — | — | [Dataset](2021/) |
@@ -102,10 +102,10 @@ The 2006 and undated source collections remain unparsed; 2011 is partially parse
 <details>
 <summary>Inputs used to generate this table (SHA-256)</summary>
 
-- `2011/gaya_mukhiya/runner_name_records.parquet`: `0e28037ab1e68ef3fd3420c604b9e44b9739b99fb36638d6a376e0a1e0bfa25d`
-- `2011/gaya_mukhiya/spreadsheet_winner_records.parquet`: `556be867fead9a5565805f788f08e4e16d1805ea30dbe14a2b38b32cbfac476b`
+- `2011/gaya_mukhiya/runner_up_records.parquet`: `1fc230fd05afb6120ff2dee6cdab3d8fe2ebb1a21461fbe76946e0140ff4fa8b`
+- `2011/gaya_mukhiya/spreadsheet_winner_records.parquet`: `de346806cf37a480c6efd9942949fab59e17e9b9e9d2f44afe399f587c54a15f`
 - `2011/khajuria_judgment/candidates.csv`: `ce065e676ceb9056da2121dd8d254fbb210785d572cc79608e4c9ef5b2c9fc63`
-- `2011/mukhiya_reports/winner_records.parquet`: `97625b13b5e1198bd4a5ebdfabbdbbceb2f50beb0bb2f8622014519f94d18379`
+- `2011/mukhiya_reports/winner_records.parquet`: `3cdb740e116412a27d059df0b42c0dd05523069de636683f7c0d997a73437c56`
 - `2016/candidates.parquet`: `0b73373fce5b29292c61399b3308d44b95f850f17127f5c2e6bfef3e162f65ca`
 - `2016/seats.parquet`: `5f234dad9afc7603e37aa34401ff4210fee31e6448cb8f94d79737a667d1761c`
 - `2016/winners.parquet`: `1f1712f0a91370cb3db6a4b891d419a60cd81a4a7dbc00c57ea04e4fc14aeb13`
@@ -117,7 +117,7 @@ The 2006 and undated source collections remain unparsed; 2011 is partially parse
 - `2021/current_winners.parquet`: `55d47177250629cd87f35413645feb613a682bba3308898894b6204732c35cd4`
 - `2021/seats.parquet`: `690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab`
 - `2021/winners.parquet`: `32c40abc700179c19c8ff0c36ce860c34640e22a3be534f51fb77f78031b3c10`
-- `scripts/reporting/summary.py`: `c51e2d4cced73cedb26b5733c39f9eb9b824a295433b6872dc45016eb3b6b6ce`
+- `scripts/reporting/summary.py`: `d52ea32cdb6f077b5ae221bc5813b4d0e1f84569e47a1f356ed822eb4f943ebc`
 - `scripts/reporting/storage.py`: `75526e88a2ecd5b7958a6d34813c2485939a917d4048db5730e453952513be2f`
 
 </details>

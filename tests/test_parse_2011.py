@@ -123,8 +123,8 @@ def test_published_transcription_and_years():
     check_review(PILOT)
     for filename, count, year in [
         ("pdf_winner_records", 338, 2011),
-        ("spreadsheet_winner_records", 331, 2011),
-        ("runner_name_records", 338, 2011),
+        ("spreadsheet_winner_records", 330, 2011),
+        ("runner_up_records", 337, 2011),
     ]:
         table = pq.read_table(PILOT / (filename + ".parquet"))
         rows = table.to_pylist()
@@ -133,6 +133,11 @@ def test_published_transcription_and_years():
         assert str(table.schema.field("election_year").type) == "int64"
         assert len({r["record_id"] for r in rows}) == count
         assert all(len(r["source_sha256"]) == 64 for r in rows)
+        assert all(
+            r[field].strip()
+            for r in rows
+            for field in ["district", "block", "panchayat_raw", "candidate_name"]
+        )
 
 
 @pytest.mark.skipif(
@@ -148,3 +153,77 @@ def test_local_source_extraction(tmp_path):
     assert report["alternate_identity_matches"] == 338
     assert report["spreadsheet_rows"] == 331
     assert report["runner_name_rows"] == 338
+    assert report["published_spreadsheet_winners"] == 330
+    assert report["published_runners"] == 337
+    assert report["runner_seat_linkage"]["corroborating_gp_headings"] == 25
+
+
+def paired_records():
+    runners = [
+        {
+            "source_serial": 1,
+            "block_raw": "Amas",
+            "reservation_raw": "महिला सामान्य",
+            "block_first_panchayat_heading": "कलवन",
+        },
+        {
+            "source_serial": 2,
+            "block_raw": "Amas",
+            "reservation_raw": "सामान्य महिला",
+            "block_first_panchayat_heading": None,
+        },
+    ]
+    winners = [
+        {
+            "serial": r["source_serial"],
+            "block_raw": r["block_raw"],
+            "reservation_raw": r["reservation_raw"],
+            "panchayat_raw": gp,
+            "source_file": "winners.pdf",
+            "source_page": 1,
+        }
+        for r, gp in zip(runners, ["कलवन", "अकौना"], strict=True)
+    ]
+    return runners, winners
+
+
+def test_runner_link_uses_companion_gp_not_group_heading():
+    runners, winners = paired_records()
+    linked, report = p.link_runner_seats(runners, list(reversed(winners)))
+    assert [r["panchayat_raw"] for r in linked] == ["कलवन", "अकौना"]
+    assert {r["seat_link_basis"] for r in linked} == {"inferred_paired_report_order"}
+    assert report["aligned_source_rows"] == 2
+    assert report["corroborating_gp_headings"] == 1
+
+
+@pytest.mark.parametrize("field", ["block_raw", "reservation_raw", "panchayat_raw"])
+def test_runner_link_rejects_disagreement(field):
+    runners, winners = paired_records()
+    winners[0][field] = "different"
+    with pytest.raises(ValueError, match=r"alignment changed|GP heading disagrees"):
+        p.link_runner_seats(runners, winners)
+
+
+@pytest.mark.parametrize("defect", ["missing", "duplicate"])
+def test_runner_link_rejects_incomplete_or_duplicate_serials(defect):
+    runners, winners = paired_records()
+    winners = winners[:-1] if defect == "missing" else winners + winners[:1]
+    with pytest.raises(ValueError, match="one-to-one"):
+        p.link_runner_seats(runners, winners)
+
+
+@pytest.mark.parametrize(
+    "missing", ["district", "block", "panchayat_raw", "candidate_name"]
+)
+def test_minimum_record_requires_location_and_person(missing):
+    complete = {
+        "record_id": "complete",
+        "district": "Gaya",
+        "block": "Amas",
+        "panchayat_raw": "कलवन",
+        "candidate_name": "अर्चना यादवेंदु",
+    }
+    incomplete = {**complete, "record_id": "incomplete", missing: "  "}
+    kept, excluded = p.minimum_records([complete, incomplete])
+    assert kept == [complete]
+    assert excluded == [{"record_id": "incomplete", "missing": [missing]}]

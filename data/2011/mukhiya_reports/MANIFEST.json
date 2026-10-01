@@ -1,4 +1,25 @@
 {
+  "validation": {
+    "source_records": 4320,
+    "excluded_missing_location_or_name": 47,
+    "excluded_exact_repeats": 300,
+    "districts": 23,
+    "pages": 311,
+    "winner_records": 3973,
+    "election_year": 2011,
+    "year_basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
+    "source_serials": "Consecutive from 1 within each PDF; checked before output",
+    "record_ids_unique": true,
+    "missing_block_records": 0,
+    "decode_issue_cells": 5,
+    "duplicate_content_records": 0,
+    "reservation_labels_present": 3971,
+    "reservation_category_mapped": 3085,
+    "women_reservation_mapped": 2721,
+    "rows_with_repeated_seat_labels": 244,
+    "scope": "Source winner records, not all candidates, unique seats or statewide completeness",
+    "overlap": "Includes the same 338 primary Gaya PDF records as the pilot; do not add the two counts"
+  },
   "year_assignment": {
     "path": "data/PROVENANCE.md",
     "election_year": 2011,
@@ -32,22 +53,16 @@
   },
   "source_root": "data/2011/raw/central_handoff",
   "code_sha256": {
-    "parse_2011_reports.py": "53fb33cda2f81cc64c78cb7607eac2c6b0f09ed3f448a7db153e5fc80d663f29",
-    "parse_2011.py": "23e9175eee49999caf45fad9149c42fa95db736d1ffb869dd0ece8d5eba56f8b",
-    "hindi_2011.py": "bfc40074a40f6506202c7e5eaf3cee6e3cfb537467b7dea00cafcb6d7e8065dd",
-    "font_map_2011.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb"
-  },
-  "files": {
-    "coverage.csv": "16447564413128a74a7ce08e51f19b48d2b91f5a06f27ffd74ad5341865931ca",
-    "issues.csv": "2daee2052f4a2a58d079e00730923fe1842705da0448ddf48f88620dbd4773a8",
-    "reservation_labels.csv": "64298ad7d53b2f5116c3fcf9862a0741a53c030a2dc7937323bd18fc820413b5",
-    "winner_records.parquet": "97625b13b5e1198bd4a5ebdfabbdbbceb2f50beb0bb2f8622014519f94d18379"
+    "parse_reports.py": "6d523e2bb256a3af7f0888f21c70c72932ebfcf2c89667a434b3fa22abf1543f",
+    "parse_gaya.py": "5eb4fcf026f334cc4f8ccacb642b670eedc6ead32d979ae833e730fa26b7cd12",
+    "hindi.py": "000941e5857904e74dca2b714c555738cbba3e1aaa5b591471e14471da7948cf",
+    "font_map.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb"
   },
   "columns": {
     "panchayat_raw": {
       "type": "string",
       "nullable": true,
-      "description": "Printed panchayat name; no fuzzy geography correction"
+      "description": "GP label from this source or the linked companion winner PDF; runner links are identified by seat_link_basis"
     },
     "candidate_name": {
       "type": "string",
@@ -255,22 +270,10 @@
       "description": "Reported number of daughters; zero retained"
     }
   },
-  "validation": {
-    "districts": 23,
-    "pages": 311,
-    "winner_records": 4320,
-    "election_year": 2011,
-    "year_basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
-    "source_serials": "Consecutive from 1 within each PDF; checked before output",
-    "record_ids_unique": true,
-    "missing_block_records": 46,
-    "decode_issue_cells": 5,
-    "duplicate_content_records": 300,
-    "reservation_labels_present": 4318,
-    "reservation_category_mapped": 3336,
-    "women_reservation_mapped": 2983,
-    "rows_with_repeated_seat_labels": 841,
-    "scope": "Source winner records, not all candidates, unique seats or statewide completeness",
-    "overlap": "Includes the same 338 primary Gaya PDF records as the pilot; do not add the two counts"
+  "files": {
+    "coverage.csv": "16447564413128a74a7ce08e51f19b48d2b91f5a06f27ffd74ad5341865931ca",
+    "issues.csv": "612d251c062617a178aac3251ee62cada583c08369b7f401f38fe204cde1ea34",
+    "reservation_labels.csv": "f252451f39d1501913290e5defae871d207510e321978540adac9f4d59ac7320",
+    "winner_records.parquet": "3cdb740e116412a27d059df0b42c0dd05523069de636683f7c0d997a73437c56"
   }
 }

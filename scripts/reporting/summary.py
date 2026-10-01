@@ -63,7 +63,7 @@ DESCRIPTIONS = {
     "winner_claim_records": (
         "Rows asserted to be winners in provisional source lists; not reconciled seats."
     ),
-    "runner_name_records": (
+    "runner_up_records": (
         "Rows from a provisional runner-up list, not a complete candidate roster."
     ),
     "records_with_reservation_label": (
@@ -153,7 +153,7 @@ def event_rows(
                     pl.col("winner_basis") != "result_flag"
                 ).height,
                 "winner_claim_records": None,
-                "runner_name_records": None,
+                "runner_up_records": None,
                 "records_with_reservation_label": None,
                 "cross_general_election_link_status": "not_established",
             }
@@ -216,7 +216,7 @@ def report(data):
     for name, year, outcome in [
         ("gaya_mukhiya/spreadsheet_winner_records", 2011, "winner"),
         ("mukhiya_reports/winner_records", 2011, "winner"),
-        ("gaya_mukhiya/runner_name_records", 2011, "runner"),
+        ("gaya_mukhiya/runner_up_records", 2011, "runner"),
     ]:
         df = read(f"2011/{name}.parquet")
         if df["election_year"].unique().to_list() != [year]:
@@ -228,9 +228,9 @@ def report(data):
             election_year=year,
             event="2011_general_source_claim" if year else "undated_source_claim",
             office="mukhiya",
-            coverage_basis="winner_list" if outcome == "winner" else "runner_name_list",
+            coverage_basis="winner_list" if outcome == "winner" else "runner_up_list",
             winner_claim_records=df.height if outcome == "winner" else None,
-            runner_name_records=df.height if outcome == "runner" else None,
+            runner_up_records=df.height if outcome == "runner" else None,
             records_with_reservation_label=None
             if reserved is None
             else reserved.height,
@@ -394,8 +394,8 @@ def summary_markdown(data, table, metadata, assets):
         if row["winner_claim_records"] is not None:
             winner = row["winner_claim_records"]
         outcome = count(winner)
-        if row["runner_name_records"] is not None:
-            outcome = f"{row['runner_name_records']:,} runners"
+        if row["runner_up_records"] is not None:
+            outcome = f"{row['runner_up_records']:,} runners"
         append(
             [
                 kind,
@@ -512,9 +512,14 @@ def published_files(data):
         "byelection_candidates": "Candidate in a by-election round",
         "byelection_result_rows": "Source result record in a by-election round",
         "byelection_winners": "Winner in a by-election round",
-        "winner_records": "2011 Mukhiya winner-list record",
-        "spreadsheet_winner_records": "2011 Gaya workbook winner record",
-        "runner_name_records": "2011 Gaya runner-list record",
+        "winner_records": (
+            "Mukhiya winner reported in a 2011 district PDF "
+            "(23 districts, including Gaya)"
+        ),
+        "spreadsheet_winner_records": "Gaya Mukhiya winner with GP and block (Excel)",
+        "runner_up_records": (
+            "Gaya Mukhiya runner-up with GP linked from the companion winner PDF"
+        ),
     }
     paths = sorted(
         [
@@ -522,7 +527,7 @@ def published_files(data):
             *data.glob("2021/*.parquet"),
             data / "2011/mukhiya_reports/winner_records.parquet",
             data / "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
-            data / "2011/gaya_mukhiya/runner_name_records.parquet",
+            data / "2011/gaya_mukhiya/runner_up_records.parquet",
         ]
     )
     lines = ["| File | Rows | Each row represents |", "| --- | ---: | --- |"]

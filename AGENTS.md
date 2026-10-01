@@ -3,6 +3,7 @@
 This is a point-in-time data collection. Follow the [data-repository policy](https://github.com/soodoku/data-repos#maintenance-policy).
 
 - Preserve sources, collection dates, provenance, schemas and reproducible parsing commands.
+- A published winner/candidate record needs the person and enough geography to locate the office seat (for Mukhiya: district, block and GP), or a documented seat identifier. Inspect originals and companion sources to recover missing locations before dropping an extract. Label inferred links and preserve their evidence; a source-row serial alone is not a seat identifier.
 - Run the affected parser tests once when code changes. Check schemas, keys, missingness and source/output hashes when data change. Review documentation edits directly.
 - Keep full-data validation, reprocessing, scraping and publication explicit. Do not run them for routine edits or repeat successful checks without a relevant change or failure.
 - Do not add blanket CI, recurring dependency checks, version matrices, Docker/VM checks, pre-commit, Preen or package-release scaffolding. These collections do not need continuous package maintenance.
