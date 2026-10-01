@@ -1,14 +1,13 @@
-"""Generate one data-guide table from published records and the source inventory."""
+"""Generate the data guide from published records and provenance."""
 
 import argparse
 import hashlib
-from datetime import UTC, datetime
+import json
 from pathlib import Path
 
 import polars as pl
 import pyarrow.parquet as pq
 
-from scripts.reporting.storage import asset_summary
 from scripts.year2016.schema import KEY as KEY_2016
 
 OFFICES = {
@@ -301,8 +300,11 @@ def report(data):
                 "by-election membership already exists separately."
             ),
         ],
-        "unparsed_sources": ["2006/raw/central_handoff", "undated/raw/central_handoff"],
-        "partially_parsed_sources": ["2011/raw/central_handoff"],
+        "unparsed_sources": [
+            "unprocessed/2006/workbooks",
+            "unprocessed/undated/workbooks",
+        ],
+        "partially_parsed_sources": ["2011/raw/reports"],
         "inputs": inputs,
         "producer_sha256": sha256(Path(__file__)),
     }
@@ -320,183 +322,47 @@ def size_label(size):
     return f"{size:,} B"
 
 
-def summary_markdown(data, table, metadata, assets):
-    """Keep bundle sizes separate from election counts at a finer level."""
+def summary_markdown(provenance):
+    """Render sources and the ordered script chain without mounting raw storage."""
     lines = [
-        "| Kind | Collection / office | Seats | Reservation labels | Candidates | "
-        "Winners / runners | Files | Stored size | Location / availability |",
-        "| --- | --- | ---: | --- | ---: | --- | ---: | ---: | --- |",
+        "| Collection | Required originals | Processing chain | "
+        "Published outputs | Archive |",
+        "| --- | --- | --- | --- | --- |",
     ]
-
-    def append(cells):
-        lines.append(
-            "| " + " | ".join(str(c).replace("|", "&#124;") for c in cells) + " |"
+    for year, pipeline in provenance["pipelines"].items():
+        sources = "<br>".join(
+            provenance["source_groups"][name]["purpose"] for name in pipeline["inputs"]
         )
-
-    for asset in sorted(assets, key=lambda item: item["path"]):
-        if not asset["files"]:
-            continue
-        relative = asset["path"]
-        year, role, name = relative.split("/", 2)
-        kind = "Source collection" if role == "raw" else "Working files / receipts"
-        deferred = year == "2021" and (
-            name in {"affidavits", "vision_validation", "source_search"}
-            or (role == "interim" and name != "archive")
-        )
-        if deferred:
-            kind += " (deferred)"
-        availability = "external storage; distribution pending"
-        if relative == "2016/raw/statewide":
-            availability = "external storage; [Zenodo restore](#source-availability)"
-        elif relative == "2016/interim/zenodo_export":
-            availability = "external storage; publication receipts only"
-        append(
-            [
-                kind,
-                f"{year} / {name}; {', '.join(asset['formats'])}",
-                "—",
-                "—",
-                "—",
-                "—",
-                f"{asset['files']:,}",
-                size_label(asset["bytes"]),
-                f"`{relative}`; {availability}",
-            ]
-        )
-
-    def count(value):
-        return "Unknown" if value is None else f"{value:,}"
-
-    for row in table.iter_rows(named=True):
-        basis = row["coverage_basis"]
-        if basis == "seat_frame":
-            folder = "2016" if row["collection"] == "2016" else "2021"
-            label = row["event"].replace("_", " ")
-            kind = "Published records"
-        else:
-            folder = (
-                "2011/mukhiya_reports"
-                if row["collection"] == "mukhiya_reports_winner_records"
-                else "2011/khajuria_judgment"
-                if row["collection"] == "khajuria_judgment"
-                else "2011/gaya_mukhiya"
+        chain = " → ".join(f"`{step['module']}`" for step in pipeline["steps"])
+        outputs = "<br>".join(f"`{path}`" for path in pipeline["outputs"])
+        archive = provenance["archives"].get(year, {})
+        status = "Publication pending"
+        if archive:
+            status = (
+                f"{archive['source_files']:,} originals; "
+                f"{size_label(archive['source_bytes'])}; {status}"
             )
-            label = "2011 / " + row["collection"].replace("_", " ")
-            kind = (
-                "Manual transcription"
-                if basis == "single_contest_judgment"
-                else "Parsed source list"
-            )
-        reservation = row["seats_with_election_reservation_label"]
-        if basis != "seat_frame":
-            reservation = row["records_with_reservation_label"]
-        winner = row["winner_records"]
-        if row["winner_claim_records"] is not None:
-            winner = row["winner_claim_records"]
-        outcome = count(winner)
-        if row["runner_up_records"] is not None:
-            outcome = f"{row['runner_up_records']:,} runners"
-        append(
-            [
-                kind,
-                f"{label} / {row['office'].replace('_', ' ')}",
-                count(row["seat_frame_rows"]),
-                count(reservation),
-                count(row["candidate_records"]),
-                outcome,
-                "—",
-                "—",
-                f"[Dataset]({folder}/)",
-            ]
-        )
-
-    snapshots = {}
-    for name in ["current_reservations", "current_winners"]:
-        relative = f"2021/{name}.parquet"
-        path = data / relative
-        snapshots[name] = pl.read_parquet(path)
-        metadata["inputs"][relative] = {
-            "sha256": sha256(path),
-            "bytes": path.stat().st_size,
-        }
-    for post, office in OFFICES.items():
-        reservations = snapshots["current_reservations"].filter(
-            pl.col("post_id") == post
-        )
-        winners = snapshots["current_winners"].filter(pl.col("post_id") == post)
-        append(
-            [
-                "Published snapshot",
-                f"Undated 2021-term feed / {office.replace('_', ' ')}",
-                "Unknown",
-                count(present(reservations, "seat_reservation").height),
-                "Unknown",
-                count(winners.height),
-                "—",
-                "—",
-                "[Dataset](2021/)",
-            ]
-        )
-
-    total = sum(a["bytes"] for a in assets)
-    files = sum(a["files"] for a in assets)
-    stamp = datetime.now(UTC).date().isoformat()
+            if archive.get("url"):
+                status = (
+                    f"[{archive['filename']}]({archive['url']}); "
+                    + status.replace(
+                        "Publication pending", "SHA-256 in PROVENANCE.json"
+                    )
+                )
+        lines.append(f"| {year} | {sources} | {chain} | {outputs} | {status} |")
     lines.extend(
         [
             "",
-            f"Stored source/working collection: **{size_label(total)} "
-            f"({total:,} bytes; "
-            f"{files:,} files)**, measured from file sizes on {stamp} (UTC). "
-            "Filesystem metadata files are excluded. Published datasets and "
-            "repository documentation are excluded from this storage total.",
-            "",
-            "Source collections contain original documents/responses and "
-            "their acquisition "
-            "metadata. Working files include caches, generated intermediates "
-            "and receipts. "
-            "Published records are derived, usable election data; manual "
-            "transcriptions "
-            "are reviewed inputs that cannot be regenerated by code alone.",
-            "",
-            "**Reading the counts:** Seats means source frame rows, including "
-            "ambiguous "
-            "seat codes. Reservation labels means nonblank labels, not only "
-            "reserved seats. "
-            "For source lists it counts labeled records, not unique seats. "
-            "Candidates and "
-            "winners count records, not necessarily unique people. Unknown "
-            "means the source "
-            "does not establish the count; 0 is an observed zero. A dash "
-            "means the column "
-            "does not apply to that row. File counts and sizes belong to "
-            "storage bundles "
-            "and are not allocated again to offices or election rounds.",
+            "Run `make parse YEAR=<year>` for the complete ordered chain. "
+            "Intermediate geography tables are disposable `.cache/` files.",
             "",
         ]
     )
-    lines.extend(f"- {limit}" for limit in metadata["limits"])
     lines.extend(
-        [
-            "",
-            "The 2006 and undated source collections remain unparsed; 2011 is "
-            "partially "
-            "parsed. Snapshot labels and current winners are displayed separately from "
-            "election-specific records. Source-list winners remain provisional until "
-            "reconciled. Winner determination is documented in each dataset.",
-            "",
-            "<details>",
-            "<summary>Inputs used to generate this table (SHA-256)</summary>",
-            "",
-        ]
+        f"- {limit}"
+        for limit in provenance["interpretation"].values()
+        if isinstance(limit, str)
     )
-    inputs = {name: info["sha256"] for name, info in metadata["inputs"].items()}
-    for name, digest in sorted(inputs.items()):
-        lines.append(f"- `{name}`: `{digest}`")
-    for name in ["summary.py", "storage.py"]:
-        lines.append(
-            f"- `scripts/reporting/{name}`: `{sha256(Path(__file__).with_name(name))}`"
-        )
-    lines.extend(["", "</details>"])
     return "\n".join(lines)
 
 
@@ -553,10 +419,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=Path("data"))
     args = parser.parse_args()
-    table, metadata = report(args.data)
-    assets = asset_summary(args.data)
+    provenance = json.loads((args.data / "PROVENANCE.json").read_text())
     path = args.data / "README.md"
-    update_readme(path, summary_markdown(args.data, table, metadata, assets))
+    update_readme(path, summary_markdown(provenance))
     update_readme(
         args.data.parent / "README.md",
         published_files(args.data),

@@ -16,7 +16,7 @@ from pypdf import PdfReader
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--font", type=Path, required=True)
-parser.add_argument("--raw", type=Path, default=Path("data/2011/raw/central_handoff"))
+parser.add_argument("--raw", type=Path, default=Path("data/2011/raw/reports"))
 parser.add_argument("--out", type=Path, required=True)
 parser.add_argument(
     "--glob",
@@ -74,10 +74,7 @@ for n, t in texts.items():
 root = args.raw
 files = [
     "winners/GAYA/GAYA_GPM.pdf",
-    "alternate_winners/GAYA/GAYA_GPM.pdf",
     "runners/GAYA/GAYA_gpm.pdf",
-    "alternate_winners/GAYA/GAYA_w_count.pdf",
-    "summaries/alternate_winners/GAYA/GAYA_WMFcount_on_post.pdf",
 ]
 files += sorted(
     {str(p.relative_to(root)) for pattern in args.glob for p in root.glob(pattern)}

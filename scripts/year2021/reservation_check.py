@@ -13,7 +13,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from bs4 import BeautifulSoup
 
-RAW = Path("data/2021/raw/reservation_check")
+RAW = Path("data/unprocessed/2021/reservation_check")
 RELEASE = Path("data/2021")
 OUT = RELEASE / "reservation_check"
 INPUTS = {

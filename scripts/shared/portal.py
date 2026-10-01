@@ -78,6 +78,19 @@ def retry_after(value):
         )
 
 
+def read_saved(raw, key, page, params=None, *, html=False):
+    """Read one original response. Missing captures never trigger a download."""
+    path = raw / f"{key}.jsonl.gz"
+    event = completed(path)
+    if event is None:
+        raise FileNotFoundError(f"Missing or incomplete saved response: {path}")
+    if event["page"] != page or {
+        k: str(v) for k, v in (event["params"] or {}).items()
+    } != {k: str(v) for k, v in (params or {}).items()}:
+        raise ValueError(f"Saved request differs from requested unit: {path}")
+    return base64.b64decode(event["body_base64"], validate=True)
+
+
 def fetch(raw, key, page, params=None, *, html=False):
     path = raw / f"{key}.jsonl.gz"
     cached = completed(path)
@@ -165,8 +178,8 @@ def fetch(raw, key, page, params=None, *, html=False):
     return body
 
 
-def enumerate_frame(raw, workers):
-    body = fetch(raw, "landing", "WinningCandidates", html=True)
+def enumerate_frame(raw, workers, *, loader=fetch, out=None):
+    body = loader(raw, "landing", "WinningCandidates", html=True)
     soup = BeautifulSoup(body, "html.parser")
     districts = [
         (int(o["value"]), o.get_text())
@@ -183,7 +196,7 @@ def enumerate_frame(raw, workers):
 
     def blocks(district):
         code, name = district
-        body = fetch(
+        body = loader(
             raw,
             f"frame/d{code}",
             "WinningCandidates",
@@ -208,9 +221,9 @@ def enumerate_frame(raw, workers):
         rows
     ):
         raise ValueError("Repeated geographic unit in frame")
-    pq.write_table(
-        pa.Table.from_pylist(rows), raw / "frame.parquet", compression="zstd"
-    )
+    out = out or raw / "frame.parquet"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    pq.write_table(pa.Table.from_pylist(rows), out, compression="zstd")
     print(
         json.dumps(
             {

@@ -1,8 +1,8 @@
 # District Mukhiya winner reports
 
-[winner_records.parquet](winner_records.parquet) contains **3,973 located, named winner records from 23 district reports**, including 3,971 nonblank reservation labels. The parser reads 4,320 source rows across 311 pages, excludes 47 rows without a recoverable block or GP, and removes 300 exact content repeats. These reports came from the historical 2011 handoff collection. Both `collection_year` and `election_year` are 2011. The maintainer identified the reports as 2011, noting that “पूर्व निर्वाचित” refers to prior service in 2001 and 2006. The [source provenance](../../PROVENANCE.md) preserves that confirmation and its scope. Every published row has district, block, GP and winner name. These remain source reports, not a verified statewide seat roster.
+[winner_records.parquet](winner_records.parquet) contains **3,973 located, named winner records from 23 district reports**, including 3,971 nonblank reservation labels. The parser reads 4,320 source rows across 311 pages, excludes 47 rows without a recoverable block or GP, and removes 300 exact content repeats. These reports came from the historical 2011 handoff collection. Both `collection_year` and `election_year` are 2011. The maintainer identified the reports as 2011, noting that “पूर्व निर्वाचित” refers to prior service in 2001 and 2006. The [source provenance](../../PROVENANCE.json) preserves that confirmation and its scope. Every published row has district, block, GP and winner name. These remain source reports, not a verified statewide seat roster.
 
-The table includes the same 338 primary Gaya PDF records as the [Gaya pilot](../gaya_mukhiya/README.md); do not add those counts. The explicitly dated Gaya workbook supplies 330 named winners with GP and block labels (one blank-name source row is excluded) and remains separate pending review of extracted name differences. The [Khajuria judgment transcription](../khajuria_judgment/README.md) independently supports one reported winner's 2011 election, without dating the whole report or its reservation labels.
+The table includes 338 primary Gaya PDF winner records. [Gaya workbook and runner-up records](../gaya_mukhiya/README.md) are separate source lists. The explicitly dated Gaya workbook supplies 330 named winners with GP and block labels (one blank-name source row is excluded) and remains separate pending review of extracted name differences. The [Khajuria judgment transcription](../khajuria_judgment/README.md) independently supports one reported winner's 2011 election, without dating the whole report or its reservation labels.
 
 ## Contents and limits
 
@@ -17,14 +17,14 @@ Each record preserves panchayat and block labels, winner and relative names, sea
 
 ## Reproduce and check
 
-Originals have one canonical home under `/Volumes/Staging/local_elections_bihar/2011/raw/central_handoff/`, exposed locally through `data/2011/raw/`. No duplicate PDFs or repaired intermediates are retained. With the original files mounted:
+Originals are read from `data/2011/raw/reports/`. See [PROVENANCE.json](../../PROVENANCE.json) for their origins and availability. With the originals restored:
 
 ```sh
 uv sync --frozen --group dev
 uv run python -m scripts.year2011.parse_reports
 ```
 
-`make parse-2011` regenerates both the Gaya comparison and these district records. Parsing works offline. [MANIFEST.json](MANIFEST.json) fingerprints all 23 original PDFs and the parser/map inputs, declares the nullable schema, records source/exclusion/output counts and fingerprints the output files. Each row also contains the original file hash, one-based PDF page, printed serial and bounding box in PDF points.
+`make parse-2011` regenerates these district records and the Gaya workbook/runner tables. Parsing works offline. [MANIFEST.json](MANIFEST.json) fingerprints all 23 original PDFs and the parser/map inputs, declares the nullable schema, records source/exclusion/output counts and fingerprints the output files. Each row also contains the original file hash, one-based PDF page, printed serial and bounding box in PDF points.
 
 The parser repairs embedded Hindi font maps in memory and reads table cells in drawing order; it does not use OCR. Committed glyph maps allow parsing without the proprietary reference font. To independently rederive the maps, the exact SHA-pinned Arial Unicode font is required:
 

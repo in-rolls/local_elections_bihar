@@ -109,19 +109,14 @@ def test_district_records_and_visual_transcription():
         for field, value in expected.items():
             assert str(actual[field]) == value, (expected["source_serial"], field)
     assert indexed[("BEGUSARAI", "43")]["reservation_raw"] is None
-    # Overlap is exact source identity, not another 338 winners.
-    pilot = pq.read_table(
-        "data/2011/gaya_mukhiya/pdf_winner_records.parquet"
+    runners = pq.read_table(
+        "data/2011/gaya_mukhiya/runner_up_records.parquet"
     ).to_pylist()
-    for row in pilot:
-        actual = indexed[("GAYA", str(row["source_serial"]))]
-        for field in [
-            "candidate_name",
-            "source_sha256",
-            "source_page",
-            "reservation_raw",
-        ]:
-            assert actual[field] == row[field]
+    by_id = {r["record_id"]: r for r in rows}
+    for runner in runners:
+        winner = by_id[runner["seat_source_record_id"]]
+        assert winner["panchayat_raw"] == runner["panchayat_raw"]
+        assert winner["source_sha256"] == runner["seat_source_sha256"]
     manifest = json.loads((OUT / "MANIFEST.json").read_text())["validation"]
     assert manifest["source_records"] == len(rows) + 47 + 300
     assert manifest["excluded_missing_location_or_name"] == 47

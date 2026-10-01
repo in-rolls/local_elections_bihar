@@ -21,10 +21,10 @@
     "overlap": "Includes the same 338 primary Gaya PDF records as the pilot; do not add the two counts"
   },
   "year_assignment": {
-    "path": "data/PROVENANCE.md",
+    "path": "data/PROVENANCE.json",
     "election_year": 2011,
     "basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
-    "sha256": "51fc8e8eb03ca4d09c3ca474d8f73e0d53c43413643cbd362bba260f0bf2651a"
+    "sha256": "1afe617c9f23be2a34041591f71f8f5a215453751f8682e51676327819ff94e8"
   },
   "sources": {
     "winners/Aurangabad/Aurangabad_GPM.pdf": "67f323b7ccaca9089c7434307b48280d124f519dcd062d5405e992fd8444b1f8",
@@ -51,10 +51,10 @@
     "winners/SIWAN/SIWAN_GPM.pdf": "d6322569c2a32c4683cf9905191564e236ca4e1560669e52abcde6bc43ce63b8",
     "winners/W.CHAMPARAN/W.CHAMPARAN_GPM.pdf": "fe954c610d131857d826b1d8b24df32bd8f24807a248831f3daa7c44af20b6ca"
   },
-  "source_root": "data/2011/raw/central_handoff",
+  "source_root": "data/2011/raw/reports",
   "code_sha256": {
-    "parse_reports.py": "6d523e2bb256a3af7f0888f21c70c72932ebfcf2c89667a434b3fa22abf1543f",
-    "parse_gaya.py": "5eb4fcf026f334cc4f8ccacb642b670eedc6ead32d979ae833e730fa26b7cd12",
+    "parse_reports.py": "6a814762cf6458bc779cb447886e90f1909d3d32bcae00239c72a04f900c21e3",
+    "parse_gaya.py": "35e3392e9fe5232a337ff93e58b93ee7d5aae829ad90544858b06165f8740d52",
     "hindi.py": "000941e5857904e74dca2b714c555738cbba3e1aaa5b591471e14471da7948cf",
     "font_map.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb"
   },
@@ -152,7 +152,7 @@
     "source_file": {
       "type": "string",
       "nullable": true,
-      "description": "Path relative to data/2011/raw/central_handoff"
+      "description": "Path relative to data/2011/raw/reports"
     },
     "source_page": {
       "type": "int64",
@@ -182,7 +182,7 @@
     "year_basis": {
       "type": "string",
       "nullable": true,
-      "description": "Year evidence; see data/PROVENANCE.md"
+      "description": "Year evidence; see data/PROVENANCE.json"
     },
     "district_raw": {
       "type": "string",

@@ -571,15 +571,17 @@ def main():
         type=Path,
         default=Path("data/2021/raw/portal_snapshot_2026"),
     )
+    parser.add_argument("--frames", type=Path, default=Path(".cache/2021"))
     parser.add_argument("--out", type=Path, default=Path("data/2021"))
     args = parser.parse_args()
     if args.check:
         verify(args.out)
         return
 
+    frames = args.frames
     frame = (
-        mukhiya_frame(args.raw)
-        + pq.read_table(args.raw / "2021/offices/frame.parquet").to_pylist()
+        mukhiya_frame(frames)
+        + pq.read_table(frames / "2021/offices/frame.parquet").to_pylist()
     )
     frame = [
         {
@@ -632,7 +634,7 @@ def main():
     # By-elections: seats listed per round by the portal's by-election page.
     byelections = Responses(args.raw, ["byelections"])
     receipts.update(byelections.sources)
-    bye_frame = pq.read_table(args.raw / "byelections/frame.parquet").to_pylist()
+    bye_frame = pq.read_table(frames / "byelections/frame.parquet").to_pylist()
     for phase in sorted({u["phase"] for u in bye_frame}):
         units = [u for u in bye_frame if u["phase"] == phase]
         built = build_post(units, byelections)

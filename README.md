@@ -78,7 +78,7 @@ not zero, male, unreserved or an inferred winner.
   Matching names or codes alone does not establish geographic continuity.
 
 See the [generated data summary](data/README.md#data-summary) for record counts,
-source locations and storage sizes, and [source provenance](data/PROVENANCE.md)
+source inputs and processing chains, and [source provenance](data/PROVENANCE.json)
 for acquisition, dating evidence and unresolved issues.
 
 ## Use
@@ -97,14 +97,15 @@ lists the commands. `make check` runs local code checks and tests.
 ## Sources and reproduction
 
 Original SEC responses, PDFs and workbooks are kept separately from published
-tables under `data/<year>/raw`. The maintainer's source store is
-`/Volumes/Staging/local_elections_bihar/`; published files do not depend on it.
-The [data guide](data/README.md) explains source locations and restoration.
+tables under `data/<year>/raw`. The [data guide](data/README.md) lists the
+required originals, public availability and ordered processing commands.
+`make parse YEAR=2011` runs the 2011 pipeline; substitute 2016 or 2021 as needed.
+Published tables can be used without downloading originals.
 
-[Zenodo 22852474](https://doi.org/10.5281/zenodo.22852474) holds the 2016 SEC source
-deposit and its original published tables. It does not contain the complete
-repository or other election years. Other source collections do not yet have
-an established public download.
+[Zenodo 23092132](https://doi.org/10.5281/zenodo.23092132) provides the required original
+sources for 2011, 2016 and the 2021 term, the sixteen Parquets, and the parsing code
+with its dependency lock and provenance. The earlier [2016 deposit](https://doi.org/10.5281/zenodo.22852474)
+remains available separately.
 
 ## Scope and collection priorities
 
@@ -115,8 +116,8 @@ outside the current task. Retain partial sources with explicit limits.
 
 ## Citation and license
 
-Cite the files and repository commit used. For the 2016 deposit, cite
-[Zenodo 22852474](https://doi.org/10.5281/zenodo.22852474).
+Cite the files and repository commit used, and
+[Zenodo 23092132](https://doi.org/10.5281/zenodo.23092132) for this collection.
 Code is [MIT licensed](LICENSE), including attribution for Ravi Taak's Kruti Dev
 mapping. Election records were published by the Bihar State Election Commission;
 no blanket data license is asserted for all collections.

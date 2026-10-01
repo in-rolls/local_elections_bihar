@@ -1,11 +1,10 @@
-"""Parse the Gaya 2011 Mukhiya pilot; no OCR, downloads or archive copies."""
+"""Parse Gaya workbook winners and link runner-up seats to the winner PDF."""
 
 import argparse
 import collections
 import csv
 import hashlib
 import json
-import re
 from itertools import pairwise
 from pathlib import Path
 
@@ -15,8 +14,8 @@ import xlrd
 
 from scripts.year2011.hindi import cell_text, decoded_pdf, kruti_text
 
-ROOT = Path("data/2011/raw/central_handoff")
-YEAR_RECEIPT = Path(__file__).resolve().parents[2] / "data/PROVENANCE.md"
+ROOT = Path("data/2011/raw/reports")
+YEAR_RECEIPT = Path(__file__).resolve().parents[2] / "data/PROVENANCE.json"
 YEAR_ASSIGNMENT = {
     "election_year": 2011,
     "year_basis": (
@@ -26,10 +25,8 @@ YEAR_ASSIGNMENT = {
 }
 SOURCES = {
     "winners": "winners/GAYA/GAYA_GPM.pdf",
-    "alternate": "alternate_winners/GAYA/GAYA_GPM.pdf",
     "spreadsheet": "mukhiya_spreadsheets/Gaya.xls",
     "runners": "runners/GAYA/GAYA_gpm.pdf",
-    "summary": "summaries/alternate_winners/GAYA/GAYA_WMFcount_on_post.pdf",
 }
 FIELDS = [
     "serial",
@@ -335,7 +332,7 @@ def link_runner_seats(runners, winners):
                 "seat_link_basis": "inferred_paired_report_order",
                 "seat_source_file": winner["source_file"],
                 "seat_source_page": winner["source_page"],
-                "seat_source_record_id": f"gaya_mukhiya_{winner['serial']:03}",
+                "seat_source_record_id": f"GAYA_mukhiya_{winner['serial']:04}",
             }
         )
     if heads != len({r["block_raw"] for r in runners}):
@@ -352,53 +349,6 @@ def link_runner_seats(runners, winners):
             "serial is not an official seat identifier"
         ),
     }
-
-
-def summaries(root):
-    records = []
-    block = None
-    with decoded_pdf(root / SOURCES["summary"]) as pdf:
-        for page in pdf.pages:
-            for table in page.find_tables():
-                block_chars = [
-                    c
-                    for c in page.chars
-                    if c["fontname"].endswith("+Arial-Bold")
-                    and c["x0"] < 220
-                    and 110 < c["top"] < table.bbox[1]
-                ]
-                if block_chars:
-                    top = max(c["top"] for c in block_chars)
-                    block = "".join(
-                        c["text"] for c in block_chars if abs(c["top"] - top) < 1
-                    )
-                for row in table.rows:
-                    cells = [cell_text(page, b) for b in row.cells]
-                    if len(cells) == 6 and cells[1] and "मुखिया" in cells[1]:
-                        records.append(
-                            {
-                                "block_raw": block,
-                                "female": int(cells[2]),
-                                "male": int(cells[3]),
-                                "total": int(cells[4]),
-                                "source_page": page.page_number,
-                            }
-                        )
-            headers = [
-                c
-                for c in page.chars
-                if c["fontname"].endswith("+Arial-Bold")
-                and c["x0"] < 220
-                and c["top"] > 110
-            ]
-            if headers:
-                top = max(c["top"] for c in headers)
-                block = "".join(c["text"] for c in headers if abs(c["top"] - top) < 1)
-    return records
-
-
-def name_key(value):
-    return re.sub(r"[\s.\u0966]", "", re.sub(r"^(श्रीमती|श्री|सुश्री)\s*", "", value))
 
 
 def minimum_records(records):
@@ -441,7 +391,7 @@ DESCRIPTIONS = {
     ),
     "serial": "Serial printed in the workbook, retained as a string",
     "source_serial": "Printed PDF serial; consecutive within the report",
-    "source_file": "Path relative to data/2011/raw/central_handoff",
+    "source_file": "Path relative to data/2011/raw/reports",
     "source_sha256": "SHA-256 of original source document",
     "source_page": "Original PDF page, one-based",
     "source_row": "Original Sheet1 row, one-based",
@@ -460,9 +410,9 @@ DESCRIPTIONS = {
         "inferred_paired_report_order: complete serial, block and exact reservation "
         "alignment with winner PDF, corroborated by block-first GP headings"
     ),
-    "seat_source_file": "Companion PDF supplying the GP; relative to central_handoff",
+    "seat_source_file": "Companion PDF supplying the GP; relative to raw/reports",
     "seat_source_page": "One-based page supplying the GP in the companion PDF",
-    "seat_source_record_id": "Row in pdf_winner_records supplying the GP",
+    "seat_source_record_id": "Row in mukhiya_reports/winner_records supplying the GP",
     "seat_source_sha256": "SHA-256 of the companion PDF supplying the GP",
     "candidate_name": "Decoded candidate name, preserving spelling and honorifics",
     "relative_name": "Printed father/husband name; relationship not distinguished",
@@ -516,7 +466,6 @@ for _field in ["age", "annual_income", "sons", "daughters"]:
 def metadata(out):
     columns = {}
     for name in [
-        "pdf_winner_records",
         "spreadsheet_winner_records",
         "runner_up_records",
     ]:
@@ -541,8 +490,8 @@ def metadata(out):
 
 
 def run(root, out):
-    winners, alternate = pdf_winners(root, "winners"), pdf_winners(root, "alternate")
-    excel, totals = spreadsheet(root), summaries(root)
+    winners = pdf_winners(root, "winners")
+    excel = spreadsheet(root)
     runners, seat_linkage = link_runner_seats(runner_names(root), winners)
     source_hashes = {
         path: hashlib.sha256((root / path).read_bytes()).hexdigest()
@@ -562,191 +511,6 @@ def run(root, out):
         )
     out.mkdir(parents=True, exist_ok=True)
     issues = []
-    other = {r["serial"]: r for r in alternate}
-    excel_by_name = collections.defaultdict(list)
-    for r in excel:
-        excel_by_name[(r["block"], name_key(r["candidate_name"]))].append(r)
-    seat_counts = collections.Counter((r["block"], r["panchayat_raw"]) for r in winners)
-    person_counts = collections.Counter(
-        (r["block"], r["candidate_name"]) for r in winners
-    )
-    rows = []
-    for r in winners:
-        row = {k: str(v) if v is not None else None for k, v in r.items()}
-        row.update(
-            record_id=f"gaya_mukhiya_{r['serial']:03}",
-            election_year=YEAR_ASSIGNMENT["election_year"],
-            collection_year=2011,
-            year_basis=YEAR_ASSIGNMENT["year_basis"],
-            district="Gaya",
-            office="mukhiya",
-            outcome="winner",
-            source_page=r["source_page"],
-            source_serial=r["serial"],
-        )
-        del row["serial"]
-        row["source_sha256"] = source_hashes[r["source_file"]]
-        row["seat_label_repeated"] = seat_counts[(r["block"], r["panchayat_raw"])] > 1
-        row["name_within_block_repeated"] = (
-            person_counts[(r["block"], r["candidate_name"])] > 1
-        )
-        if row["seat_label_repeated"]:
-            issues.append(
-                {
-                    "record_id": row["record_id"],
-                    "kind": "repeated_seat_label",
-                    "field": "panchayat_raw",
-                    "primary": r["panchayat_raw"],
-                    "comparison": "No automatic deduplication",
-                    "source": r["source_file"],
-                }
-            )
-        row["gender"] = {
-            "महीला": "female",
-            "महिला": "female",
-            "पुरूष": "male",
-            "पुरुष": "male",
-        }.get(r["gender_raw"])
-        for field in ["age", "annual_income", "sons", "daughters"]:
-            value = r[field + "_raw"]
-            row[field] = int(value) if value.isdigit() else None
-            if value and row[field] is None:
-                issues.append(
-                    {
-                        "record_id": row["record_id"],
-                        "kind": "non_numeric",
-                        "field": field,
-                        "primary": value,
-                        "comparison": "",
-                        "source": r["source_file"],
-                    }
-                )
-        if row["age"] is not None and not 18 <= row["age"] <= 120:
-            issues.append(
-                {
-                    "record_id": row["record_id"],
-                    "kind": "age_out_of_range",
-                    "field": "age",
-                    "primary": r["age_raw"],
-                    "comparison": "",
-                    "source": r["source_file"],
-                }
-            )
-            row["age"] = None
-        if row["gender"] is None:
-            issues.append(
-                {
-                    "record_id": row["record_id"],
-                    "kind": "unmapped_gender",
-                    "field": "gender",
-                    "primary": r["gender_raw"],
-                    "comparison": "",
-                    "source": r["source_file"],
-                }
-            )
-        row["reservation_women"] = "महिला" in r["reservation_raw"]
-        row["reservation_women"] = True if row["reservation_women"] else None
-        matches = excel_by_name[(r["block"], name_key(r["candidate_name"]))]
-        row["spreadsheet_match"] = (
-            "unique_name_within_block"
-            if len(matches) == 1
-            else "unmatched"
-            if not matches
-            else "ambiguous"
-        )
-        row["spreadsheet_row"] = matches[0]["source_row"] if len(matches) == 1 else None
-        counterpart = other.get(r["serial"])
-        row["alternate_matches"] = bool(
-            counterpart
-            and counterpart["block"] == r["block"]
-            and counterpart["candidate_name"] == r["candidate_name"]
-        )
-        if row["alternate_matches"]:
-            for field in FIELDS[2:]:
-                if r[field] != counterpart[field]:
-                    issues.append(
-                        {
-                            "record_id": row["record_id"],
-                            "kind": "alternate_difference",
-                            "field": field,
-                            "primary": r[field],
-                            "comparison": counterpart[field],
-                            "source": SOURCES["alternate"],
-                        }
-                    )
-        else:
-            issues.append(
-                {
-                    "record_id": row["record_id"],
-                    "kind": "alternate_identity_unresolved",
-                    "field": "candidate_name",
-                    "primary": r["candidate_name"],
-                    "comparison": counterpart["candidate_name"] if counterpart else "",
-                    "source": SOURCES["alternate"],
-                }
-            )
-        if len(matches) == 1:
-            for field in [
-                "panchayat_raw",
-                "age_raw",
-                "annual_income_raw",
-                "sons_raw",
-                "daughters_raw",
-                "education_raw",
-            ]:
-                val = matches[0][field]
-                value = (
-                    str(int(val))
-                    if isinstance(val, float) and val.is_integer()
-                    else str(val)
-                )
-                if r[field] != value:
-                    issues.append(
-                        {
-                            "record_id": row["record_id"],
-                            "kind": "spreadsheet_difference",
-                            "field": field,
-                            "primary": r[field],
-                            "comparison": value,
-                            "source": SOURCES["spreadsheet"],
-                        }
-                    )
-        rows.append(row)
-    schema = pa.schema(
-        [
-            (
-                k,
-                pa.int64()
-                if k
-                in {
-                    "election_year",
-                    "collection_year",
-                    "source_page",
-                    "source_serial",
-                    "age",
-                    "annual_income",
-                    "sons",
-                    "daughters",
-                    "spreadsheet_row",
-                }
-                else pa.bool_()
-                if k
-                in {
-                    "alternate_matches",
-                    "reservation_women",
-                    "seat_label_repeated",
-                    "name_within_block_repeated",
-                }
-                else pa.string(),
-            )
-            for k in rows[0]
-        ]
-    )
-    pq.write_table(
-        pa.Table.from_pylist(rows, schema=schema),
-        out / "pdf_winner_records.parquet",
-        compression="zstd",
-    )
     excel_rows = []
     for r in excel:
         record = {
@@ -818,22 +582,6 @@ def run(root, out):
         out / "spreadsheet_winner_records.parquet",
         compression="zstd",
     )
-    runner_links = []
-    for r in runners:
-        for x in excel_by_name[(r["block"], name_key(r["candidate_name"]))]:
-            runner_links.append(
-                {
-                    **r,
-                    "spreadsheet_row": x["source_row"],
-                    "spreadsheet_name": x["candidate_name"],
-                    "match_basis": "name within block; seat not established",
-                }
-            )
-    write_csv(
-        out / "runner_spreadsheet_conflicts.csv",
-        runner_links,
-        [*runners[0], "spreadsheet_row", "spreadsheet_name", "match_basis"],
-    )
     published_runners, excluded_runners = minimum_records(runners)
     pq.write_table(
         pa.Table.from_pylist(
@@ -860,74 +608,35 @@ def run(root, out):
         out / "runner_up_records.parquet",
         compression="zstd",
     )
-    coverage = []
-    for block in sorted(
-        {r["block_raw"] for r in winners} | {r["block_raw"] for r in totals}
-    ):
-        ws = [r for r in winners if r["block_raw"] == block]
-        ts = [r for r in totals if r["block_raw"] == block]
-        expected = sum(r["total"] for r in ts) if ts else None
-        coverage.append(
-            {
-                "block_raw": block,
-                "winner_rows": len(ws),
-                "reported_winners": expected,
-                "difference": len(ws) - expected if expected is not None else None,
-                "summary_pages": ";".join(str(r["source_page"]) for r in ts),
-            }
-        )
-    write_csv(out / "coverage.csv", coverage, list(coverage[0]))
     write_csv(
         out / "issues.csv",
         issues,
         ["record_id", "kind", "field", "primary", "comparison", "source"],
     )
     report = {
-        "winner_rows": len(rows),
-        "alternate_rows": len(alternate),
         "spreadsheet_rows": len(excel),
-        "summary_total": sum(r["total"] for r in totals),
         "runner_name_rows": len(runners),
         "published_spreadsheet_winners": len(excel_rows),
         "published_runners": len(published_runners),
         "excluded_records": excluded_excel + excluded_runners,
         "runner_seat_linkage": seat_linkage,
-        "runner_names_also_in_winner_spreadsheet": len(
-            {r["source_serial"] for r in runner_links}
-        ),
-        "runner_spreadsheet_comparison_pairs": len(runner_links),
         "year_assignment": YEAR_ASSIGNMENT["year_basis"],
         "review_needed": "Extracted PDF/workbook names and outcomes need review",
-        "coverage_all_blocks_match": all(r["difference"] == 0 for r in coverage),
-        "source_serials_consecutive": True,
-        "spreadsheet_matching": dict(
-            collections.Counter(r["spreadsheet_match"] for r in rows)
-        ),
-        "alternate_identity_matches": sum(r["alternate_matches"] for r in rows),
         "issues_by_kind": dict(collections.Counter(r["kind"] for r in issues)),
-        "primary_blocks": len({r["block"] for r in rows}),
-        "rows_with_repeated_seat_labels": sum(r["seat_label_repeated"] for r in rows),
-        "rows_with_repeated_names_within_block": sum(
-            r["name_within_block_repeated"] for r in rows
-        ),
-        "scope": (
-            "Gaya Mukhiya reported winners only; not statewide or a complete seat frame"
-        ),
+        "scope": "Gaya workbook winners and runner-up list; overlapping source claims",
     }
-    if report["summary_total"] != len(rows) or not report["coverage_all_blocks_match"]:
-        raise ValueError("Winner rows disagree with source summary counts")
     manifest = {
         "columns": metadata(out),
         "validation": report,
         "year_assignment": {
-            "path": "data/PROVENANCE.md",
+            "path": "data/PROVENANCE.json",
             "election_year": YEAR_ASSIGNMENT["election_year"],
             "basis": YEAR_ASSIGNMENT["year_basis"],
             "sha256": hashlib.sha256(YEAR_RECEIPT.read_bytes()).hexdigest(),
         },
         "sources": {
             k: {
-                "path": "data/2011/raw/central_handoff/" + v,
+                "path": "data/2011/raw/reports/" + v,
                 "sha256": hashlib.sha256((root / v).read_bytes()).hexdigest(),
             }
             for k, v in SOURCES.items()
@@ -948,8 +657,14 @@ def run(root, out):
                 "bytes": p.stat().st_size,
                 "sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
             }
-            for p in sorted(out.iterdir())
-            if p.name not in {"MANIFEST.json", "README.md"}
+            for p in [
+                out / name
+                for name in (
+                    "spreadsheet_winner_records.parquet",
+                    "runner_up_records.parquet",
+                    "issues.csv",
+                )
+            ]
         },
     }
     (out / "MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n")

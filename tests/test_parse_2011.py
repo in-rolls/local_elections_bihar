@@ -2,7 +2,6 @@
 
 import csv
 import json
-from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -83,29 +82,13 @@ def test_last_row_with_missing_vertical_rule():
     assert [r[1] for r in rows] == [["1", "क", "9"], ["2", "ख", "8"]]
 
 
-def test_summary_carries_block_header_across_page(monkeypatch):
-    header = {**char("Tankuppa", 80, 777), "fontname": "AAAA+Arial-Bold"}
-    numeric = {**char("120", 233, 793), "fontname": "AAAA+Arial-Bold"}
-    page1 = SimpleNamespace(chars=[header, numeric], find_tables=lambda: [])
-    cells = ["1", "मुखिया", "5", "5", "10", "50%"]
-    table = SimpleNamespace(
-        bbox=(50, 110, 550, 150), rows=[SimpleNamespace(cells=cells)]
-    )
-    page2 = SimpleNamespace(chars=[], find_tables=lambda: [table])
-    monkeypatch.setattr(
-        p, "decoded_pdf", lambda _: nullcontext(SimpleNamespace(pages=[page1, page2]))
-    )
-    monkeypatch.setattr(p, "cell_text", lambda _, cell: cell)
-    page2.page_number = 2
-    assert p.summaries(Path("/unused")) == [
-        {"block_raw": "Tankuppa", "female": 5, "male": 5, "total": 10, "source_page": 2}
-    ]
-
-
-def check_review(directory):
+def check_review():
     rows = {
         r["source_serial"]: r
-        for r in pq.read_table(directory / "pdf_winner_records.parquet").to_pylist()
+        for r in pq.read_table(
+            "data/2011/mukhiya_reports/winner_records.parquet"
+        ).to_pylist()
+        if r["district_raw"] == "GAYA"
     }
     with REVIEW.open() as f:
         expected = list(csv.DictReader(f))
@@ -120,9 +103,8 @@ def check_review(directory):
 
 
 def test_published_transcription_and_years():
-    check_review(PILOT)
+    check_review()
     for filename, count, year in [
-        ("pdf_winner_records", 338, 2011),
         ("spreadsheet_winner_records", 330, 2011),
         ("runner_up_records", 337, 2011),
     ]:
@@ -142,15 +124,11 @@ def test_published_transcription_and_years():
 
 @pytest.mark.skipif(
     not (p.ROOT / p.SOURCES["winners"]).exists(),
-    reason="Original Gaya sources are on the external drive",
+    reason="Original Gaya sources are not restored",
 )
 def test_local_source_extraction(tmp_path):
     p.run(p.ROOT, tmp_path)
-    check_review(tmp_path)
     report = json.loads((tmp_path / "MANIFEST.json").read_text())["validation"]
-    assert report["summary_total"] == report["winner_rows"] == 338
-    assert report["coverage_all_blocks_match"]
-    assert report["alternate_identity_matches"] == 338
     assert report["spreadsheet_rows"] == 331
     assert report["runner_name_rows"] == 338
     assert report["published_spreadsheet_winners"] == 330
