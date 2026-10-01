@@ -87,10 +87,12 @@ for acquisition, dating evidence and unresolved issues.
 import polars as pl
 
 seats = pl.read_parquet("data/2016/seats.parquet").filter(pl.col("office") == "mukhiya")
-winners = pl.read_parquet("data/2016/winners.parquet").filter(pl.col("office") == "mukhiya")
+winners = pl.read_parquet("data/2016/winners.parquet").filter(
+    pl.col("office") == "mukhiya"
+)
 ```
 
-`make verify` checks the published 2016 and 2021 files locally. Parsing or
+`make verify` checks the published datasets for all three years locally. Parsing or
 collecting sources is optional and explicit; the [scripts guide](scripts/README.md)
 lists the commands. `make check` runs local code checks and tests.
 
