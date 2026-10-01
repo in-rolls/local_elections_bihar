@@ -1,21 +1,10 @@
-# Working on this repository
+# Working on this data repository
 
-- This is a data collection and parsing repository, not a distributable software
-  package. Do not apply preen or add package-release infrastructure unless asked.
-- Focus on collecting and parsing seat reservations, candidates and winners.
-  Keep source receipts and preserve uncertainty without inventing classifications.
-- Use the existing local environment. Do not start Docker or another VM for
-  routine work. Container checks require an explicit request or a demonstrated
-  container-specific failure.
-- Match validation to the change. Run affected tests during code edits and
-  `make check` once before a code PR. Documentation-only edits need diff review.
-- Run `make verify` locally when published tables or their validation code change.
-  Do not rebuild datasets, rescan the raw archive or repeat successful checks
-  unless a new change or failure makes that necessary.
-- GitHub CI supplies one Python 3.14 check on the PR. Do not add a local version
-  matrix or wait for a second run after merging. Do not add pre-commit as another
-  layer over the same lint and formatting checks.
-- Use the existing parsers and standard tools. Add infrastructure only to solve
-  a concrete problem; avoid duplicate data copies and disposable artifacts in Git.
-- Check official documentation when an API question arises. Install missing
-  test dependencies when needed rather than silently skipping relevant tests.
+This is a point-in-time data collection. Follow the [data-repository policy](https://github.com/soodoku/data-repos#maintenance-policy).
+
+- Preserve sources, collection dates, provenance, schemas and reproducible parsing commands.
+- Run the affected parser tests once when code changes. Check schemas, keys, missingness and source/output hashes when data change. Review documentation edits directly.
+- Keep full-data validation, reprocessing, scraping and publication explicit. Do not run them for routine edits or repeat successful checks without a relevant change or failure.
+- Do not add blanket CI, recurring dependency checks, version matrices, Docker/VM checks, pre-commit, Preen or package-release scaffolding. These collections do not need continuous package maintenance.
+- Use the existing environment and standard tools. Install missing dependencies only for the checks needed by the current change; do not provision a matrix of environments.
+- Ask when source meaning or credentials are unclear. Check official documentation for API questions. Preserve unrelated work and never infer substantive data values to make a check pass.
