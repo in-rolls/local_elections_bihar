@@ -30,5 +30,5 @@ those hashes do not assert that today's reorganized scripts are byte-identical.
 in `data/PROVENANCE.json`. Parsing uses saved responses; live collection stays an
 explicit separate command. `python -m scripts.sources pack --year 2011` creates
 only the specified input archive in `.cache/archives/` and records its checksum.
-The provenance file pins the published version’s archive URLs. Optional audit sources live under
+Archive URLs stay empty until a public version is available. Optional audit sources live under
 `data/unprocessed/<year>/`; they are not reproduction dependencies.

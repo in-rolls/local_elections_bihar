@@ -156,7 +156,7 @@ uv run pytest -q tests/test_parse_2011.py
 
 An alternate source location can be supplied with `--raw` and an output directory
 with `--out`. Parsing writes the final tables and receipts only. It does not copy
-originals or save rendered pages or intermediate PDFs. The source archive is available through `make fetch-sources YEAR=2011`. Affidavits are outside this pipeline.
+originals or save rendered pages or intermediate PDFs. The prepared source archive is awaiting publication; see the data guide. Affidavits are outside this pipeline.
 
 The [repository scope](../../../README.md#scope-and-collection-priorities) makes
 seat reservations, candidates and winners the next extraction priorities for

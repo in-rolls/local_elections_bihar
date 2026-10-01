@@ -217,7 +217,7 @@
   "archives": {
     "2011": {
       "filename": "bihar_2011_sources.zip",
-      "url": "https://zenodo.org/records/23092132/files/bihar_2011_sources.zip?download=1",
+      "url": null,
       "sha256": "13e6c0cb656432230f5fc9eb86ccaf53baf91dc25a956fefaf9500c7655c418d",
       "bytes": 3580617,
       "source_files": 25,
@@ -226,7 +226,7 @@
     },
     "2016": {
       "filename": "bihar_2016_sources.zip",
-      "url": "https://zenodo.org/records/23092132/files/bihar_2016_sources.zip?download=1",
+      "url": null,
       "sha256": "777f537750e1792c0af8aac6b708fdb11dc2488c8618bbb487155e3140409e00",
       "bytes": 2664104953,
       "source_files": 2933,
@@ -235,7 +235,7 @@
     },
     "2021": {
       "filename": "bihar_2021_sources.zip",
-      "url": "https://zenodo.org/records/23092132/files/bihar_2021_sources.zip?download=1",
+      "url": null,
       "sha256": "941c45146d82716ce1688bf662fd573967fd15b5401fe5785925963dc8806fa6",
       "bytes": 937264309,
       "source_files": 630549,
@@ -245,9 +245,11 @@
   },
   "availability": {
     "project_deposit": {
-      "url": "https://doi.org/10.5281/zenodo.23092132",
+      "url": "https://zenodo.org/uploads/23092132",
       "version": "data-2026-10-01.1",
-      "contents": "Three required-source archives, sixteen Parquets and the code/documentation archive. Zenodo Parquet filenames replace / in each output path with __."
+      "contents": "Three required-source archives, sixteen Parquets and the code/documentation archive. Zenodo Parquet filenames replace / in each output path with __.",
+      "status": "draft",
+      "reason": "Large source uploads timed out; draft has not been published. Archive checksums describe the prepared local files, not available public downloads."
     },
     "historical_2016": {
       "url": "https://doi.org/10.5281/zenodo.22852474",

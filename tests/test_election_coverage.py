@@ -157,7 +157,7 @@ def test_summary_preserves_counts_and_counts_storage_once(tmp_path):
     assert "scripts.year2011.parse_reports" in text
     assert "scripts.sources" in text
     assert "2011/gaya_mukhiya/runner_up_records.parquet" in text
-    assert "SHA-256 in PROVENANCE.json" in text
+    assert "Publication pending" in text
     path = tmp_path / "README.md"
     path.write_text(
         "Before\n<!-- data-summary:start -->\nold\n<!-- data-summary:end -->\nAfter\n"

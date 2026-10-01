@@ -12,9 +12,9 @@ and an external drive are not needed to update the guide.
 
 | Collection | Required originals | Processing chain | Published outputs | Archive |
 | --- | --- | --- | --- | --- |
-| 2011 | 23 district winner PDFs, Gaya winner workbook and runner-up PDF. Originals retain all pages and rows. | `scripts.year2011.parse_reports` → `scripts.year2011.parse_gaya` | `2011/mukhiya_reports/winner_records.parquet`<br>`2011/gaya_mukhiya/spreadsheet_winner_records.parquet`<br>`2011/gaya_mukhiya/runner_up_records.parquet` | [bihar_2011_sources.zip](https://zenodo.org/records/23092132/files/bihar_2011_sources.zip?download=1); 25 originals; 3.58 MB; SHA-256 in PROVENANCE.json |
-| 2016 | Geography form responses and election results; request metadata and original response bodies travel together. | `scripts.sources` → `scripts.year2016.parse` | `2016/seats.parquet`<br>`2016/candidates.parquet`<br>`2016/winners.parquet` | [bihar_2016_sources.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources.zip?download=1); 2,933 originals; 2.66 GB; SHA-256 in PROVENANCE.json |
-| 2021 | General and by-election geography, candidates, results, phases and current-term feeds.<br>District/block names and current-term Mukhiya winners and reservations. | `scripts.sources` → `scripts.year2021.parse` | `2021/seats.parquet`<br>`2021/candidates.parquet`<br>`2021/result_rows.parquet`<br>`2021/winners.parquet`<br>`2021/byelection_seats.parquet`<br>`2021/byelection_candidates.parquet`<br>`2021/byelection_result_rows.parquet`<br>`2021/byelection_winners.parquet`<br>`2021/current_winners.parquet`<br>`2021/current_reservations.parquet` | [bihar_2021_sources.zip](https://zenodo.org/records/23092132/files/bihar_2021_sources.zip?download=1); 630,549 originals; 798.91 MB; SHA-256 in PROVENANCE.json |
+| 2011 | 23 district winner PDFs, Gaya winner workbook and runner-up PDF. Originals retain all pages and rows. | `scripts.year2011.parse_reports` → `scripts.year2011.parse_gaya` | `2011/mukhiya_reports/winner_records.parquet`<br>`2011/gaya_mukhiya/spreadsheet_winner_records.parquet`<br>`2011/gaya_mukhiya/runner_up_records.parquet` | 25 originals; 3.58 MB; Publication pending |
+| 2016 | Geography form responses and election results; request metadata and original response bodies travel together. | `scripts.sources` → `scripts.year2016.parse` | `2016/seats.parquet`<br>`2016/candidates.parquet`<br>`2016/winners.parquet` | 2,933 originals; 2.66 GB; Publication pending |
+| 2021 | General and by-election geography, candidates, results, phases and current-term feeds.<br>District/block names and current-term Mukhiya winners and reservations. | `scripts.sources` → `scripts.year2021.parse` | `2021/seats.parquet`<br>`2021/candidates.parquet`<br>`2021/result_rows.parquet`<br>`2021/winners.parquet`<br>`2021/byelection_seats.parquet`<br>`2021/byelection_candidates.parquet`<br>`2021/byelection_result_rows.parquet`<br>`2021/byelection_winners.parquet`<br>`2021/current_winners.parquet`<br>`2021/current_reservations.parquet` | 630,549 originals; 798.91 MB; Publication pending |
 
 Run `make parse YEAR=<year>` for the complete ordered chain. Intermediate geography tables are disposable `.cache/` files.
 
@@ -37,7 +37,8 @@ make verify YEAR=2011
 ```
 
 Use `YEAR=2016`, `YEAR=2021` or `YEAR=all` for other pipelines. Fetching requires
-the pinned URL and checksum in `PROVENANCE.json`. It verifies the archive before
+a public URL and checksum in `PROVENANCE.json`; until publication the command
+reports the source download as unavailable. It verifies the archive before
 extraction and
 refuses to overwrite existing sources. If you already have the originals in the
 listed layout, skip fetching. Parsing reads saved files and never collects live
@@ -71,11 +72,13 @@ script-generated dataset.
 
 ## Public source availability
 
-[Zenodo 23092132](https://doi.org/10.5281/zenodo.23092132) contains three required-source
-archives, the sixteen published Parquets and `bihar_code.zip` with the scripts,
-lockfile, documentation and manifests. Parquet filenames on Zenodo replace `/` in
-the repository output path with `__`; for example, `2016__seats.parquet` belongs at
-`data/2016/seats.parquet`. Code and output files are separate downloads.
+The new project-wide Zenodo deposit (reserved record 23092132) remains a draft
+because large uploads timed out. The three source ZIPs have been prepared and
+checksummed, but are not public downloads yet. `PROVENANCE.json` records this
+status and leaves their download URLs empty. The planned deposit contains these
+archives, the sixteen Parquets and `bihar_code.zip` with scripts, lockfile,
+documentation and manifests. Its Parquet filenames replace `/` in a repository
+output path with `__`.
 
 [Zenodo 22852474](https://doi.org/10.5281/zenodo.22852474) remains the historical 2016
 deposit. Its extra reservation PDFs and older packaging are not needed for the
