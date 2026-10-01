@@ -104,11 +104,11 @@ required originals, public availability and ordered processing commands.
 `make parse YEAR=2011` runs the 2011 pipeline; substitute 2016 or 2021 as needed.
 Published tables can be used without downloading originals.
 
-The three required-source archives are prepared; their sizes and checksums are in
-[data/PROVENANCE.json](data/PROVENANCE.json). The new project-wide Zenodo deposit is
-still a draft because large uploads timed out. These archives are not yet public
-downloads. The earlier [2016 deposit](https://doi.org/10.5281/zenodo.22852474)
-remains available, with restoration instructions in the data guide.
+[Zenodo 23092132](https://doi.org/10.5281/zenodo.23092132) preserves the sixteen
+Parquets, three required-source archives and the matching code and documentation.
+Run `make fetch-sources YEAR=2011` before parsing to download and verify that year's
+originals. Archive URLs and checksums are defined in
+[data/PROVENANCE.json](data/PROVENANCE.json).
 
 ## Scope and collection priorities
 
@@ -119,7 +119,8 @@ outside the current task. Retain partial sources with explicit limits.
 
 ## Citation and license
 
-Cite the files and repository commit used. For the historical 2016 deposit, cite
+Cite [Zenodo 23092132](https://doi.org/10.5281/zenodo.23092132) and identify the
+files used. The separate historical 2016 deposit remains
 [Zenodo 22852474](https://doi.org/10.5281/zenodo.22852474).
 Code is [MIT licensed](LICENSE), including attribution for Ravi Taak's Kruti Dev
 mapping. Election records were published by the Bihar State Election Commission;
