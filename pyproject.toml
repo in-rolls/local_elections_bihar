@@ -30,7 +30,7 @@ Issues = "https://github.com/in-rolls/local_elections_bihar/issues"
 package = false
 
 [dependency-groups]
-dev = ["ruff>=0.14", "pre-commit>=4", { include-group = "test" }]
+dev = ["ruff>=0.14", { include-group = "test" }]
 test = ["pytest>=8"]
 
 [tool.ruff]

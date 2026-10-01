@@ -290,10 +290,16 @@ use election-specific candidates and winners separately from
 
 ```sh
 make check
-make ci-docker
 ```
 
-`make check` runs Ruff, formatting, the tests, pre-commit and the release verifications. CI and the standard Docker target test Python 3.12 and 3.14.
+`make check` runs Ruff, formatting checks and tests once in the local environment.
+For a small code change, run the affected tests while editing and the full check
+once before the PR. Documentation-only edits need a diff review, not a data rebuild.
+
+`make verify` checks published table checksums, schemas and joins; run it locally
+when those tables or their validation code change. CI runs both commands in one
+Python 3.14 job per PR, with manual runs available. There is no Docker step,
+version matrix, scheduled CI run, duplicate run after merge or pre-commit layer.
 
 ## Citation
 
