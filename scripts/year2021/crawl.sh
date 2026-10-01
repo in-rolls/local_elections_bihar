@@ -35,6 +35,6 @@ for pass in 1 2 3 4 5; do
     sleep 600
 done
 
-uv run python -m scripts.year2021.parse
+make build-2021
 uv run python -m scripts.year2021.audit
 uv run python -m scripts.year2021.reservation_check

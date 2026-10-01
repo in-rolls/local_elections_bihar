@@ -150,23 +150,14 @@ def test_summary_preserves_counts_and_counts_storage_once(tmp_path):
     from scripts.reporting.summary import summary_markdown, update_readme
 
     data = Path("data")
-    table, metadata = report(data)
-    assets = [
-        {
-            "path": "2021/raw/statewide",
-            "files": 10,
-            "bytes": 1234567,
-            "formats": [".jsonl.gz"],
-        }
-    ]
-    text = summary_markdown(data, table, metadata, assets)
-    assert "1,234,567 bytes; 10 files" in text
-    assert text.count("`2021/raw/statewide`") == 1
-    assert (
-        "| Parsed source list | 2011 / mukhiya reports winner records / "
-        "mukhiya | Unknown | 3,971 | Unknown | 3,973 |" in text
-    )
-    assert "Undated 2021-term feed / mukhiya" in text
+    import json
+
+    provenance = json.loads((data / "PROVENANCE.json").read_text())
+    text = summary_markdown(provenance)
+    assert "scripts.year2011.parse_reports" in text
+    assert "scripts.sources" in text
+    assert "2011/gaya_mukhiya/runner_up_records.parquet" in text
+    assert "Publication pending" in text
     path = tmp_path / "README.md"
     path.write_text(
         "Before\n<!-- data-summary:start -->\nold\n<!-- data-summary:end -->\nAfter\n"
@@ -174,7 +165,7 @@ def test_summary_preserves_counts_and_counts_storage_once(tmp_path):
     update_readme(path, text)
     assert path.read_text().startswith("Before\n")
     assert path.read_text().endswith("\nAfter\n")
-    assert path.read_text().count("| Kind |") == 1
+    assert path.read_text().count("| Collection |") == 1
     before = path.read_text()
     update_readme(path, text)
     assert path.read_text() == before

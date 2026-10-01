@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "scope": "Bihar local seats, reservations, candidates and winners. Affidavits are separate and unchanged.",
+  "source_groups": {
+    "2011_reports": {
+      "year": 2011,
+      "root": "2011/raw/reports",
+      "include": [
+        "winners/*/*GPM.pdf",
+        "mukhiya_spreadsheets/Gaya.xls",
+        "runners/GAYA/GAYA_gpm.pdf"
+      ],
+      "origin": "https://github.com/in-rolls/local_elections/tree/fa4c4e79/data/bihar",
+      "collected": "Historical handoff; original download dates unknown",
+      "purpose": "23 district winner PDFs, Gaya winner workbook and runner-up PDF. Originals retain all pages and rows."
+    },
+    "2016_pages": {
+      "year": 2016,
+      "root": "2016/raw/statewide",
+      "include": [
+        "2016/frame/*.jsonl.gz",
+        "2016/results/*.jsonl.gz"
+      ],
+      "origin": "https://sec.bihar.gov.in/old-sec/ovc.aspx",
+      "collected": "September 2026; exact request dates in ledgers",
+      "purpose": "Geography form responses and election results; request metadata and original response bodies travel together."
+    },
+    "2021_pages": {
+      "year": 2021,
+      "root": "2021/raw/statewide",
+      "include": [
+        "2021/frame/**/*.jsonl.gz",
+        "2021/candidates/**/*.jsonl.gz",
+        "2021/results/**/*.jsonl.gz",
+        "2021/phases/**/*.jsonl.gz",
+        "2021/offices/frame/**/*.jsonl.gz",
+        "2021/offices/p*/**/*.jsonl.gz",
+        "byelections/**/*.jsonl.gz",
+        "current/**/*.jsonl.gz"
+      ],
+      "origin": "https://sec25.bihar.gov.in",
+      "collected": "September 2026; exact request dates in ledgers",
+      "purpose": "General and by-election geography, candidates, results, phases and current-term feeds."
+    },
+    "2021_geography_and_mukhiya_snapshot": {
+      "year": 2021,
+      "root": "2021/raw/portal_snapshot_2026",
+      "include": [
+        "landing.jsonl.gz",
+        "frame/*.jsonl.gz",
+        "winners/*_p3.jsonl.gz",
+        "reservations/*_p3.jsonl.gz"
+      ],
+      "origin": "https://sec25.bihar.gov.in",
+      "collected": "September 2026; exact request dates in ledgers",
+      "purpose": "District/block names and current-term Mukhiya winners and reservations."
+    }
+  },
+  "pipelines": {
+    "2011": {
+      "year": 2011,
+      "inputs": [
+        "2011_reports"
+      ],
+      "steps": [
+        {
+          "module": "scripts.year2011.parse_reports",
+          "arguments": [
+            "--raw",
+            "{data}/2011/raw/reports",
+            "--out",
+            "{data}/2011/mukhiya_reports"
+          ],
+          "produces": [
+            "2011/mukhiya_reports/winner_records.parquet"
+          ]
+        },
+        {
+          "module": "scripts.year2011.parse_gaya",
+          "arguments": [
+            "--raw",
+            "{data}/2011/raw/reports",
+            "--out",
+            "{data}/2011/gaya_mukhiya"
+          ],
+          "produces": [
+            "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
+            "2011/gaya_mukhiya/runner_up_records.parquet"
+          ]
+        }
+      ],
+      "outputs": [
+        "2011/mukhiya_reports/winner_records.parquet",
+        "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
+        "2011/gaya_mukhiya/runner_up_records.parquet"
+      ],
+      "manifests": [
+        "2011/mukhiya_reports/MANIFEST.json",
+        "2011/gaya_mukhiya/MANIFEST.json"
+      ]
+    },
+    "2016": {
+      "year": 2016,
+      "inputs": [
+        "2016_pages"
+      ],
+      "steps": [
+        {
+          "module": "scripts.sources",
+          "arguments": [
+            "frames",
+            "--year",
+            "2016",
+            "--data",
+            "{data}",
+            "--cache",
+            "{cache}"
+          ],
+          "produces": [
+            "{cache}/2016/frame.parquet"
+          ]
+        },
+        {
+          "module": "scripts.year2016.parse",
+          "arguments": [
+            "--frame",
+            "{cache}/2016/frame.parquet",
+            "--results",
+            "{data}/2016/raw/statewide/2016/results",
+            "--out",
+            "{data}/2016"
+          ],
+          "produces": [
+            "2016/seats.parquet",
+            "2016/candidates.parquet",
+            "2016/winners.parquet"
+          ]
+        }
+      ],
+      "outputs": [
+        "2016/seats.parquet",
+        "2016/candidates.parquet",
+        "2016/winners.parquet"
+      ],
+      "manifests": [
+        "2016/MANIFEST.json"
+      ]
+    },
+    "2021": {
+      "year": 2021,
+      "inputs": [
+        "2021_pages",
+        "2021_geography_and_mukhiya_snapshot"
+      ],
+      "steps": [
+        {
+          "module": "scripts.sources",
+          "arguments": [
+            "frames",
+            "--year",
+            "2021",
+            "--data",
+            "{data}",
+            "--cache",
+            "{cache}"
+          ],
+          "produces": [
+            "{cache}/2021/frame.parquet",
+            "{cache}/2021/2021/frame.parquet",
+            "{cache}/2021/2021/offices/frame.parquet",
+            "{cache}/2021/byelections/frame.parquet"
+          ]
+        },
+        {
+          "module": "scripts.year2021.parse",
+          "arguments": [
+            "--raw",
+            "{data}/2021/raw/statewide",
+            "--frames",
+            "{cache}/2021",
+            "--current-mukhiya",
+            "{data}/2021/raw/portal_snapshot_2026",
+            "--out",
+            "{data}/2021"
+          ],
+          "produces": [
+            "2021/seats.parquet",
+            "2021/candidates.parquet",
+            "2021/result_rows.parquet",
+            "2021/winners.parquet",
+            "2021/byelection_seats.parquet",
+            "2021/byelection_candidates.parquet",
+            "2021/byelection_result_rows.parquet",
+            "2021/byelection_winners.parquet",
+            "2021/current_winners.parquet",
+            "2021/current_reservations.parquet"
+          ]
+        }
+      ],
+      "outputs": [
+        "2021/seats.parquet",
+        "2021/candidates.parquet",
+        "2021/result_rows.parquet",
+        "2021/winners.parquet",
+        "2021/byelection_seats.parquet",
+        "2021/byelection_candidates.parquet",
+        "2021/byelection_result_rows.parquet",
+        "2021/byelection_winners.parquet",
+        "2021/current_winners.parquet",
+        "2021/current_reservations.parquet"
+      ],
+      "manifests": [
+        "2021/MANIFEST.json"
+      ]
+    }
+  },
+  "archives": {
+    "2011": {
+      "filename": "bihar_2011_sources.zip",
+      "url": null,
+      "sha256": "13e6c0cb656432230f5fc9eb86ccaf53baf91dc25a956fefaf9500c7655c418d",
+      "bytes": 3580617,
+      "source_files": 25,
+      "source_bytes": 3576263,
+      "record_id": "23092132"
+    },
+    "2016": {
+      "filename": "bihar_2016_sources.zip",
+      "url": null,
+      "sha256": "777f537750e1792c0af8aac6b708fdb11dc2488c8618bbb487155e3140409e00",
+      "bytes": 2664104953,
+      "source_files": 2933,
+      "source_bytes": 2663523979,
+      "record_id": "23092132"
+    },
+    "2021": {
+      "filename": "bihar_2021_sources.zip",
+      "url": null,
+      "sha256": "941c45146d82716ce1688bf662fd573967fd15b5401fe5785925963dc8806fa6",
+      "bytes": 937264309,
+      "source_files": 630549,
+      "source_bytes": 798914453,
+      "record_id": "23092132"
+    }
+  },
+  "availability": {
+    "project_deposit": {
+      "url": "https://zenodo.org/uploads/23092132",
+      "version": "data-2026-10-01.1",
+      "contents": "Three required-source archives, sixteen Parquets and the code/documentation archive. Zenodo Parquet filenames replace / in each output path with __.",
+      "status": "draft",
+      "reason": "Large source uploads timed out; draft has not been published. Archive checksums describe the prepared local files, not available public downloads."
+    },
+    "historical_2016": {
+      "url": "https://doi.org/10.5281/zenodo.22852474",
+      "files": 60,
+      "bytes": 2787457212,
+      "verification": "On 2026-10-01 API sizes and MD5s matched the local export; manifest downloaded and byte-matched. Remaining payloads not re-downloaded.",
+      "result_archive_sha256": "8f58b5883f58a7069be8c23702ff7f4d275b15eea2fa3fc21b0391525401c607",
+      "layout": "48 rp chunks plus frame-page and reservation-roster tar archives, three Parquets and documentation. Preserved as its own historical deposit."
+    }
+  },
+  "interpretation": {
+    "2011_year": {
+      "year": 2011,
+      "confirmed": "2026-10-01",
+      "evidence": "Gaya workbook states 2011. User identified primary/alternate winner PDFs and companion runner lists as 2011; prior-elected-office columns concern 2001/2006. This is collection identification, not a printed date verified on every PDF page."
+    },
+    "2011_overlap": "District winner table contains all 338 Gaya primary PDF winners. Gaya workbook and runner-up lists remain separate source claims. Name differences have not been established as conflicts. Court transcription overlaps one district winner; counts are not additive.",
+    "runner_seat_links": "GP inferred from complete serial, block and exact reservation alignment of companion reports, corroborated by 25 block-first GP headings. Row-level linkage evidence is in runner_up_records.parquet.",
+    "2021_term": "2021 election, 2023/2025 by-elections and undated current-term feeds stay separate. Current reservations and occupants are not assigned retrospectively. Election-specific reservation linkage is incomplete.",
+    "cross_year": "Matching codes or labels do not establish stable seat boundaries across general elections."
+  },
+  "gaps": {
+    "saved_pages": "Missing or incomplete saved responses are collection gaps, not a request to scrape again. The 2021 tables preserve available observations and response-status fields. The 2016 parser requires --partial to parse an incomplete results capture. Missing geography can prevent frame reconstruction.",
+    "original_documents": "Preserve complete source PDFs and workbooks, including unparsed pages and rejected records. Dataset manifests carry document checksums.",
+    "historical_dates": "32 other-office workbooks have 2006 headings; 37 Mukhiya and 35 Sarpanch workbooks remain undated."
+  },
+  "search_findings": {
+    "dataverse": "On October 1, 2026, an authenticated Harvard Dataverse search covered all 83\ndatasets accessible to `@soodoku`, including drafts, and public Bihar/project\nfilename searches. No Bihar local-election deposit was found within that scope.\n[PRI Seat Reservation Data](https://doi.org/10.7910/DVN/PQZVCO) contained\n`haryana_mau_1995_2021.gz`. This cannot rule out deleted uploads, other accounts\nor unrelated filenames.",
+    "sec_archive": "The [SEC archive](https://sec.bihar.gov.in/archive) labels its older candidate,\nvote and winner forms as 2016. A five-request check of its\n[winner form](https://sec.bihar.gov.in/old-sec/wcl.aspx) returned 12 Mukhiya\nwinner names for Arwal block, Arwal district, matching the published name set.\nThis was not a seat-key comparison or a statewide completeness check.\nNo verified 2011 candidate-results endpoint was found in the inspected pages\nand targeted searches; that is not proof that none exists."
+  },
+  "retention": {
+    "raw": "Only originals used by the listed pipelines. Include the original response body together with its URL, parameters and collection date.",
+    "unprocessed": "Unique collected originals with no current output are in one unprocessed/<year>/ collection outside data/<year>/raw and the reproduction archives; optionally expose it at data/unprocessed for audit commands.",
+    "cache": "Geography frames and other generated intermediate files belong in .cache; remove after use if desired.",
+    "affidavits": "Existing affidavit sources and review inputs remain unchanged, outside these pipelines.",
+    "metadata": "Dataset MANIFEST.json files own schemas and source/output checksums. This file owns collection origins and pipeline definitions."
+  }
+}

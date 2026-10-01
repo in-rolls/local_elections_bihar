@@ -1,335 +1,5 @@
 {
   "columns": {
-    "pdf_winner_records.parquet": {
-      "panchayat_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "GP label from this source or the linked companion winner PDF; runner links are identified by seat_link_basis",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "candidate_name": {
-        "type": "string",
-        "nullable": true,
-        "description": "Decoded candidate name, preserving spelling and honorifics",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "relative_name": {
-        "type": "string",
-        "nullable": true,
-        "description": "Printed father/husband name; relationship not distinguished",
-        "null_count": 0,
-        "empty_string_count": 1,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "address_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Decoded address as reported, possibly including phone numbers in workbook",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "reservation_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Reported seat reservation; distinct from candidate category",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "gender_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Source gender spelling, even where it conflicts with another source",
-        "null_count": 0,
-        "empty_string_count": 1,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "age_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Unrecoded source cell for age",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "category_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Reported candidate social category, not seat reservation",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "phone_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Printed phone cell; malformed numbers retained as text",
-        "null_count": 0,
-        "empty_string_count": 2,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "occupation_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Reported occupation, including malformed overflow text",
-        "null_count": 0,
-        "empty_string_count": 2,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "annual_income_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Unrecoded source cell for annual_income",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "sons_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Unrecoded source cell for sons",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "daughters_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Unrecoded source cell for daughters",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "previous_office_2001_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Source claim about elected office in 2001; blank is not coded no",
-        "null_count": 0,
-        "empty_string_count": 192,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "previous_office_2006_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Source claim about elected office in 2006; blank is not coded no",
-        "null_count": 0,
-        "empty_string_count": 164,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "education_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "Reported qualification; no degree threshold imputed",
-        "null_count": 0,
-        "empty_string_count": 1,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "block_raw": {
-        "type": "string",
-        "nullable": true,
-        "description": "English block label as printed; capitalization retained",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "block": {
-        "type": "string",
-        "nullable": true,
-        "description": "Hindi block label; PDF labels mapped explicitly to workbook block names",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "source_file": {
-        "type": "string",
-        "nullable": true,
-        "description": "Path relative to data/2011/raw/central_handoff",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "source_page": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Original PDF page, one-based",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "source_box": {
-        "type": "string",
-        "nullable": true,
-        "description": "JSON [left, top, right, bottom] in PDF points, top-origin",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "record_id": {
-        "type": "string",
-        "nullable": true,
-        "description": "Source-record identifier; not a verified person or seat identifier",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "election_year": {
-        "type": "int64",
-        "nullable": true,
-        "description": "2011; see year_basis for workbook date or PDF collection confirmation",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "collection_year": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Year of historical handoff folder; not independently verified election year",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "year_basis": {
-        "type": "string",
-        "nullable": true,
-        "description": "Evidence for the year assignment or reason for leaving it unresolved",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "district": {
-        "type": "string",
-        "nullable": true,
-        "description": "Gaya, as printed in the source",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "office": {
-        "type": "string",
-        "nullable": true,
-        "description": "mukhiya, identified by the printed office heading",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "outcome": {
-        "type": "string",
-        "nullable": true,
-        "description": "Outcome asserted by this source; contradictory sources remain separate",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "source_serial": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Printed PDF serial; consecutive within the report",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "source_sha256": {
-        "type": "string",
-        "nullable": true,
-        "description": "SHA-256 of original source document",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "seat_label_repeated": {
-        "type": "bool",
-        "nullable": true,
-        "description": "Another PDF record has the same block and literal panchayat label",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "name_within_block_repeated": {
-        "type": "bool",
-        "nullable": true,
-        "description": "Another PDF record has the same name within the block",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "gender": {
-        "type": "string",
-        "nullable": true,
-        "description": "female/male from reviewed Hindi source labels; no inference from names",
-        "null_count": 1,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "age": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Reported age in years; values outside 18-120 left null",
-        "null_count": 6,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "annual_income": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Reported annual income; currency not explicit in the printed heading",
-        "null_count": 2,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "sons": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Reported number of sons; zero retained",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "daughters": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Reported number of daughters; zero retained",
-        "null_count": 6,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "reservation_women": {
-        "type": "bool",
-        "nullable": true,
-        "description": "True when reservation cell explicitly contains \u092e\u0939\u093f\u0932\u093e; otherwise unknown",
-        "null_count": 247,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "spreadsheet_match": {
-        "type": "string",
-        "nullable": true,
-        "description": "Exact normalized name within block: unique, unmatched or ambiguous; not a seat join",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "spreadsheet_row": {
-        "type": "int64",
-        "nullable": true,
-        "description": "Workbook row for a unique name/block comparison; null otherwise",
-        "null_count": 282,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      },
-      "alternate_matches": {
-        "type": "bool",
-        "nullable": true,
-        "description": "Same source serial, block and candidate name in alternate winner PDF",
-        "null_count": 0,
-        "empty_string_count": 0,
-        "missing": "Null for unavailable typed values; empty text preserves blank source cell"
-      }
-    },
     "spreadsheet_winner_records.parquet": {
       "serial": {
         "type": "string",
@@ -446,7 +116,7 @@
       "source_file": {
         "type": "string",
         "nullable": true,
-        "description": "Path relative to data/2011/raw/central_handoff",
+        "description": "Path relative to data/2011/raw/reports",
         "null_count": 0,
         "empty_string_count": 0,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
@@ -600,7 +270,7 @@
       "source_file": {
         "type": "string",
         "nullable": true,
-        "description": "Path relative to data/2011/raw/central_handoff",
+        "description": "Path relative to data/2011/raw/reports",
         "null_count": 0,
         "empty_string_count": 0,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
@@ -624,7 +294,7 @@
       "seat_source_file": {
         "type": "string",
         "nullable": true,
-        "description": "Companion PDF supplying the GP; relative to central_handoff",
+        "description": "Companion PDF supplying the GP; relative to raw/reports",
         "null_count": 0,
         "empty_string_count": 0,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
@@ -640,7 +310,7 @@
       "seat_source_record_id": {
         "type": "string",
         "nullable": true,
-        "description": "Row in pdf_winner_records supplying the GP",
+        "description": "Row in mukhiya_reports/winner_records supplying the GP",
         "null_count": 0,
         "empty_string_count": 0,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
@@ -720,10 +390,7 @@
     }
   },
   "validation": {
-    "winner_rows": 338,
-    "alternate_rows": 338,
     "spreadsheet_rows": 331,
-    "summary_total": 338,
     "runner_name_rows": 338,
     "published_spreadsheet_winners": 330,
     "published_runners": 337,
@@ -748,61 +415,35 @@
       "checks": "Complete unique serials; exact block and reservation text; GP headings",
       "limitation": "GP inferred from companion report, not individually printed for runners; serial is not an official seat identifier"
     },
-    "runner_names_also_in_winner_spreadsheet": 38,
-    "runner_spreadsheet_comparison_pairs": 40,
     "year_assignment": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
     "review_needed": "Extracted PDF/workbook names and outcomes need review",
-    "coverage_all_blocks_match": true,
-    "source_serials_consecutive": true,
-    "spreadsheet_matching": {
-      "unmatched": 281,
-      "unique_name_within_block": 56,
-      "ambiguous": 1
-    },
-    "alternate_identity_matches": 338,
     "issues_by_kind": {
-      "alternate_difference": 370,
-      "spreadsheet_difference": 193,
-      "non_numeric": 27,
-      "age_out_of_range": 6,
-      "repeated_seat_label": 25,
-      "unmapped_gender": 1
+      "non_numeric": 19
     },
-    "primary_blocks": 24,
-    "rows_with_repeated_seat_labels": 25,
-    "rows_with_repeated_names_within_block": 16,
-    "scope": "Gaya Mukhiya reported winners only; not statewide or a complete seat frame"
+    "scope": "Gaya workbook winners and runner-up list; overlapping source claims"
   },
   "year_assignment": {
-    "path": "data/PROVENANCE.md",
+    "path": "data/PROVENANCE.json",
     "election_year": 2011,
     "basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
-    "sha256": "51fc8e8eb03ca4d09c3ca474d8f73e0d53c43413643cbd362bba260f0bf2651a"
+    "sha256": "865023b70a394cb2aecbc0c3f68e5dde8c231ba573dd5f0f52fae141b3ec7a4f"
   },
   "sources": {
     "winners": {
-      "path": "data/2011/raw/central_handoff/winners/GAYA/GAYA_GPM.pdf",
+      "path": "data/2011/raw/reports/winners/GAYA/GAYA_GPM.pdf",
       "sha256": "4a3d89964b07a713b13848c8b27aaa3d7b3a1563fd0b2d3020db0115baf92b4d"
     },
-    "alternate": {
-      "path": "data/2011/raw/central_handoff/alternate_winners/GAYA/GAYA_GPM.pdf",
-      "sha256": "d1b3d170aa9a0691c19ae3020624d60f9132ef71d5dec549161a40f4e208d92f"
-    },
     "spreadsheet": {
-      "path": "data/2011/raw/central_handoff/mukhiya_spreadsheets/Gaya.xls",
+      "path": "data/2011/raw/reports/mukhiya_spreadsheets/Gaya.xls",
       "sha256": "484ad9a2dd0f8ec6af6b604d81758db66b47ff0fce8c2c179cd6fd93f41f211e"
     },
     "runners": {
-      "path": "data/2011/raw/central_handoff/runners/GAYA/GAYA_gpm.pdf",
+      "path": "data/2011/raw/reports/runners/GAYA/GAYA_gpm.pdf",
       "sha256": "466dee40ce85a3faae20425223859cc50713e8af9ffa5efcaebbae219f6dff5d"
-    },
-    "summary": {
-      "path": "data/2011/raw/central_handoff/summaries/alternate_winners/GAYA/GAYA_WMFcount_on_post.pdf",
-      "sha256": "38f762757bfe6ecb9745d4e5db4b5980f150393ddd646f474eaf4af0e1f84749"
     }
   },
   "code_sha256": {
-    "parse_gaya.py": "5eb4fcf026f334cc4f8ccacb642b670eedc6ead32d979ae833e730fa26b7cd12",
+    "parse_gaya.py": "35e3392e9fe5232a337ff93e58b93ee7d5aae829ad90544858b06165f8740d52",
     "hindi.py": "000941e5857904e74dca2b714c555738cbba3e1aaa5b591471e14471da7948cf",
     "font_map.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb",
     "kruti_dev_010.json": "71daac4ca9c59752deada373a8c2bf68fe8e465b293e3ab05c2c1bbfc842e2cc",
@@ -810,29 +451,17 @@
     "uv.lock": "d75099d0a3333c5e8e4487135a1adedada2af20cb55e3bc1832297ae14e66bd9"
   },
   "files": {
-    "coverage.csv": {
-      "bytes": 726,
-      "sha256": "54702138433acbf07fb5a7808d51350e54a4f061d7a596e16f8c2b76f0f4765a"
-    },
-    "issues.csv": {
-      "bytes": 100784,
-      "sha256": "ba706c69017361d27f50d4ed480de385fe7d8ae19acda62ecc2855dc158b5fc6"
-    },
-    "pdf_winner_records.parquet": {
-      "bytes": 39993,
-      "sha256": "a64ad8983a5d37703d4a6f4e001e1e9e5ec9f9a9c3dd7d6f21f9ab284c3a078b"
-    },
-    "runner_spreadsheet_conflicts.csv": {
-      "bytes": 23709,
-      "sha256": "3881adce86a8d5707255230dcc9b8a4a9f348d8bf65a6283e2dbc81adbf8143b"
-    },
-    "runner_up_records.parquet": {
-      "bytes": 19454,
-      "sha256": "1fc230fd05afb6120ff2dee6cdab3d8fe2ebb1a21461fbe76946e0140ff4fa8b"
-    },
     "spreadsheet_winner_records.parquet": {
       "bytes": 27689,
       "sha256": "de346806cf37a480c6efd9942949fab59e17e9b9e9d2f44afe399f587c54a15f"
+    },
+    "runner_up_records.parquet": {
+      "bytes": 19457,
+      "sha256": "6794c7b0c8cc11b53e5553338dfa2637aaea152dd5d7b716cfaa3790caa447fe"
+    },
+    "issues.csv": {
+      "bytes": 1391,
+      "sha256": "8d4806383f461836e4d9fe07e48567d6ac51c4b6aa7a85577b6626dcb84ba165"
     }
   }
 }

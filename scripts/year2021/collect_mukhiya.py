@@ -13,13 +13,14 @@ import pyarrow.parquet as pq
 from scripts.shared.portal import completed, decode_records, fetch
 
 
-def collect(raw, districts, workers):
-    frame = pq.read_table(raw / "frame.parquet").to_pylist()
+def build_frame(raw, districts, workers, *, loader=fetch, frames=None):
+    frames = frames or raw
+    frame = pq.read_table(frames / "frame.parquet").to_pylist()
     blocks = [u for u in frame if u["post_id"] == 3 and u["district_id"] in districts]
 
     def units(u):
         d, b = u["district_id"], u["block_id"]
-        body = fetch(
+        body = loader(
             raw,
             f"2021/frame/d{d}_b{b}",
             "Result",
@@ -32,14 +33,21 @@ def collect(raw, districts, workers):
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
         frame_2021 = [u for group in pool.map(units, blocks) for u in group]
-    frame_path = raw / "2021/frame.parquet"
+    frame_path = frames / "2021/frame.parquet"
     if frame_path.exists():
         frame_2021 += [
             u
             for u in pq.read_table(frame_path).to_pylist()
             if u["district_id"] not in districts
         ]
+    frame_path.parent.mkdir(parents=True, exist_ok=True)
     pq.write_table(pa.Table.from_pylist(frame_2021), frame_path)
+
+    return frame_2021
+
+
+def collect(raw, districts, workers):
+    frame_2021 = build_frame(raw, districts, workers)
 
     def unit(u):
         d, b, p = u["district_id"], u["block_id"], int(u["panchayat_id"])

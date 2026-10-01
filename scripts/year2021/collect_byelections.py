@@ -22,8 +22,8 @@ PHASES = ("2023_1", "2023_2", "2025_1")
 ROOT = "byelections"
 
 
-def details(raw, post, phase, level, d=0, b=0, p=0):
-    body = fetch(
+def details(raw, post, phase, level, d=0, b=0, p=0, *, loader=fetch):
+    body = loader(
         raw,
         f"{ROOT}/listing/{phase}/p{post}/l{level}_d{d}_b{b}_p{p}",
         "ByElectionDetails",
@@ -40,21 +40,30 @@ def details(raw, post, phase, level, d=0, b=0, p=0):
     return decode_records(body)
 
 
-def seats_for(raw, post, phase, district):
+def seats_for(raw, post, phase, district, *, loader=fetch):
     seats = []
-    for block in details(raw, post, phase, 2, district):
+    for block in details(raw, post, phase, 2, district, loader=loader):
         b = block["BlockID"]
         if post == 6:
             leaves = [
                 {**leaf, "WardNo": leaf["JPN"]}
-                for leaf in details(raw, post, phase, 3, district, b)
+                for leaf in details(raw, post, phase, 3, district, b, loader=loader)
             ]
         else:
             leaves = [
                 leaf
-                for panchayat in details(raw, post, phase, 3, district, b)
+                for panchayat in details(
+                    raw, post, phase, 3, district, b, loader=loader
+                )
                 for leaf in details(
-                    raw, post, phase, 4, district, b, panchayat["PanchayatID"]
+                    raw,
+                    post,
+                    phase,
+                    4,
+                    district,
+                    b,
+                    panchayat["PanchayatID"],
+                    loader=loader,
                 )
             ]
         for leaf in leaves:
@@ -78,16 +87,19 @@ def seats_for(raw, post, phase, district):
     return seats
 
 
-def build_frame(raw, workers):
+def build_frame(raw, workers, *, loader=fetch, frames=None):
+    frames = frames or raw
     jobs = []
     for post in range(1, 7):
         for phase in PHASES:
-            districts = details(raw, post, phase, 1)
+            districts = details(raw, post, phase, 1, loader=loader)
             listed = sum(int(x["Total"]) for x in districts)
             jobs += [(post, phase, x["Dist"], int(x["Total"])) for x in districts]
             print(json.dumps({"post": post, "phase": phase, "listed": listed}))
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
-        groups = list(pool.map(lambda j: (j, seats_for(raw, *j[:3])), jobs))
+        groups = list(
+            pool.map(lambda j: (j, seats_for(raw, *j[:3], loader=loader)), jobs)
+        )
     rows, gaps = {}, []
     for (post, phase, district, total), seats in groups:
         # A samiti seat spanning panchayats is listed once per panchayat.
@@ -106,12 +118,12 @@ def build_frame(raw, workers):
     print(json.dumps({"seats": len(rows), "district_count_gaps": gaps}))
     if gaps:
         raise ValueError("By-election seats differ from the listed district totals")
-    (raw / ROOT).mkdir(parents=True, exist_ok=True)
+    (frames / ROOT).mkdir(parents=True, exist_ok=True)
     pq.write_table(
         pa.Table.from_pylist(
             sorted(rows.values(), key=lambda s: tuple(map(str, s.values())))
         ),
-        raw / f"{ROOT}/frame.parquet",
+        frames / f"{ROOT}/frame.parquet",
     )
 
 

@@ -13,3 +13,4 @@ data/*/interim
 Desktop.ini
 Thumbs.db
 .cache/
+data/unprocessed

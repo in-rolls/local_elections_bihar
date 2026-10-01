@@ -88,7 +88,7 @@ DESCRIPTIONS = {
         "No readable block label recovered from heading; no carry-forward "
         "or address-based inference"
     ),
-    "year_basis": ("Year evidence; see data/PROVENANCE.md"),
+    "year_basis": ("Year evidence; see data/PROVENANCE.json"),
 }
 
 
@@ -356,13 +356,13 @@ def write_outputs(raw, out):
     metadata = {
         "validation": validation,
         "year_assignment": {
-            "path": "data/PROVENANCE.md",
+            "path": "data/PROVENANCE.json",
             "election_year": YEAR_ASSIGNMENT["election_year"],
             "basis": YEAR_ASSIGNMENT["year_basis"],
             "sha256": hashlib.sha256(YEAR_RECEIPT.read_bytes()).hexdigest(),
         },
         "sources": sources,
-        "source_root": "data/2011/raw/central_handoff",
+        "source_root": "data/2011/raw/reports",
         "code_sha256": {
             name: hashlib.sha256(
                 Path(__file__).with_name(name).read_bytes()

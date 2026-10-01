@@ -36,9 +36,11 @@ def unit_id(u):
     return f"d{d}_z{s}"
 
 
-def build_frame(raw, workers):
+def build_frame(raw, workers, *, loader=fetch, frames=None):
     """Enumerate every 2021 seat and require the portal's own seat totals."""
-    panchayats = pq.read_table(raw / "2021/frame.parquet").to_pylist()
+    frames = frames or raw
+    (frames / ROOT).mkdir(parents=True, exist_ok=True)
+    panchayats = pq.read_table(frames / "2021/frame.parquet").to_pylist()
     blocks = sorted({(u["district_id"], u["block_id"]) for u in panchayats})
     districts = sorted({u["district_id"] for u in panchayats})
     names = {
@@ -48,7 +50,7 @@ def build_frame(raw, workers):
 
     def wards(u):
         d, b, p = u["district_id"], u["block_id"], int(u["panchayat_id"])
-        body = fetch(
+        body = loader(
             raw,
             f"{ROOT}/frame/wards/d{d}_b{b}_p{p}",
             "Result",
@@ -61,7 +63,7 @@ def build_frame(raw, workers):
 
     def samiti(block):
         d, b = block
-        body = fetch(
+        body = loader(
             raw,
             f"{ROOT}/frame/samiti/d{d}_b{b}",
             "Result",
@@ -70,7 +72,7 @@ def build_frame(raw, workers):
         return [(block, int(s["i"])) for s in decode_records(body)]
 
     def zila(d):
-        body = fetch(
+        body = loader(
             raw,
             f"{ROOT}/frame/zila/d{d}",
             "Result",
@@ -124,7 +126,7 @@ def build_frame(raw, workers):
     if len(keys) != len(set(keys)):
         raise ValueError("Repeated seat unit in frame")
 
-    totals = decode_records(fetch(raw, f"{ROOT}/frame/totals", TOTALS_URL))
+    totals = decode_records(loader(raw, f"{ROOT}/frame/totals", TOTALS_URL))
     expected = {
         (int(t["districtID"]), post): int(t[f"p{post}"])
         for t in totals
@@ -149,7 +151,7 @@ def build_frame(raw, workers):
     if gaps or extra:
         raise ValueError("Seat frame differs from portal totals")
     pq.write_table(
-        pa.Table.from_pylist(rows), raw / f"{ROOT}/frame.parquet", compression="zstd"
+        pa.Table.from_pylist(rows), frames / f"{ROOT}/frame.parquet", compression="zstd"
     )
 
 

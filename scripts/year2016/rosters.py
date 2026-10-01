@@ -67,7 +67,7 @@ def download(raw):
     buttons = [(i["name"], i["value"]) for i in soup.select("input[type=submit][name]")]
     if len(buttons) != DISTRICTS:
         raise ValueError(f"Expected {DISTRICTS} district buttons, found {len(buttons)}")
-    folder = raw / "2016/reservation"
+    folder = raw / "reservation_pdfs"
     folder.mkdir(parents=True, exist_ok=True)
     listing = []
     for name, label in buttons:
@@ -112,7 +112,7 @@ def download(raw):
 
 
 def parse(raw, out):
-    folder = raw / "2016/reservation"
+    folder = raw / "reservation_pdfs"
     rows, unread = [], []
     listing = json.loads((folder / "listing.json").read_text())
     if not listing:
@@ -170,7 +170,7 @@ def parse(raw, out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["download", "parse"])
-    parser.add_argument("--raw", type=Path, default=Path("data/2016/raw/statewide"))
+    parser.add_argument("--raw", type=Path, default=Path("data/unprocessed/2016"))
     parser.add_argument(
         "--out", type=Path, default=Path(".cache/reservation_roster_2016.parquet")
     )
