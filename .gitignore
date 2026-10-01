@@ -7,9 +7,9 @@ __pycache__/
 build/
 dist/
 *.log
-!data/provenance/*.log
 *.part
 data/*/raw
 data/*/interim
 Desktop.ini
 Thumbs.db
+.cache/

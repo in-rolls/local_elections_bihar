@@ -3,7 +3,7 @@
 The workbook explicitly identifies the 2011 election. The maintainer also
 confirmed the PDF collection as 2011, noting its “पूर्व निर्वाचित” columns for
 prior elected office in 2001 and 2006. All three tables use `election_year=2011`;
-the [year receipt](../../provenance/2011_report_year.json) records that evidence.
+the [source provenance](../../PROVENANCE.md) records that evidence.
 Extracted workbook/PDF name differences still require checking against the
 originals. Keep the source records separate until that review resolves them.
 These files do not yet establish a reconciled roster or complete seat frame.
@@ -44,7 +44,7 @@ source serials nor `record_id` are seat or person identifiers.
 `coverage.csv` reconciles all 338 PDF records with the companion summary by
 printed block label. It retains zero-count summary labels and the separate
 Vajirganj/Wazirganj labels. The explicit Hindi crosswalk in
-[`parse_2011.py`](../../../scripts/parse_2011.py) maps these two to the same block;
+[`parse_2011.py`](../../../scripts/year2011/parse_gaya.py) maps these two to the same block;
 there are 24 distinct mapped blocks. This agreement tests extraction coverage,
 not the correctness of the report, its year or its population coverage.
 
@@ -57,8 +57,8 @@ winners = pq.read_table("data/2011/gaya_mukhiya/spreadsheet_winner_records.parqu
 print(winners.select(["block", "panchayat_raw", "candidate_name", "age"]).to_pandas())
 ```
 
-`dictionary.csv` documents each table's columns, types, null counts and blank
-counts; `SCHEMA.json` provides the Arrow schemas. Source strings and their typed
+`MANIFEST.json` documents each table's columns, types, null counts and blank
+counts. Source strings and their typed
 counterparts provide a row-level recode record. The rules are:
 
 - Decode legacy font encodings to Unicode, normalize to NFC, collapse whitespace
@@ -109,8 +109,7 @@ Every parsed record identifies its source file and SHA-256, plus a PDF page or
 workbook row. Primary PDF records also include their bounding box. Alternate
 comparisons use the same serial; summary page references appear in `coverage.csv`.
 `MANIFEST.json` pins the five original files, parser code, mappings, reviewed
-sample and dependency lock. `CHECKSUMS` covers the machine-readable outputs and
-manifest; `validation.json` records reconciliation and issue counts.
+sample and dependency lock. The same manifest records output hashes, reconciliation and issue counts.
 
 The PDF text uses embedded glyph encodings whose original Unicode maps scramble
 Hindi. `font_map_2011.json` maps reviewed glyphs, keyed by the embedded font's
@@ -126,7 +125,7 @@ Unicode reference font, which is proprietary and not redistributed. It also read
 `alternate_winners/GAYA/GAYA_w_count.pdf` to map its summary font. For example:
 
 ```sh
-uv run python scripts/map_fonts_2011.py \
+uv run python -m scripts.year2011.map_fonts \
   --font '/System/Library/Fonts/Supplemental/Arial Unicode.ttf' \
   --out /tmp/gaya-font-map.json
 ```

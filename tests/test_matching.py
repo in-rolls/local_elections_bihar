@@ -1,6 +1,6 @@
 """Result-to-candidate matching on shapes seen in the SEC feeds."""
 
-from matching import match, name_key
+from scripts.shared.matching import match, name_key
 
 
 def test_swapped_serials_follow_names():

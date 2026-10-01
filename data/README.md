@@ -1,201 +1,171 @@
-# Working with Bihar election data
+# Bihar election data
 
-The [repository scope](../README.md#scope-and-collection-priorities) defines the
-collection target: seats and reservations linked to candidates and winners,
-across all recoverable general elections and by-elections for six panchayat
-offices. Turnout, polling logistics, municipalities, indirect leadership and
-further affidavit work are deferred. Existing deferred assets are retained
-separately; their presence is not a collection priority.
+Use the year folders for published seats, reservation labels, candidates and
+winners. These tables are derived from original sources and are the usable data
+products. Sources and their limitations are described in [PROVENANCE.md](PROVENANCE.md).
+Further affidavit work, turnout and indirect leadership remain outside the current scope.
 
-Start with the published tables in `data/2016/` and `data/2021/`. You do not need
-an external drive or the raw collection to use those tables. `make verify` checks
-their schemas, row counts, checksums and joins without contacting the SEC.
+## Data summary
 
-## One layout, on any disk
+Run `make data-summary` to update the single table below. The script reads the
+published datasets and measures the source directories; it does not download,
+parse originals or create another inventory file. Regeneration requires the full
+source collection to be mounted. Reading the table and using the published
+datasets do not require that drive. Do not edit the generated section by hand.
+
+<!-- data-summary:start -->
+
+| Kind | Collection / office | Seats | Reservation labels | Candidates | Winners / runners | Files | Stored size | Location / availability |
+| --- | --- | ---: | --- | ---: | --- | ---: | ---: | --- |
+| Source collection | 2006 / central_handoff; .xls | — | — | — | — | 32 | 21.51 MB | `2006/raw/central_handoff`; external storage; distribution pending |
+| Source collection | 2011 / central_handoff; .pdf, .xls | — | — | — | — | 291 | 56.37 MB | `2011/raw/central_handoff`; external storage; distribution pending |
+| Working files / receipts | 2016 / zenodo_export; .log, .md, .py, no extension | — | — | — | — | 4 | 11.95 KB | `2016/interim/zenodo_export`; external storage; publication receipts only |
+| Source collection | 2016 / legacy; .csv | — | — | — | — | 6 | 187.71 MB | `2016/raw/legacy`; external storage; distribution pending |
+| Source collection | 2016 / statewide; .json, .jsonl.gz, .log, .parquet, .pdf | — | — | — | — | 3,127 | 2.75 GB | `2016/raw/statewide`; external storage; [Zenodo restore](#source-availability) |
+| Working files / receipts (deferred) | 2021 / affidavits; .json, .png, .txt | — | — | — | — | 1,236 | 165.73 MB | `2021/interim/affidavits`; external storage; distribution pending |
+| Working files / receipts | 2021 / archive; no extension | — | — | — | — | 1 | 866 B | `2021/interim/archive`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / check.log; .log | — | — | — | — | 1 | 1.63 KB | `2021/interim/check.log`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / download.log; .log | — | — | — | — | 1 | 11.97 KB | `2021/interim/download.log`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / download_status.json; .json | — | — | — | — | 1 | 222 B | `2021/interim/download_status.json`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / download_status.parquet; .parquet | — | — | — | — | 1 | 214.14 KB | `2021/interim/download_status.parquet`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / parsed; .json, .parquet | — | — | — | — | 3 | 9.22 MB | `2021/interim/parsed`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / pipeline_status.json; .json | — | — | — | — | 1 | 1.88 KB | `2021/interim/pipeline_status.json`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / release.log; .log | — | — | — | — | 1 | 1.16 KB | `2021/interim/release.log`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / structured_source_search.json; .json | — | — | — | — | 1 | 2.43 KB | `2021/interim/structured_source_search.json`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / throughput.json; .json | — | — | — | — | 1 | 368 B | `2021/interim/throughput.json`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / throughput.log; .log | — | — | — | — | 1 | 304 B | `2021/interim/throughput.log`; external storage; distribution pending |
+| Working files / receipts (deferred) | 2021 / vision_validation; .json, .log | — | — | — | — | 3 | 60.41 KB | `2021/interim/vision_validation`; external storage; distribution pending |
+| Source collection (deferred) | 2021 / affidavits; .json, .jsonl, .jsonl.gz, .pdf | — | — | — | — | 2,721 | 3.25 GB | `2021/raw/affidavits`; external storage; distribution pending |
+| Source collection | 2021 / mukhiya_archive; .json, no extension | — | — | — | — | 3 | 9.74 MB | `2021/raw/mukhiya_archive`; external storage; distribution pending |
+| Source collection | 2021 / portal_snapshot_2026; .jsonl.gz, .parquet | — | — | — | — | 1,304 | 3.23 MB | `2021/raw/portal_snapshot_2026`; external storage; distribution pending |
+| Source collection | 2021 / report; .html.gz | — | — | — | — | 2 | 64.59 KB | `2021/raw/report`; external storage; distribution pending |
+| Source collection | 2021 / reservation_check; .jsonl.gz | — | — | — | — | 5 | 103.61 KB | `2021/raw/reservation_check`; external storage; distribution pending |
+| Source collection (deferred) | 2021 / source_search; .html, .js, .pdf, .png | — | — | — | — | 7 | 11.40 MB | `2021/raw/source_search`; external storage; distribution pending |
+| Source collection | 2021 / statewide; .gz, .jsonl.gz, .parquet | — | — | — | — | 629,456 | 797.09 MB | `2021/raw/statewide`; external storage; distribution pending |
+| Source collection | undated / central_handoff; .xls | — | — | — | — | 72 | 40.36 MB | `undated/raw/central_handoff`; external storage; distribution pending |
+| Published records | 2016 general / ward member | 114,583 | 103,469 | 277,148 | 97,515 | — | — | [Dataset](2016/) |
+| Published records | 2016 general / panch | 114,583 | 95,465 | 136,021 | 85,692 | — | — | [Dataset](2016/) |
+| Published records | 2016 general / mukhiya | 8,402 | 8,133 | 96,257 | 7,942 | — | — | [Dataset](2016/) |
+| Published records | 2016 general / sarpanch | 8,402 | 8,139 | 45,054 | 7,881 | — | — | [Dataset](2016/) |
+| Published records | 2016 general / panchayat samiti member | 11,142 | 11,142 | 80,259 | 10,793 | — | — | [Dataset](2016/) |
+| Published records | 2016 general / zila parishad member | 983 | 983 | 10,126 | 894 | — | — | [Dataset](2016/) |
+| Published records | 2021 general / ward member | 109,641 | Unknown | 505,438 | 109,510 | — | — | [Dataset](2021/) |
+| Published records | 2021 general / panch | 109,641 | Unknown | 216,429 | 106,656 | — | — | [Dataset](2021/) |
+| Published records | 2021 general / mukhiya | 8,067 | Unknown | 66,430 | 8,050 | — | — | [Dataset](2021/) |
+| Published records | 2021 general / sarpanch | 8,067 | Unknown | 49,698 | 8,044 | — | — | [Dataset](2021/) |
+| Published records | 2021 general / panchayat samiti member | 11,095 | Unknown | 73,778 | 11,065 | — | — | [Dataset](2021/) |
+| Published records | 2021 general / zila parishad member | 1,160 | Unknown | 12,935 | 1,150 | — | — | [Dataset](2021/) |
+| Published records | 2023 1 byelection / ward member | 533 | Unknown | 1,092 | 533 | — | — | [Dataset](2021/) |
+| Published records | 2023 1 byelection / panch | 2,002 | Unknown | 2,158 | 2,002 | — | — | [Dataset](2021/) |
+| Published records | 2023 1 byelection / mukhiya | 48 | Unknown | 273 | 48 | — | — | [Dataset](2021/) |
+| Published records | 2023 1 byelection / sarpanch | 54 | Unknown | 275 | 54 | — | — | [Dataset](2021/) |
+| Published records | 2023 1 byelection / panchayat samiti member | 44 | Unknown | 180 | 44 | — | — | [Dataset](2021/) |
+| Published records | 2023 1 byelection / zila parishad member | 7 | Unknown | 66 | 7 | — | — | [Dataset](2021/) |
+| Published records | 2023 2 byelection / ward member | 321 | Unknown | 530 | 321 | — | — | [Dataset](2021/) |
+| Published records | 2023 2 byelection / panch | 788 | Unknown | 825 | 788 | — | — | [Dataset](2021/) |
+| Published records | 2023 2 byelection / mukhiya | 20 | Unknown | 112 | 20 | — | — | [Dataset](2021/) |
+| Published records | 2023 2 byelection / sarpanch | 34 | Unknown | 126 | 34 | — | — | [Dataset](2021/) |
+| Published records | 2023 2 byelection / panchayat samiti member | 20 | Unknown | 61 | 20 | — | — | [Dataset](2021/) |
+| Published records | 2023 2 byelection / zila parishad member | 4 | Unknown | 27 | 4 | — | — | [Dataset](2021/) |
+| Published records | 2025 1 byelection / ward member | 733 | Unknown | 959 | 733 | — | — | [Dataset](2021/) |
+| Published records | 2025 1 byelection / panch | 915 | Unknown | 955 | 915 | — | — | [Dataset](2021/) |
+| Published records | 2025 1 byelection / mukhiya | 63 | Unknown | 290 | 63 | — | — | [Dataset](2021/) |
+| Published records | 2025 1 byelection / sarpanch | 83 | Unknown | 282 | 83 | — | — | [Dataset](2021/) |
+| Published records | 2025 1 byelection / panchayat samiti member | 72 | Unknown | 204 | 72 | — | — | [Dataset](2021/) |
+| Published records | 2025 1 byelection / zila parishad member | 8 | Unknown | 34 | 8 | — | — | [Dataset](2021/) |
+| Parsed source list | 2011 / gaya mukhiya spreadsheet winner records / mukhiya | Unknown | Unknown | Unknown | 331 | — | — | [Dataset](2011/gaya_mukhiya/) |
+| Parsed source list | 2011 / mukhiya reports winner records / mukhiya | Unknown | 4,318 | Unknown | 4,320 | — | — | [Dataset](2011/mukhiya_reports/) |
+| Parsed source list | 2011 / gaya mukhiya runner name records / mukhiya | Unknown | Unknown | Unknown | 338 runners | — | — | [Dataset](2011/gaya_mukhiya/) |
+| Manual transcription | 2011 / khajuria judgment / mukhiya | Unknown | Unknown | 11 | 1 | — | — | [Dataset](2011/khajuria_judgment/) |
+| Published snapshot | Undated 2021-term feed / ward member | Unknown | 109,641 | Unknown | 109,641 | — | — | [Dataset](2021/) |
+| Published snapshot | Undated 2021-term feed / panch | Unknown | 109,641 | Unknown | 109,641 | — | — | [Dataset](2021/) |
+| Published snapshot | Undated 2021-term feed / mukhiya | Unknown | 8,067 | Unknown | 8,067 | — | — | [Dataset](2021/) |
+| Published snapshot | Undated 2021-term feed / sarpanch | Unknown | 8,067 | Unknown | 8,067 | — | — | [Dataset](2021/) |
+| Published snapshot | Undated 2021-term feed / panchayat samiti member | Unknown | 11,095 | Unknown | 11,095 | — | — | [Dataset](2021/) |
+| Published snapshot | Undated 2021-term feed / zila parishad member | Unknown | 1,160 | Unknown | 1,160 | — | — | [Dataset](2021/) |
+
+Stored source/working collection: **7.31 GB (7,307,234,801 bytes; 638,282 files)**, measured from file sizes on 2026-10-01 (UTC). Filesystem metadata files are excluded. Published datasets and repository documentation are excluded from this storage total.
+
+Source collections contain original documents/responses and their acquisition metadata. Working files include caches, generated intermediates and receipts. Published records are derived, usable election data; manual transcriptions are reviewed inputs that cannot be regenerated by code alone.
+
+**Reading the counts:** Seats means source frame rows, including ambiguous seat codes. Reservation labels means nonblank labels, not only reserved seats. For source lists it counts labeled records, not unique seats. Candidates and winners count records, not necessarily unique people. Unknown means the source does not establish the count; 0 is an observed zero. A dash means the column does not apply to that row. File counts and sizes belong to storage bundles and are not allocated again to offices or election rounds.
+
+- District Mukhiya reports include the 338 Gaya pilot PDF records, counted once here. The Khajuria judgment winner overlaps one district-report record; source totals are not additive.
+- A reported reservation label is not independent confirmation of its correctness.
+- Current-term reservations are not assigned to general or by-elections retrospectively.
+- Seat coverage is conditional on the collected frame, not proof of statewide completeness.
+- 2011 winner/runner records do not establish a unique-seat frame or all-candidate coverage.
+- Cross-general-election links have not been established; within-term by-election membership already exists separately.
+
+The 2006 and undated source collections remain unparsed; 2011 is partially parsed. Snapshot labels and current winners are displayed separately from election-specific records. Source-list winners remain provisional until reconciled. Winner determination is documented in each dataset.
+
+<details>
+<summary>Inputs used to generate this table (SHA-256)</summary>
+
+- `2011/gaya_mukhiya/runner_name_records.parquet`: `0e28037ab1e68ef3fd3420c604b9e44b9739b99fb36638d6a376e0a1e0bfa25d`
+- `2011/gaya_mukhiya/spreadsheet_winner_records.parquet`: `556be867fead9a5565805f788f08e4e16d1805ea30dbe14a2b38b32cbfac476b`
+- `2011/khajuria_judgment/candidates.csv`: `ce065e676ceb9056da2121dd8d254fbb210785d572cc79608e4c9ef5b2c9fc63`
+- `2011/mukhiya_reports/winner_records.parquet`: `97625b13b5e1198bd4a5ebdfabbdbbceb2f50beb0bb2f8622014519f94d18379`
+- `2016/candidates.parquet`: `0b73373fce5b29292c61399b3308d44b95f850f17127f5c2e6bfef3e162f65ca`
+- `2016/seats.parquet`: `5f234dad9afc7603e37aa34401ff4210fee31e6448cb8f94d79737a667d1761c`
+- `2016/winners.parquet`: `1f1712f0a91370cb3db6a4b891d419a60cd81a4a7dbc00c57ea04e4fc14aeb13`
+- `2021/byelection_candidates.parquet`: `c2686d60f0678ca3dbb8e79e1127d78bc9aa19f03570084ce6ae2c20aa99f4f8`
+- `2021/byelection_seats.parquet`: `a6bf0939e4e50c79161efb0d03b6425a7499b792a676d4f6db77049f817b6aef`
+- `2021/byelection_winners.parquet`: `c6445333c4109b108bb36681e530bce0de9f31e343d9e7636ca9bb258cf0153b`
+- `2021/candidates.parquet`: `8e6fda01045edf245cc0c7d46665f3496c5e41323775a3900300a9ae0b9537be`
+- `2021/current_reservations.parquet`: `a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073`
+- `2021/current_winners.parquet`: `55d47177250629cd87f35413645feb613a682bba3308898894b6204732c35cd4`
+- `2021/seats.parquet`: `690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab`
+- `2021/winners.parquet`: `32c40abc700179c19c8ff0c36ce860c34640e22a3be534f51fb77f78031b3c10`
+- `scripts/reporting/summary.py`: `c51e2d4cced73cedb26b5733c39f9eb9b824a295433b6872dc45016eb3b6b6ce`
+- `scripts/reporting/storage.py`: `75526e88a2ecd5b7958a6d34813c2485939a917d4048db5730e453952513be2f`
+
+</details>
+
+<!-- data-summary:end -->
+
+## Files and locations
 
 ```text
 data/
-  coverage.csv                election/office coverage from parsed tables
-  coverage.json               coverage definitions, limitations and source hashes
-  CATALOG.csv                 asset counts and sizes, generated from receipts
-  SIZE_REPORT.json            year totals, archive sizes, deferred-work sizes
-  MIGRATION.csv.gz            original organization receipt, preserved unchanged
-  PRUNING.csv.gz              removed paths, SHA-256 and reasons
-  provenance/                 original handoff manifest and Zenodo verification
-  2006/raw/                   workbooks explicitly headed 2006
-  2011/raw/                   winner, runner-up, summary and alternate reports
-  undated/raw/                records whose election year remains unresolved
-  2016/
-    raw/                     source collection and acquisition metadata
-    interim/                 small publication receipts; disposable caches when needed
-    *.parquet                published tables
-    MANIFEST.json            published table checksums and build provenance
-  2021/
-    raw/                     source collection and acquisition metadata
-    interim/                 small publication receipts; disposable caches when needed
-    *.parquet                published tables
-    affidavits/              existing 64-winner transcription and review inputs
-    reservation_check/       published reservation comparison
+  README.md                 generated summary and usage instructions
+  PROVENANCE.md              source origins, dates, checks and limitations
+  <year>/
+    raw/                    original source collection and acquisition metadata
+    *.parquet               published datasets
+    MANIFEST.json           dataset source/output references and hashes
 ```
 
-Each year has the same `raw/` and `interim/` structure, including years with empty
-working directories. Sources retain their original bytes. Acquisition bundles
-include the enumeration frames and request receipts saved alongside responses.
-Collection dates are distinct from election years: the 2026 portal snapshot of
-the 2021 term is under `2021/raw/portal_snapshot_2026/`. By-election rounds retain
-their original phase identifiers within the 2021-term acquisition bundle.
+Manual transcriptions and review inputs are retained with the relevant dataset.
+They cannot be recreated by rerunning extraction code. Disposable caches belong
+in ignored `.cache/` or a temporary directory; there is no required `interim/`
+layer. Existing deferred affidavit tools still use their historical working
+locations, which are included in the size summary and left untouched.
 
-On the maintainer's machine, the physical source and working directories live
-under `/Volumes/Staging/local_elections_bihar/<year>/`. The repository's
-`data/<year>/raw` and `data/<year>/interim` entries are ignored symlinks to those
-directories. Published tables and receipts remain ordinary repository files.
-There are no alternative old-path aliases. An unmounted drive makes the source
-links unavailable; it does not prevent using or verifying the published tables.
+On the maintainer's machine, source directories live under
+`/Volumes/Staging/local_elections_bihar/<year>/raw`. Ignored links at
+`data/<year>/raw` point there. Other users can put restored sources directly at
+`data/<year>/raw`, or link that path to their own storage. Parsers accept explicit
+input paths; the external drive's name is not a requirement.
 
-Other users can restore ordinary directories directly under `data/<year>/`, or
-use their own storage root. For example, from the repository root:
+Published datasets can be used without raw sources. `make verify` checks the
+2016 and 2021 published datasets. Parsing originals is a separate, explicit task.
+Dataset manifests record source hashes and extraction details; they are not a
+history of filesystem moves or deletions.
 
-```sh
-mkdir -p /your/storage/bihar/2016/raw /your/storage/bihar/2016/interim
-ln -s /your/storage/bihar/2016/raw data/2016/raw
-ln -s /your/storage/bihar/2016/interim data/2016/interim
-```
+## Source availability
 
-Use either ordinary directories or symlinks at these paths; do not replace an
-existing directory with a link. Scripts use repository-relative paths and do not
-require `/Volumes/Staging`. Their `--raw`, `--frame`, `--results`, and `--out`
-options support explicit locations where applicable.
+The 2016 SEC source deposit is [Zenodo 22852474](https://doi.org/10.5281/zenodo.22852474).
+It contains 48 chunks of result-page archives, frame pages, reservation rosters,
+the three published tables and documentation. The verification scope and limits
+are recorded in [PROVENANCE.md](PROVENANCE.md). Temporary download chunks and
+archives are transport packaging; retain the extracted sources after verification.
 
-## Measuring collection progress
-
-Run `make coverage` to summarize the existing Parquet tables without downloading
-or reparsing originals. [coverage.csv](coverage.csv) counts known frame seats,
-reservation labels, seats with candidates and winners, candidate records and
-votes, and source-flagged versus derived winners by election and office.
-[coverage.json](coverage.json) defines the columns and pins the inputs and parser.
-Use it to identify missing records and links; file volume is not a coverage measure.
-
-Election-specific reservation labels and undated term-snapshot labels occupy
-different columns. Their presence is not independent validation. Ambiguous seat
-codes are excluded from counts of successfully linked candidate/winner seats but
-remain in frame and record totals. Provisional 2011 lists report source-record
-counts, leaving unique-seat and all-candidate coverage unknown. Other historical
-sources remain unparsed. Links across general-election frames remain outstanding.
-
-## Inventory and provenance
-
-The source and working collection is now **7.31 GB**, down from 15.10 GB.
-Pruning removed **7.80 GB** of duplicate packaging, export copies, progress logs
-and superseded generated tables. A prior organization pass had already removed
-4.93 GB of identical archive copies. These savings are separate.
-
-Of the remaining collection, **3.87 GB is core election material**:
-
-| Material | Size | Why retain it |
-| --- | ---: | --- |
-| Gzipped SEC request/response logs | 3.463 GB | Original HTML/JSON responses and acquisition receipts |
-| Earlier 2016 CSV collection | 187.7 MB | Independent historical snapshot for comparison |
-| PDFs: 2011 reports and 2016 reservation rosters | 139.6 MB | Original documents |
-| Excel workbooks: 2006, 2011 and unresolved years | 62.5 MB | Original handoff sources |
-| Frame indexes, metadata and receipts | 13.9 MB | Small indexes needed by current readers and provenance |
-
-The other **3.44 GB** is affidavit and associated research work, including its
-existing intermediate files; this was left untouched. This total includes the
-3.25 GB affidavit source directory, OCR caches, download state and related inputs.
-Published tables and repository provenance files are outside these totals.
-Sizes mean file bytes, not disk allocation.
-
-No election source was discarded merely because a generated table exists.
-Every non-Mac-metadata member of the removed archives checksum-matched a retained
-raw file. The 2021 tars alone contained 1.65 GB of headers, padding and Mac
-metadata. The 48 Zenodo chunks were another copy of the 2016 results archive.
-The scripts now read retained source directories directly. They do not recreate
-those archives during normal collection. Generated reservation tables can be
-made on demand from the retained PDFs.
-
-`CATALOG.csv` and `SIZE_REPORT.json` are generated by `make data-summary` from
-`MIGRATION.csv.gz` minus `PRUNING.csv.gz`. The former preserves every original
-location, canonical path, byte count, SHA-256 and year evidence. The latter
-records every removed file, its checksum and the reason for removal.
-`provenance/archive_overlap.json` records archive-member comparisons;
-`provenance/pruning.json` records the before/after totals.
-`repository/` and `storage/` in the original receipt denote the checkout and
-external store before organization. This inventory is a dated snapshot, not an
-automatically changing index of later acquisitions.
-
-```sh
-make data-summary
-make data-verify
-uv run python scripts/data_inventory.py verify --year 2011 --role raw
-```
-
-The local checks and offline rebuild comparisons are recorded in
-[`provenance/validation.json`](provenance/validation.json), with the test and
-container logs beside it.
-
-Verification checks retained files after applying the pruning receipt; it does not silently
-reindex changed inputs or claim that newly collected files were part of the
-migration. Run it with the external drive mounted, or against a complete restored
-collection. A partial restore should use the matching year/role selection.
-The catalog's availability column describes the local layout, not a promised
-remote download. The separately verified 2016 Zenodo deposit is described below.
-
-Historical manifests, request ledgers and export instructions are preserved
-verbatim, including their original paths and dates. Use the migration receipt to
-resolve old paths; `provenance/organization.json` records the former directory
-symlinks. Published build manifests retain the code hashes of the build
-that produced those artifacts; organization validation is recorded separately.
-The reservation-check manifest was regenerated after its path change; its
-published results are unchanged.
-
-The older central handoff originates at `in-rolls/local_elections`, commit
-`fa4c4e79`, and its original checksum manifest is retained in `provenance/`.
-All 32 other-office workbooks have 2006 headings. The `Mukhiya_2006` folder name
-is unreliable: Gaya's first row explicitly states 2011, while the first 12 rows
-of the other 37 workbooks do not establish their year. Those 37 files and all
-35 Sarpanch workbooks remain `undated`. This is a year-classification limit,
-not a claim that the records have no recoverable date.
-
-The 2011 PDF collection has winner lists for 23 district folders, alternate
-winner reports for eight districts, runner-up reports for eight districts, and
-summary/indirect-election reports. The maintainer confirmed the collection as
-2011 after reviewing reports with prior-election columns for 2001 and 2006;
-the [year receipt](provenance/2011_report_year.json) preserves the evidence.
-Both winner-report versions are retained without assuming that one supersedes
-the other. The district folders do not establish statewide completeness.
-The [Gaya Mukhiya pilot](2011/gaya_mukhiya/README.md) now provides 331 explicitly dated workbook winner records and separate tables for 338 PDF winners and 338 runner names. Both are assigned to 2011; extracted name differences require review against the originals. The pilot includes source/page/row references, discrepancy receipts and a field dictionary. The [district Mukhiya reports](2011/mukhiya_reports/README.md) now contain 4,320 winner records across 23 districts and 4,318 reservation labels, including the same 338 primary Gaya PDF records. Their election years are 2011, with the confirmation basis recorded in each row. A separate [judgment transcription](2011/khajuria_judgment/README.md) adds 11 candidates and votes for Khajuria in 2011 and corroborates one Bhojpur winner identity. Other offices and remaining earlier-year sources still need parsing.
-
-## What Zenodo contains
-
-[Zenodo record 22852474](https://doi.org/10.5281/zenodo.22852474), published on
-22 September 2026 under CC0, contains 60 files totaling 2,787,457,212 bytes:
-
-- 48 `rp.??` chunks forming the 2016 result-page archive (2,705 ledgers).
-- A frame-page archive (228 ledgers) and reservation-roster archive (192 files).
-- The three 2016 tables: seats, candidates and winners.
-- The schema, dictionary, manifest, audit, checksums and deposit README.
-
-Every file's size and MD5 in the public record matches the corresponding local
-export file. The chunks concatenate to the SHA-256 of the local result archive.
-The three tables, schema, dictionary, manifest and audit are byte-identical to
-the repository versions checked during this pass. We checked the public metadata
-against local bytes and downloaded the remote manifest to confirm its contents;
-we did not re-download all 2.79 GB of payloads.
-
-The public API response, per-file comparison and verification result are saved
-in `provenance/zenodo_2016_record.json`, `provenance/zenodo_2016_files.csv` and
-`provenance/zenodo_2016_verification.json`. Only small publication metadata and
-the historical upload log remain under
-`2016/interim/zenodo_export/`. Local export payloads were removed after comparing
-them with the retained source files and published tables. The public deposit is
-unchanged. Historical verification files describe the export before pruning;
-consult `PRUNING.csv.gz` for its current local disposition.
-
-The deposit does **not** contain 2021 sources, older-election sources, affidavits,
-the independent legacy CSV collection, the generated `frame.parquet`, or this
-repository's executable pipeline. The frame is reproducible from the deposited
-frame pages using the offline command below. The independent audit's legacy-CSV
-comparison therefore needs a separately available input.
+There is no established public download for the complete older-year handoff or
+2021 raw collection. The Harvard Dataverse account/search check found no Bihar
+local-election deposit within its stated scope. Do not treat local paths as
+available downloads. Sources for 2006 and unresolved years remain unparsed;
+2011 is partially parsed. Refer to the 2011 dataset notes before combining sources.
 
 ## Restore and rebuild 2016 from Zenodo
 
@@ -209,7 +179,7 @@ mkdir -p data/2016/raw/statewide
 tar -xf /tmp/bihar-2016-download/bihar_2016_result_pages.tar -C data/2016/raw/statewide
 tar -xf /tmp/bihar-2016-download/bihar_2016_frame_pages.tar -C data/2016/raw/statewide
 tar -xf /tmp/bihar-2016-download/bihar_2016_reservation_rosters.tar -C data/2016/raw/statewide
-uv run python scripts/sec_2016.py frame-offline --raw data/2016/raw/statewide
+uv run python -m scripts.year2016.collect frame-offline --raw data/2016/raw/statewide
 ```
 
 Keep the extracted source files as the working collection. After successful
@@ -219,40 +189,3 @@ The supplied tables are already in this repository; regenerating them is
 optional. `make build-2016` reads the saved sources if regeneration is needed.
 The full local inventory includes additional sources outside the Zenodo deposit,
 so a Zenodo-only restore is checked using the deposit's own checksums.
-
-## Other pipelines and deferred work
-
-For 2021, `raw/statewide/` contains the acquisition checkpoints for all offices,
-by-elections and current-term feeds. `raw/mukhiya_archive/` retains historical
-archive and request receipts only. `raw/portal_snapshot_2026/` supplies the earlier
-mukhiya current-feed snapshot. `raw/report/` and `raw/reservation_check/` hold
-comparison sources. Distribution of sources beyond the existing Zenodo deposit
-remains undecided.
-
-An authenticated Harvard Dataverse check covered all 83 datasets accessible to
-`@soodoku`, including drafts, plus public Bihar dataset and project-filename
-searches. No Bihar local-election deposit was found. The related-looking
-[PRI Seat Reservation Data](https://doi.org/10.7910/DVN/PQZVCO) record contains one
-file, `haryana_mau_1995_2021.gz`. This describes the visible account and search
-results, not deleted uploads or other accounts. Evidence is recorded in
-`provenance/dataverse_check.json`. No remote data was changed.
-
-Already-collected affidavit PDFs and request receipts are in
-`2021/raw/affidavits/`; OCR text, page images and page-location caches are in
-`2021/interim/affidavits/`. The checked-in review CSV remains an explicit manual
-input to the published 64-winner transcription. It cannot be regenerated by OCR.
-The general 2021 crawl stops after election tables and validation. Further
-affidavit downloads, OCR and transcription are a distinct, deferred step.
-
-SEC reconnaissance found a [2016 archive](https://sec.bihar.gov.in/archive),
-[2021 election report](https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx), and
-[2026 Form 1 page](https://sec.bihar.gov.in/Prapatra1_ClaimObjection2026/).
-The archive links separate 2016 contestant, winner, reservation and vote forms.
-A five-request probe of the [winner form](https://sec.bihar.gov.in/old-sec/wcl.aspx)
-returned 12 Mukhiya winners in Arwal block, Arwal district. Their candidate-name
-set exactly matches the 12 published winners for that block. This is a bounded
-independent comparison, not a statewide completeness check or a seat-key match.
-Saved HTML and the comparison are in `provenance/sec_probe.json` and its linked
-receipt. No affidavit links were followed. The other pages remain discovery
-leads; no older-year download was established by this probe. No new data is
-published remotely by this pass.

@@ -4,11 +4,12 @@ import base64
 import gzip
 import json
 
-import build_2016 as b
 import polars as pl
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
+
+from scripts.year2016 import parse as b
 
 HEADER = "".join(f"<th>{h}</th>" for h in b.HEADER)
 PAGER = "javascript:__doPostBack('gvVoterListDetails','"

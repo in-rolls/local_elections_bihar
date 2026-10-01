@@ -1,6 +1,6 @@
 """Synthetic source contracts for the non-mukhiya 2021 offices; no live requests."""
 
-import offices_2021
+from scripts.year2021 import collect_offices as offices_2021
 
 
 def seat(post, seat_no, panchayat_id=None, block_id=1):

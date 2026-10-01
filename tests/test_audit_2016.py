@@ -1,9 +1,10 @@
 """The audit's comparisons must fail on a planted defect; no live requests."""
 
-import audit_2016 as a
-import build_2016 as b
 import polars as pl
 from test_build_2016 import candidate, page, write_inputs
+
+from scripts.year2016 import audit as a
+from scripts.year2016 import parse as b
 
 
 def release(tmp_path):

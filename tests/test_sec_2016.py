@@ -5,7 +5,8 @@ import threading
 import time
 
 import pytest
-import sec_2016 as s
+
+from scripts.year2016 import collect as s
 
 FORM = b'<html><input type="hidden" name="__VIEWSTATE" value="x"></html>'
 

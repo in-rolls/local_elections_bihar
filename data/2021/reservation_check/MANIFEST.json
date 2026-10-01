@@ -26,38 +26,125 @@
       "path": "flagged_winners.parquet",
       "rows": 35,
       "sha256": "b3ef5d686c7013309d4cca290faf38fead063db96b2c71a7b31b7e5e9e2826ee",
-      "schema": {
-        "district_id": "int64",
-        "block_id": "int64",
-        "panchayat_id": "int64",
-        "candidate_serial": "int64",
-        "seat_reservation": "string",
-        "gender_2021": "string",
-        "gender_current": "string",
-        "same_reported_name": "bool",
-        "candidate_document_url": "string",
-        "current_document_url": "string",
-        "same_document_url": "bool",
-        "reservation_source_sha256": "string",
-        "candidate_source_sha256": "string",
-        "current_winner_source_sha256": "string"
+      "columns": {
+        "district_id": {
+          "type": "int64",
+          "description": "Original composite 2021 candidate key component"
+        },
+        "block_id": {
+          "type": "int64",
+          "description": "Original composite 2021 candidate key component"
+        },
+        "panchayat_id": {
+          "type": "int64",
+          "description": "Original composite 2021 candidate key component"
+        },
+        "candidate_serial": {
+          "type": "int64",
+          "description": "Original composite 2021 candidate key component"
+        },
+        "seat_reservation": {
+          "type": "string",
+          "description": "Unmodified current reservation-feed label"
+        },
+        "gender_2021": {
+          "type": "string",
+          "description": "Unmodified explicitly 2021 candidate-feed gender"
+        },
+        "gender_current": {
+          "type": "string",
+          "description": "Current winner-feed gender; null if no seat match"
+        },
+        "same_reported_name": {
+          "type": "bool",
+          "description": "Literal name equality after edge whitespace trim; not an identity match"
+        },
+        "candidate_document_url": {
+          "type": "string",
+          "description": "Document URL in dated 2021 candidate feed"
+        },
+        "current_document_url": {
+          "type": "string",
+          "description": "Document URL in current winner feed"
+        },
+        "same_document_url": {
+          "type": "bool",
+          "description": "Exact equality of nonempty document URLs; null if missing. Does not establish the correct gender or reservation label."
+        },
+        "reservation_source_sha256": {
+          "type": "string",
+          "description": "Respective response-body hash retained in input provenance"
+        },
+        "candidate_source_sha256": {
+          "type": "string",
+          "description": "Respective response-body hash retained in input provenance"
+        },
+        "current_winner_source_sha256": {
+          "type": "string",
+          "description": "Respective response-body hash retained in input provenance"
+        }
       }
     }
   ],
-  "fields": {
-    "district_id": "Original composite 2021 candidate key component",
-    "block_id": "Original composite 2021 candidate key component",
-    "panchayat_id": "Original composite 2021 candidate key component",
-    "candidate_serial": "Original composite 2021 candidate key component",
-    "seat_reservation": "Unmodified current reservation-feed label",
-    "gender_2021": "Unmodified explicitly 2021 candidate-feed gender",
-    "gender_current": "Current winner-feed gender; null if no seat match",
-    "candidate_document_url": "Document URL in dated 2021 candidate feed",
-    "current_document_url": "Document URL in current winner feed",
-    "same_document_url": "Exact equality of nonempty document URLs; null if missing. Does not establish the correct gender or reservation label.",
-    "same_reported_name": "Literal name equality after edge whitespace trim; not an identity match",
-    "reservation_source_sha256": "Respective response-body hash retained in input provenance",
-    "candidate_source_sha256": "Respective response-body hash retained in input provenance",
-    "current_winner_source_sha256": "Respective response-body hash retained in input provenance"
+  "validation": {
+    "official_2021_totals": {
+      "total": 8067,
+      "sc": 1338,
+      "st": 90,
+      "bc": 1374,
+      "women": 3583
+    },
+    "current_portal_totals": {
+      "total": 8067,
+      "sc": 1339,
+      "st": 90,
+      "bc": 1373,
+      "women": 3583
+    },
+    "current_minus_official": {
+      "total": 0,
+      "sc": 1,
+      "st": 0,
+      "bc": -1,
+      "women": 0
+    },
+    "reservation_rows_with_explicit_year": 0,
+    "districts": 38,
+    "blocks": 533,
+    "current_feeds_women_reservation": {
+      "matched_seats": 8067,
+      "missing_winner_feed_seats": 0,
+      "missing_reservation_feed_seats": 0,
+      "agrees": 8067,
+      "disagrees": 0,
+      "unknown": 0
+    },
+    "candidates": {
+      "records": 66430,
+      "unmatched_reservation_keys": 0,
+      "records_in_women_reserved_seats": 28801,
+      "reported_gender_in_women_reserved_seats": {
+        "अन्य": 13,
+        "पुरुष": 209,
+        "महिला": 28579
+      }
+    },
+    "winners": {
+      "records": 8050,
+      "unmatched_reservation_keys": 0,
+      "records_in_women_reserved_seats": 3578,
+      "reported_gender_in_women_reserved_seats": {
+        "पुरुष": 35,
+        "महिला": 3543
+      }
+    },
+    "flagged_winners": 35,
+    "flagged_winners_current_gender": {
+      "पुरुष": 4,
+      "महिला": 31
+    },
+    "flagged_winners_same_reported_name": 34,
+    "flagged_winners_same_document_url": 35,
+    "interpretation": "Matching totals do not validate individual 2021 assignments. Gender disagreements flag source conflicts, not proven reservation violations. No reservation or gender values are corrected or promoted by this check."
   }
 }

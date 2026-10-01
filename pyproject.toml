@@ -44,7 +44,7 @@ allowed-confusables = ["‘", "’", "‛", "–"]
 [tool.pytest.ini_options]
 minversion = "8"
 testpaths = ["tests"]
-pythonpath = ["scripts"]
+pythonpath = ["."]
 log_level = "INFO"
 xfail_strict = true
 filterwarnings = ["error"]
