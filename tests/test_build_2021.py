@@ -191,6 +191,23 @@ def test_vacant_placeholder_fields_are_not_a_person(tmp_path):
     validate("current_winners", [winner])
 
 
+def test_unpublished_votes_stay_null_not_zero(tmp_path):
+    # Kaimur d31_b7 mukhiya rows carry TotalVote null; 522 candidates read 0.
+    _, candidates, _, winners = build(
+        tmp_path,
+        [candidate(1, "उषा देवी"), candidate(2, "कविता देवी")],
+        [
+            result(1, "उषा देवी", 182, None, False),
+            result(2, "कविता देवी", 182, None, True),
+            result(3, "सोनी देवी", 182, None, False),
+        ],
+    )
+    assert [c["votes"] for c in candidates] == [None, None, None]
+    assert winners[0]["votes"] is None
+    validate("candidates", candidates)
+    validate("winners", winners)
+
+
 def test_results_without_serial_are_not_pooled(tmp_path):
     # 16,113 ward-member result rows have OrderBy null.
     rows = [

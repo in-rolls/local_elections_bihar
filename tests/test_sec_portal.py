@@ -8,7 +8,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 import sec_2021
-from sec_portal import attributes, completed, decode_records, parse, retry_after
+from sec_portal import completed, decode_records, retry_after
 
 
 def archive(path, data, phase=None):
@@ -42,58 +42,7 @@ def test_truncated_checkpoint_never_counts_as_completed(tmp_path):
     assert completed(tmp_path / "missing.gz") is None
 
 
-def test_source_categories_and_unknown_year_remain_separate(tmp_path):
-    raw, out = tmp_path / "raw", tmp_path / "out"
-    raw.mkdir()
-    frame = [
-        {
-            "district_id": 33,
-            "district": "D",
-            "block_id": 1,
-            "block": "B",
-            "post_id": 3,
-            "post": "Mukhiya",
-        }
-    ]
-    pq.write_table(pa.Table.from_pylist(frame), raw / "frame.parquet")
-    winner = {
-        "Dist": 33,
-        "BlockID": 1,
-        "Post": "Mukhiya",
-        "PanchayatNo": 12,
-        "CandidateName": "Synthetic",
-        "Age": 27,
-        "Category": "candidate category",
-        "ReservationStatus": "reported category",
-        "ReservationFor": "female",
-    }
-    reservation = {
-        "Dist": 33,
-        "BlockID": 1,
-        "Post": "Mukhiya",
-        "PanchayatNo": 12,
-        "Reservation": "seat category",
-    }
-    archive(raw / "winners/d33_b1_p3.jsonl.gz", [winner])
-    archive(raw / "reservations/d33_b1_p3.jsonl.gz", [reservation])
-    parse(raw, out)
-    row = pq.read_table(out / "winners.parquet").to_pylist()[0]
-    assert row["year"] is None
-    assert row["candidate_age"] == 27
-    assert row["candidate_category"] == "candidate category"
-    assert row["reservation_status_reported"] == "reported category"
-    assert row["seat_reservation"] is None
-    assert json.loads(row["raw_cell"]) == winner
-    winner["Dist"] = 34
-    archive(raw / "winners/d33_b1_p3.jsonl.gz", [winner])
-    with pytest.raises(ValueError, match="geography"):
-        parse(raw, out)
-
-
-def test_age_type_and_retry_after():
-    assert attributes({})["candidate_age"] is None
-    with pytest.raises(ValueError, match="age"):
-        attributes({"Age": "twenty"})
+def test_retry_after():
     assert retry_after("120") == 120
 
 

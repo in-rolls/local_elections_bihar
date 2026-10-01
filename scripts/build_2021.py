@@ -271,13 +271,17 @@ def build_post(units, responses):
             result_names.setdefault(r["_key"], r["result_name"])
             first_row.setdefault(r["_key"], r)
         pairs = match(names, result_names)
-        votes, flags = collections.Counter(), collections.defaultdict(set)
+        # A total exists only when every row of the candidate reports one; a
+        # TotalVote of null is an unpublished count, not zero votes.
+        votes, flags = {}, collections.defaultdict(set)
         for r in reported:
             serial, method = pairs[r["_key"]]
             r["candidate_serial"] = serial
             r["match_method"] = None if serial is None else method
-            if r["votes"] is not None:
-                votes[r["_key"]] += r["votes"]
+            known = votes.get(r["_key"], 0)
+            votes[r["_key"]] = (
+                None if known is None or r["votes"] is None else known + r["votes"]
+            )
             flags[r["_key"]].add(r["elected"])
         # In a few split seats IsWin is set on only some of the winner's panchayat
         # rows (4 samiti seats in district 2); the seat-level flag is any row.
@@ -583,7 +587,7 @@ def main():
     parser.add_argument(
         "--current-mukhiya", type=Path, default=Path("data/raw/portal_2021_2026")
     )
-    parser.add_argument("--out", type=Path, default=Path("data/release/2021_panchayat"))
+    parser.add_argument("--out", type=Path, default=Path("data/2021"))
     args = parser.parse_args()
     if args.check:
         verify(args.out)

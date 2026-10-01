@@ -1,0 +1,61 @@
+#!/bin/sh
+# 2021: every office, the by-elections and the current-term feeds, then the
+# release, its audit, and the mukhiya affidavit downloads.
+# Resumable: completed requests are reused, so rerun after any interruption.
+set -eu
+if command -v caffeinate >/dev/null 2>&1 && [ "${BIHAR_AWAKE:-0}" != 1 ]; then
+    exec env BIHAR_AWAKE=1 caffeinate -dims "$0" "$@"
+fi
+if [ ! -f data/raw/statewide_2021/frame.parquet ] ||
+    [ ! -f data/raw/statewide_2021/2021/frame.parquet ]; then
+    (cd data/raw && shasum -a 256 -c CHECKSUMS)
+    mkdir -p data/raw/statewide_2021
+    tar -xzf data/raw/statewide_2021.tar.gz -C data/raw/statewide_2021
+fi
+
+uv run python scripts/sec_2021.py fetch --raw data/raw/statewide_2021 --districts $(seq 1 38)
+
+# A pass that leaves failed units exits non-zero; later passes retry only those.
+passes() {
+    for pass in 1 2 3 4 5; do
+        if uv run python scripts/offices_2021.py "$@"; then
+            return 0
+        fi
+        echo "pass $pass of '$*' left failures; retrying in 10 minutes" >&2
+        sleep 600
+    done
+    return 1
+}
+[ -f data/raw/statewide_2021/2021/offices/frame.parquet ] || passes frame
+passes current
+passes dated --posts 4 5 6
+passes dated --posts 1 2
+[ -f data/raw/statewide_2021/byelections/frame.parquet ] ||
+    uv run python scripts/byelections_2021.py frame
+for pass in 1 2 3 4 5; do
+    uv run python scripts/byelections_2021.py fetch && break
+    echo "pass $pass of by-election fetch left failures; retrying in 10 minutes" >&2
+    sleep 600
+done
+
+# Reading ~560k small files in crawl order is slow on a spinning disk; pack each
+# feed once, in directory order, and build from the archives.
+archive=data/interim/2021/archive
+mkdir -p "$archive"
+for feed in 2021/offices/frame 2021/offices/p1 2021/offices/p2 2021/offices/p4 \
+    2021/offices/p5 2021/offices/p6 current/winners current/reservations byelections; do
+    name=$(echo "$feed" | tr / _)
+    COPYFILE_DISABLE=1 tar -cf "$archive/$name.tar.part" -C data/raw/statewide_2021 "$feed"
+    mv "$archive/$name.tar.part" "$archive/$name.tar"
+done
+cp data/raw/statewide_2021/2021/offices/frame.parquet "$archive/offices_frame.parquet"
+uv run python scripts/build_2021.py
+uv run python scripts/audit_2021.py
+uv run python scripts/check_reservations_2021.py
+
+# Mukhiya winners' nomination papers, for education.
+parsed=data/interim/2021/parsed
+uv run python scripts/sec_2021.py parse --raw data/raw/statewide_2021 --out "$parsed"
+uv run python scripts/affidavits.py frame --source "$parsed/mukhiya_2021.parquet" \
+    --frame "$parsed/affidavit_frame.parquet"
+uv run python scripts/affidavits.py download --frame "$parsed/affidavit_frame.parquet"

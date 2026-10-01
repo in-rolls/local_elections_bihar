@@ -42,4 +42,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: uv sync --frozen --group dev
       - run: uv run pytest
-      - run: make verify-data
+      - run: make verify

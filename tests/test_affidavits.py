@@ -107,7 +107,7 @@ def test_published_education_matches_reviews_and_source_artifacts():
 
     from affidavits import file_hash, read_reviews
 
-    root = Path(__file__).resolve().parents[1] / "data/fin/2021"
+    root = Path(__file__).resolve().parents[1] / "data/2021/affidavits"
     manifest = json.loads((root / "education.json").read_text())
     assert file_hash(root / "education.parquet") == manifest["output_sha256"]
     assert file_hash(root / "education.csv") == manifest["csv_sha256"]

@@ -2,15 +2,13 @@ import copy
 import json
 from pathlib import Path
 
-import pyarrow.parquet as pq
 import pytest
-from check_reservations_2021 import INPUTS, audit, category
-from release_2021 import sha
+from check_reservations_2021 import audit, category, load, sha
 
 
 @pytest.fixture(scope="module")
 def sources():
-    return {name: pq.read_table(path).to_pylist() for name, path in INPUTS.items()}
+    return load()
 
 
 def run(sources):
@@ -23,7 +21,7 @@ def run(sources):
 def test_real_source_disagreements_are_preserved(sources):
     checks, flagged = run(sources)
     expected = json.loads(
-        Path("data/fin/reservation_check_2021/validation.json").read_text()
+        Path("data/2021/reservation_check/validation.json").read_text()
     )
     assert checks == expected
     assert checks["current_minus_official"] == {
@@ -76,7 +74,7 @@ def test_current_winner_disagreement_does_not_recode_2021(sources):
 
 
 def test_published_audit_checksums_and_provenance():
-    root = Path("data/fin/reservation_check_2021")
+    root = Path("data/2021/reservation_check")
     for line in (root / "CHECKSUMS").read_text().splitlines():
         digest, name = line.split()
         assert sha(root / name) == digest

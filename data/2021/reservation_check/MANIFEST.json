@@ -1,0 +1,63 @@
+{
+  "purpose": "Source reconciliation only; not a 2021 treatment release",
+  "key": [
+    "district_id",
+    "block_id",
+    "panchayat_id",
+    "candidate_serial"
+  ],
+  "inputs": {
+    "data/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
+    "data/2021/candidates.parquet": "8e6fda01045edf245cc0c7d46665f3496c5e41323775a3900300a9ae0b9537be",
+    "data/2021/current_winners.parquet": "55d47177250629cd87f35413645feb613a682bba3308898894b6204732c35cd4",
+    "data/2021/current_reservations.parquet": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073"
+  },
+  "receipts": {
+    "data/raw/reservation_check_2021/btnFilter.jsonl.gz": "d4666f0dd1674cf8a919d990a7016e3c5b9c3e5d76b84abad95433f0b206a8c8",
+    "data/raw/reservation_check_2021/candidate_detail.jsonl.gz": "ff2969f8400c335027a1481c153fd262676eb69361a788762a2f8ebfcc2b1a0e",
+    "data/raw/reservation_check_2021/nomination_lblTotalList.jsonl.gz": "5fa3635b7313b6777c5887954d32ac400ca4641436f3014f8b45d6da77d5e5cb",
+    "data/raw/reservation_check_2021/report_ch1.jsonl.gz": "2ee9eede96e4e0d3d0364f78c4cc79bd6a58ec537fecea4a727051f3077859be",
+    "data/raw/reservation_check_2021/reservation_d33_b1.jsonl.gz": "840a4961df29c9c7040f48b89280594b4041ddc8694ebf6f9fc3b5bc666c6a5c"
+  },
+  "report_url": "https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx",
+  "parser_sha256": "fd9976340a0cf9524e21134bb8797ee2a9972e192da1e0069bb4cded10191a1c",
+  "files": [
+    {
+      "path": "flagged_winners.parquet",
+      "rows": 35,
+      "sha256": "b3ef5d686c7013309d4cca290faf38fead063db96b2c71a7b31b7e5e9e2826ee",
+      "schema": {
+        "district_id": "int64",
+        "block_id": "int64",
+        "panchayat_id": "int64",
+        "candidate_serial": "int64",
+        "seat_reservation": "string",
+        "gender_2021": "string",
+        "gender_current": "string",
+        "same_reported_name": "bool",
+        "candidate_document_url": "string",
+        "current_document_url": "string",
+        "same_document_url": "bool",
+        "reservation_source_sha256": "string",
+        "candidate_source_sha256": "string",
+        "current_winner_source_sha256": "string"
+      }
+    }
+  ],
+  "fields": {
+    "district_id": "Original composite 2021 candidate key component",
+    "block_id": "Original composite 2021 candidate key component",
+    "panchayat_id": "Original composite 2021 candidate key component",
+    "candidate_serial": "Original composite 2021 candidate key component",
+    "seat_reservation": "Unmodified current reservation-feed label",
+    "gender_2021": "Unmodified explicitly 2021 candidate-feed gender",
+    "gender_current": "Current winner-feed gender; null if no seat match",
+    "candidate_document_url": "Document URL in dated 2021 candidate feed",
+    "current_document_url": "Document URL in current winner feed",
+    "same_document_url": "Exact equality of nonempty document URLs; null if missing. Does not establish the correct gender or reservation label.",
+    "same_reported_name": "Literal name equality after edge whitespace trim; not an identity match",
+    "reservation_source_sha256": "Respective response-body hash retained in input provenance",
+    "candidate_source_sha256": "Respective response-body hash retained in input provenance",
+    "current_winner_source_sha256": "Respective response-body hash retained in input provenance"
+  }
+}

@@ -10,5 +10,5 @@
   "source": "https://sec25.bihar.gov.in/sec_new/Panchayat/Result",
   "phase": "2021_1",
   "collection_date": "2026-09-10",
-  "request_receipts": "../release/2021/MANIFEST.json"
+  "request_receipts": "statewide_2021_receipts.json"
 }
