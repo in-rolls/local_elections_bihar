@@ -18,315 +18,1265 @@
       "rows": 247671,
       "bytes": 1210757,
       "sha256": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
-      "schema": {
-        "post_id": "Int8",
-        "district_id": "Int32",
-        "block_id": "Int32",
-        "panchayat_id": "Int64",
-        "seat_no": "Int32",
-        "unit_id": "String",
-        "district": "String",
-        "block": "String",
-        "panchayat": "String",
-        "phases_listed": "String",
-        "candidate_records": "Int32",
-        "result_records": "Int32",
-        "result_only_candidates": "Int32",
-        "result_candidates": "Int32",
-        "winners_flagged": "Int32",
-        "winner_flag_partial": "Boolean",
-        "status": "String"
-      },
       "unique_key": [
         "post_id",
         "unit_id"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID; see POSTS."
+        },
+        "district_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>; <Check less_than_or_equal_to: less_than_or_equal_to(38)>",
+          "description": "SEC district ID."
+        },
+        "block_id": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "SEC block ID; null for zila parishad seats."
+        },
+        "panchayat_id": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "SEC panchayat ID; null for samiti and zila parishad seats."
+        },
+        "seat_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Ward, samiti or zila parishad seat number; null for mukhiya and sarpanch."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key within the office, built from the IDs."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District name from the portal frame."
+        },
+        "block": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Block name from the portal frame."
+        },
+        "panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Panchayat name from the portal frame."
+        },
+        "phases_listed": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Election rounds the portal lists for the seat, ';'-joined (e.g. 2021_1;2023_1); null when not requested."
+        },
+        "candidate_records": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Rows in the 2021 candidate list."
+        },
+        "result_records": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Rows in the 2021 result feed; samiti and zila parishad seats have one row per candidate per panchayat."
+        },
+        "result_only_candidates": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Candidates named in results but missing from the candidate list."
+        },
+        "result_candidates": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Distinct candidates in the results."
+        },
+        "winners_flagged": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>; <Check less_than_or_equal_to: less_than_or_equal_to(1)>",
+          "description": "Candidates with IsWin true on any result row."
+        },
+        "winner_flag_partial": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "IsWin differs across the winner's panchayat rows in the source."
+        },
+        "status": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['results', 'one_candidate_no_results', 'candidates_no_results', 'no_candidates', 'phase_not_listed'])>",
+          "description": "Seat outcome class; see SEAT_STATUS."
+        }
+      }
     },
     {
       "path": "candidates.parquet",
       "rows": 924708,
       "bytes": 57009305,
       "sha256": "8e6fda01045edf245cc0c7d46665f3496c5e41323775a3900300a9ae0b9537be",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "in_candidate_list": "Boolean",
-        "candidate_serial": "Int32",
-        "candidate_name": "String",
-        "guardian_name": "String",
-        "candidate_age": "Int32",
-        "candidate_age_implausible": "Boolean",
-        "candidate_gender_raw": "String",
-        "candidate_gender": "String",
-        "candidate_address": "String",
-        "symbol_name": "String",
-        "symbol_file": "String",
-        "photo_url": "String",
-        "affidavit_url": "String",
-        "result_present": "Boolean",
-        "result_serial": "Int32",
-        "match_method": "String",
-        "votes": "Int64",
-        "elected": "Boolean",
-        "source_url": "String",
-        "fetched_at": "String",
-        "source_sha256": "String",
-        "source_row": "Int32"
-      },
       "unique_key": [
         "source_url",
         "source_row"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key; joins to seats."
+        },
+        "in_candidate_list": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "Listed in the candidate list; false for candidates named only in results, whose list attributes are null."
+        },
+        "candidate_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "OrderBy in the candidate list (renumbered in name order); null if unlisted."
+        },
+        "candidate_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "CandidateName, verbatim; the result-feed name without the winner mark when unlisted; null when blank in the source (one panch candidate)."
+        },
+        "guardian_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "GaurdianName (father or husband), verbatim."
+        },
+        "candidate_age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Age as reported; not corrected."
+        },
+        "candidate_age_implausible": {
+          "type": "Boolean",
+          "nullable": true,
+          "checks": "",
+          "description": "Age below 21 or above 100."
+        },
+        "candidate_gender_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Gender, verbatim."
+        },
+        "candidate_gender": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
+          "description": "Gender mapped to male/female/other."
+        },
+        "candidate_address": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "CandidateAddress, verbatim."
+        },
+        "symbol_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "SymbolName, the allotted election symbol."
+        },
+        "symbol_file": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "SymbolUrl, the symbol image file name."
+        },
+        "photo_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "CandidatePhoto link."
+        },
+        "affidavit_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "CandidateDoc nomination PDF link."
+        },
+        "result_present": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "A result record was matched to this candidate."
+        },
+        "result_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "OrderBy of the matched result record."
+        },
+        "match_method": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['serial_and_name', 'name', 'namesake_order', 'name_contained', 'serial_only'])>",
+          "description": "How the result was matched; null without a result."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "TotalVote summed over the seat's result rows; null without results."
+        },
+        "elected": {
+          "type": "Boolean",
+          "nullable": true,
+          "checks": "",
+          "description": "IsWin from the result feed; null without results."
+        },
+        "source_url": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "SEC request URL, including election phase and seat parameters."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the response was retrieved."
+        },
+        "source_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved response body."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "One-based position of the record in that response."
+        }
+      }
     },
     {
       "path": "result_rows.parquet",
       "rows": 968562,
       "bytes": 24164377,
       "sha256": "369c291ad1ae46eee60585f83480bbaa20474a5aec1bc9799fabc33941d2aea3",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "result_record_id": "Int64",
-        "post_name": "String",
-        "result_district_id": "Int32",
-        "result_district": "String",
-        "result_block_id": "Int32",
-        "result_block": "String",
-        "result_panchayat_id": "Int64",
-        "result_panchayat": "String",
-        "result_seat_no": "Int32",
-        "result_serial": "Int32",
-        "result_name": "String",
-        "votes": "Int64",
-        "elected": "Boolean",
-        "candidate_serial": "Int32",
-        "match_method": "String",
-        "source_url": "String",
-        "fetched_at": "String",
-        "source_sha256": "String",
-        "source_row": "Int32"
-      },
       "unique_key": [
         "post_id",
         "unit_id",
         "source_row"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key; joins to seats."
+        },
+        "result_record_id": {
+          "type": "Int64",
+          "nullable": false,
+          "checks": "",
+          "description": "SlNo, the portal's result record number."
+        },
+        "post_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "PostName, verbatim."
+        },
+        "result_district_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "Dist; equals the requested district."
+        },
+        "result_district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "DistrictName, verbatim."
+        },
+        "result_block_id": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "BlockID of the reporting panchayat."
+        },
+        "result_block": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "BlockName, verbatim."
+        },
+        "result_panchayat_id": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "PanchayatNo of the reporting panchayat."
+        },
+        "result_panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "PanchayatName, verbatim."
+        },
+        "result_seat_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "WardNo: ward, samiti or zila parishad number."
+        },
+        "result_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "OrderBy in the result feed; null in 16,113 ward-member rows."
+        },
+        "result_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "CandidateName in the result feed, verbatim."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "TotalVote in this panchayat; null when blank."
+        },
+        "elected": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "IsWin."
+        },
+        "candidate_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Matched candidate-list serial; null when the candidate is not listed."
+        },
+        "match_method": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['serial_and_name', 'name', 'namesake_order', 'name_contained', 'serial_only'])>",
+          "description": "How the match was made; null when unlisted."
+        },
+        "source_url": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "SEC request URL, including election phase and seat parameters."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the response was retrieved."
+        },
+        "source_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved response body."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "One-based position of the record in that response."
+        }
+      }
     },
     {
       "path": "winners.parquet",
       "rows": 244475,
       "bytes": 5282160,
       "sha256": "32c40abc700179c19c8ff0c36ce860c34640e22a3be534f51fb77f78031b3c10",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "winner_basis": "String",
-        "candidate_serial": "Int32",
-        "result_serial": "Int32",
-        "winner_name": "String",
-        "candidate_gender": "String",
-        "candidate_age": "Int32",
-        "votes": "Int64",
-        "affidavit_url": "String"
-      },
       "unique_key": [
         "post_id",
         "unit_id"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key; joins to seats."
+        },
+        "winner_basis": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['result_flag', 'sole_candidate'])>",
+          "description": "result_flag (IsWin) or sole_candidate (one candidate, no results; inferred as elected unopposed)."
+        },
+        "candidate_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Candidate-list serial; null if unlisted."
+        },
+        "result_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Result serial; null for sole candidates."
+        },
+        "winner_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Candidate-list name, else the result name."
+        },
+        "candidate_gender": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
+          "description": "Mapped gender; null if unlisted."
+        },
+        "candidate_age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Reported age; null if unlisted."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Votes summed over result rows."
+        },
+        "affidavit_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "Nomination PDF link; null if unlisted."
+        }
+      }
     },
     {
       "path": "current_winners.parquet",
       "rows": 247671,
       "bytes": 13269320,
       "sha256": "55d47177250629cd87f35413645feb613a682bba3308898894b6204732c35cd4",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "district_id": "Int32",
-        "block_id": "Int32",
-        "panchayat_id": "Int64",
-        "seat_no": "Int32",
-        "district": "String",
-        "block": "String",
-        "panchayat": "String",
-        "post_name": "String",
-        "vacant_placeholder": "Boolean",
-        "placeholder_date": "String",
-        "placeholder_affidavit": "String",
-        "candidate_name": "String",
-        "guardian_name": "String",
-        "candidate_gender_raw": "String",
-        "candidate_age": "Int32",
-        "candidate_address": "String",
-        "candidate_category": "String",
-        "reservation_for_reported": "String",
-        "reservation_status_reported": "String",
-        "photo_url": "String",
-        "affidavit_url": "String",
-        "source_url": "String",
-        "fetched_at": "String",
-        "source_sha256": "String",
-        "source_row": "Int32"
-      },
       "unique_key": [
         "source_url",
         "source_row"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Matched seat key; null if the seat is not in the frame."
+        },
+        "district_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "Dist."
+        },
+        "block_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "BlockID."
+        },
+        "panchayat_id": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "PanchayatNo; null for zila parishad."
+        },
+        "seat_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "WardNo; null for mukhiya and sarpanch."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District, verbatim."
+        },
+        "block": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Block, verbatim."
+        },
+        "panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Panchayat, verbatim."
+        },
+        "post_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Post, verbatim."
+        },
+        "vacant_placeholder": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "Portal placeholder for a vacant seat: no name, age 55, a date in the photo field; person fields are null."
+        },
+        "placeholder_date": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Date shown in a placeholder's photo field."
+        },
+        "placeholder_affidavit": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Affidavit field text of a placeholder."
+        },
+        "candidate_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "CandidateName, verbatim; null if vacant."
+        },
+        "guardian_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "GuardianName, verbatim."
+        },
+        "candidate_gender_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Gender, verbatim."
+        },
+        "candidate_age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Age as reported."
+        },
+        "candidate_address": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Address, verbatim."
+        },
+        "candidate_category": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Category: candidate's caste category."
+        },
+        "reservation_for_reported": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "ReservationFor: women or other."
+        },
+        "reservation_status_reported": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "ReservationStatus, verbatim."
+        },
+        "photo_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "CandidatePhotos link."
+        },
+        "affidavit_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "Affidavit link."
+        },
+        "source_url": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "SEC request URL, including election phase and seat parameters."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the response was retrieved."
+        },
+        "source_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved response body."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "One-based position of the record in that response."
+        }
+      }
     },
     {
       "path": "current_reservations.parquet",
       "rows": 247671,
       "bytes": 1903637,
       "sha256": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "district_id": "Int32",
-        "block_id": "Int32",
-        "panchayat_id": "Int64",
-        "seat_no": "Int32",
-        "district": "String",
-        "block": "String",
-        "panchayat": "String",
-        "post_name": "String",
-        "seat_reservation": "String",
-        "source_url": "String",
-        "fetched_at": "String",
-        "source_sha256": "String",
-        "source_row": "Int32"
-      },
       "unique_key": [
         "source_url",
         "source_row"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Matched seat key; null if the seat is not in the frame."
+        },
+        "district_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "Dist."
+        },
+        "block_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "BlockID."
+        },
+        "panchayat_id": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "PanchayatNo; null for zila parishad."
+        },
+        "seat_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "WardNo; null for mukhiya and sarpanch."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District, verbatim."
+        },
+        "block": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Block, verbatim."
+        },
+        "panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Panchayat, verbatim."
+        },
+        "post_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Post, verbatim."
+        },
+        "seat_reservation": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Reservation: category (women/other), verbatim."
+        },
+        "source_url": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "SEC request URL, including election phase and seat parameters."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the response was retrieved."
+        },
+        "source_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved response body."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "One-based position of the record in that response."
+        }
+      }
     },
     {
       "path": "byelection_seats.parquet",
       "rows": 5749,
       "bytes": 113676,
       "sha256": "a6bf0939e4e50c79161efb0d03b6425a7499b792a676d4f6db77049f817b6aef",
-      "schema": {
-        "post_id": "Int8",
-        "district_id": "Int32",
-        "block_id": "Int32",
-        "panchayat_id": "Int64",
-        "seat_no": "Int32",
-        "unit_id": "String",
-        "district": "String",
-        "block": "String",
-        "panchayat": "String",
-        "phases_listed": "String",
-        "candidate_records": "Int32",
-        "result_records": "Int32",
-        "result_only_candidates": "Int32",
-        "result_candidates": "Int32",
-        "winners_flagged": "Int32",
-        "winner_flag_partial": "Boolean",
-        "status": "String",
-        "phase": "String"
-      },
       "unique_key": [
         "phase",
         "post_id",
         "unit_id"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID; see POSTS."
+        },
+        "district_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>; <Check less_than_or_equal_to: less_than_or_equal_to(38)>",
+          "description": "SEC district ID."
+        },
+        "block_id": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "SEC block ID; null for zila parishad seats."
+        },
+        "panchayat_id": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "SEC panchayat ID; null for samiti and zila parishad seats."
+        },
+        "seat_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Ward, samiti or zila parishad seat number; null for mukhiya and sarpanch."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key within the office, built from the IDs."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District name from the portal frame."
+        },
+        "block": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Block name from the portal frame."
+        },
+        "panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Panchayat name from the portal frame."
+        },
+        "phases_listed": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Election rounds the portal lists for the seat, ';'-joined (e.g. 2021_1;2023_1); null when not requested."
+        },
+        "candidate_records": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Rows in the 2021 candidate list."
+        },
+        "result_records": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Rows in the 2021 result feed; samiti and zila parishad seats have one row per candidate per panchayat."
+        },
+        "result_only_candidates": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Candidates named in results but missing from the candidate list."
+        },
+        "result_candidates": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Distinct candidates in the results."
+        },
+        "winners_flagged": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>; <Check less_than_or_equal_to: less_than_or_equal_to(1)>",
+          "description": "Candidates with IsWin true on any result row."
+        },
+        "winner_flag_partial": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "IsWin differs across the winner's panchayat rows in the source."
+        },
+        "status": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['results', 'one_candidate_no_results', 'candidates_no_results', 'no_candidates', 'phase_not_listed'])>",
+          "description": "Seat outcome class; see SEAT_STATUS."
+        },
+        "phase": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
+          "description": "By-election round: 2023_1, 2023_2 or 2025_1."
+        }
+      }
     },
     {
       "path": "byelection_candidates.parquet",
       "rows": 8449,
       "bytes": 751776,
       "sha256": "c2686d60f0678ca3dbb8e79e1127d78bc9aa19f03570084ce6ae2c20aa99f4f8",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "in_candidate_list": "Boolean",
-        "candidate_serial": "Int32",
-        "candidate_name": "String",
-        "guardian_name": "String",
-        "candidate_age": "Int32",
-        "candidate_age_implausible": "Boolean",
-        "candidate_gender_raw": "String",
-        "candidate_gender": "String",
-        "candidate_address": "String",
-        "symbol_name": "String",
-        "symbol_file": "String",
-        "photo_url": "String",
-        "affidavit_url": "String",
-        "result_present": "Boolean",
-        "result_serial": "Int32",
-        "match_method": "String",
-        "votes": "Int64",
-        "elected": "Boolean",
-        "source_url": "String",
-        "fetched_at": "String",
-        "source_sha256": "String",
-        "source_row": "Int32",
-        "phase": "String"
-      },
       "unique_key": [
         "source_url",
         "source_row"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key; joins to seats."
+        },
+        "in_candidate_list": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "Listed in the candidate list; false for candidates named only in results, whose list attributes are null."
+        },
+        "candidate_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "OrderBy in the candidate list (renumbered in name order); null if unlisted."
+        },
+        "candidate_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "CandidateName, verbatim; the result-feed name without the winner mark when unlisted; null when blank in the source (one panch candidate)."
+        },
+        "guardian_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "GaurdianName (father or husband), verbatim."
+        },
+        "candidate_age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Age as reported; not corrected."
+        },
+        "candidate_age_implausible": {
+          "type": "Boolean",
+          "nullable": true,
+          "checks": "",
+          "description": "Age below 21 or above 100."
+        },
+        "candidate_gender_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Gender, verbatim."
+        },
+        "candidate_gender": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
+          "description": "Gender mapped to male/female/other."
+        },
+        "candidate_address": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "CandidateAddress, verbatim."
+        },
+        "symbol_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "SymbolName, the allotted election symbol."
+        },
+        "symbol_file": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "SymbolUrl, the symbol image file name."
+        },
+        "photo_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "CandidatePhoto link."
+        },
+        "affidavit_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "CandidateDoc nomination PDF link."
+        },
+        "result_present": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "A result record was matched to this candidate."
+        },
+        "result_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "OrderBy of the matched result record."
+        },
+        "match_method": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['serial_and_name', 'name', 'namesake_order', 'name_contained', 'serial_only'])>",
+          "description": "How the result was matched; null without a result."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "TotalVote summed over the seat's result rows; null without results."
+        },
+        "elected": {
+          "type": "Boolean",
+          "nullable": true,
+          "checks": "",
+          "description": "IsWin from the result feed; null without results."
+        },
+        "source_url": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "SEC request URL, including election phase and seat parameters."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the response was retrieved."
+        },
+        "source_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved response body."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "One-based position of the record in that response."
+        },
+        "phase": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
+          "description": "By-election round: 2023_1, 2023_2 or 2025_1."
+        }
+      }
     },
     {
       "path": "byelection_result_rows.parquet",
       "rows": 4643,
       "bytes": 193150,
       "sha256": "5f29cf8519c15e059a5e4c5d5975305807c1a5a6e9a9c162d922a396b65c9ce5",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "result_record_id": "Int64",
-        "post_name": "String",
-        "result_district_id": "Int32",
-        "result_district": "String",
-        "result_block_id": "Int32",
-        "result_block": "String",
-        "result_panchayat_id": "Int64",
-        "result_panchayat": "String",
-        "result_seat_no": "Int32",
-        "result_serial": "Int32",
-        "result_name": "String",
-        "votes": "Int64",
-        "elected": "Boolean",
-        "candidate_serial": "Int32",
-        "match_method": "String",
-        "source_url": "String",
-        "fetched_at": "String",
-        "source_sha256": "String",
-        "source_row": "Int32",
-        "phase": "String"
-      },
       "unique_key": [
         "phase",
         "post_id",
         "unit_id",
         "source_row"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key; joins to seats."
+        },
+        "result_record_id": {
+          "type": "Int64",
+          "nullable": false,
+          "checks": "",
+          "description": "SlNo, the portal's result record number."
+        },
+        "post_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "PostName, verbatim."
+        },
+        "result_district_id": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "Dist; equals the requested district."
+        },
+        "result_district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "DistrictName, verbatim."
+        },
+        "result_block_id": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "BlockID of the reporting panchayat."
+        },
+        "result_block": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "BlockName, verbatim."
+        },
+        "result_panchayat_id": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "PanchayatNo of the reporting panchayat."
+        },
+        "result_panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "PanchayatName, verbatim."
+        },
+        "result_seat_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "WardNo: ward, samiti or zila parishad number."
+        },
+        "result_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "OrderBy in the result feed; null in 16,113 ward-member rows."
+        },
+        "result_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "CandidateName in the result feed, verbatim."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "TotalVote in this panchayat; null when blank."
+        },
+        "elected": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "IsWin."
+        },
+        "candidate_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Matched candidate-list serial; null when the candidate is not listed."
+        },
+        "match_method": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['serial_and_name', 'name', 'namesake_order', 'name_contained', 'serial_only'])>",
+          "description": "How the match was made; null when unlisted."
+        },
+        "source_url": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "SEC request URL, including election phase and seat parameters."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the response was retrieved."
+        },
+        "source_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved response body."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "One-based position of the record in that response."
+        },
+        "phase": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
+          "description": "By-election round: 2023_1, 2023_2 or 2025_1."
+        }
+      }
     },
     {
       "path": "byelection_winners.parquet",
       "rows": 5749,
       "bytes": 131630,
       "sha256": "c6445333c4109b108bb36681e530bce0de9f31e343d9e7636ca9bb258cf0153b",
-      "schema": {
-        "post_id": "Int8",
-        "unit_id": "String",
-        "winner_basis": "String",
-        "candidate_serial": "Int32",
-        "result_serial": "Int32",
-        "winner_name": "String",
-        "candidate_gender": "String",
-        "candidate_age": "Int32",
-        "votes": "Int64",
-        "affidavit_url": "String",
-        "phase": "String"
-      },
       "unique_key": [
         "phase",
         "post_id",
         "unit_id"
-      ]
+      ],
+      "columns": {
+        "post_id": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([1, 2, 3, 4, 5, 6])>",
+          "description": "SEC post ID."
+        },
+        "unit_id": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat key; joins to seats."
+        },
+        "winner_basis": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['result_flag', 'sole_candidate'])>",
+          "description": "result_flag (IsWin) or sole_candidate (one candidate, no results; inferred as elected unopposed)."
+        },
+        "candidate_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Candidate-list serial; null if unlisted."
+        },
+        "result_serial": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Result serial; null for sole candidates."
+        },
+        "winner_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Candidate-list name, else the result name."
+        },
+        "candidate_gender": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
+          "description": "Mapped gender; null if unlisted."
+        },
+        "candidate_age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Reported age; null if unlisted."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Votes summed over result rows."
+        },
+        "affidavit_url": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check str_startswith: str_startswith('http')>",
+          "description": "Nomination PDF link; null if unlisted."
+        },
+        "phase": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
+          "description": "By-election round: 2023_1, 2023_2 or 2025_1."
+        }
+      }
     }
   ],
   "source_archives_sha256": {
@@ -345,5 +1295,614 @@
     "matching.py": "eb4b553c6be1265febb7fbe30553b863cf3900c7be88da88a4b8fd80373e7aaa",
     "schemas_2021.py": "37df6e99af4af9de801da795a078cad7391840a04961fffd5a69103af88b3431",
     "sec_portal.py": "c0a9e8c74688e32890224abddca8c2134464c8b36b85720c0c087e8653856811"
+  },
+  "audit": {
+    "seats_vs_portal_totals": {
+      "seats": {
+        "1": 109641,
+        "2": 109641,
+        "3": 8067,
+        "4": 8067,
+        "5": 11095,
+        "6": 1160
+      },
+      "district_office_mismatches": []
+    },
+    "seat_status": {
+      "6": {
+        "candidates_no_results": 7,
+        "results": 1151,
+        "no_candidates": 2
+      },
+      "3": {
+        "results": 8058,
+        "candidates_no_results": 4,
+        "no_candidates": 5
+      },
+      "4": {
+        "no_candidates": 11,
+        "candidates_no_results": 6,
+        "results": 8050
+      },
+      "1": {
+        "candidates_no_results": 29,
+        "no_candidates": 58,
+        "one_candidate_no_results": 1270,
+        "results": 108284
+      },
+      "5": {
+        "results": 11067,
+        "no_candidates": 20,
+        "candidates_no_results": 8
+      },
+      "2": {
+        "no_candidates": 2802,
+        "one_candidate_no_results": 31420,
+        "results": 75259,
+        "candidates_no_results": 160
+      }
+    },
+    "winners": {
+      "by_post_and_basis": [
+        {
+          "post_id": 1,
+          "winner_basis": "result_flag",
+          "len": 108240
+        },
+        {
+          "post_id": 1,
+          "winner_basis": "sole_candidate",
+          "len": 1270
+        },
+        {
+          "post_id": 2,
+          "winner_basis": "result_flag",
+          "len": 75236
+        },
+        {
+          "post_id": 2,
+          "winner_basis": "sole_candidate",
+          "len": 31420
+        },
+        {
+          "post_id": 3,
+          "winner_basis": "result_flag",
+          "len": 8050
+        },
+        {
+          "post_id": 4,
+          "winner_basis": "result_flag",
+          "len": 8044
+        },
+        {
+          "post_id": 5,
+          "winner_basis": "result_flag",
+          "len": 11065
+        },
+        {
+          "post_id": 6,
+          "winner_basis": "result_flag",
+          "len": 1150
+        }
+      ],
+      "winner_not_in_candidate_list": 100,
+      "flagged_winner_below_top_vote": 0,
+      "examples_below_top": [],
+      "partial_winner_flags": 4
+    },
+    "sec_report_candidates_by_office": {
+      "1": {
+        "report": {
+          "male": 239123,
+          "female": 266340,
+          "total": 505463
+        },
+        "release": {
+          "male": 239111,
+          "female": 266147,
+          "other": 178,
+          "unlisted_gender_unknown": 2,
+          "total": 505438
+        }
+      },
+      "2": {
+        "report": {
+          "male": 89257,
+          "female": 127794,
+          "total": 217051
+        },
+        "release": {
+          "male": 88922,
+          "female": 127456,
+          "other": 51,
+          "unlisted_gender_unknown": 0,
+          "total": 216429
+        }
+      },
+      "3": {
+        "report": {
+          "male": 32464,
+          "female": 33971,
+          "total": 66435
+        },
+        "release": {
+          "male": 32462,
+          "female": 33952,
+          "other": 16,
+          "unlisted_gender_unknown": 0,
+          "total": 66430
+        }
+      },
+      "4": {
+        "report": {
+          "male": 26345,
+          "female": 23364,
+          "total": 49709
+        },
+        "release": {
+          "male": 26341,
+          "female": 23353,
+          "other": 4,
+          "unlisted_gender_unknown": 0,
+          "total": 49698
+        }
+      },
+      "5": {
+        "report": {
+          "male": 35321,
+          "female": 38477,
+          "total": 73798
+        },
+        "release": {
+          "male": 34370,
+          "female": 37602,
+          "other": 12,
+          "unlisted_gender_unknown": 1794,
+          "total": 73778
+        }
+      },
+      "6": {
+        "report": {
+          "male": 6405,
+          "female": 6532,
+          "total": 12937
+        },
+        "release": {
+          "male": 6277,
+          "female": 6440,
+          "other": 3,
+          "unlisted_gender_unknown": 215,
+          "total": 12935
+        }
+      }
+    },
+    "sec_report_candidates_by_block": {
+      "report_blocks": 2136,
+      "name_matched": 2126,
+      "equal": 1753,
+      "absolute_difference_total": 673,
+      "largest_differences": [
+        {
+          "post": 2,
+          "district": "कैमूर(भभुआ)",
+          "block": "कुदरा",
+          "report": 292,
+          "release": 285
+        },
+        {
+          "post": 2,
+          "district": "मधुबनी",
+          "block": "जयनगर",
+          "report": 406,
+          "release": 400
+        },
+        {
+          "post": 2,
+          "district": "गोपालगंज",
+          "block": "बरौली",
+          "report": 567,
+          "release": 561
+        },
+        {
+          "post": 2,
+          "district": "दरभंगा",
+          "block": "दरभंगा",
+          "report": 618,
+          "release": 612
+        },
+        {
+          "post": 2,
+          "district": "समस्तीपुर",
+          "block": "विद्यापतिनगर",
+          "report": 397,
+          "release": 392
+        },
+        {
+          "post": 2,
+          "district": "मुजफ्फरपुर",
+          "block": "औराई",
+          "report": 654,
+          "release": 649
+        },
+        {
+          "post": 2,
+          "district": "लखीसराय",
+          "block": "सूरजगढ़ा",
+          "report": 541,
+          "release": 536
+        },
+        {
+          "post": 2,
+          "district": "सिवान",
+          "block": "बड़हरिया",
+          "report": 590,
+          "release": 585
+        },
+        {
+          "post": 2,
+          "district": "गोपालगंज",
+          "block": "कुचायकोट",
+          "report": 797,
+          "release": 792
+        },
+        {
+          "post": 2,
+          "district": "औरंगाबाद",
+          "block": "कुटुम्बा",
+          "report": 553,
+          "release": 548
+        }
+      ],
+      "unmatched_report_blocks": 10
+    },
+    "sec_report_elected_by_office": {
+      "1": {
+        "report": {
+          "female": 57153,
+          "total": 109554
+        },
+        "release": {
+          "total": 109510,
+          "female": 57145,
+          "gender_unknown": 1,
+          "sole_candidate": 1270
+        }
+      },
+      "3": {
+        "report": {
+          "female": 4209,
+          "total": 8058
+        },
+        "release": {
+          "total": 8050,
+          "female": 4206,
+          "gender_unknown": 0,
+          "sole_candidate": 0
+        }
+      },
+      "5": {
+        "report": {
+          "female": 5982,
+          "total": 11092
+        },
+        "release": {
+          "total": 11065,
+          "female": 5917,
+          "gender_unknown": 93,
+          "sole_candidate": 0
+        }
+      },
+      "6": {
+        "report": {
+          "female": 654,
+          "total": 1159
+        },
+        "release": {
+          "total": 1150,
+          "female": 648,
+          "gender_unknown": 6,
+          "sole_candidate": 0
+        }
+      },
+      "2": {
+        "report": {
+          "female": 63974,
+          "total": 107431
+        },
+        "release": {
+          "total": 106656,
+          "female": 63620,
+          "gender_unknown": 0,
+          "sole_candidate": 31420
+        }
+      },
+      "4": {
+        "report": {
+          "female": 3833,
+          "total": 8059
+        },
+        "release": {
+          "total": 8044,
+          "female": 3827,
+          "gender_unknown": 0,
+          "sole_candidate": 0
+        }
+      }
+    },
+    "dated_vs_current_winner": {
+      "p1_different_name": 2279,
+      "p1_same_name": 107223,
+      "p1_vacant_now": 8,
+      "p2_different_name": 1460,
+      "p2_same_name": 105192,
+      "p2_vacant_now": 4,
+      "p3_different_name": 236,
+      "p3_same_name": 7814,
+      "p4_different_name": 231,
+      "p4_same_name": 7813,
+      "p5_different_name": 227,
+      "p5_same_name": 10838,
+      "p6_different_name": 47,
+      "p6_same_name": 1103
+    },
+    "current_feeds": {
+      "current_winners": {
+        "rows": 247671,
+        "unmatched_to_seats": 0,
+        "repeated_seats": 0
+      },
+      "current_reservations": {
+        "rows": 247671,
+        "unmatched_to_seats": 0,
+        "repeated_seats": 0
+      },
+      "vacant_placeholders": 362
+    },
+    "portal_gender_statistics": {
+      "1": {
+        "portal": {
+          "c01": 47.21,
+          "c02": 52.79,
+          "c03": 0.0
+        },
+        "release": {
+          "c01": 47.2,
+          "c02": 52.79,
+          "c03": 0.0
+        }
+      },
+      "2": {
+        "portal": {
+          "c01": 39.53,
+          "c02": 60.14,
+          "c03": 0.01
+        },
+        "release": {
+          "c01": 39.53,
+          "c02": 60.15,
+          "c03": 0.0
+        }
+      },
+      "3": {
+        "portal": {
+          "c01": 47.18,
+          "c02": 52.81,
+          "c03": 0.0
+        },
+        "release": {
+          "c01": 47.18,
+          "c02": 52.81,
+          "c03": 0.0
+        }
+      },
+      "4": {
+        "portal": {
+          "c01": 52.0,
+          "c02": 47.97,
+          "c03": 0.02
+        },
+        "release": {
+          "c01": 52.0,
+          "c02": 48.0,
+          "c03": 0.0
+        }
+      },
+      "5": {
+        "portal": {
+          "c01": 45.4,
+          "c02": 54.6,
+          "c03": 0.0
+        },
+        "release": {
+          "c01": 45.4,
+          "c02": 54.6,
+          "c03": 0.0
+        }
+      },
+      "6": {
+        "portal": {
+          "c01": 43.19,
+          "c02": 56.81,
+          "c03": 0.0
+        },
+        "release": {
+          "c01": 43.19,
+          "c02": 56.81,
+          "c03": 0.0
+        }
+      }
+    },
+    "resample": {
+      "seats": 200,
+      "changed": []
+    },
+    "byelections": {
+      "seats": [
+        {
+          "phase": "2023_1",
+          "post_id": 1,
+          "len": 533
+        },
+        {
+          "phase": "2023_1",
+          "post_id": 2,
+          "len": 2002
+        },
+        {
+          "phase": "2023_1",
+          "post_id": 3,
+          "len": 48
+        },
+        {
+          "phase": "2023_1",
+          "post_id": 4,
+          "len": 54
+        },
+        {
+          "phase": "2023_1",
+          "post_id": 5,
+          "len": 44
+        },
+        {
+          "phase": "2023_1",
+          "post_id": 6,
+          "len": 7
+        },
+        {
+          "phase": "2023_2",
+          "post_id": 1,
+          "len": 321
+        },
+        {
+          "phase": "2023_2",
+          "post_id": 2,
+          "len": 788
+        },
+        {
+          "phase": "2023_2",
+          "post_id": 3,
+          "len": 20
+        },
+        {
+          "phase": "2023_2",
+          "post_id": 4,
+          "len": 34
+        },
+        {
+          "phase": "2023_2",
+          "post_id": 5,
+          "len": 20
+        },
+        {
+          "phase": "2023_2",
+          "post_id": 6,
+          "len": 4
+        },
+        {
+          "phase": "2025_1",
+          "post_id": 1,
+          "len": 733
+        },
+        {
+          "phase": "2025_1",
+          "post_id": 2,
+          "len": 915
+        },
+        {
+          "phase": "2025_1",
+          "post_id": 3,
+          "len": 63
+        },
+        {
+          "phase": "2025_1",
+          "post_id": 4,
+          "len": 83
+        },
+        {
+          "phase": "2025_1",
+          "post_id": 5,
+          "len": 72
+        },
+        {
+          "phase": "2025_1",
+          "post_id": 6,
+          "len": 8
+        }
+      ],
+      "status": {
+        "one_candidate_no_results": 4499,
+        "results": 1250
+      },
+      "winners_by_basis": {
+        "result_flag": 1250,
+        "sole_candidate": 4499
+      },
+      "flagged_winner_below_top_vote": 0
+    },
+    "distributions": {
+      "candidates_by_post": {
+        "1": 505438,
+        "2": 216429,
+        "3": 66430,
+        "4": 49698,
+        "5": 73778,
+        "6": 12935
+      },
+      "result_only_candidates": {
+        "6": 215,
+        "5": 1794,
+        "1": 2
+      },
+      "implausible_ages": 93,
+      "age_quantiles": {
+        "0": 21.0,
+        "0.01": 21.0,
+        "0.5": 41.0,
+        "0.99": 74.0,
+        "1": 1987.0
+      },
+      "result_votes_max": 5900,
+      "result_votes_null": 531,
+      "match_methods": {
+        "name": 16676,
+        "null": 3367,
+        "name_contained": 1430,
+        "serial_and_name": 946905,
+        "serial_only": 16,
+        "namesake_order": 168
+      },
+      "candidates_per_seat": {
+        "0": 2898,
+        "1": 32690,
+        "2": 60681,
+        "3": 43542,
+        "4": 32580,
+        "5": 25279,
+        "6": 18257,
+        "7": 12151,
+        "8": 7639,
+        "9": 4677,
+        "10": 3610,
+        "11": 1266,
+        "12": 830,
+        "13": 534,
+        "14": 333,
+        "15": 242,
+        "16": 168,
+        "17": 68,
+        "18": 68,
+        "19": 49,
+        "20": 79,
+        "21": 9,
+        "22": 8,
+        "23": 3,
+        "24": 2,
+        "26": 4,
+        "27": 1,
+        "28": 1,
+        "30": 2
+      }
+    },
+    "flags": []
   }
 }

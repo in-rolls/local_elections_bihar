@@ -4,11 +4,13 @@ import base64
 import gzip
 import json
 
-import build_2021 as b
 import polars as pl
 import pytest
 from pandera.errors import SchemaErrors
-from schemas_2021 import TABLES, polars_schema
+
+from scripts.shared.schema import polars_schema
+from scripts.year2021 import parse as b
+from scripts.year2021.schema import TABLES
 
 URL = "https://sec25.bihar.gov.in/x"
 

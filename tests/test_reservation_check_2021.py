@@ -1,11 +1,10 @@
 import copy
-import csv
-import gzip
 import json
 from pathlib import Path
 
 import pytest
-from check_reservations_2021 import audit, category, load, sha
+
+from scripts.year2021.reservation_check import audit, category, load, sha
 
 
 @pytest.fixture(scope="module")
@@ -22,10 +21,8 @@ def run(sources):
 
 def test_real_source_disagreements_are_preserved(sources):
     checks, flagged = run(sources)
-    expected = json.loads(
-        Path("data/2021/reservation_check/validation.json").read_text()
-    )
-    assert checks == expected
+    expected = json.loads(Path("data/2021/reservation_check/MANIFEST.json").read_text())
+    assert checks == expected["validation"]
     assert checks["current_minus_official"] == {
         "total": 0,
         "sc": 1,
@@ -77,23 +74,15 @@ def test_current_winner_disagreement_does_not_recode_2021(sources):
 
 def test_published_audit_checksums_and_provenance():
     root = Path("data/2021/reservation_check")
-    for line in (root / "CHECKSUMS").read_text().splitlines():
-        digest, name = line.split()
-        assert sha(root / name) == digest
     manifest = json.loads((root / "MANIFEST.json").read_text())
+    for info in manifest["files"]:
+        assert sha(root / info["path"]) == info["sha256"]
     for path, digest in manifest["inputs"].items():
         assert sha(Path(path)) == digest
     expected = manifest["receipts"]
-    recorded = {}
-    with gzip.open("data/MIGRATION.csv.gz", "rt", newline="") as handle:
-        for row in csv.DictReader(handle):
-            if row["canonical_path"] in expected:
-                recorded[row["canonical_path"]] = row["sha256"]
-    assert recorded == expected
     for path, digest in expected.items():
         if Path(path).is_file():
             assert sha(Path(path)) == digest
-    assert sha(Path("scripts/check_reservations_2021.py")) == manifest["parser_sha256"]
 
 
 def test_current_reservation_disagreement_is_counted(sources):

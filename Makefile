@@ -1,5 +1,5 @@
 .PHONY: check test verify verify-2016 verify-2021 build-2016 \
-	audit-2016 build-2021 audit-2021 reservation-check-2021 data-verify data-summary parse-2011 coverage
+	audit-2016 build-2021 audit-2021 reservation-check-2021 data-summary parse-2011
 
 check:
 	uv sync --frozen --group dev
@@ -13,36 +13,30 @@ test:
 verify: verify-2016 verify-2021
 
 verify-2016:
-	uv run python scripts/build_2016.py --check
+	uv run python -m scripts.year2016.parse --check
 
 verify-2021:
-	uv run python scripts/build_2021.py --check
+	uv run python -m scripts.year2021.parse --check
 
 build-2016:
-	uv run python scripts/build_2016.py
+	uv run python -m scripts.year2016.parse
 
 audit-2016:
-	uv run python scripts/roster_2016.py parse
-	uv run python scripts/audit_2016.py
+	uv run python -m scripts.year2016.rosters parse
+	uv run python -m scripts.year2016.audit
 
 build-2021:
-	uv run python scripts/build_2021.py
+	uv run python -m scripts.year2021.parse
 
 audit-2021:
-	uv run python scripts/audit_2021.py
+	uv run python -m scripts.year2021.audit
 
 reservation-check-2021:
-	uv run python scripts/check_reservations_2021.py
-
-data-verify:
-	uv run python scripts/data_inventory.py verify
+	uv run python -m scripts.year2021.reservation_check
 
 data-summary:
-	uv run python scripts/data_inventory.py summary
+	uv run python -m scripts.reporting.summary
 
 parse-2011:
-	uv run python scripts/parse_2011.py
-	uv run python scripts/parse_2011_reports.py
-
-coverage:
-	uv run python scripts/election_coverage.py
+	uv run python -m scripts.year2011.parse_gaya
+	uv run python -m scripts.year2011.parse_reports

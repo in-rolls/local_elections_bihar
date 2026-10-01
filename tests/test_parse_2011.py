@@ -6,10 +6,11 @@ from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
 
-import parse_2011 as p
 import pyarrow.parquet as pq
 import pytest
-from hindi_2011 import cell_text, kruti_text, logical_text
+
+from scripts.year2011 import parse_gaya as p
+from scripts.year2011.hindi import cell_text, kruti_text, logical_text
 
 PILOT = Path("data/2011/gaya_mukhiya")
 REVIEW = Path("tests/fixtures/2011/gaya_visual_review.csv")
@@ -141,7 +142,7 @@ def test_published_transcription_and_years():
 def test_local_source_extraction(tmp_path):
     p.run(p.ROOT, tmp_path)
     check_review(tmp_path)
-    report = json.loads((tmp_path / "validation.json").read_text())
+    report = json.loads((tmp_path / "MANIFEST.json").read_text())["validation"]
     assert report["summary_total"] == report["winner_rows"] == 338
     assert report["coverage_all_blocks_match"]
     assert report["alternate_identity_matches"] == 338

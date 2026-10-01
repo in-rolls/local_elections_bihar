@@ -7,10 +7,11 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-import parse_2011 as p
 import pyarrow.parquet as pq
 import pytest
-from parse_2011_reports import reservation
+
+from scripts.year2011 import parse_gaya as p
+from scripts.year2011.parse_reports import reservation
 
 OUT = Path("data/2011/mukhiya_reports")
 
@@ -121,12 +122,11 @@ def test_output_receipts_and_dated_contest():
         assignment = manifest["year_assignment"]
         evidence = Path(assignment["path"])
         assert hashlib.sha256(evidence.read_bytes()).hexdigest() == assignment["sha256"]
-        assert (
-            json.loads(evidence.read_text())["classification"] == "maintainer_confirmed"
-        )
+        assert assignment["election_year"] == 2011
     for directory in [OUT, court]:
-        for line in (directory / "CHECKSUMS").read_text().splitlines():
-            digest, name = line.split("  ", 1)
+        metadata = json.loads((directory / "MANIFEST.json").read_text())
+        for name, info in metadata["files"].items():
+            digest = info if isinstance(info, str) else info["sha256"]
             assert hashlib.sha256((directory / name).read_bytes()).hexdigest() == digest
     with (court / "candidates.csv").open() as stream:
         rows = list(csv.DictReader(stream))
@@ -148,7 +148,7 @@ def test_output_receipts_and_dated_contest():
     assert [
         r["source_table_label"] for r in rows if r["initial_outcome"] == "elected"
     ] == ["k"]
-    receipt = json.loads((court / "receipt.json").read_text())
+    receipt = json.loads((court / "MANIFEST.json").read_text())
     match = receipt["matched_report"]
     report = pq.read_table(OUT / "winner_records.parquet").to_pylist()
     winner = next(r for r in report if r["record_id"] == match["record_id"])
