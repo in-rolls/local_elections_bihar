@@ -45,8 +45,8 @@
     {
       "path": "candidates.parquet",
       "rows": 924708,
-      "bytes": 57009626,
-      "sha256": "3971775d2e2593e7aba39b154e60402a1f619219fd809d0e2de95c01f6fd63ef",
+      "bytes": 57009305,
+      "sha256": "8e6fda01045edf245cc0c7d46665f3496c5e41323775a3900300a9ae0b9537be",
       "schema": {
         "post_id": "Int8",
         "unit_id": "String",
@@ -115,8 +115,8 @@
     {
       "path": "winners.parquet",
       "rows": 244475,
-      "bytes": 5282167,
-      "sha256": "6ac618e92b7bf9f22a0b95211a8fcdb9d1f605aa870a2d729986cddfe635c217",
+      "bytes": 5282160,
+      "sha256": "32c40abc700179c19c8ff0c36ce860c34640e22a3be534f51fb77f78031b3c10",
       "schema": {
         "post_id": "Int8",
         "unit_id": "String",
@@ -341,7 +341,7 @@
     "current_reservations.tar": "3c3af9edbd296aad36891e71e401ab912361270f1e7cd708ad15ee2c6d38bc22"
   },
   "code_sha256": {
-    "build_2021.py": "d8a5380337408fdb777ac86b20344fb9b3be05bf7c0d14724ab92336a348ef50",
+    "build_2021.py": "43062f3f539dd7fc9435f350519654bce8968fd9f5752fe9cc7d36a07abf375a",
     "matching.py": "eb4b553c6be1265febb7fbe30553b863cf3900c7be88da88a4b8fd80373e7aaa",
     "schemas_2021.py": "37df6e99af4af9de801da795a078cad7391840a04961fffd5a69103af88b3431",
     "sec_portal.py": "c0a9e8c74688e32890224abddca8c2134464c8b36b85720c0c087e8653856811"
