@@ -23,7 +23,9 @@ OUT = Path("data/2011/mukhiya_reports")
 def test_release_parser_receipt(folder, parser):
     manifest = json.loads(Path(f"data/2011/{folder}/MANIFEST.json").read_text())
     code = Path("scripts/year2011") / parser
-    assert manifest["code_sha256"][parser] == hashlib.sha256(code.read_bytes()).hexdigest()
+    assert (
+        manifest["code_sha256"][parser] == hashlib.sha256(code.read_bytes()).hexdigest()
+    )
 
 
 @pytest.mark.parametrize(
