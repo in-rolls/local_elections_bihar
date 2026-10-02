@@ -8,9 +8,9 @@ import polars as pl
 import pytest
 from pandera.errors import SchemaErrors
 
-from scripts.shared.schema import polars_schema
-from scripts.year2021 import parse as b
-from scripts.year2021.schema import TABLES
+from local_elections_bihar.shared.schema import polars_schema
+from local_elections_bihar.year2021 import parse as b
+from local_elections_bihar.year2021.schema import TABLES
 
 URL = "https://sec25.bihar.gov.in/x"
 

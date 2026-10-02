@@ -10,7 +10,7 @@ from pathlib import Path
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from scripts.shared.portal import completed, decode_records, fetch
+from local_elections_bihar.shared.portal import completed, decode_records, fetch
 
 
 def build_frame(raw, districts, workers, *, loader=fetch, frames=None):

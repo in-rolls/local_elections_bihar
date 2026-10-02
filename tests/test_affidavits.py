@@ -2,7 +2,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
-from scripts.affidavits.pipeline import frame, page_score
+from local_elections_bihar.affidavits.pipeline import frame, page_score
 
 
 def test_frame_uses_result_flag_and_full_geography(tmp_path):
@@ -50,7 +50,7 @@ def test_page_locator_does_not_assign_education_values():
 def test_reviews_preserve_unknowns_and_reject_proposer_education(tmp_path):
     import csv
 
-    from scripts.affidavits.pipeline import read_reviews
+    from local_elections_bihar.affidavits.pipeline import read_reviews
 
     row = {
         "document_id": "a",
@@ -106,7 +106,7 @@ def test_published_education_matches_reviews_and_source_artifacts():
     import json
     from pathlib import Path
 
-    from scripts.affidavits.pipeline import file_hash, read_reviews
+    from local_elections_bihar.affidavits.pipeline import file_hash, read_reviews
 
     root = Path(__file__).resolve().parents[1] / "data/2021/affidavits"
     manifest = json.loads((root / "education.json").read_text())
@@ -139,7 +139,7 @@ def test_changed_pdf_invalidates_cached_ocr(tmp_path, monkeypatch):
     import json
     from types import SimpleNamespace
 
-    from scripts.affidavits import pipeline as affidavits
+    from local_elections_bihar.affidavits import pipeline as affidavits
 
     monkeypatch.setattr(affidavits, "ROOT", tmp_path / "raw")
     monkeypatch.setattr(affidavits, "CACHE_ROOT", tmp_path / "interim")
@@ -180,7 +180,7 @@ def test_download_status_preserves_pending_failed_and_corrupt_files(
 ):
     import json
 
-    from scripts.affidavits import pipeline as affidavits
+    from local_elections_bihar.affidavits import pipeline as affidavits
 
     monkeypatch.setattr(affidavits, "ROOT", tmp_path / "pdfs")
     rows = [
@@ -210,7 +210,7 @@ def test_download_status_preserves_pending_failed_and_corrupt_files(
 
 
 def test_downloader_continues_after_source_failure(tmp_path, monkeypatch):
-    from scripts.affidavits import pipeline as affidavits
+    from local_elections_bihar.affidavits import pipeline as affidavits
 
     monkeypatch.setattr(affidavits, "ROOT", tmp_path / "pdfs")
     seen = []
@@ -235,7 +235,7 @@ def test_downloader_continues_after_source_failure(tmp_path, monkeypatch):
 
 
 def test_interrupted_metadata_does_not_stop_status_snapshot(tmp_path, monkeypatch):
-    from scripts.affidavits import pipeline as affidavits
+    from local_elections_bihar.affidavits import pipeline as affidavits
 
     monkeypatch.setattr(affidavits, "ROOT", tmp_path / "pdfs")
     row = {

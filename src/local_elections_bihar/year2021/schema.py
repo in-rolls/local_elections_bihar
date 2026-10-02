@@ -9,7 +9,7 @@ from typing import ClassVar
 import pandera.polars as pa
 import polars as pl
 
-from scripts.shared.schema import field, nullable
+from local_elections_bihar.shared.schema import field, nullable
 
 POSTS = {
     1: "Ward member (gram panchayat)",

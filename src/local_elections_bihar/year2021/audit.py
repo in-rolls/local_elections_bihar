@@ -19,8 +19,8 @@ from pathlib import Path
 import polars as pl
 from bs4 import BeautifulSoup
 
-from scripts.shared.matching import name_key
-from scripts.shared.portal import completed_bytes, decode_records
+from local_elections_bihar.shared.matching import name_key
+from local_elections_bihar.shared.portal import completed_bytes, decode_records
 
 PORTAL = "https://sec25.bihar.gov.in"
 REPORT_URL = "https://sec.bihar.gov.in/PanchayatRpt/ch{}.aspx"

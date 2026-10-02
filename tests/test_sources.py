@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from scripts.shared.portal import read_saved
-from scripts.sources import digest, extract, fetch, pack
+from local_elections_bihar.shared.portal import read_saved
+from local_elections_bihar.sources import digest, extract, fetch, pack
 
 
 def test_saved_response_missing_or_incomplete_is_not_a_download(tmp_path):

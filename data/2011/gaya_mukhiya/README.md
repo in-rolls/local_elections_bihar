@@ -122,7 +122,7 @@ contextual glyph overrides. Re-derivation requires the specific SHA-pinned Arial
 Unicode reference font, which is proprietary and not redistributed. For example:
 
 ```sh
-uv run python -m scripts.year2011.map_fonts \
+uv run python -m local_elections_bihar.year2011.map_fonts \
   --font '/System/Library/Fonts/Supplemental/Arial Unicode.ttf' \
   --out /tmp/gaya-font-map.json
 ```

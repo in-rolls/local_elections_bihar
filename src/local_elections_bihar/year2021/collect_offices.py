@@ -16,7 +16,7 @@ from pathlib import Path
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from scripts.shared.portal import decode_records, fetch
+from local_elections_bihar.shared.portal import decode_records, fetch
 
 POSTS = (1, 2, 4, 5, 6)
 WARD_POSTS = (1, 2)

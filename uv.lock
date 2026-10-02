@@ -399,7 +399,7 @@ wheels = [
 [[package]]
 name = "local-elections-bihar"
 version = "1.0.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "fonttools" },

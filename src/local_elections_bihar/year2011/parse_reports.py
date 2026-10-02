@@ -10,7 +10,7 @@ from pathlib import Path
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from scripts.year2011.parse_gaya import (
+from local_elections_bihar.year2011.parse_gaya import (
     DESCRIPTIONS,
     FIELDS,
     ROOT,

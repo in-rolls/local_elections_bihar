@@ -3,8 +3,8 @@
 import polars as pl
 from test_build_2016 import candidate, page, write_inputs
 
-from scripts.year2016 import audit as a
-from scripts.year2016 import parse as b
+from local_elections_bihar.year2016 import audit as a
+from local_elections_bihar.year2016 import parse as b
 
 
 def release(tmp_path):

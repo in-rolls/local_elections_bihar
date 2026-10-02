@@ -13,38 +13,38 @@ test:
 YEAR ?= all
 
 fetch-sources:
-	uv run python -m scripts.sources fetch --year $(YEAR)
+	uv run python -m local_elections_bihar.sources fetch --year $(YEAR)
 
 parse:
-	uv run python -m scripts.sources parse --year $(YEAR)
+	uv run python -m local_elections_bihar.sources parse --year $(YEAR)
 
 verify:
-	uv run python -m scripts.sources verify --year $(YEAR)
+	uv run python -m local_elections_bihar.sources verify --year $(YEAR)
 
 verify-2016:
-	uv run python -m scripts.year2016.parse --check
+	uv run python -m local_elections_bihar.year2016.parse --check
 
 verify-2021:
-	uv run python -m scripts.year2021.parse --check
+	uv run python -m local_elections_bihar.year2021.parse --check
 
 build-2016:
-	uv run python -m scripts.sources parse --year 2016
+	uv run python -m local_elections_bihar.sources parse --year 2016
 
 audit-2016:
-	uv run python -m scripts.year2016.rosters parse
-	uv run python -m scripts.year2016.audit
+	uv run python -m local_elections_bihar.year2016.rosters parse
+	uv run python -m local_elections_bihar.year2016.audit
 
 build-2021:
-	uv run python -m scripts.sources parse --year 2021
+	uv run python -m local_elections_bihar.sources parse --year 2021
 
 audit-2021:
-	uv run python -m scripts.year2021.audit
+	uv run python -m local_elections_bihar.year2021.audit
 
 reservation-check-2021:
-	uv run python -m scripts.year2021.reservation_check
+	uv run python -m local_elections_bihar.year2021.reservation_check
 
 data-summary:
-	uv run python -m scripts.reporting.summary
+	uv run python -m local_elections_bihar.reporting.summary
 
 parse-2011:
-	uv run python -m scripts.sources parse --year 2011
+	uv run python -m local_elections_bihar.sources parse --year 2011

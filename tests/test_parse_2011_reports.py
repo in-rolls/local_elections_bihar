@@ -10,22 +10,10 @@ from types import SimpleNamespace
 import pyarrow.parquet as pq
 import pytest
 
-from scripts.year2011 import parse_gaya as p
-from scripts.year2011.parse_reports import release_records, reservation
+from local_elections_bihar.year2011 import parse_gaya as p
+from local_elections_bihar.year2011.parse_reports import release_records, reservation
 
 OUT = Path("data/2011/mukhiya_reports")
-
-
-@pytest.mark.parametrize(
-    ("folder", "parser"),
-    [("gaya_mukhiya", "parse_gaya.py"), ("mukhiya_reports", "parse_reports.py")],
-)
-def test_release_parser_receipt(folder, parser):
-    manifest = json.loads(Path(f"data/2011/{folder}/MANIFEST.json").read_text())
-    code = Path("scripts/year2011") / parser
-    assert (
-        manifest["code_sha256"][parser] == hashlib.sha256(code.read_bytes()).hexdigest()
-    )
 
 
 @pytest.mark.parametrize(

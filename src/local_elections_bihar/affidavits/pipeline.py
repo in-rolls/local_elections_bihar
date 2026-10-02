@@ -22,7 +22,7 @@ import requests
 from PIL import Image
 from tenacity import Retrying, retry_if_exception_type, stop_after_delay
 
-from scripts.shared.portal import TransientError, retry_after, retry_wait
+from local_elections_bihar.shared.portal import TransientError, retry_after, retry_wait
 
 LOCAL = threading.local()
 KEY = ["district_id", "block_id", "panchayat_id", "candidate_serial"]

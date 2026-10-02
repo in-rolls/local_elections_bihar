@@ -93,7 +93,7 @@ winners = pl.read_parquet("data/2016/winners.parquet").filter(
 ```
 
 `make verify` checks the published datasets for all three years locally. Parsing or
-collecting sources is optional and explicit; the [scripts guide](scripts/README.md)
+collecting sources is optional and explicit; the [pipeline guide](src/local_elections_bihar/README.md)
 lists the commands. `make check` runs local code checks and tests.
 
 ## Sources and reproduction
