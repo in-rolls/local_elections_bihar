@@ -122,7 +122,7 @@ contextual glyph overrides. Re-derivation requires the specific SHA-pinned Arial
 Unicode reference font, which is proprietary and not redistributed. For example:
 
 ```sh
-uv run python -m scripts.year2011.map_fonts \
+uv run python -m local_elections_bihar.year2011.map_fonts \
   --font '/System/Library/Fonts/Supplemental/Arial Unicode.ttf' \
   --out /tmp/gaya-font-map.json
 ```
@@ -156,9 +156,7 @@ uv run pytest -q tests/test_parse_2011.py
 
 An alternate source location can be supplied with `--raw` and an output directory
 with `--out`. Parsing writes the final tables and receipts only. It does not copy
-originals or save rendered pages or intermediate PDFs. Run
-`make fetch-sources YEAR=2011` to restore the originals from Zenodo; see the
-[data guide](../../README.md#reproduce-a-dataset). Affidavits are outside this pipeline.
+originals or save rendered pages or intermediate PDFs. The prepared source archive is awaiting publication; see the data guide. Affidavits are outside this pipeline.
 
 The [repository scope](../../../README.md#scope-and-collection-priorities) makes
 seat reservations, candidates and winners the next extraction priorities for
