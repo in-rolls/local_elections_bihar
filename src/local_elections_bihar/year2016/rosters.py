@@ -19,7 +19,7 @@ import pyarrow.parquet as pq
 import requests
 from bs4 import BeautifulSoup
 
-from scripts.year2016.collect import AGENT
+from local_elections_bihar.year2016.collect import AGENT
 
 DISTRICTS = 38
 PAGE = "https://sec.bihar.gov.in/old-sec/Reservation.aspx"

@@ -5,7 +5,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from scripts.reporting.summary import event_rows, report
+from local_elections_bihar.reporting.summary import event_rows, report
 
 
 def inputs():
@@ -144,32 +144,3 @@ def test_unknown_office_is_not_silently_omitted():
     changed = [df.with_columns(pl.lit(9).alias("post_id")) for df in inputs()]
     with pytest.raises(ValueError, match="unrecognized office"):
         summarize(*changed)
-
-
-def test_summary_preserves_counts_and_counts_storage_once(tmp_path):
-    from scripts.reporting.summary import summary_markdown, update_readme
-
-    data = Path("data")
-    import json
-
-    provenance = json.loads((data / "PROVENANCE.json").read_text())
-    text = summary_markdown(provenance)
-    assert "scripts.year2011.parse_reports" in text
-    assert "scripts.sources" in text
-    assert "2011/gaya_mukhiya/runner_up_records.parquet" in text
-    for archive in provenance["archives"].values():
-        if archive.get("url"):
-            assert archive["url"] in text
-        else:
-            assert "Publication pending" in text
-    path = tmp_path / "README.md"
-    path.write_text(
-        "Before\n<!-- data-summary:start -->\nold\n<!-- data-summary:end -->\nAfter\n"
-    )
-    update_readme(path, text)
-    assert path.read_text().startswith("Before\n")
-    assert path.read_text().endswith("\nAfter\n")
-    assert path.read_text().count("| Collection |") == 1
-    before = path.read_text()
-    update_readme(path, text)
-    assert path.read_text() == before

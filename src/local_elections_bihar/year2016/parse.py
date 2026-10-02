@@ -18,9 +18,9 @@ import polars as pl
 import pyarrow.parquet as pq
 from bs4 import BeautifulSoup
 
-from scripts.shared.schema import dictionary_rows, polars_schema
-from scripts.year2016.collect import OFFICES, current_page, html_of
-from scripts.year2016.schema import TABLES
+from local_elections_bihar.shared.schema import dictionary_rows, polars_schema
+from local_elections_bihar.year2016.collect import OFFICES, current_page, html_of
+from local_elections_bihar.year2016.schema import TABLES
 
 HEADER = (
     "Sr No.",
@@ -422,7 +422,9 @@ def main():
         "files": files,
         "frame_sha256": hashlib.sha256(args.frame.read_bytes()).hexdigest(),
         "code_sha256": {
-            name: hashlib.sha256((Path("scripts") / name).read_bytes()).hexdigest()
+            name: hashlib.sha256(
+                (Path(__file__).resolve().parents[1] / name).read_bytes()
+            ).hexdigest()
             for name in (
                 "year2016/parse.py",
                 "year2016/schema.py",

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.year2021.reservation_check import audit, category, load, sha
+from local_elections_bihar.year2021.reservation_check import audit, category, load, sha
 
 
 @pytest.fixture(scope="module")

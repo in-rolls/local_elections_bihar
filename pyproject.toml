@@ -26,8 +26,12 @@ dependencies = [
 Repository = "https://github.com/in-rolls/local_elections_bihar"
 Issues = "https://github.com/in-rolls/local_elections_bihar/issues"
 
-[tool.uv]
-package = false
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/local_elections_bihar"]
 
 [dependency-groups]
 dev = ["ruff>=0.14", { include-group = "test" }]
@@ -44,7 +48,6 @@ allowed-confusables = ["‘", "’", "‛", "–"]
 [tool.pytest.ini_options]
 minversion = "8"
 testpaths = ["tests"]
-pythonpath = ["."]
 log_level = "INFO"
 xfail_strict = true
 filterwarnings = ["error"]

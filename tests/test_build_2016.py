@@ -9,7 +9,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
-from scripts.year2016 import parse as b
+from local_elections_bihar.year2016 import parse as b
 
 HEADER = "".join(f"<th>{h}</th>" for h in b.HEADER)
 PAGER = "javascript:__doPostBack('gvVoterListDetails','"

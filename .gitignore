@@ -4,8 +4,8 @@ __pycache__/
 .ruff_cache/
 .venv/
 *.egg-info/
-build/
-dist/
+/build/
+/dist/
 *.log
 *.part
 data/*/raw

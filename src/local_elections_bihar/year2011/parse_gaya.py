@@ -12,10 +12,10 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import xlrd
 
-from scripts.year2011.hindi import cell_text, decoded_pdf, kruti_text
+from local_elections_bihar.year2011.hindi import cell_text, decoded_pdf, kruti_text
 
 ROOT = Path("data/2011/raw/reports")
-YEAR_RECEIPT = Path(__file__).resolve().parents[2] / "data/PROVENANCE.json"
+YEAR_RECEIPT = Path(__file__).resolve().parents[3] / "data/PROVENANCE.json"
 YEAR_ASSIGNMENT = {
     "election_year": 2011,
     "year_basis": (

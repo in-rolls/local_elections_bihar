@@ -8,8 +8,8 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
-from scripts.shared.portal import completed, decode_records, retry_after
-from scripts.year2021 import collect_mukhiya as sec_2021
+from local_elections_bihar.shared.portal import completed, decode_records, retry_after
+from local_elections_bihar.year2021 import collect_mukhiya as sec_2021
 
 
 def archive(path, data, phase=None):
@@ -75,7 +75,7 @@ def test_2021_requires_explicit_phase(tmp_path):
 
 
 def test_cached_request_accepts_equivalent_url_parameter_types(tmp_path):
-    from scripts.shared.portal import fetch
+    from local_elections_bihar.shared.portal import fetch
 
     path = tmp_path / "cached.jsonl.gz"
     event = {

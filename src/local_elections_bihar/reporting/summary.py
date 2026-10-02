@@ -8,7 +8,7 @@ from pathlib import Path
 import polars as pl
 import pyarrow.parquet as pq
 
-from scripts.year2016.schema import KEY as KEY_2016
+from local_elections_bihar.year2016.schema import KEY as KEY_2016
 
 OFFICES = {
     1: "ward_member",

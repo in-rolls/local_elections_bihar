@@ -64,7 +64,7 @@
       ],
       "steps": [
         {
-          "module": "scripts.year2011.parse_reports",
+          "module": "local_elections_bihar.year2011.parse_reports",
           "arguments": [
             "--raw",
             "{data}/2011/raw/reports",
@@ -76,7 +76,7 @@
           ]
         },
         {
-          "module": "scripts.year2011.parse_gaya",
+          "module": "local_elections_bihar.year2011.parse_gaya",
           "arguments": [
             "--raw",
             "{data}/2011/raw/reports",
@@ -106,7 +106,7 @@
       ],
       "steps": [
         {
-          "module": "scripts.sources",
+          "module": "local_elections_bihar.sources",
           "arguments": [
             "frames",
             "--year",
@@ -121,7 +121,7 @@
           ]
         },
         {
-          "module": "scripts.year2016.parse",
+          "module": "local_elections_bihar.year2016.parse",
           "arguments": [
             "--frame",
             "{cache}/2016/frame.parquet",
@@ -154,7 +154,7 @@
       ],
       "steps": [
         {
-          "module": "scripts.sources",
+          "module": "local_elections_bihar.sources",
           "arguments": [
             "frames",
             "--year",
@@ -172,7 +172,7 @@
           ]
         },
         {
-          "module": "scripts.year2021.parse",
+          "module": "local_elections_bihar.year2021.parse",
           "arguments": [
             "--raw",
             "{data}/2021/raw/statewide",

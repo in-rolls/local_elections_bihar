@@ -6,7 +6,7 @@ import time
 
 import pytest
 
-from scripts.year2016 import collect as s
+from local_elections_bihar.year2016 import collect as s
 
 FORM = b'<html><input type="hidden" name="__VIEWSTATE" value="x"></html>'
 

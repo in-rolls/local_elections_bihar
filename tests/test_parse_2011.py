@@ -8,8 +8,8 @@ from types import SimpleNamespace
 import pyarrow.parquet as pq
 import pytest
 
-from scripts.year2011 import parse_gaya as p
-from scripts.year2011.hindi import cell_text, kruti_text, logical_text
+from local_elections_bihar.year2011 import parse_gaya as p
+from local_elections_bihar.year2011.hindi import cell_text, kruti_text, logical_text
 
 PILOT = Path("data/2011/gaya_mukhiya")
 REVIEW = Path("tests/fixtures/2011/gaya_visual_review.csv")

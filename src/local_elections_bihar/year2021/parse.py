@@ -16,10 +16,10 @@ from pathlib import Path
 import polars as pl
 import pyarrow.parquet as pq
 
-from scripts.shared.matching import match
-from scripts.shared.portal import completed_bytes, decode_records
-from scripts.shared.schema import dictionary_rows, polars_schema
-from scripts.year2021.schema import TABLES
+from local_elections_bihar.shared.matching import match
+from local_elections_bihar.shared.portal import completed_bytes, decode_records
+from local_elections_bihar.shared.schema import dictionary_rows, polars_schema
+from local_elections_bihar.year2021.schema import TABLES
 
 PHASE = "2021_1"
 WINNER_MARK = re.compile(r"\s*\(विजेता\)\s*$")
@@ -678,7 +678,9 @@ def main():
             "SHA-256 of sorted relative ledger paths + NUL + each file SHA-256 digest"
         ),
         "code_sha256": {
-            name: hashlib.sha256((Path("scripts") / name).read_bytes()).hexdigest()
+            name: hashlib.sha256(
+                (Path(__file__).resolve().parents[1] / name).read_bytes()
+            ).hexdigest()
             for name in [
                 "year2021/parse.py",
                 "year2021/schema.py",

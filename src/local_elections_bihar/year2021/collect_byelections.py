@@ -15,8 +15,12 @@ from pathlib import Path
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from scripts.shared.portal import decode_records, fetch
-from scripts.year2021.collect_offices import order, request_params, unit_id
+from local_elections_bihar.shared.portal import decode_records, fetch
+from local_elections_bihar.year2021.collect_offices import (
+    order,
+    request_params,
+    unit_id,
+)
 
 PHASES = ("2023_1", "2023_2", "2025_1")
 ROOT = "byelections"

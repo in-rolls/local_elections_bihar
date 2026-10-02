@@ -11,7 +11,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from urllib.request import urlopen
 
-SPEC = Path(__file__).resolve().parents[1] / "data/PROVENANCE.json"
+SPEC = Path(__file__).resolve().parents[2] / "data/PROVENANCE.json"
 
 
 def digest(path):
@@ -117,12 +117,12 @@ def extract(archive, data, year):
 
 def frames(year, data, cache):
     if year == "2016":
-        from scripts.year2016.collect import write_frame
+        from local_elections_bihar.year2016.collect import write_frame
 
         write_frame(data / "2016/raw/statewide", cache / "2016/frame.parquet")
     elif year == "2021":
-        from scripts.shared.portal import enumerate_frame, read_saved
-        from scripts.year2021 import (
+        from local_elections_bihar.shared.portal import enumerate_frame, read_saved
+        from local_elections_bihar.year2021 import (
             collect_byelections,
             collect_mukhiya,
             collect_offices,
@@ -165,7 +165,7 @@ def verify(spec, year, data):
             [
                 sys.executable,
                 "-m",
-                f"scripts.year{year}.parse",
+                f"local_elections_bihar.year{year}.parse",
                 "--check",
                 "--out",
                 str(data / year),

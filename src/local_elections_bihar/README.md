@@ -1,7 +1,7 @@
-# Scripts
+# Data pipelines
 
 Run commands from the repository root. Python entry points use `uv run python -m`;
-no package installation or custom import path is needed. `make` provides the
+`uv sync` installs these modules from `src/local_elections_bihar/`. `make` provides the
 usual parsing, validation and summary commands.
 
 | Directory | Responsibility | Main entry points |
@@ -13,7 +13,7 @@ usual parsing, validation and summary commands.
 | `reporting/` | Produce the single data-guide table from published records and PROVENANCE.json | `make data-summary` |
 | `affidavits/` | Existing affidavit tools; outside current collection priorities | `pipeline`; run only for explicitly requested affidavit work |
 
-For example, `uv run python -m scripts.year2016.collect --help` lists collection
+For example, `uv run python -m local_elections_bihar.year2016.collect --help` lists collection
 options. The `crawl.sh` files orchestrate live collection and subsequent parsing;
 they are explicit collection jobs, not checks to run during ordinary maintenance.
 The data summary reads published tables and the provenance specification; it does
@@ -28,7 +28,7 @@ those hashes do not assert that today's reorganized scripts are byte-identical.
 `sources.py` is the shared entry point for `make fetch-sources YEAR=...`,
 `make parse YEAR=...` and `make verify YEAR=...`. Pipeline steps are defined once
 in `data/PROVENANCE.json`. Parsing uses saved responses; live collection stays an
-explicit separate command. `python -m scripts.sources pack --year 2011` creates
+explicit separate command. `python -m local_elections_bihar.sources pack --year 2011` creates
 only the specified input archive in `.cache/archives/` and records its checksum.
 Archive URLs stay empty until a public version is available. Optional audit sources live under
 `data/unprocessed/<year>/`; they are not reproduction dependencies.
