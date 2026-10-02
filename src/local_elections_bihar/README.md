@@ -29,6 +29,6 @@ those hashes do not assert that today's reorganized scripts are byte-identical.
 `make parse YEAR=...` and `make verify YEAR=...`. Pipeline steps are defined once
 in `data/PROVENANCE.json`. Parsing uses saved responses; live collection stays an
 explicit separate command. `python -m local_elections_bihar.sources pack --year 2011` creates
-only the specified input archive in `.cache/archives/` and records its checksum.
+only the specified input archives in `.cache/archives/` and records their checksums.
 Archive URLs stay empty until a public version is available. Optional audit sources live under
 `data/unprocessed/<year>/`; they are not reproduction dependencies.

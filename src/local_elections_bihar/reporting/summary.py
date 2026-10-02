@@ -335,20 +335,18 @@ def summary_markdown(provenance):
         )
         chain = " → ".join(f"`{step['module']}`" for step in pipeline["steps"])
         outputs = "<br>".join(f"`{path}`" for path in pipeline["outputs"])
-        archive = provenance["archives"].get(year, {})
+        archives = provenance["archives"].get(year, [])
         status = "Publication pending"
-        if archive:
-            status = (
-                f"{archive['source_files']:,} originals; "
-                f"{size_label(archive['source_bytes'])}; {status}"
+        if archives:
+            count = sum(archive["source_files"] for archive in archives)
+            size = sum(archive["source_bytes"] for archive in archives)
+            links = "<br>".join(
+                f"[{archive['filename']}]({archive['url']})"
+                if archive.get("url")
+                else "Publication pending"
+                for archive in archives
             )
-            if archive.get("url"):
-                status = (
-                    f"[{archive['filename']}]({archive['url']}); "
-                    + status.replace(
-                        "Publication pending", "SHA-256 in PROVENANCE.json"
-                    )
-                )
+            status = f"{count:,} originals; {size_label(size)}; {links}"
         lines.append(f"| {year} | {sources} | {chain} | {outputs} | {status} |")
     lines.extend(
         [
