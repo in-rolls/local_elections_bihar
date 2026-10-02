@@ -1,6 +1,7 @@
 """Fetch source archives, rebuild geography, parse and verify published datasets."""
 
 import argparse
+import fnmatch
 import hashlib
 import json
 import shutil
@@ -39,47 +40,70 @@ def selected_sources(spec, year, data):
 
 
 def pack(spec, year, data, destination):
-    """Create transport packaging; do not move or delete originals."""
+    """Package every selected original exactly once in standalone ZIPs."""
+    definitions = spec.get("archives", {}).get(
+        year, [{"filename": f"bihar_{year}_sources.zip"}]
+    )
+    sources = list(selected_sources(spec, year, data))
+    groups = [[] for _ in definitions]
+    for path, relative in sources:
+        matches = [
+            index
+            for index, archive in enumerate(definitions)
+            if any(
+                fnmatch.fnmatchcase(relative, pattern)
+                for pattern in archive.get("include", ["*"])
+            )
+        ]
+        if len(matches) != 1:
+            raise ValueError(f"Source must belong to exactly one archive: {relative}")
+        groups[matches[0]].append((path, relative))
+    if any(not group for group in groups):
+        raise ValueError("Archive selection is empty")
     destination.mkdir(parents=True, exist_ok=True)
-    archive = destination / f"bihar_{year}_sources.zip"
-    if archive.exists():
-        raise FileExistsError(archive)
-    count = size = 0
-    with zipfile.ZipFile(archive, "x", compression=zipfile.ZIP_STORED) as output:
-        for path, relative in selected_sources(spec, year, data):
-            output.write(path, relative)
-            count += 1
-            size += path.stat().st_size
-    return {
-        "filename": archive.name,
-        "url": None,
-        "sha256": digest(archive),
-        "bytes": archive.stat().st_size,
-        "source_files": count,
-        "source_bytes": size,
-    }
+    for definition in definitions:
+        if (destination / definition["filename"]).exists():
+            raise FileExistsError(destination / definition["filename"])
+    receipts = []
+    for definition, group in zip(definitions, groups, strict=True):
+        archive = destination / definition["filename"]
+        with zipfile.ZipFile(archive, "x", compression=zipfile.ZIP_STORED) as output:
+            for path, relative in group:
+                output.write(path, relative)
+        receipts.append(
+            {
+                **definition,
+                "url": None,
+                "sha256": digest(archive),
+                "bytes": archive.stat().st_size,
+                "source_files": len(group),
+                "source_bytes": sum(path.stat().st_size for path, _ in group),
+            }
+        )
+    return receipts
 
 
 def fetch(spec, year, data):
-    archive = spec["archives"].get(year)
-    if not archive or not archive.get("url"):
+    archives = spec["archives"].get(year, [])
+    if not archives or any(not archive.get("url") for archive in archives):
         raise ValueError(f"No published source archive for {year}; see PROVENANCE.json")
     data.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="bihar-download-") as tmp:
-        downloaded = Path(tmp) / "sources.zip"
-        with (
-            urlopen(archive["url"], timeout=120) as source,
-            downloaded.open("wb") as out,
-        ):
-            shutil.copyfileobj(source, out)
-        if (
-            downloaded.stat().st_size != archive["bytes"]
-            or digest(downloaded) != archive["sha256"]
-        ):
-            raise ValueError(
-                "Source archive checksum or size differs; nothing extracted"
-            )
-        extract(downloaded, data, year)
+    for archive in archives:
+        with tempfile.TemporaryDirectory(prefix="bihar-download-") as tmp:
+            downloaded = Path(tmp) / "sources.zip"
+            with (
+                urlopen(archive["url"], timeout=120) as source,
+                downloaded.open("wb") as out,
+            ):
+                shutil.copyfileobj(source, out)
+            if (
+                downloaded.stat().st_size != archive["bytes"]
+                or digest(downloaded) != archive["sha256"]
+            ):
+                raise ValueError(
+                    "Source archive checksum or size differs; nothing extracted"
+                )
+            extract(downloaded, data, year)
 
 
 def extract(archive, data, year):
@@ -106,13 +130,22 @@ def extract(archive, data, year):
             ):
                 raise ValueError(f"Extraction target contains a symlink: {target}")
             if target.exists():
-                raise FileExistsError(
-                    f"Refusing to overwrite existing source: {target}"
-                )
+                with source.open(member) as original:
+                    matches = (
+                        target.is_file()
+                        and digest(target)
+                        == hashlib.file_digest(original, "sha256").hexdigest()
+                    )
+                if not matches:
+                    raise FileExistsError(
+                        f"Refusing to overwrite differing source: {target}"
+                    )
         bad = source.testzip()
         if bad:
             raise ValueError(f"Corrupt source archive member: {bad}")
-        source.extractall(data)
+        for member in members:
+            if not (data / member.filename).exists():
+                source.extract(member, data)
 
 
 def frames(year, data, cache):
