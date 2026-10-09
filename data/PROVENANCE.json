@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "scope": "Bihar local seats, reservations, candidates and winners. Affidavits are separate and unchanged.",
   "source_groups": {
     "2011_reports": {
@@ -215,41 +215,130 @@
     }
   },
   "archives": {
-    "2011": {
-      "filename": "bihar_2011_sources.zip",
-      "url": null,
-      "sha256": "13e6c0cb656432230f5fc9eb86ccaf53baf91dc25a956fefaf9500c7655c418d",
-      "bytes": 3580617,
-      "source_files": 25,
-      "source_bytes": 3576263,
-      "record_id": "23092132"
-    },
-    "2016": {
-      "filename": "bihar_2016_sources.zip",
-      "url": null,
-      "sha256": "777f537750e1792c0af8aac6b708fdb11dc2488c8618bbb487155e3140409e00",
-      "bytes": 2664104953,
-      "source_files": 2933,
-      "source_bytes": 2663523979,
-      "record_id": "23092132"
-    },
-    "2021": {
-      "filename": "bihar_2021_sources.zip",
-      "url": null,
-      "sha256": "941c45146d82716ce1688bf662fd573967fd15b5401fe5785925963dc8806fa6",
-      "bytes": 937264309,
-      "source_files": 630549,
-      "source_bytes": 798914453,
-      "record_id": "23092132"
-    }
+    "2011": [
+      {
+        "filename": "bihar_2011_sources.zip",
+        "url": "https://zenodo.org/records/23092132/files/bihar_2011_sources.zip?download=1",
+        "sha256": "13e6c0cb656432230f5fc9eb86ccaf53baf91dc25a956fefaf9500c7655c418d",
+        "bytes": 3580617,
+        "source_files": 25,
+        "source_bytes": 3576263,
+        "record_id": "23092132"
+      }
+    ],
+    "2016": [
+      {
+        "filename": "bihar_2016_sources_d01_d08.zip",
+        "include": [
+          "*_d01*",
+          "*_d02*",
+          "*_d03*",
+          "*_d04*",
+          "*_d05*",
+          "*_d06*",
+          "*_d07*",
+          "*_d08*"
+        ],
+        "url": "https://zenodo.org/records/23092132/files/bihar_2016_sources_d01_d08.zip?download=1",
+        "record_id": "23092132",
+        "sha256": "e1eb42d9c69cd4ac543c44d9b0363751ecbf17ead8015c2e28f17aa9c426b4eb",
+        "bytes": 643436237,
+        "source_files": 629,
+        "source_bytes": 643312431
+      },
+      {
+        "filename": "bihar_2016_sources_d09_d16.zip",
+        "include": [
+          "*_d09*",
+          "*_d10*",
+          "*_d11*",
+          "*_d12*",
+          "*_d13*",
+          "*_d14*",
+          "*_d15*",
+          "*_d16*"
+        ],
+        "url": "https://zenodo.org/records/23092132/files/bihar_2016_sources_d09_d16.zip?download=1",
+        "record_id": "23092132",
+        "sha256": "2ef11cebdb205d859ac06795d6137044053f74b93e9895a1a60a4c9d60f9758d",
+        "bytes": 653571285,
+        "source_files": 656,
+        "source_bytes": 653442095
+      },
+      {
+        "filename": "bihar_2016_sources_d17_d24.zip",
+        "include": [
+          "*_d17*",
+          "*_d18*",
+          "*_d19*",
+          "*_d20*",
+          "*_d21*",
+          "*_d22*",
+          "*_d23*",
+          "*_d24*"
+        ],
+        "url": "https://zenodo.org/records/23092132/files/bihar_2016_sources_d17_d24.zip?download=1",
+        "record_id": "23092132",
+        "sha256": "a0fa2402d418ebb08e9ec44b886cbb3800d6ec54269c5757ba850e21dbc947d1",
+        "bytes": 595690044,
+        "source_files": 638,
+        "source_bytes": 595564484
+      },
+      {
+        "filename": "bihar_2016_sources_d25_d32.zip",
+        "include": [
+          "*_d25*",
+          "*_d26*",
+          "*_d27*",
+          "*_d28*",
+          "*_d29*",
+          "*_d30*",
+          "*_d31*",
+          "*_d32*"
+        ],
+        "url": "https://zenodo.org/records/23092132/files/bihar_2016_sources_d25_d32.zip?download=1",
+        "record_id": "23092132",
+        "sha256": "bc8918cf69db55bf4e66d5678e83a3ec38f45c8465ca942c194298070f458350",
+        "bytes": 452902018,
+        "source_files": 614,
+        "source_bytes": 452781176
+      },
+      {
+        "filename": "bihar_2016_sources_d33_d38.zip",
+        "include": [
+          "*_d33*",
+          "*_d34*",
+          "*_d35*",
+          "*_d36*",
+          "*_d37*",
+          "*_d38*"
+        ],
+        "url": "https://zenodo.org/records/23092132/files/bihar_2016_sources_d33_d38.zip?download=1",
+        "record_id": "23092132",
+        "sha256": "5b7055c50bcfb55e5d28ee8ea77c302626cf3d487cc92a8e81c3c8b15d80d7fc",
+        "bytes": 318501697,
+        "source_files": 396,
+        "source_bytes": 318423793
+      }
+    ],
+    "2021": [
+      {
+        "filename": "bihar_2021_sources.zip",
+        "url": "https://zenodo.org/records/23092132/files/bihar_2021_sources.zip?download=1",
+        "sha256": "941c45146d82716ce1688bf662fd573967fd15b5401fe5785925963dc8806fa6",
+        "bytes": 937264309,
+        "source_files": 630549,
+        "source_bytes": 798914453,
+        "record_id": "23092132"
+      }
+    ]
   },
   "availability": {
     "project_deposit": {
-      "url": "https://zenodo.org/uploads/23092132",
+      "url": "https://doi.org/10.5281/zenodo.23092132",
       "version": "data-2026-10-01.1",
-      "contents": "Three required-source archives, sixteen Parquets and the code/documentation archive. Zenodo Parquet filenames replace / in each output path with __.",
-      "status": "draft",
-      "reason": "Large source uploads timed out; draft has not been published. Archive checksums describe the prepared local files, not available public downloads."
+      "contents": "Seven source ZIPs (one for 2011, five district groups for 2016, one for 2021), sixteen Parquets and the code/documentation archive. Zenodo Parquet filenames replace / in each output path with __.",
+      "status": "published"
     },
     "historical_2016": {
       "url": "https://doi.org/10.5281/zenodo.22852474",
