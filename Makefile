@@ -1,5 +1,6 @@
 .PHONY: fetch-sources parse check test verify verify-2016 verify-2021 build-2016 \
-	audit-2016 build-2021 audit-2021 reservation-check-2021 data-summary parse-2011
+	audit-2016 build-2021 audit-2021 reservation-check-2021 data-summary parse-2011 \
+	linkage verify-linkage
 
 check:
 	uv sync --frozen --group dev
@@ -48,3 +49,9 @@ data-summary:
 
 parse-2011:
 	uv run python -m local_elections_bihar.sources parse --year 2011
+
+linkage:
+	uv run python -m local_elections_bihar.linkage.mukhiya build
+
+verify-linkage:
+	uv run python -m local_elections_bihar.linkage.mukhiya check

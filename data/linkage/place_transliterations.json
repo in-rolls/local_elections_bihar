@@ -1,0 +1,9 @@
+{
+  "path": "place_transliterations.parquet",
+  "rows": 8434,
+  "sha256": "a8396c524de712e08e04b5f913bed52c2ce44c4c886743bcca9bcb19943e5175",
+  "generator": {
+    "indicate": "0.10.0",
+    "engine": "model"
+  }
+}

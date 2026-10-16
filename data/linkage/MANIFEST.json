@@ -1,0 +1,49 @@
+{
+  "purpose": "Research crosswalks between Mukhiya seats of different elections. A link asserts that names agree inside the same block, not that boundaries are unchanged.",
+  "matcher": {
+    "preclink": "1.2.0",
+    "name_threshold": 0.8,
+    "ward_pass_threshold": 0.8
+  },
+  "inputs": {
+    "data/2016/seats.parquet": "5f234dad9afc7603e37aa34401ff4210fee31e6448cb8f94d79737a667d1761c",
+    "data/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
+    "data/2021/current_reservations.parquet": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073",
+    "data/2011/mukhiya_reports/winner_records.parquet": "3cdb740e116412a27d059df0b42c0dd05523069de636683f7c0d997a73437c56",
+    "data/linkage/place_transliterations.parquet": "a8396c524de712e08e04b5f913bed52c2ce44c4c886743bcca9bcb19943e5175"
+  },
+  "code_sha256": "e72c0a280316072d4db5bcc77b2f8e9ab34a07be1f393b56505854594cd02c92",
+  "validation": {
+    "mukhiya_2016_2021": {
+      "gps_2016": 8400,
+      "gps_2021": 8067,
+      "linked": 7945,
+      "linked_by_name": 7630,
+      "linked_by_name_and_wards": 315,
+      "unlinked_2016": 455,
+      "unlinked_2021": 122,
+      "ward_count_agreement_name_pass": 0.9726,
+      "ward_count_agreement_shuffled_within_block": 0.2394
+    },
+    "mukhiya_2011_2016": {
+      "records_2011": 3973,
+      "records_2011_unrepeated_labels": 3729,
+      "records_2011_block_located": 3640,
+      "block_headings_2011": 266,
+      "block_headings_linked": 258,
+      "linked": 3264
+    }
+  },
+  "files": [
+    {
+      "path": "mukhiya_2016_2021.parquet",
+      "rows": 7945,
+      "sha256": "c53cf34d82629bf4012046f5bdf59421e2845a28d900ed71ff6863e8c16d9985"
+    },
+    {
+      "path": "mukhiya_2011_2016.parquet",
+      "rows": 3264,
+      "sha256": "3a9f783dec25594f28d5dd480bfa9d6539d72d378558768aa10d0b928c5192a2"
+    }
+  ]
+}

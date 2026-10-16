@@ -384,6 +384,9 @@ def published_files(data):
         "runner_up_records": (
             "Gaya Mukhiya runner-up with GP linked from the companion winner PDF"
         ),
+        "mukhiya_2016_2021": "2016 Mukhiya seat linked to its 2021 seat by name",
+        "mukhiya_2011_2016": "2011 Mukhiya winner record linked to its 2016 seat",
+        "place_transliterations": "Romanization of a Devanagari GP name",
     }
     paths = sorted(
         [
@@ -392,6 +395,7 @@ def published_files(data):
             data / "2011/mukhiya_reports/winner_records.parquet",
             data / "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
             data / "2011/gaya_mukhiya/runner_up_records.parquet",
+            *data.glob("linkage/*.parquet"),
         ]
     )
     lines = ["| File | Rows | Each row represents |", "| --- | ---: | --- |"]

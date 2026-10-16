@@ -15,6 +15,7 @@ dependencies = [
     "pdfplumber>=0.11",
     "pillow>=12.3.0",
     "polars>=1.44",
+    "preclink>=1.2",
     "pyarrow>=21",
     "pypdf>=6",
     "requests>=2.34.2",
@@ -36,6 +37,7 @@ packages = ["src/local_elections_bihar"]
 [dependency-groups]
 dev = ["ruff>=0.14", { include-group = "test" }]
 test = ["pytest>=8"]
+transliterate = ["indicate>=0.10; python_version >= '3.13'"]
 
 [tool.ruff]
 line-length = 88
