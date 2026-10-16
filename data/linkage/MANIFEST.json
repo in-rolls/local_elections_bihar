@@ -10,9 +10,10 @@
     "data/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
     "data/2021/current_reservations.parquet": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073",
     "data/2011/mukhiya_reports/winner_records.parquet": "3cdb740e116412a27d059df0b42c0dd05523069de636683f7c0d997a73437c56",
-    "data/linkage/place_transliterations.parquet": "a8396c524de712e08e04b5f913bed52c2ce44c4c886743bcca9bcb19943e5175"
+    "data/linkage/place_transliterations.parquet": "a8396c524de712e08e04b5f913bed52c2ce44c4c886743bcca9bcb19943e5175",
+    "data/crosswalks/block_2011_2016.csv": "3cfd61d23d3e7a9dc20be56877fc043ef6b1ea523310884774cc9dd8bd4954dd"
   },
-  "code_sha256": "e72c0a280316072d4db5bcc77b2f8e9ab34a07be1f393b56505854594cd02c92",
+  "code_sha256": "718bfc98dca04afef774ec97a5cbaa625f12c01cdc1f0ad7236767bff499b378",
   "validation": {
     "mukhiya_2016_2021": {
       "gps_2016": 8400,
@@ -28,10 +29,10 @@
     "mukhiya_2011_2016": {
       "records_2011": 3973,
       "records_2011_unrepeated_labels": 3729,
-      "records_2011_block_located": 3640,
+      "records_2011_block_located": 3729,
       "block_headings_2011": 266,
-      "block_headings_linked": 258,
-      "linked": 3264
+      "block_headings_linked": 266,
+      "linked": 3342
     }
   },
   "files": [
@@ -42,8 +43,8 @@
     },
     {
       "path": "mukhiya_2011_2016.parquet",
-      "rows": 3264,
-      "sha256": "3a9f783dec25594f28d5dd480bfa9d6539d72d378558768aa10d0b928c5192a2"
+      "rows": 3342,
+      "sha256": "1418380db13ff5c8baba151f08ef97fef565252345f2ade50b628d6857b569d8"
     }
   ]
 }

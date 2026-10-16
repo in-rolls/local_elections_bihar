@@ -35,6 +35,7 @@ from rapidfuzz import fuzz
 DATA = Path("data")
 OUT = DATA / "linkage"
 TRANSLITERATIONS = OUT / "place_transliterations.parquet"
+BLOCKS_2011 = DATA / "crosswalks" / "block_2011_2016.csv"
 INPUTS = {
     "seats_2016": DATA / "2016/seats.parquet",
     "seats_2021": DATA / "2021/seats.parquet",
@@ -89,11 +90,27 @@ FOLDS = [
 DIRECTIONS = {
     "east": r"purv|poorv|पूर्व|पूरब|purab",
     "west": r"pash?chim|pachim|पश्चिम|पच्छिम",
-    "north": r"uttar|utter|उत्तर|उतर",
-    "south": r"dakshin|dakchhin|dakhin|दक्षिण|दक्षिनी|दछिन",
+    "north": r"uttar|utter|उत्\s*तर|उतर",
+    "south": r"daksh[ai]n|dakchhin|dakhin|दक्षिण|दक्षिनी|दछिन",
+    # Twin villages are distinguished by these; "Kalan" is not "Khurd".
+    "kalan": r"\bkal[ae]?n\b|\bkalaan\b|कलां|कला\b",
+    "khurd": r"\bkhurd\b|\bkhurad\b|खुर्द",
+    "buzurg": r"\bbuzurg\b|\bbujurg\b|बुजुर्ग|बुज़ुर्ग",
 }
 DIGITS = str.maketrans("०१२३४५६७८९", "0123456789")
 CODE_PREFIX = re.compile(r"^\s*\d+\s*-\s*")
+
+
+# A name may state a direction, a twin-village qualifier, both or neither. Two
+# names conflict only when both state one from the same family and they differ.
+QUALIFIER_FAMILIES = (
+    frozenset({"east", "west", "north", "south"}),
+    frozenset({"kalan", "khurd", "buzurg", "khas"}),
+)
+
+
+def qualifiers_conflict(a, b):
+    return any((a & f) and (b & f) and (a & f) != (b & f) for f in QUALIFIER_FAMILIES)
 
 
 def fold(name):
@@ -132,8 +149,8 @@ class PlaceName:
     def compare(self, left, right):
         scores = []
         for (a, a_num, a_dir), (b, b_num, b_dir) in zip(left, right, strict=True):
-            conflict = (a_num and b_num and a_num != b_num) or (
-                a_dir and b_dir and a_dir != b_dir
+            conflict = (a_num and b_num and a_num != b_num) or qualifiers_conflict(
+                a_dir, b_dir
             )
             scores.append(0.0 if conflict else similarity(a, b))
         return pd.Series(scores, index=left.index)
@@ -310,26 +327,22 @@ def link_2016_2021(translit):
     return out, checks
 
 
-def blocks_2011(w11, g16):
-    """2011 block headings to 2016 block codes, one-to-one within district."""
-    left = (
-        w11.select("district_code", pl.col("block_raw").alias("name"))
-        .unique()
-        .with_columns(key=pl.concat_str("district_code", "name", separator="|"))
-    )
-    right = (
-        g16.select("district_code", "block_code", pl.col("block").alias("name"))
-        .unique()
-        .with_columns(key=pl.col("block_code"))
-    )
-    lf, rf = (
-        frame(x.with_columns(wards=pl.lit(None)), "name", "name") for x in (left, right)
-    )
-    pairs = link(lf, rf, ["district_code"], [PlaceName()], NAME_THRESHOLD)
-    return pl.from_pandas(pairs).select(
-        pl.col("left").alias("block_key"),
-        pl.col("right").alias("block_code"),
-        pl.col("name_score").alias("block_score"),
+def blocks_2011():
+    """2011 block headings to 2016 block codes, from the reviewed crosswalk. A
+    block can appear under two headings in one report, so the map is many to one."""
+    return (
+        pl.read_csv(
+            BLOCKS_2011,
+            schema_overrides={"district_code": pl.String, "block_code_2016": pl.String},
+        )
+        .filter(pl.col("decision") == "linked")
+        .select(
+            pl.concat_str("district_code", "block_2011", separator="|").alias(
+                "block_key"
+            ),
+            pl.col("block_code_2016").alias("block_code"),
+            pl.col("name_score").alias("block_score"),
+        )
     )
 
 
@@ -343,7 +356,7 @@ def link_2011_2016(translit):
             latin=pl.col("panchayat_raw").replace_strict(translit, default=None),
         )
     )
-    blocks = blocks_2011(w11, g16)
+    blocks = blocks_2011()
     w11 = w11.with_columns(
         block_key=pl.concat_str("district_code", "block_raw", separator="|")
     ).join(blocks, on="block_key", how="left")
@@ -458,7 +471,9 @@ def build(out=OUT):
             "name_threshold": NAME_THRESHOLD,
             "ward_pass_threshold": WARD_PASS_THRESHOLD,
         },
-        "inputs": {str(p): sha(p) for p in [*INPUTS.values(), TRANSLITERATIONS]},
+        "inputs": {
+            str(p): sha(p) for p in [*INPUTS.values(), TRANSLITERATIONS, BLOCKS_2011]
+        },
         "code_sha256": sha(__file__),
         "validation": {"mukhiya_2016_2021": c1621, "mukhiya_2011_2016": c1116},
         "files": [

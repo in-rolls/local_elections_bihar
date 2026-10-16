@@ -47,3 +47,14 @@ def test_ward_pass_needs_equal_ward_counts():
     comparisons = [PlaceName(), ExactComparison("wards")]
     assert len(link(left, agree, ["block_code"], comparisons, 0.8)) == 1
     assert link(left, differ, ["block_code"], comparisons, 0.8).empty
+
+
+def test_qualifiers_conflict_only_within_a_family():
+    from local_elections_bihar.linkage.mukhiya import qualifiers_conflict
+
+    south = name_key("SINGHIYA BUJURG DAKSHANI", "singhiya bujurg dakshani")[2]
+    assert south == {"buzurg", "south"}
+    assert not qualifiers_conflict(south, name_key("सिंघिया बुजुर्ग दक्षिण", "")[2])
+    assert qualifiers_conflict(south, name_key("सिंघिया बुजुर्ग उत् तर", "")[2])
+    assert not qualifiers_conflict(frozenset({"kalan"}), frozenset({"north"}))
+    assert qualifiers_conflict(frozenset({"kalan"}), frozenset({"khurd"}))

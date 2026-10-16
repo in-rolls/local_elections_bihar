@@ -29,7 +29,7 @@ The list is generated from the published files by `make data-summary`.
 | [2021/result_rows.parquet](data/2021/result_rows.parquet) | 968,562 | Source result record; see dataset grain |
 | [2021/seats.parquet](data/2021/seats.parquet) | 247,671 | Seat in the election frame |
 | [2021/winners.parquet](data/2021/winners.parquet) | 244,475 | Winner record, with determination basis |
-| [linkage/mukhiya_2011_2016.parquet](data/linkage/mukhiya_2011_2016.parquet) | 3,264 | 2011 Mukhiya winner record linked to its 2016 seat |
+| [linkage/mukhiya_2011_2016.parquet](data/linkage/mukhiya_2011_2016.parquet) | 3,342 | 2011 Mukhiya winner record linked to its 2016 seat |
 | [linkage/mukhiya_2016_2021.parquet](data/linkage/mukhiya_2016_2021.parquet) | 7,945 | 2016 Mukhiya seat linked to its 2021 seat by name |
 | [linkage/place_transliterations.parquet](data/linkage/place_transliterations.parquet) | 8,434 | Romanization of a Devanagari GP name |
 
