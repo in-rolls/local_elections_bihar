@@ -88,3 +88,10 @@ lowest count exceeds every rival's counts added together. 29 seats are
 accepted on that rule (28 `supported`, plus the Maniyari seat whose leader's
 two rows differ only in the father's name, VIJAY/VINAY PASWAN); 12 are left
 undecided. `winners.parquet` is unchanged; a consumer applies these rulings.
+
+## Raw responses
+
+The 121 winner-list responses (3 MB, gzipped JSON lines; sha256 in
+`MANIFEST.json`) are committed under `data/2016/raw/statewide/2016/winner_list/`,
+an exception to this repository's practice of archiving raw files on Zenodo:
+they are small and were not part of the existing archives.
