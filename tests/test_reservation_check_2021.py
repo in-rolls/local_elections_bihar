@@ -1,0 +1,105 @@
+import copy
+import json
+from pathlib import Path
+
+import pytest
+
+from local_elections_bihar.year2021.reservation_check import audit, category, load, sha
+
+
+@pytest.fixture(scope="module")
+def sources():
+    return load()
+
+
+def run(sources):
+    return audit(
+        **sources,
+        official={"total": 8067, "sc": 1338, "st": 90, "bc": 1374, "women": 3583},
+    )
+
+
+def test_real_source_disagreements_are_preserved(sources):
+    checks, flagged = run(sources)
+    expected = json.loads(Path("data/2021/reservation_check/MANIFEST.json").read_text())
+    assert checks == expected["validation"]
+    assert checks["current_minus_official"] == {
+        "total": 0,
+        "sc": 1,
+        "st": 0,
+        "bc": -1,
+        "women": 0,
+    }
+    assert checks["current_feeds_women_reservation"] == {
+        "matched_seats": 8067,
+        "missing_winner_feed_seats": 0,
+        "missing_reservation_feed_seats": 0,
+        "agrees": 8067,
+        "disagrees": 0,
+        "unknown": 0,
+    }
+    assert checks["flagged_winners_same_document_url"] == 35
+    assert len(flagged) == 35
+    assert checks["flagged_winners_current_gender"] == {"पुरुष": 4, "महिला": 31}
+    assert all(r["candidate_woman_raw_2021"].strip() == "पुरुष" for r in flagged)
+
+
+def test_seat_reservation_does_not_follow_winner_gender():
+    assert category("अनारक्षित  (अन्य)") == ("open", False)
+    assert category("अनारक्षित  (महिला)") == ("open", True)
+    with pytest.raises(ValueError, match="Unknown seat reservation"):
+        category("महिला")
+
+
+def test_duplicate_and_missing_geographic_keys_fail(sources):
+    duplicate = {**sources, "reservations": sources["reservations"] * 2}
+    with pytest.raises(ValueError, match="Duplicate"):
+        run(duplicate)
+    missing = {**sources, "reservations": sources["reservations"][1:]}
+    with pytest.raises(ValueError, match="lack a reservation key"):
+        run(missing)
+
+
+def test_current_winner_disagreement_does_not_recode_2021(sources):
+    altered = copy.deepcopy(sources)
+    checks, flagged = run(altered)
+    key = tuple(flagged[0][f] for f in ["district_id", "block_id", "panchayat_id"])
+    for r in altered["current_winners"]:
+        if tuple(int(r[f]) for f in ["district_id", "block_id", "panchayat_id"]) == key:
+            r["candidate_woman_raw"] = "अन्य"
+    changed, rows = run(altered)
+    assert changed["winners"] == checks["winners"]
+    assert [r["candidate_woman_raw_2021"] for r in rows] == [
+        r["candidate_woman_raw_2021"] for r in flagged
+    ]
+
+
+def test_published_audit_checksums_and_provenance():
+    root = Path("data/2021/reservation_check")
+    manifest = json.loads((root / "MANIFEST.json").read_text())
+    for info in manifest["files"]:
+        assert sha(root / info["path"]) == info["sha256"]
+    for path, digest in manifest["inputs"].items():
+        assert sha(Path(path)) == digest
+    expected = manifest["receipts"]
+    for path, digest in expected.items():
+        if Path(path).is_file():
+            assert sha(Path(path)) == digest
+
+
+def test_current_reservation_disagreement_is_counted(sources):
+    altered = copy.deepcopy(sources)
+    r = altered["current_winners"][0]
+    r["reserved_woman_raw"] = "अन्य" if r["reserved_woman_raw"] == "महिला" else "महिला"
+    checks, _ = run(altered)
+    assert checks["current_feeds_women_reservation"]["disagrees"] == 1
+    assert checks["current_feeds_women_reservation"]["agrees"] == 8066
+
+
+def test_missing_documents_do_not_prove_identity(sources):
+    altered = copy.deepcopy(sources)
+    for r in altered["winners"] + altered["current_winners"]:
+        r["affidavit_url"] = None
+    checks, flagged = run(altered)
+    assert checks["flagged_winners_same_document_url"] == 0
+    assert all(r["same_document_url"] is None for r in flagged)

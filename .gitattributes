@@ -1,0 +1,3 @@
+# Checksummed data and provenance must retain their exact bytes on every platform.
+data/** -text
+data/**/*.csv whitespace=cr-at-eol

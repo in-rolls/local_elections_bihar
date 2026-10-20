@@ -1,0 +1,394 @@
+{
+  "year": 2016,
+  "source": "https://sec.bihar.gov.in/old-sec/ovc.aspx",
+  "files": [
+    {
+      "path": "seats.parquet",
+      "rows": 258095,
+      "sha256": "b6687ac806078cbc5280de07d1d5e7d8938873405785a779ad078066a61fef98",
+      "columns": {
+        "office": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['ward_member', 'panch', 'mukhiya', 'sarpanch', 'panchayat_samiti_member', 'zila_parishad_member'])>",
+          "description": "Office, from the form's post list."
+        },
+        "district_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form district code."
+        },
+        "block_code": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Form block code; null for zila parishad."
+        },
+        "panchayat_code": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Form panchayat code; set for ward member and panch."
+        },
+        "unit_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form code of the seat: ward, panchayat, or territorial number."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District label from the form."
+        },
+        "block": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Block label from the form."
+        },
+        "panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Panchayat label (ward member and panch seats)."
+        },
+        "unit": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Seat label from the form dropdown."
+        },
+        "code_repeated": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "The form uses this code for more than one place in the same parent (Siwan, Ziradei panchayat 10); its page cannot be tied to one label."
+        },
+        "seat_label": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Territorial seat shown on the results page (lblPradesikForMukhiya)."
+        },
+        "reserved_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Seat reservation shown on the results page; null on no-record pages and where the form shows its unset '--select--'."
+        },
+        "status": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['results', 'no_record'])>",
+          "description": "results, or no_record when the form answers 'Record not Found'."
+        },
+        "pages": {
+          "type": "Int16",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "Results-grid pages saved (20 candidates per page)."
+        },
+        "candidate_rows": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Candidate rows across all pages."
+        },
+        "winner_note": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['several_uncontested', 'repeated_serial_differs', 'tied_top_vote'])>",
+          "description": "Why no winner is derived although rows exist: several distinct uncontested candidates, a serial repeated with a different person or vote count, or a top vote shared by two candidates with no lot mark."
+        }
+      }
+    },
+    {
+      "path": "candidates.parquet",
+      "rows": 644865,
+      "sha256": "af592cfa5e5c35782c84da40fa5a89166a89e59f1980112d681e0304172915fd",
+      "columns": {
+        "office": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['ward_member', 'panch', 'mukhiya', 'sarpanch', 'panchayat_samiti_member', 'zila_parishad_member'])>",
+          "description": "Office, from the form's post list."
+        },
+        "district_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form district code."
+        },
+        "block_code": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Form block code; null for zila parishad."
+        },
+        "panchayat_code": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Form panchayat code; set for ward member and panch."
+        },
+        "unit_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form code of the seat: ward, panchayat, or territorial number."
+        },
+        "row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "Position of the row in the seat's table, across pages."
+        },
+        "sr_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Sr No., the candidate serial in the seat; the source repeats some, starts some at 0 and leaves some blank."
+        },
+        "sr_no_repeated": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "Another row of the seat has this Sr No."
+        },
+        "candidate_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Candidate Name, verbatim."
+        },
+        "father_husband_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Father/Hubs Name, verbatim."
+        },
+        "candidate_woman_raw": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Gender, verbatim ('--' for vacant rows)."
+        },
+        "candidate_woman": {
+          "type": "Int8",
+          "nullable": true,
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 \u092e\u0939\u093f\u0932\u093e, 0 \u092a\u0941\u0930\u0941\u0937; null for \u0924\u0943\u0924\u0940\u092f \u0932\u093f\u0902\u0917 and '--'."
+        },
+        "age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>; <Check less_than_or_equal_to: less_than_or_equal_to(120)>",
+          "description": "Age as reported, implausibly low values included; null for '--', blank, or a number above 120 (see age_raw)."
+        },
+        "age_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Age, verbatim."
+        },
+        "candidate_caste_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Category, verbatim; null for '--'."
+        },
+        "education": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Educational Qualification, verbatim."
+        },
+        "mobile_number": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Mobile No., verbatim (text, leading zeros kept)."
+        },
+        "address": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Address, verbatim."
+        },
+        "email": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Email Id, verbatim."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Obtained Valid Vote; null for '--' (uncontested or vacant) or blank. For a tie drawn by lot ('136+1') the count before the plus."
+        },
+        "votes_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Obtained Valid Vote, verbatim."
+        },
+        "won_by_lot": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "The vote cell carries '+1': the form's mark for a tie decided by lot."
+        },
+        "remarks": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['0', 'Uncontested', 'Vacant'])>",
+          "description": "Remarks: 0, Uncontested or Vacant."
+        },
+        "page": {
+          "type": "Int16",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "Results-grid page the row was on."
+        },
+        "source_file": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Result ledger holding the saved page."
+        },
+        "source_event": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Zero-based position of the page in that ledger."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the page was retrieved."
+        },
+        "page_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved page HTML."
+        }
+      }
+    },
+    {
+      "path": "winners.parquet",
+      "rows": 210717,
+      "sha256": "acb1f400882c12fa87a05d45cdf4bd63a35b96312f44e70ee65f049ea97161dd",
+      "columns": {
+        "office": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['ward_member', 'panch', 'mukhiya', 'sarpanch', 'panchayat_samiti_member', 'zila_parishad_member'])>",
+          "description": "Office, from the form's post list."
+        },
+        "district_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form district code."
+        },
+        "block_code": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Form block code; null for zila parishad."
+        },
+        "panchayat_code": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Form panchayat code; set for ward member and panch."
+        },
+        "unit_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form code of the seat: ward, panchayat, or territorial number."
+        },
+        "sr_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Winner's candidate serial."
+        },
+        "row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "Winner's row in candidates."
+        },
+        "winner_basis": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['uncontested', 'lot', 'top_vote'])>",
+          "description": "uncontested (Remarks), lot ('+1' vote mark on a tie) or top_vote (highest Obtained Valid Vote; the 2016 form has no winner flag)."
+        },
+        "tied": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "Another candidate has the same top vote; true only for wins by lot, since a tie with no lot mark names no winner."
+        },
+        "candidate_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Candidate Name."
+        },
+        "candidate_woman_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Gender, verbatim."
+        },
+        "candidate_woman": {
+          "type": "Int8",
+          "nullable": true,
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 woman, 0 man; null for other."
+        },
+        "age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Reported age."
+        },
+        "candidate_caste_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Category."
+        },
+        "votes": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Obtained Valid Vote; null when uncontested."
+        },
+        "margin": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "Votes ahead of the runner-up; null when uncontested."
+        }
+      }
+    }
+  ],
+  "frame_sha256": "36f60ee0a136011f99255ef804d6fff28739a657ab60f86756d331bbc7402386",
+  "code_sha256": {
+    "year2016/parse.py": "1ec58582f04eece21e6636521c28ed443f3f31349747564b8ec6a46cd2bf9db3",
+    "year2016/schema.py": "41bbd056a3f7c70902bff90648b6595550cfe92fecdee319967cde72d411e7c1",
+    "year2016/collect.py": "8ebaa771f593b0717385479d473854492f2799d935f28a90bea328cee16120f2",
+    "shared/schema.py": "3b0307cb663e280b3ad31cdbade45b8013c1a7a618496377d302272fcea8e87c"
+  }
+}
