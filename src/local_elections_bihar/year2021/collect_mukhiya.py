@@ -127,7 +127,7 @@ def parse(raw, out):
                         "candidate_serial": row["OrderBy"],
                         "candidate_name": row["CandidateName"],
                         "candidate_age": row.get("Age"),
-                        "candidate_gender": row.get("Gender"),
+                        "candidate_woman_raw": row.get("Gender"),
                         "votes": row.get("TotalVote"),
                         "elected": row.get("IsWin"),
                         "affidavit_url": row.get("CandidateDoc"),
@@ -151,7 +151,7 @@ def parse(raw, out):
     strings = [
         "kind",
         "candidate_name",
-        "candidate_gender",
+        "candidate_woman_raw",
         "affidavit_url",
         "source_url",
         "fetched_at",

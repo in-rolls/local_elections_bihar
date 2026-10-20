@@ -192,6 +192,21 @@ def transliterations(path=TRANSLITERATIONS):
     return dict(pl.read_parquet(path).select("native", "latin").iter_rows())
 
 
+def transliteration_method(path=TRANSLITERATIONS):
+    """What produced the romanizations, e.g. "indicate 0.10.0 model" (NAMING.md
+    asks every *_latin value to say how it was made)."""
+    info = json.loads(path.with_suffix(".json").read_text())["generator"]
+    return f"indicate {info['indicate']} {info['engine']}"
+
+
+def method_beside(column):
+    return (
+        pl.when(pl.col(column).is_not_null())
+        .then(pl.lit(transliteration_method()))
+        .alias(column.replace("gp_latin", "gp_latin_method"))
+    )
+
+
 def gps_2016():
     """2016 Mukhiya seats. Seats whose form code names two places (Siwan,
     Ziradei 10) cannot be tied to one results page and are left unlinked."""
@@ -286,7 +301,7 @@ def link_2016_2021(translit):
                 pl.col("key").alias("unit_id_2021"),
                 "panchayat_id",
                 pl.col("name").alias("gp_2021"),
-                pl.col("latin").alias("gp_2021_latin"),
+                pl.col("latin").alias("gp_latin_2021"),
                 pl.col("wards").alias("wards_2021"),
             ),
             on="unit_id_2021",
@@ -299,7 +314,8 @@ def link_2016_2021(translit):
             "panchayat_id",
             "gp_2016",
             "gp_2021",
-            "gp_2021_latin",
+            "gp_latin_2021",
+            method_beside("gp_latin_2021"),
             "wards_2016",
             "wards_2021",
             "name_score",
@@ -379,7 +395,7 @@ def link_2011_2016(translit):
                 pl.col("record_id").alias("record_id_2011"),
                 pl.col("block_raw").alias("block_2011"),
                 pl.col("panchayat_raw").alias("gp_2011"),
-                pl.col("latin").alias("gp_2011_latin"),
+                pl.col("latin").alias("gp_latin_2011"),
                 "block_score",
             ),
             on="record_id_2011",
@@ -401,7 +417,8 @@ def link_2011_2016(translit):
             "unit_code",
             "block_2011",
             "gp_2011",
-            "gp_2011_latin",
+            "gp_latin_2011",
+            method_beside("gp_latin_2011"),
             "gp_2016",
             "block_score",
             "name_score",

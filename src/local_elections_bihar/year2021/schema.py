@@ -19,7 +19,8 @@ POSTS = {
     5: "Panchayat samiti member",
     6: "Zila parishad member",
 }
-GENDERS = ["male", "female", "other"]
+# *_woman: 1 woman, 0 man; null for other, unstated or unlisted (NAMING.md)
+WOMAN = [0, 1]
 SEAT_STATUS = [
     "results",
     "one_candidate_no_results",
@@ -104,10 +105,8 @@ class Candidate(pa.DataFrameModel):
     guardian_name: pl.Utf8 = nullable("GaurdianName (father or husband), verbatim.")
     candidate_age: pl.Int32 = nullable("Age as reported; not corrected.", ge=0)
     candidate_age_implausible: pl.Boolean = nullable("Age below 21 or above 100.")
-    candidate_gender_raw: pl.Utf8 = nullable("Gender, verbatim.")
-    candidate_gender: pl.Utf8 = nullable(
-        "Gender mapped to male/female/other.", isin=GENDERS
-    )
+    candidate_woman_raw: pl.Utf8 = nullable("Gender, verbatim.")
+    candidate_woman: pl.Int8 = nullable("1 महिला, 0 पुरुष; null for other.", isin=WOMAN)
     candidate_address: pl.Utf8 = nullable("CandidateAddress, verbatim.")
     symbol_name: pl.Utf8 = nullable("SymbolName, the allotted election symbol.")
     symbol_file: pl.Utf8 = nullable("SymbolUrl, the symbol image file name.")
@@ -179,8 +178,9 @@ class Winner(pa.DataFrameModel):
     candidate_serial: pl.Int32 = nullable("Candidate-list serial; null if unlisted.")
     result_serial: pl.Int32 = nullable("Result serial; null for sole candidates.")
     winner_name: pl.Utf8 = field("Candidate-list name, else the result name.")
-    candidate_gender: pl.Utf8 = nullable(
-        "Mapped gender; null if unlisted.", isin=GENDERS
+    candidate_woman_raw: pl.Utf8 = nullable("Gender, verbatim; null if unlisted.")
+    candidate_woman: pl.Int8 = nullable(
+        "1 woman, 0 man; null if other or unlisted.", isin=WOMAN
     )
     candidate_age: pl.Int32 = nullable("Reported age; null if unlisted.", ge=0)
     votes: pl.Int64 = nullable("Votes summed over result rows.", ge=0)
@@ -214,12 +214,12 @@ class CurrentWinner(pa.DataFrameModel):
     placeholder_affidavit: pl.Utf8 = nullable("Affidavit field text of a placeholder.")
     candidate_name: pl.Utf8 = nullable("CandidateName, verbatim; null if vacant.")
     guardian_name: pl.Utf8 = nullable("GuardianName, verbatim.")
-    candidate_gender_raw: pl.Utf8 = nullable("Gender, verbatim.")
+    candidate_woman_raw: pl.Utf8 = nullable("Gender, verbatim.")
     candidate_age: pl.Int32 = nullable("Age as reported.", ge=0)
     candidate_address: pl.Utf8 = nullable("Address, verbatim.")
-    candidate_category: pl.Utf8 = nullable("Category: candidate's caste category.")
-    reservation_for_reported: pl.Utf8 = nullable("ReservationFor: women or other.")
-    reservation_status_reported: pl.Utf8 = nullable("ReservationStatus, verbatim.")
+    candidate_caste_raw: pl.Utf8 = nullable("Category: candidate's caste category.")
+    reserved_woman_raw: pl.Utf8 = nullable("ReservationFor: women or other.")
+    reserved_caste_local: pl.Utf8 = nullable("ReservationStatus, verbatim.")
     photo_url: pl.Utf8 = nullable("CandidatePhotos link.", str_startswith="http")
     affidavit_url: pl.Utf8 = nullable("Affidavit link.", str_startswith="http")
     source_url: pl.Utf8 = field(PROVENANCE["source_url"])
@@ -245,7 +245,7 @@ class CurrentReservation(pa.DataFrameModel):
     block: pl.Utf8 = field("Block, verbatim.")
     panchayat: pl.Utf8 = nullable("Panchayat, verbatim.")
     post_name: pl.Utf8 = field("Post, verbatim.")
-    seat_reservation: pl.Utf8 = field("Reservation: category (women/other), verbatim.")
+    reserved_raw: pl.Utf8 = field("Reservation: category (women/other), verbatim.")
     source_url: pl.Utf8 = field(PROVENANCE["source_url"])
     fetched_at: pl.Utf8 = field(PROVENANCE["fetched_at"])
     source_sha256: pl.Utf8 = field(PROVENANCE["source_sha256"], str_length=64)

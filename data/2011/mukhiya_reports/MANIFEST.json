@@ -13,9 +13,9 @@
     "missing_block_records": 0,
     "decode_issue_cells": 5,
     "duplicate_content_records": 0,
-    "reservation_labels_present": 3971,
-    "reservation_category_mapped": 3085,
-    "women_reservation_mapped": 2721,
+    "reserved_labels_present": 3971,
+    "reserved_caste_mapped": 3085,
+    "reserved_woman_mapped": 2721,
     "rows_with_repeated_seat_labels": 244,
     "scope": "Source winner records, not all candidates, unique seats or statewide completeness",
     "overlap": "Includes the same 338 primary Gaya PDF records as the pilot; do not add the two counts"
@@ -53,8 +53,8 @@
   },
   "source_root": "data/2011/raw/reports",
   "code_sha256": {
-    "parse_reports.py": "6a814762cf6458bc779cb447886e90f1909d3d32bcae00239c72a04f900c21e3",
-    "parse_gaya.py": "35e3392e9fe5232a337ff93e58b93ee7d5aae829ad90544858b06165f8740d52",
+    "parse_reports.py": "37a6e0b69e4ac7b6b56be8e16f9b29cc11eca5622988b5f0bba409976760f4e6",
+    "parse_gaya.py": "d2d1e74bc20f7eb4eee565b7f7d7f10bd00fd11dee7fc2c8aaedb07ad1849607",
     "hindi.py": "000941e5857904e74dca2b714c555738cbba3e1aaa5b591471e14471da7948cf",
     "font_map.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb"
   },
@@ -79,12 +79,12 @@
       "nullable": true,
       "description": "Decoded address as reported, possibly including phone numbers in workbook"
     },
-    "reservation_raw": {
+    "reserved_raw": {
       "type": "string",
       "nullable": true,
       "description": "Reported seat reservation; distinct from candidate category"
     },
-    "gender_raw": {
+    "candidate_woman_raw": {
       "type": "string",
       "nullable": true,
       "description": "Source gender spelling, even where it conflicts with another source"
@@ -94,7 +94,7 @@
       "nullable": true,
       "description": "Unrecoded source cell for age"
     },
-    "category_raw": {
+    "candidate_caste_raw": {
       "type": "string",
       "nullable": true,
       "description": "Reported candidate social category, not seat reservation"
@@ -229,20 +229,20 @@
       "nullable": true,
       "description": "Repeated literal name within district/block; null if name or block missing"
     },
-    "gender": {
-      "type": "string",
+    "candidate_woman": {
+      "type": "int8",
       "nullable": true,
-      "description": "female/male/other from explicit source labels; no name inference"
+      "description": "1 woman, 0 man, from explicit source labels (null for other); no name inference"
     },
-    "reservation_category": {
+    "reserved_caste": {
       "type": "string",
       "nullable": true,
       "description": "Exact reviewed source-label mapping to unreserved/SC/ST/BC/EBC; ambiguous labels null"
     },
-    "reservation_women": {
-      "type": "bool",
+    "reserved_woman": {
+      "type": "int8",
       "nullable": true,
-      "description": "True for explicit female label; false for explicit other/male; otherwise null"
+      "description": "1 for an explicit female label; 0 for explicit other/male; otherwise null"
     },
     "duplicate_of_record_id": {
       "type": "string",
@@ -271,9 +271,9 @@
     }
   },
   "files": {
-    "coverage.csv": "16447564413128a74a7ce08e51f19b48d2b91f5a06f27ffd74ad5341865931ca",
-    "issues.csv": "612d251c062617a178aac3251ee62cada583c08369b7f401f38fe204cde1ea34",
-    "reservation_labels.csv": "f252451f39d1501913290e5defae871d207510e321978540adac9f4d59ac7320",
-    "winner_records.parquet": "3cdb740e116412a27d059df0b42c0dd05523069de636683f7c0d997a73437c56"
+    "coverage.csv": "7564ecb55f461a3f68c2d30a55c3de0b32ece0739d3ac82f053573c41b711ed2",
+    "issues.csv": "1c2683fdfcde887937bf0b071c3e7392e46269139f50567ea63f720f699b100d",
+    "reservation_labels.csv": "0493d2f86b839b20e5d8239b6fa8b32e1e25e761cf6ba3d13c900efd3f84b5e7",
+    "winner_records.parquet": "83b07aed81343393692d866067f5c3b75295067027e803bc70f7ab3942428104"
   }
 }

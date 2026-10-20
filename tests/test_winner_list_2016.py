@@ -78,7 +78,7 @@ def seats_frame(units, notes=None, labels=None):
             "unit": f"{u} - {label}",
             "code_repeated": False,
             "seat_label": (labels or {}).get(u),
-            "seat_reservation": None,
+            "reserved_raw": None,
             "status": "results",
             "pages": 1,
             "candidate_rows": 1,

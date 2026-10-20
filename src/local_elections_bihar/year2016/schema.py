@@ -19,7 +19,8 @@ OFFICES = [
     "panchayat_samiti_member",
     "zila_parishad_member",
 ]
-GENDERS = ["male", "female", "other"]
+# *_woman: 1 woman, 0 man; null for other, unstated or unlisted (NAMING.md)
+WOMAN = [0, 1]
 REMARKS = ["0", "Uncontested", "Vacant"]
 SEAT_STATUS = ["results", "no_record"]
 WINNER_NOTE = ["several_uncontested", "repeated_serial_differs", "tied_top_vote"]
@@ -66,7 +67,7 @@ class Seat(pa.DataFrameModel):
     seat_label: pl.Utf8 = nullable(
         "Territorial seat shown on the results page (lblPradesikForMukhiya)."
     )
-    seat_reservation: pl.Utf8 = nullable(
+    reserved_raw: pl.Utf8 = nullable(
         "Seat reservation shown on the results page; null on no-record pages and "
         "where the form shows its unset '--select--'."
     )
@@ -105,9 +106,9 @@ class Candidate(pa.DataFrameModel):
     sr_no_repeated: pl.Boolean = field("Another row of the seat has this Sr No.")
     candidate_name: pl.Utf8 = nullable("Candidate Name, verbatim.")
     father_husband_name: pl.Utf8 = nullable("Father/Hubs Name, verbatim.")
-    gender_raw: pl.Utf8 = field("Gender, verbatim ('--' for vacant rows).")
-    gender: pl.Utf8 = nullable(
-        "Gender mapped to male/female/other (तृतीय लिंग); null for '--'.", isin=GENDERS
+    candidate_woman_raw: pl.Utf8 = field("Gender, verbatim ('--' for vacant rows).")
+    candidate_woman: pl.Int8 = nullable(
+        "1 महिला, 0 पुरुष; null for तृतीय लिंग and '--'.", isin=WOMAN
     )
     age: pl.Int32 = nullable(
         "Age as reported, implausibly low values included; null for '--', blank, "
@@ -116,7 +117,7 @@ class Candidate(pa.DataFrameModel):
         le=120,
     )
     age_raw: pl.Utf8 = nullable("Age, verbatim.")
-    category: pl.Utf8 = nullable("Category, verbatim; null for '--'.")
+    candidate_caste_raw: pl.Utf8 = nullable("Category, verbatim; null for '--'.")
     education: pl.Utf8 = nullable("Educational Qualification, verbatim.")
     mobile_number: pl.Utf8 = nullable(
         "Mobile No., verbatim (text, leading zeros kept)."
@@ -162,9 +163,10 @@ class Winner(pa.DataFrameModel):
         "tie with no lot mark names no winner."
     )
     candidate_name: pl.Utf8 = nullable("Candidate Name.")
-    gender: pl.Utf8 = nullable("Mapped gender.", isin=GENDERS)
+    candidate_woman_raw: pl.Utf8 = nullable("Gender, verbatim.")
+    candidate_woman: pl.Int8 = nullable("1 woman, 0 man; null for other.", isin=WOMAN)
     age: pl.Int32 = nullable("Reported age.", ge=0)
-    category: pl.Utf8 = nullable("Category.")
+    candidate_caste_raw: pl.Utf8 = nullable("Category.")
     votes: pl.Int64 = nullable("Obtained Valid Vote; null when uncontested.", ge=0)
     margin: pl.Int64 = nullable("Votes ahead of the runner-up; null when uncontested.")
 
@@ -197,14 +199,14 @@ class WinnerListRecord(pa.DataFrameModel):
     )
     panchayat_name: pl.Utf8 = field("Panchayat Name, verbatim.")
     seat_label: pl.Utf8 = field("Territorial seat (नि० क्षे० सं०), verbatim.")
-    seat_reservation: pl.Utf8 = nullable("Reservation Status, verbatim.")
+    reserved_raw: pl.Utf8 = nullable("Reservation Status, verbatim.")
     winner_name: pl.Utf8 = field("Candidate Name, verbatim.")
     father_husband_name: pl.Utf8 = nullable("Father/Husband Name, verbatim.")
-    gender_raw: pl.Utf8 = field("Gender, verbatim.")
-    gender: pl.Utf8 = nullable("Gender mapped to male/female/other.", isin=GENDERS)
+    candidate_woman_raw: pl.Utf8 = field("Gender, verbatim.")
+    candidate_woman: pl.Int8 = nullable("1 महिला, 0 पुरुष; null for other.", isin=WOMAN)
     age: pl.Int32 = nullable("Age; null when blank or above 120.", ge=0, le=120)
     age_raw: pl.Utf8 = nullable("Age, verbatim.")
-    category: pl.Utf8 = nullable("Category, verbatim.")
+    candidate_caste_raw: pl.Utf8 = nullable("Category, verbatim.")
     education: pl.Utf8 = nullable("Educational Qualification, verbatim.")
     mobile_number: pl.Utf8 = nullable("Mobile No., verbatim.")
     address: pl.Utf8 = nullable("Address, verbatim.")

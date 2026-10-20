@@ -5,7 +5,7 @@
     {
       "path": "winner_list_records.parquet",
       "rows": 1682,
-      "sha256": "ee4e67341b7097cfe5fa0bb24e6f51cf280bdeeb306ad39e269ee055e06382f5",
+      "sha256": "b6aead4fe8ca0827864f2c7d7e9dc76832753f3921847d8fbab76e13fa115a90",
       "columns": {
         "district_code": {
           "type": "String",
@@ -49,7 +49,7 @@
           "checks": "",
           "description": "Territorial seat (नि० क्षे० सं०), verbatim."
         },
-        "seat_reservation": {
+        "reserved_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
@@ -67,17 +67,17 @@
           "checks": "",
           "description": "Father/Husband Name, verbatim."
         },
-        "gender_raw": {
+        "candidate_woman_raw": {
           "type": "String",
           "nullable": false,
           "checks": "",
           "description": "Gender, verbatim."
         },
-        "gender": {
-          "type": "String",
+        "candidate_woman": {
+          "type": "Int8",
           "nullable": true,
-          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
-          "description": "Gender mapped to male/female/other."
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 महिला, 0 पुरुष; null for other."
         },
         "age": {
           "type": "Int32",
@@ -91,7 +91,7 @@
           "checks": "",
           "description": "Age, verbatim."
         },
-        "category": {
+        "candidate_caste_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
@@ -182,9 +182,9 @@
     }
   ],
   "inputs_sha256": {
-    "seats.parquet": "5f234dad9afc7603e37aa34401ff4210fee31e6448cb8f94d79737a667d1761c",
-    "candidates.parquet": "0b73373fce5b29292c61399b3308d44b95f850f17127f5c2e6bfef3e162f65ca",
-    "winners.parquet": "1f1712f0a91370cb3db6a4b891d419a60cd81a4a7dbc00c57ea04e4fc14aeb13"
+    "seats.parquet": "b6687ac806078cbc5280de07d1d5e7d8938873405785a779ad078066a61fef98",
+    "candidates.parquet": "af592cfa5e5c35782c84da40fa5a89166a89e59f1980112d681e0304172915fd",
+    "winners.parquet": "acb1f400882c12fa87a05d45cdf4bd63a35b96312f44e70ee65f049ea97161dd"
   },
   "source_ledgers": {
     "mukhiya_d01_b010.jsonl.gz": "df5a2c441b5ab2fc7422bf9bf1758bb36c82bec30863cb3551d0bc79311f1fd5",
@@ -310,9 +310,9 @@
     "mukhiya_d38_b008.jsonl.gz": "1c0d6ef90b1be06161c6af4f4ded98577b5ea5200f8016bbc5d666346254ee2f"
   },
   "code_sha256": {
-    "year2016/winner_list.py": "530df80a838abbb0626db008703d64dd1513500f711cf5df976ba8fd4978d492",
+    "year2016/winner_list.py": "05ec2f90d7fec3cb8908adb7a58c38090862dc66645e21d97c1bad676c444fa3",
     "year2016/collect_winner_list.py": "61f9890595319356db130a2b33835dcbaf8a40fa576e3013537d9cfc3048ab2f",
     "year2016/collect.py": "8ebaa771f593b0717385479d473854492f2799d935f28a90bea328cee16120f2",
-    "year2016/schema.py": "618eecf8150284df1f00419462a2bb6dab092431c6bcb4d49b9b4c1cdbb3dbde"
+    "year2016/schema.py": "41bbd056a3f7c70902bff90648b6595550cfe92fecdee319967cde72d411e7c1"
   }
 }

@@ -1,4 +1,4 @@
-document_id,page,education_raw,education_category,graduate_plus,illiterate,prior_elected,reservation_raw,quota_document,review_status,notes,additional_pages,page_kind
+document_id,page,education_raw,education_level,graduate_plus,illiterate,prior_elected,reserved_raw_from_affidavit,reserved_woman_from_affidavit,review_status,notes,additional_pages,page_kind
 33_1_330010001_2,12,B.A.,graduate,1,0,0,General Female,1,visually_checked,,,candidate_biography
 33_1_330010002_2,12,नॉन मैट्रिक,below_secondary,0,,1,सामान्य,0,visually_checked,Non-matric does not establish literacy; mukhiya since 2016,,candidate_biography
 33_1_330010004_4,14,B.Sc,graduate,1,0,0,General,0,visually_checked,,,candidate_biography

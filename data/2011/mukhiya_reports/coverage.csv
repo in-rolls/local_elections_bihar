@@ -1,4 +1,4 @@
-district_raw,source_file,pages,winner_records,reservation_labels_present,reservation_category_mapped,women_reservation_mapped,missing_block_records,rows_with_repeated_seat_labels,decode_issue_cells,duplicate_content_records
+district_raw,source_file,pages,winner_records,reserved_labels_present,reserved_caste_mapped,reserved_woman_mapped,missing_block_records,rows_with_repeated_seat_labels,decode_issue_cells,duplicate_content_records
 Aurangabad,winners/Aurangabad/Aurangabad_GPM.pdf,17,310,310,232,272,0,214,2,106
 BEGUSARAI,winners/BEGUSARAI/BEGUSARAI_GPM.pdf,21,244,243,176,175,6,31,1,12
 BHAGALPUR,winners/BHAGALPUR/BHAGALPUR_GPM.pdf,11,147,147,129,112,0,2,0,0

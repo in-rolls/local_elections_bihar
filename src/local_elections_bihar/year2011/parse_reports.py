@@ -33,13 +33,8 @@ CATEGORY_LABELS = {
         "अत्यंतपिछड़ावर्ग",
     },
 }
-GENDERS = {
-    "महिला": "female",
-    "महीला": "female",
-    "पुरुष": "male",
-    "पुरूष": "male",
-    "अन्य": "other",
-}
+# 1 / 0 / null (NAMING.md); "अन्य" keeps its text in candidate_woman_raw
+GENDERS = {"महिला": 1, "महीला": 1, "पुरुष": 0, "पुरूष": 0, "अन्य": None}
 NUMBERS = ("age", "annual_income", "sons", "daughters")
 INTS = {
     "collection_year",
@@ -49,8 +44,8 @@ INTS = {
     "decode_issue_count",
     *NUMBERS,
 }
+INT8 = {"reserved_woman", "candidate_woman"}
 BOOLS = {
-    "reservation_women",
     "missing_block",
     "seat_label_repeated",
     "name_within_block_repeated",
@@ -62,7 +57,10 @@ DESCRIPTIONS = {
     "election_year": (
         "2011, based on maintainer confirmation and prior-election headings"
     ),
-    "gender": "female/male/other from explicit source labels; no name inference",
+    "candidate_woman": (
+        "1 woman, 0 man, from explicit source labels (null for other); "
+        "no name inference"
+    ),
     "seat_label_repeated": (
         "Repeated literal block/panchayat label within district; "
         "null if either label is missing"
@@ -74,12 +72,12 @@ DESCRIPTIONS = {
         "First record with identical decoded source cells and block in this PDF; "
         "null for first occurrence or any decoding failure"
     ),
-    "reservation_category": (
+    "reserved_caste": (
         "Exact reviewed source-label mapping to unreserved/SC/ST/BC/EBC; "
         "ambiguous labels null"
     ),
-    "reservation_women": (
-        "True for explicit female label; false for explicit other/male; otherwise null"
+    "reserved_woman": (
+        "1 for an explicit female label; 0 for explicit other/male; otherwise null"
     ),
     "decode_issue_count": (
         "Cells set to null because glyph ordering could not be resolved; see issues.csv"
@@ -97,7 +95,7 @@ def reservation(value):
     text = re.sub(r"[\s,./()\-]", "", (value or "").replace("\u0966", "0"))
     female = any(word in text for word in ("महिला", "महीला"))
     other = any(word in text for word in ("अन्य", "पुरुष", "पुरूष"))
-    women = None if female == other else female
+    women = None if female == other else int(female)
     for suffix in ("महिला", "महीला", "अन्य", "पुरुष", "पुरूष"):
         text = text.removesuffix(suffix)
     category = next(
@@ -211,10 +209,10 @@ def write_outputs(raw, out):
                     if row["block_raw"] and row["candidate_name"]
                     else None
                 ),
-                gender=GENDERS.get(row["gender_raw"]),
+                candidate_woman=GENDERS.get(row["candidate_woman_raw"]),
             )
-            row["reservation_category"], row["reservation_women"] = reservation(
-                row["reservation_raw"]
+            row["reserved_caste"], row["reserved_woman"] = reservation(
+                row["reserved_raw"]
             )
             content_key = (row["block_raw"], *(row[field] for field in FIELDS[1:]))
             row["duplicate_of_record_id"] = None
@@ -249,14 +247,12 @@ def write_outputs(raw, out):
                 "source_file": relative,
                 "pages": max(r["source_page"] for r in rows),
                 "winner_records": len(rows),
-                "reservation_labels_present": sum(
-                    bool(r["reservation_raw"]) for r in rows
+                "reserved_labels_present": sum(bool(r["reserved_raw"]) for r in rows),
+                "reserved_caste_mapped": sum(
+                    r["reserved_caste"] is not None for r in rows
                 ),
-                "reservation_category_mapped": sum(
-                    r["reservation_category"] is not None for r in rows
-                ),
-                "women_reservation_mapped": sum(
-                    r["reservation_women"] is not None for r in rows
+                "reserved_woman_mapped": sum(
+                    r["reserved_woman"] is not None for r in rows
                 ),
                 "missing_block_records": sum(r["missing_block"] for r in rows),
                 "rows_with_repeated_seat_labels": sum(
@@ -276,7 +272,9 @@ def write_outputs(raw, out):
         [
             (
                 name,
-                pa.int64()
+                pa.int8()
+                if name in INT8
+                else pa.int64()
                 if name in INTS
                 else pa.bool_()
                 if name in BOOLS
@@ -305,13 +303,13 @@ def write_outputs(raw, out):
             "source_box",
         ],
     )
-    labels = collections.Counter(r["reservation_raw"] for r in records)
+    labels = collections.Counter(r["reserved_raw"] for r in records)
     label_rows = [
         {
-            "reservation_raw": label,
+            "reserved_raw": label,
             "records": count,
-            "reservation_category": reservation(label)[0],
-            "reservation_women": reservation(label)[1],
+            "reserved_caste": reservation(label)[0],
+            "reserved_woman": reservation(label)[1],
         }
         for label, count in sorted(
             labels.items(), key=lambda item: (-item[1], item[0] or "")
@@ -334,13 +332,9 @@ def write_outputs(raw, out):
         "duplicate_content_records": sum(
             r["duplicate_of_record_id"] is not None for r in records
         ),
-        "reservation_labels_present": sum(bool(r["reservation_raw"]) for r in records),
-        "reservation_category_mapped": sum(
-            r["reservation_category"] is not None for r in records
-        ),
-        "women_reservation_mapped": sum(
-            r["reservation_women"] is not None for r in records
-        ),
+        "reserved_labels_present": sum(bool(r["reserved_raw"]) for r in records),
+        "reserved_caste_mapped": sum(r["reserved_caste"] is not None for r in records),
+        "reserved_woman_mapped": sum(r["reserved_woman"] is not None for r in records),
         "rows_with_repeated_seat_labels": sum(
             bool(r["seat_label_repeated"]) for r in records
         ),

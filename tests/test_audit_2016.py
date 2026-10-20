@@ -89,12 +89,12 @@ def test_frame_and_consistency_checks(tmp_path):
     frame = pl.read_parquet(frame)
     assert a.compare_frame(seats, frame)[1] == []
     assert a.compare_frame(seats.head(1), frame)[1] == ["frame_office_counts"]
-    women = seats.with_columns(pl.lit("अनारक्षित(महिला)").alias("seat_reservation"))
+    women = seats.with_columns(pl.lit("अनारक्षित(महिला)").alias("reserved_raw"))
     men = candidates.with_columns(
         pl.when(pl.col("sr_no") == 4)
-        .then(pl.lit("male"))
-        .otherwise(pl.col("gender"))
-        .alias("gender")
+        .then(pl.lit(0, dtype=pl.Int8))
+        .otherwise(pl.col("candidate_woman"))
+        .alias("candidate_woman")
     )
     report, _ = a.consistency(women, men, winners)
     assert report["non_female_candidates_in_women_seats"] == 1

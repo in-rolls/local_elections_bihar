@@ -40,9 +40,9 @@ LEGACY_FIELDS = {
     "sr_no": "sr_no",
     "candidate_name": "candidate_name",
     "father_husband_name": "father_husband_name",
-    "gender": "gender_raw",
+    "gender": "candidate_woman_raw",
     "age": "age_raw",
-    "category": "category",
+    "category": "candidate_caste_raw",
     "educ": "education",
     "mobile_number": "mobile_number",
     "address": "address",
@@ -53,7 +53,7 @@ LEGACY_FIELDS = {
 # Compared per seat, apart from the candidate rows: the form's reservation label
 # is not stable. Kaimur zila parishad seat 9 read 'अनारक्षित(महिला)' when the legacy
 # files were collected, reads 'अनारक्षित' now, and the roster PDF reserves it for women.
-RESERVATION = {"reservation_status": "seat_reservation"}
+RESERVATION = {"reservation_status": "reserved_raw"}
 OFFICE_CODES = {
     "zila_parishad_member": "0102",
     "panchayat_samiti_member": "0105",
@@ -106,7 +106,7 @@ def clean(column):
 
 def release_rows(seats, candidates):
     labels = seats.unique(KEY, keep="first").select(
-        *KEY, *GEO, "seat_reservation", "code_repeated"
+        *KEY, *GEO, "reserved_raw", "code_repeated"
     )
     rows = candidates.join(labels, on=KEY, how="left", nulls_equal=True)
     return rows.select(
@@ -227,19 +227,19 @@ def compare_frame(seats, frame):
 
 def consistency(seats, candidates, winners, examples=20):
     people = candidates.filter(pl.col("remarks") != "Vacant").join(
-        seats.unique(KEY, keep="first").select(*KEY, "seat_reservation"),
+        seats.unique(KEY, keep="first").select(*KEY, "reserved_raw"),
         on=KEY,
         how="left",
         nulls_equal=True,
     )
-    reserved = people.filter(pl.col("seat_reservation").is_not_null())
-    base = pl.col("seat_reservation").str.replace(WOMEN, "", literal=True)
+    reserved = people.filter(pl.col("reserved_raw").is_not_null())
+    base = pl.col("reserved_raw").str.replace(WOMEN, "", literal=True)
     men = reserved.filter(
-        pl.col("seat_reservation").str.contains(WOMEN, literal=True)
-        & (pl.col("gender") != "female")
+        pl.col("reserved_raw").str.contains(WOMEN, literal=True)
+        & (pl.col("candidate_woman") != 1)
     )
     category = reserved.filter(
-        base.is_in(list(SEAT_CATEGORY)) & (pl.col("category") != base)
+        base.is_in(list(SEAT_CATEGORY)) & (pl.col("candidate_caste_raw") != base)
     )
     per_seat = candidates.group_by(KEY).agg(
         pl.len().alias("rows"),
@@ -250,18 +250,24 @@ def consistency(seats, candidates, winners, examples=20):
     paging = per_seat.filter(
         pl.col("last_page") != ((pl.col("rows") - 1) // PAGE_SIZE + 1)
     )
-    columns = [*KEY, "sr_no", "candidate_name", "gender_raw", "category"]
+    columns = [
+        *KEY,
+        "sr_no",
+        "candidate_name",
+        "candidate_woman_raw",
+        "candidate_caste_raw",
+    ]
     report = {
         "non_female_candidates_in_women_seats": men.height,
-        "non_female_examples": men.select(*columns, "seat_reservation")
+        "non_female_examples": men.select(*columns, "reserved_raw")
         .head(examples)
         .to_dicts(),
         "other_category_in_sc_st_seats": category.height,
-        "other_category_examples": category.select(*columns, "seat_reservation")
+        "other_category_examples": category.select(*columns, "reserved_raw")
         .head(examples)
         .to_dicts(),
-        "reservation_by_candidate_category": reserved.group_by(
-            base.alias("seat"), "category"
+        "reserved_by_candidate_caste": reserved.group_by(
+            base.alias("seat"), "candidate_caste_raw"
         )
         .len()
         .sort("seat", "len", descending=[False, True])
@@ -314,15 +320,17 @@ def compare_roster(seats, roster, examples=20):
     roster = roster.with_columns(
         pl.col("office").map_elements(roster_office, return_dtype=pl.Utf8),
         pl.col("district_button").replace(ROSTER_DISTRICTS).alias("name"),
-        label=pl.col("category")
-        + pl.when(pl.col("women") == "महिला").then(pl.lit(WOMEN)).otherwise(pl.lit("")),
+        label=pl.col("candidate_caste_raw")
+        + pl.when(pl.col("reserved_woman_raw") == "महिला")
+        .then(pl.lit(WOMEN))
+        .otherwise(pl.lit("")),
     ).filter(pl.col("office").is_not_null())
     roster = roster.unique(["office", "name", "block_krutidev", "seat_no", "label"])
     # The form writes ड़ as one code point and the roster table as two.
     roster = roster.with_columns(nfc("label"))
     mine = seats.with_columns(
         pl.col("district").str.split(" - ").list.get(1).alias("name"),
-        nfc("seat_reservation"),
+        nfc("reserved_raw"),
     )
     zila = "zila_parishad_member"
     pairs = (
@@ -334,8 +342,8 @@ def compare_roster(seats, roster, examples=20):
         .join(roster.filter(pl.col("office") == zila), on=["name", "seat_no"])
     )
     differs = pairs.filter(
-        pl.col("seat_reservation").is_not_null()
-        & (pl.col("seat_reservation") != pl.col("label"))
+        pl.col("reserved_raw").is_not_null()
+        & (pl.col("reserved_raw") != pl.col("label"))
     )
     counted = []
     for office in ("panchayat_samiti_member", "mukhiya", "sarpanch"):
@@ -353,7 +361,7 @@ def compare_roster(seats, roster, examples=20):
             .len("roster")
             .join(
                 ours.filter(pl.col("name").is_in(full.to_list()))
-                .group_by("name", pl.col("seat_reservation").alias("label"))
+                .group_by("name", pl.col("reserved_raw").alias("label"))
                 .len("release"),
                 on=["name", "label"],
                 how="full",
@@ -378,7 +386,7 @@ def compare_roster(seats, roster, examples=20):
         "zila_parishad_seats_compared": pairs.height,
         "zila_parishad_seats_differing": differs.height,
         "zila_parishad_examples": differs.select(
-            "district", "unit_code", "seat_reservation", pl.col("label").alias("roster")
+            "district", "unit_code", "reserved_raw", pl.col("label").alias("roster")
         )
         .head(examples)
         .to_dicts(),
@@ -396,11 +404,15 @@ def distributions(seats, candidates, winners):
         "candidates_per_seat": dict(
             seats.group_by("candidate_rows").len().sort("candidate_rows").iter_rows()
         ),
-        "gender_raw": dict(candidates.group_by("gender_raw").len().iter_rows()),
+        "candidate_woman_raw": dict(
+            candidates.group_by("candidate_woman_raw").len().iter_rows()
+        ),
         "remarks": dict(candidates.group_by("remarks").len().iter_rows()),
-        "category": dict(candidates.group_by("category").len().iter_rows()),
+        "candidate_caste_raw": dict(
+            candidates.group_by("candidate_caste_raw").len().iter_rows()
+        ),
         "education": dict(candidates.group_by("education").len().iter_rows()),
-        "seat_reservation": dict(seats.group_by("seat_reservation").len().iter_rows()),
+        "reserved_raw": dict(seats.group_by("reserved_raw").len().iter_rows()),
         "age_quantiles": candidates.select(
             pl.col("age").quantile(q).alias(str(q)) for q in (0, 0.01, 0.5, 0.99, 1)
         ).to_dicts()[0],

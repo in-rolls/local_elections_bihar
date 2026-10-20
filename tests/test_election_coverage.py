@@ -13,7 +13,7 @@ def inputs():
         {
             "post_id": [3, 3, 3, 3],
             "unit_id": ["a", "b", "b", "c"],
-            "seat_reservation": ["SC (women)", None, None, ""],
+            "reserved_raw": ["SC (women)", None, None, ""],
         }
     )
     candidates = pl.DataFrame(
@@ -67,10 +67,10 @@ def test_snapshot_does_not_supply_election_reservation():
         {
             "post_id": [3, 3, 3],
             "unit_id": ["a", "b", "c"],
-            "seat_reservation": ["SC (women)", "unreserved", "   "],
+            "reserved_raw": ["SC (women)", "unreserved", "   "],
         }
     )
-    row = summarize(seats.drop("seat_reservation"), candidates, winners, snapshot)
+    row = summarize(seats.drop("reserved_raw"), candidates, winners, snapshot)
     assert row["seats_with_election_reservation_label"] is None
     assert row["seats_with_snapshot_reservation_label"] == 1
     assert row["cross_general_election_link_status"] == "not_established"
@@ -109,7 +109,7 @@ def test_multiple_winners_are_not_silently_counted_as_one():
 
 def test_repeated_snapshot_seats_fail():
     snapshot = inputs()[0]
-    snapshot = snapshot.with_columns(pl.lit("unreserved").alias("seat_reservation"))
+    snapshot = snapshot.with_columns(pl.lit("unreserved").alias("reserved_raw"))
     with pytest.raises(ValueError, match="Snapshot has repeated seat keys"):
         summarize(*inputs(), snapshot)
 

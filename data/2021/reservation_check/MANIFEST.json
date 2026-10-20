@@ -8,9 +8,9 @@
   ],
   "inputs": {
     "data/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
-    "data/2021/candidates.parquet": "8e6fda01045edf245cc0c7d46665f3496c5e41323775a3900300a9ae0b9537be",
-    "data/2021/current_winners.parquet": "55d47177250629cd87f35413645feb613a682bba3308898894b6204732c35cd4",
-    "data/2021/current_reservations.parquet": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073"
+    "data/2021/candidates.parquet": "e5679156c18bd8ae44d8983484f27fac26fcda1d658d17bf1aff67a8c14f5768",
+    "data/2021/current_winners.parquet": "3c1044399c66b6d5965302117f7b1b7d525aac1def93e0543a33190d9bd95cb6",
+    "data/2021/current_reservations.parquet": "45341aeecf7157e8028e4d96275d2f62b596da0d36190d6cbb4012c30347c142"
   },
   "receipts": {
     "data/2021/raw/reservation_check/btnFilter.jsonl.gz": "d4666f0dd1674cf8a919d990a7016e3c5b9c3e5d76b84abad95433f0b206a8c8",
@@ -20,12 +20,12 @@
     "data/2021/raw/reservation_check/reservation_d33_b1.jsonl.gz": "840a4961df29c9c7040f48b89280594b4041ddc8694ebf6f9fc3b5bc666c6a5c"
   },
   "report_url": "https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx",
-  "parser_sha256": "15c875796eb711b5b912f259595a34e561bee0f44fce159d4f0acabf02115bd5",
+  "parser_sha256": "7aa8025f8042cc233e1ad40b98540de24e5b356ce9fe8900c92b1f3b50c68b9f",
   "files": [
     {
       "path": "flagged_winners.parquet",
       "rows": 35,
-      "sha256": "b3ef5d686c7013309d4cca290faf38fead063db96b2c71a7b31b7e5e9e2826ee",
+      "sha256": "933918e33938be27ec4e55f7b3b1781d873a50ba7ffc51c2bfc1c8967f4f2150",
       "columns": {
         "district_id": {
           "type": "int64",
@@ -43,15 +43,15 @@
           "type": "int64",
           "description": "Original composite 2021 candidate key component"
         },
-        "seat_reservation": {
+        "reserved_raw": {
           "type": "string",
           "description": "Unmodified current reservation-feed label"
         },
-        "gender_2021": {
+        "candidate_woman_raw_2021": {
           "type": "string",
           "description": "Unmodified explicitly 2021 candidate-feed gender"
         },
-        "gender_current": {
+        "candidate_woman_raw_current": {
           "type": "string",
           "description": "Current winner-feed gender; null if no seat match"
         },
@@ -71,7 +71,7 @@
           "type": "bool",
           "description": "Exact equality of nonempty document URLs; null if missing. Does not establish the correct gender or reservation label."
         },
-        "reservation_source_sha256": {
+        "reserved_source_sha256": {
           "type": "string",
           "description": "Respective response-body hash retained in input provenance"
         },

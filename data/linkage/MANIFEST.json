@@ -6,14 +6,14 @@
     "ward_pass_threshold": 0.8
   },
   "inputs": {
-    "data/2016/seats.parquet": "5f234dad9afc7603e37aa34401ff4210fee31e6448cb8f94d79737a667d1761c",
+    "data/2016/seats.parquet": "b6687ac806078cbc5280de07d1d5e7d8938873405785a779ad078066a61fef98",
     "data/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
-    "data/2021/current_reservations.parquet": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073",
-    "data/2011/mukhiya_reports/winner_records.parquet": "3cdb740e116412a27d059df0b42c0dd05523069de636683f7c0d997a73437c56",
+    "data/2021/current_reservations.parquet": "45341aeecf7157e8028e4d96275d2f62b596da0d36190d6cbb4012c30347c142",
+    "data/2011/mukhiya_reports/winner_records.parquet": "83b07aed81343393692d866067f5c3b75295067027e803bc70f7ab3942428104",
     "data/linkage/place_transliterations.parquet": "a8396c524de712e08e04b5f913bed52c2ce44c4c886743bcca9bcb19943e5175",
     "data/crosswalks/block_2011_2016.csv": "3cfd61d23d3e7a9dc20be56877fc043ef6b1ea523310884774cc9dd8bd4954dd"
   },
-  "code_sha256": "718bfc98dca04afef774ec97a5cbaa625f12c01cdc1f0ad7236767bff499b378",
+  "code_sha256": "a3375f91bf16a407a989e913da727e74bd3af89d9d6cbcb8dea8f5e91cff3778",
   "validation": {
     "mukhiya_2016_2021": {
       "gps_2016": 8400,
@@ -39,12 +39,12 @@
     {
       "path": "mukhiya_2016_2021.parquet",
       "rows": 7945,
-      "sha256": "c53cf34d82629bf4012046f5bdf59421e2845a28d900ed71ff6863e8c16d9985"
+      "sha256": "5efb645e7a87e8eb6ae214527778ca4bed7869be4fbd6fda39554ccfcd0daa8c"
     },
     {
       "path": "mukhiya_2011_2016.parquet",
       "rows": 3342,
-      "sha256": "1418380db13ff5c8baba151f08ef97fef565252345f2ade50b628d6857b569d8"
+      "sha256": "a794fb5b4955fa98120be284be695b495e55a93952feb22f971f210639900024"
     }
   ]
 }

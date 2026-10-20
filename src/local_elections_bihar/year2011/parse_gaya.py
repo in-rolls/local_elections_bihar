@@ -34,10 +34,10 @@ FIELDS = [
     "candidate_name",
     "relative_name",
     "address_raw",
-    "reservation_raw",
-    "gender_raw",
+    "reserved_raw",
+    "candidate_woman_raw",
     "age_raw",
-    "category_raw",
+    "candidate_caste_raw",
     "phone_raw",
     "occupation_raw",
     "annual_income_raw",
@@ -211,7 +211,7 @@ def spreadsheet(root):
                             "address_raw",
                             "education_raw",
                             "economic_class_raw",
-                            "category_raw",
+                            "candidate_caste_raw",
                             "annual_income_raw",
                             "occupation_raw",
                             "sons_raw",
@@ -283,7 +283,7 @@ def runner_names(root):
                             "block_raw": block,
                             "block": BLOCKS[block],
                             "candidate_name": cells[1],
-                            "reservation_raw": cells[4],
+                            "reserved_raw": cells[4],
                             "block_first_panchayat_heading": heading,
                             "source_page": page.page_number,
                             "source_file": SOURCES["runners"],
@@ -316,7 +316,7 @@ def link_runner_seats(runners, winners):
     linked = []
     for runner in runners:
         winner = by_serial[runner["source_serial"]]
-        if any(runner[key] != winner[key] for key in ["block_raw", "reservation_raw"]):
+        if any(runner[key] != winner[key] for key in ["block_raw", "reserved_raw"]):
             raise ValueError("Runner/winner block or reservation alignment changed")
         heading = runner["block_first_panchayat_heading"]
         if heading is not None:
@@ -420,14 +420,18 @@ DESCRIPTIONS = {
         "Decoded address as reported, possibly including phone numbers in workbook"
     ),
     "phone_raw": "Printed phone cell; malformed numbers retained as text",
-    "reservation_raw": "Reported seat reservation; distinct from candidate category",
-    "category_raw": "Reported candidate social category, not seat reservation",
+    "reserved_raw": "Reported seat reservation; distinct from candidate category",
+    "candidate_caste_raw": "Reported candidate social category, not seat reservation",
     "economic_class_raw": "Workbook economic-class label, separate from caste/category",
     "education_raw": "Reported qualification; no degree threshold imputed",
     "occupation_raw": "Reported occupation, including malformed overflow text",
-    "gender_raw": "Source gender spelling, even where it conflicts with another source",
-    "gender": "female/male from reviewed Hindi source labels; no inference from names",
-    "reservation_women": (
+    "candidate_woman_raw": (
+        "Source gender spelling, even where it conflicts with another source"
+    ),
+    "candidate_woman": (
+        "1 woman, 0 man, from reviewed Hindi source labels; no inference from names"
+    ),
+    "reserved_woman": (
         "True when reservation cell explicitly contains महिला; otherwise unknown"
     ),
     "previous_office_2001_raw": (

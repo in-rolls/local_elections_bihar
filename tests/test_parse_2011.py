@@ -97,7 +97,7 @@ def check_review():
         actual = rows[int(sample["source_serial"])]
         for field, value in sample.items():
             assert str(actual[field]) == value, (sample["source_serial"], field)
-    assert rows[232]["gender"] == "male"  # Retain the printed label.
+    assert rows[232]["candidate_woman"] == 0  # Retain the printed label.
     assert rows[129]["age"] is None
     assert rows[129]["age_raw"] == "1980"
 
@@ -141,13 +141,13 @@ def paired_records():
         {
             "source_serial": 1,
             "block_raw": "Amas",
-            "reservation_raw": "महिला सामान्य",
+            "reserved_raw": "महिला सामान्य",
             "block_first_panchayat_heading": "कलवन",
         },
         {
             "source_serial": 2,
             "block_raw": "Amas",
-            "reservation_raw": "सामान्य महिला",
+            "reserved_raw": "सामान्य महिला",
             "block_first_panchayat_heading": None,
         },
     ]
@@ -155,7 +155,7 @@ def paired_records():
         {
             "serial": r["source_serial"],
             "block_raw": r["block_raw"],
-            "reservation_raw": r["reservation_raw"],
+            "reserved_raw": r["reserved_raw"],
             "panchayat_raw": gp,
             "source_file": "winners.pdf",
             "source_page": 1,
@@ -174,7 +174,7 @@ def test_runner_link_uses_companion_gp_not_group_heading():
     assert report["corroborating_gp_headings"] == 1
 
 
-@pytest.mark.parametrize("field", ["block_raw", "reservation_raw", "panchayat_raw"])
+@pytest.mark.parametrize("field", ["block_raw", "reserved_raw", "panchayat_raw"])
 def test_runner_link_rejects_disagreement(field):
     runners, winners = paired_records()
     winners[0][field] = "different"

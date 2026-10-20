@@ -24,14 +24,15 @@ from local_elections_bihar.year2021.schema import TABLES
 PHASE = "2021_1"
 WINNER_MARK = re.compile(r"\s*\(विजेता\)\s*$")
 EXCLUDED = {"MobileNo": "personal phone number; kept only in the raw archive"}
-GENDER = {"पुरुष": "male", "महिला": "female", "अन्य": "other"}
+# 1 / 0 / null (NAMING.md); "अन्य" keeps its text in candidate_woman_raw
+GENDER = {"पुरुष": 0, "महिला": 1, "अन्य": None}
 CANDIDATE_FIELDS = {
     "PostId": "post_id",
     "OrderBy": "candidate_serial",
     "CandidateName": "candidate_name",
     "GaurdianName": "guardian_name",
     "Age": "candidate_age",
-    "Gender": "candidate_gender_raw",
+    "Gender": "candidate_woman_raw",
     "CandidateAddress": "candidate_address",
     "SymbolName": "symbol_name",
     "SymbolUrl": "symbol_file",
@@ -64,15 +65,15 @@ CURRENT_FIELDS = {
     "Post": "post_name",
     "CandidateName": "candidate_name",
     "GuardianName": "guardian_name",
-    "Gender": "candidate_gender_raw",
+    "Gender": "candidate_woman_raw",
     "Age": "candidate_age",
     "Address": "candidate_address",
-    "Category": "candidate_category",
-    "ReservationFor": "reservation_for_reported",
-    "ReservationStatus": "reservation_status_reported",
+    "Category": "candidate_caste_raw",
+    "ReservationFor": "reserved_woman_raw",
+    "ReservationStatus": "reserved_caste_local",
     "CandidatePhotos": "photo_url",
     "Affidavit": "affidavit_url",
-    "Reservation": "seat_reservation",
+    "Reservation": "reserved_raw",
 }
 INTEGERS = {
     "post_id",
@@ -217,11 +218,10 @@ def build_post(units, responses):
             t = typed(row, CANDIDATE_FIELDS, where)
             if t.pop("post_id") != u["post_id"]:
                 raise ValueError(f"Candidate office differs from request in {where}")
-            gender = GENDER.get((t["candidate_gender_raw"] or "").strip())
-            if gender is None:
-                raise ValueError(
-                    f"Unknown gender {t['candidate_gender_raw']!r} {where}"
-                )
+            raw = (t["candidate_woman_raw"] or "").strip()
+            gender = GENDER.get(raw)
+            if raw not in GENDER:
+                raise ValueError(f"Unknown gender {t['candidate_woman_raw']!r} {where}")
             age = t["candidate_age"]
             listed.append(
                 {
@@ -229,7 +229,7 @@ def build_post(units, responses):
                     "unit_id": u["unit_id"],
                     "in_candidate_list": True,
                     **t,
-                    "candidate_gender": gender,
+                    "candidate_woman": gender,
                     "candidate_age_implausible": age is not None
                     and not 21 <= age <= 100,
                     "source_url": c_event["url"],
@@ -341,7 +341,8 @@ def build_post(units, responses):
                     "result_serial": first_row[won[0]]["result_serial"],
                     "winner_name": c.get("candidate_name")
                     or WINNER_MARK.sub("", result_names[won[0]]).strip(),
-                    "candidate_gender": c.get("candidate_gender"),
+                    "candidate_woman_raw": c.get("candidate_woman_raw"),
+                    "candidate_woman": c.get("candidate_woman"),
                     "candidate_age": c.get("candidate_age"),
                     "votes": votes[won[0]],
                     "affidavit_url": c.get("affidavit_url"),
@@ -357,7 +358,8 @@ def build_post(units, responses):
                     "candidate_serial": c["candidate_serial"],
                     "result_serial": None,
                     "winner_name": c["candidate_name"],
-                    "candidate_gender": c["candidate_gender"],
+                    "candidate_woman_raw": c["candidate_woman_raw"],
+                    "candidate_woman": c["candidate_woman"],
                     "candidate_age": c["candidate_age"],
                     "votes": None,
                     "affidavit_url": c["affidavit_url"],
@@ -460,7 +462,7 @@ def build_current(responses, legacy_mukhiya, frame):
             if placeholder:
                 t["placeholder_date"] = t.pop("photo_url")
                 t["placeholder_affidavit"] = t.pop("affidavit_url")
-                for column in ("candidate_age", "candidate_gender_raw"):
+                for column in ("candidate_age", "candidate_woman_raw"):
                     t[column] = None
             seat = current_seat_key(
                 post, t["district_id"], t["block_id"], t["panchayat_id"], t["seat_no"]

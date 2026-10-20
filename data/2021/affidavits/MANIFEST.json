@@ -4,7 +4,7 @@
     33
   ],
   "panchayats_enumerated": 64,
-  "sha256": "e4f3323cd016a7d51922154b4f3471fa574e895aab8d4c7bcc06b41ed9f5b7ee",
+  "sha256": "659e9f22d08a0f02496ee56b6c392b9ce528b76388fbc753d44ff4e54543e130",
   "schema": {
     "district_id": "int64",
     "block_id": "int64",
@@ -18,7 +18,7 @@
     "elected": "bool",
     "kind": "string",
     "candidate_name": "string",
-    "candidate_gender": "string",
+    "candidate_woman_raw": "string",
     "affidavit_url": "string",
     "source_url": "string",
     "fetched_at": "string",

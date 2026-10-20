@@ -22,7 +22,7 @@ def test_frame_uses_result_flag_and_full_geography(tmp_path):
                     if kind == "results"
                     else "Synthetic",
                     "elected": True if kind == "results" else None,
-                    "candidate_gender": "महिला",
+                    "candidate_woman_raw": "महिला",
                     "candidate_age": 30,
                     "affidavit_url": "https://example.test/a.pdf",
                     "source_url": "https://example.test/source",
@@ -58,8 +58,8 @@ def test_reviews_preserve_unknowns_and_reject_proposer_education(tmp_path):
         "graduate_plus": "",
         "illiterate": "0",
         "prior_elected": "",
-        "quota_document": "1",
-        "education_category": "unspecified_educated",
+        "reserved_woman_from_affidavit": "1",
+        "education_level": "unspecified_educated",
         "review_status": "visually_checked",
         "page_kind": "candidate_biography",
         "additional_pages": "3;4",
@@ -89,7 +89,7 @@ def test_reviews_preserve_unknowns_and_reject_proposer_education(tmp_path):
     write([{**row, "page_kind": "proposer_biography"}])
     with pytest.raises(ValueError, match="Non-candidate"):
         read_reviews(path, ["a"])
-    write([{**row, "quota_document": "2"}])
+    write([{**row, "reserved_woman_from_affidavit": "2"}])
     with pytest.raises(ValueError, match="Invalid binary"):
         read_reviews(path, ["a"])
 

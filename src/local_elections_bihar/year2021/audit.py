@@ -141,14 +141,14 @@ def audit(release, raw, report_dir, resample, seed):
 
     # 3. SEC 2021 report: candidates by office and gender, and by block.
     tables = report_tables(report_dir)
-    ours = cands.group_by("post_id", "candidate_gender").len()
+    ours = cands.group_by("post_id", "candidate_woman").len()
     by_office = {}
     for row in tables[13][2]:
         if len(row) == 5 and row[0].rstrip("-").isdigit():
             post = int(row[0].rstrip("-"))
             mine = dict(
                 ours.filter(pl.col("post_id") == post)
-                .select("candidate_gender", "len")
+                .select("candidate_woman", "len")
                 .iter_rows()
             )
             by_office[post] = {
@@ -158,10 +158,9 @@ def audit(release, raw, report_dir, resample, seed):
                     "total": int(row[4]),
                 },
                 "release": {
-                    "male": mine.get("male", 0),
-                    "female": mine.get("female", 0),
-                    "other": mine.get("other", 0),
-                    "unlisted_gender_unknown": mine.get(None, 0),
+                    "male": mine.get(0, 0),
+                    "female": mine.get(1, 0),
+                    "other_or_unlisted": mine.get(None, 0),
                     "total": sum(mine.values()),
                 },
             }
@@ -206,9 +205,9 @@ def audit(release, raw, report_dir, resample, seed):
                 "report": {"female": int(row[9]), "total": int(row[10])},
                 "release": {
                     "total": w.height,
-                    "female": w.filter(pl.col("candidate_gender") == "female").height,
+                    "female": w.filter(pl.col("candidate_woman") == 1).height,
                     "gender_unknown": w.filter(
-                        pl.col("candidate_gender").is_null()
+                        pl.col("candidate_woman").is_null()
                     ).height,
                     "sole_candidate": w.filter(
                         pl.col("winner_basis") == "sole_candidate"
@@ -274,7 +273,7 @@ def audit(release, raw, report_dir, resample, seed):
         # The portal counts vacant placeholders in the denominator but in no gender.
         feed = current.filter(pl.col("post_id") == post)
         counts = collections.Counter(
-            labels.get((g or "").strip()) for g in feed["candidate_gender_raw"]
+            labels.get((g or "").strip()) for g in feed["candidate_woman_raw"]
         )
         mine = {
             c: round(100 * counts[c] / feed.height, 2) for c in ("c01", "c02", "c03")

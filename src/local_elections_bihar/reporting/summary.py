@@ -104,7 +104,7 @@ def event_rows(
     if winners.select(keys).is_duplicated().any():
         raise ValueError(f"{event}: multiple winner records for one source seat key")
     if snapshot is not None:
-        snapshot = present(snapshot, "seat_reservation")
+        snapshot = present(snapshot, "reserved_raw")
         if snapshot.select(keys).is_duplicated().any():
             raise ValueError("Snapshot has repeated seat keys")
     bases = set(winners["winner_basis"].unique())
@@ -118,7 +118,7 @@ def event_rows(
         ww = winners.filter(pl.col(office_column) == value)
         ambiguous = ss.group_by(keys).len().filter(pl.col("len") > 1).select(keys)
         unique = ss.join(ambiguous, on=keys, how="anti", nulls_equal=True)
-        reserved = present(ss, "seat_reservation")
+        reserved = present(ss, "reserved_raw")
         rows.append(
             {
                 "collection": str(year) if year == 2016 else "2021_term",
@@ -220,7 +220,7 @@ def report(data):
         df = read(f"2011/{name}.parquet")
         if df["election_year"].unique().to_list() != [year]:
             raise ValueError(f"Update coverage classification for changed {name} year")
-        reserved = present(df, "reservation_raw")
+        reserved = present(df, "reserved_raw")
         row = dict.fromkeys(DESCRIPTIONS)
         row.update(
             collection=name.replace("/", "_"),

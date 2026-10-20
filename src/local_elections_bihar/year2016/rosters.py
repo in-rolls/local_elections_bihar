@@ -140,9 +140,9 @@ def parse(raw, out):
                         "block_krutidev": block,
                         "serial": int(match.group(1)),
                         "seat_no": int(match.group(3)),
-                        "reservation_2006": match.group(4),
-                        "category": CATEGORY[match.group(5)],
-                        "women": WOMEN[match.group(6)],
+                        "reserved_code_2006": match.group(4),
+                        "reserved_caste_local": CATEGORY[match.group(5)],
+                        "reserved_woman_raw": WOMEN[match.group(6)],
                         "source_line": line,
                     }
                 )

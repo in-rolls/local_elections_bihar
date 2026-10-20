@@ -83,7 +83,7 @@ counterparts provide a row-level recode record. The rules are:
 - Six PDF ages are invalid: 0, 0, 1980, 1972, 1966 and 15. Do not convert apparent
   birth years to ages without a verified election year. PDF typed age has six
   missing values; published workbook typed age has 12.
-- Map the printed gender labels महिला/महीला to `female` and पुरुष/पुरूष to `male`.
+- Map the printed gender labels महिला/महीला to `candidate_woman` 1 and पुरुष/पुरूष to 0.
   One blank label remains null. Printed labels are retained even when a name might
   suggest otherwise. Workbook gender is unavailable and is not inferred.
 - Runner reservation text is preserved without assigning a category. See the

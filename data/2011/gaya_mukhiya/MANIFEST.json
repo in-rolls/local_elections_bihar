@@ -57,7 +57,7 @@
         "empty_string_count": 2,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
       },
-      "category_raw": {
+      "candidate_caste_raw": {
         "type": "string",
         "nullable": true,
         "description": "Reported candidate social category, not seat reservation",
@@ -243,7 +243,7 @@
         "empty_string_count": 0,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
       },
-      "reservation_raw": {
+      "reserved_raw": {
         "type": "string",
         "nullable": true,
         "description": "Reported seat reservation; distinct from candidate category",
@@ -443,21 +443,21 @@
     }
   },
   "code_sha256": {
-    "parse_gaya.py": "35e3392e9fe5232a337ff93e58b93ee7d5aae829ad90544858b06165f8740d52",
+    "parse_gaya.py": "d2d1e74bc20f7eb4eee565b7f7d7f10bd00fd11dee7fc2c8aaedb07ad1849607",
     "hindi.py": "000941e5857904e74dca2b714c555738cbba3e1aaa5b591471e14471da7948cf",
     "font_map.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb",
     "kruti_dev_010.json": "71daac4ca9c59752deada373a8c2bf68fe8e465b293e3ab05c2c1bbfc842e2cc",
-    "gaya_visual_review.csv": "8a9a63094367359234d600322e9739de92bcf3de137142458ad0f2c260c39019",
-    "uv.lock": "d75099d0a3333c5e8e4487135a1adedada2af20cb55e3bc1832297ae14e66bd9"
+    "gaya_visual_review.csv": "1af0a8a0e1f2be4e919c90e9f754550aa23711a6645c64a2f0cd7dbb549b9bf6",
+    "uv.lock": "3a28986e070a8b838b9559df57892adfc7feb8213f1df95afc137c84cd784b55"
   },
   "files": {
     "spreadsheet_winner_records.parquet": {
-      "bytes": 27689,
-      "sha256": "de346806cf37a480c6efd9942949fab59e17e9b9e9d2f44afe399f587c54a15f"
+      "bytes": 27715,
+      "sha256": "12b36732dca9b812b0c7fce9f5bb677d9644f8110e3d05683c032854d5ab4316"
     },
     "runner_up_records.parquet": {
-      "bytes": 19457,
-      "sha256": "6794c7b0c8cc11b53e5553338dfa2637aaea152dd5d7b716cfaa3790caa447fe"
+      "bytes": 19451,
+      "sha256": "eb8720cf2d1285c57e53a8843237c42c9fdaa32bbe4127f1060c16a08b773b9e"
     },
     "issues.csv": {
       "bytes": 1391,

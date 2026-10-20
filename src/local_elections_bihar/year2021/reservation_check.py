@@ -64,8 +64,7 @@ def load(inputs=INPUTS):
         return pl.read_parquet(inputs[name]).filter(pl.col("post_id") == 3)
 
     ids = mukhiya("seats").select("unit_id", *SEAT)
-    gender = pl.col("candidate_gender_raw").alias("candidate_gender")
-    person = [gender, "candidate_name", "affidavit_url", "source_sha256"]
+    person = ["candidate_woman_raw", "candidate_name", "affidavit_url", "source_sha256"]
     candidates = (
         mukhiya("candidates")
         .join(ids, on="unit_id", how="left")
@@ -74,10 +73,10 @@ def load(inputs=INPUTS):
     return {
         "reservations": mukhiya("current_reservations")
         .with_columns(year=pl.lit(None, pl.Int64))
-        .select(*SEAT, "post_id", "year", "seat_reservation", "source_sha256")
+        .select(*SEAT, "post_id", "year", "reserved_raw", "source_sha256")
         .to_dicts(),
         "current_winners": mukhiya("current_winners")
-        .select(*SEAT, "post_id", "reservation_for_reported", *person)
+        .select(*SEAT, "post_id", "reserved_woman_raw", *person)
         .to_dicts(),
         "candidates": candidates.drop("elected").to_dicts(),
         "winners": candidates.filter("elected").drop("elected").to_dicts(),
@@ -126,7 +125,7 @@ def audit(reservations, candidates, winners, current_winners, official):
         raise ValueError("Candidate/winner records must be explicitly dated 2021")
     if any(r["post_id"] != 3 for r in reservations + candidates + winners):
         raise ValueError("Expected mukhiya records only")
-    codes = {k: category(r["seat_reservation"]) for k, r in seats.items()}
+    codes = {k: category(r["reserved_raw"]) for k, r in seats.items()}
     totals = {"total": len(seats), "sc": 0, "st": 0, "bc": 0, "women": 0}
     for caste, female in codes.values():
         if caste in totals:
@@ -145,7 +144,7 @@ def audit(reservations, candidates, winners, current_winners, official):
     common = seats.keys() & current.keys()
     reservation_agreement = collections.Counter()
     for k in common:
-        value = current[k]["reservation_for_reported"]
+        value = current[k]["reserved_woman_raw"]
         if value is None:
             reservation_agreement["unknown"] += 1
         elif value.strip() not in {"महिला", "अन्य"}:
@@ -172,7 +171,7 @@ def audit(reservations, candidates, winners, current_winners, official):
             "reported_gender_in_women_reserved_seats": dict(
                 sorted(
                     collections.Counter(
-                        r["candidate_gender"].strip() for r in female
+                        r["candidate_woman_raw"].strip() for r in female
                     ).items()
                 )
             ),
@@ -180,16 +179,18 @@ def audit(reservations, candidates, winners, current_winners, official):
         if kind != "winners":
             continue
         for r in female:
-            if r["candidate_gender"].strip() == "महिला":
+            if r["candidate_woman_raw"].strip() == "महिला":
                 continue
             k = key(r, SEAT)
             other = current.get(k)
             flagged.append(
                 {
                     **{f: r[f] for f in KEY},
-                    "seat_reservation": seats[k]["seat_reservation"],
-                    "gender_2021": r["candidate_gender"],
-                    "gender_current": other["candidate_gender"] if other else None,
+                    "reserved_raw": seats[k]["reserved_raw"],
+                    "candidate_woman_raw_2021": r["candidate_woman_raw"],
+                    "candidate_woman_raw_current": other["candidate_woman_raw"]
+                    if other
+                    else None,
                     "same_reported_name": (
                         r["candidate_name"].strip() == other["candidate_name"].strip()
                         if other
@@ -202,7 +203,7 @@ def audit(reservations, candidates, winners, current_winners, official):
                         if other and r["affidavit_url"] and other["affidavit_url"]
                         else None
                     ),
-                    "reservation_source_sha256": seats[k]["source_sha256"],
+                    "reserved_source_sha256": seats[k]["source_sha256"],
                     "candidate_source_sha256": r["source_sha256"],
                     "current_winner_source_sha256": other["source_sha256"]
                     if other
@@ -213,7 +214,7 @@ def audit(reservations, candidates, winners, current_winners, official):
     checks["flagged_winners_current_gender"] = dict(
         sorted(
             collections.Counter(
-                r["gender_current"] or "missing" for r in flagged
+                r["candidate_woman_raw_current"] or "missing" for r in flagged
             ).items()
         )
     )
@@ -241,14 +242,14 @@ def build(out=OUT):
         raise ValueError("Invalid report receipt")
     checks, flagged = audit(**load(), official=report_totals(body))
     fields = [(f, pa.int64()) for f in KEY] + [
-        ("seat_reservation", pa.string()),
-        ("gender_2021", pa.string()),
-        ("gender_current", pa.string()),
+        ("reserved_raw", pa.string()),
+        ("candidate_woman_raw_2021", pa.string()),
+        ("candidate_woman_raw_current", pa.string()),
         ("same_reported_name", pa.bool_()),
         ("candidate_document_url", pa.string()),
         ("current_document_url", pa.string()),
         ("same_document_url", pa.bool_()),
-        ("reservation_source_sha256", pa.string()),
+        ("reserved_source_sha256", pa.string()),
         ("candidate_source_sha256", pa.string()),
         ("current_winner_source_sha256", pa.string()),
     ]
@@ -264,9 +265,13 @@ def build(out=OUT):
         "files": [info],
         "fields": {
             **dict.fromkeys(KEY, "Original composite 2021 candidate key component"),
-            "seat_reservation": "Unmodified current reservation-feed label",
-            "gender_2021": "Unmodified explicitly 2021 candidate-feed gender",
-            "gender_current": ("Current winner-feed gender; null if no seat match"),
+            "reserved_raw": "Unmodified current reservation-feed label",
+            "candidate_woman_raw_2021": (
+                "Unmodified explicitly 2021 candidate-feed gender"
+            ),
+            "candidate_woman_raw_current": (
+                "Current winner-feed gender; null if no seat match"
+            ),
             "candidate_document_url": "Document URL in dated 2021 candidate feed",
             "current_document_url": "Document URL in current winner feed",
             "same_document_url": (

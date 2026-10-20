@@ -96,7 +96,7 @@ def test_district_records_and_visual_transcription():
         actual = indexed[(expected["district_raw"], expected["source_serial"])]
         for field, value in expected.items():
             assert str(actual[field]) == value, (expected["source_serial"], field)
-    assert indexed[("BEGUSARAI", "43")]["reservation_raw"] is None
+    assert indexed[("BEGUSARAI", "43")]["reserved_raw"] is None
     runners = pq.read_table(
         "data/2011/gaya_mukhiya/runner_up_records.parquet"
     ).to_pylist()

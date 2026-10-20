@@ -18,10 +18,6 @@
       "rows": 247671,
       "bytes": 1210757,
       "sha256": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
-      "unique_key": [
-        "post_id",
-        "unit_id"
-      ],
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -125,17 +121,17 @@
           "checks": "<Check isin: isin(['results', 'one_candidate_no_results', 'candidates_no_results', 'no_candidates', 'phase_not_listed'])>",
           "description": "Seat outcome class; see SEAT_STATUS."
         }
-      }
+      },
+      "unique_key": [
+        "post_id",
+        "unit_id"
+      ]
     },
     {
       "path": "candidates.parquet",
       "rows": 924708,
-      "bytes": 57009305,
-      "sha256": "8e6fda01045edf245cc0c7d46665f3496c5e41323775a3900300a9ae0b9537be",
-      "unique_key": [
-        "source_url",
-        "source_row"
-      ],
+      "bytes": 57002562,
+      "sha256": "e5679156c18bd8ae44d8983484f27fac26fcda1d658d17bf1aff67a8c14f5768",
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -185,17 +181,17 @@
           "checks": "",
           "description": "Age below 21 or above 100."
         },
-        "candidate_gender_raw": {
+        "candidate_woman_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
           "description": "Gender, verbatim."
         },
-        "candidate_gender": {
-          "type": "String",
+        "candidate_woman": {
+          "type": "Int8",
           "nullable": true,
-          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
-          "description": "Gender mapped to male/female/other."
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 महिला, 0 पुरुष; null for other."
         },
         "candidate_address": {
           "type": "String",
@@ -281,18 +277,17 @@
           "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
           "description": "One-based position of the record in that response."
         }
-      }
+      },
+      "unique_key": [
+        "source_url",
+        "source_row"
+      ]
     },
     {
       "path": "result_rows.parquet",
       "rows": 968562,
       "bytes": 24164377,
       "sha256": "369c291ad1ae46eee60585f83480bbaa20474a5aec1bc9799fabc33941d2aea3",
-      "unique_key": [
-        "post_id",
-        "unit_id",
-        "source_row"
-      ],
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -420,17 +415,18 @@
           "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
           "description": "One-based position of the record in that response."
         }
-      }
+      },
+      "unique_key": [
+        "post_id",
+        "unit_id",
+        "source_row"
+      ]
     },
     {
       "path": "winners.parquet",
       "rows": 244475,
-      "bytes": 5282160,
-      "sha256": "32c40abc700179c19c8ff0c36ce860c34640e22a3be534f51fb77f78031b3c10",
-      "unique_key": [
-        "post_id",
-        "unit_id"
-      ],
+      "bytes": 5314342,
+      "sha256": "28674c909f05c179cfaf93c942cfed17561f6ea1ba10251b083d290db2f3d9f6",
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -468,11 +464,17 @@
           "checks": "",
           "description": "Candidate-list name, else the result name."
         },
-        "candidate_gender": {
+        "candidate_woman_raw": {
           "type": "String",
           "nullable": true,
-          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
-          "description": "Mapped gender; null if unlisted."
+          "checks": "",
+          "description": "Gender, verbatim; null if unlisted."
+        },
+        "candidate_woman": {
+          "type": "Int8",
+          "nullable": true,
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 woman, 0 man; null if other or unlisted."
         },
         "candidate_age": {
           "type": "Int32",
@@ -492,17 +494,17 @@
           "checks": "<Check str_startswith: str_startswith('http')>",
           "description": "Nomination PDF link; null if unlisted."
         }
-      }
+      },
+      "unique_key": [
+        "post_id",
+        "unit_id"
+      ]
     },
     {
       "path": "current_winners.parquet",
       "rows": 247671,
-      "bytes": 13269320,
-      "sha256": "55d47177250629cd87f35413645feb613a682bba3308898894b6204732c35cd4",
-      "unique_key": [
-        "source_url",
-        "source_row"
-      ],
+      "bytes": 13269235,
+      "sha256": "3c1044399c66b6d5965302117f7b1b7d525aac1def93e0543a33190d9bd95cb6",
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -594,7 +596,7 @@
           "checks": "",
           "description": "GuardianName, verbatim."
         },
-        "candidate_gender_raw": {
+        "candidate_woman_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
@@ -612,19 +614,19 @@
           "checks": "",
           "description": "Address, verbatim."
         },
-        "candidate_category": {
+        "candidate_caste_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
           "description": "Category: candidate's caste category."
         },
-        "reservation_for_reported": {
+        "reserved_woman_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
           "description": "ReservationFor: women or other."
         },
-        "reservation_status_reported": {
+        "reserved_caste_local": {
           "type": "String",
           "nullable": true,
           "checks": "",
@@ -666,17 +668,17 @@
           "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
           "description": "One-based position of the record in that response."
         }
-      }
+      },
+      "unique_key": [
+        "source_url",
+        "source_row"
+      ]
     },
     {
       "path": "current_reservations.parquet",
       "rows": 247671,
-      "bytes": 1903637,
-      "sha256": "a432377012f1d55f5862f44fe3f9f8a4b391b1b215fc44c5d5d626f96dc71073",
-      "unique_key": [
-        "source_url",
-        "source_row"
-      ],
+      "bytes": 1903613,
+      "sha256": "45341aeecf7157e8028e4d96275d2f62b596da0d36190d6cbb4012c30347c142",
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -738,7 +740,7 @@
           "checks": "",
           "description": "Post, verbatim."
         },
-        "seat_reservation": {
+        "reserved_raw": {
           "type": "String",
           "nullable": false,
           "checks": "",
@@ -768,18 +770,17 @@
           "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
           "description": "One-based position of the record in that response."
         }
-      }
+      },
+      "unique_key": [
+        "source_url",
+        "source_row"
+      ]
     },
     {
       "path": "byelection_seats.parquet",
       "rows": 5749,
       "bytes": 113676,
       "sha256": "a6bf0939e4e50c79161efb0d03b6425a7499b792a676d4f6db77049f817b6aef",
-      "unique_key": [
-        "phase",
-        "post_id",
-        "unit_id"
-      ],
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -889,17 +890,18 @@
           "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
           "description": "By-election round: 2023_1, 2023_2 or 2025_1."
         }
-      }
+      },
+      "unique_key": [
+        "phase",
+        "post_id",
+        "unit_id"
+      ]
     },
     {
       "path": "byelection_candidates.parquet",
       "rows": 8449,
-      "bytes": 751776,
-      "sha256": "c2686d60f0678ca3dbb8e79e1127d78bc9aa19f03570084ce6ae2c20aa99f4f8",
-      "unique_key": [
-        "source_url",
-        "source_row"
-      ],
+      "bytes": 751755,
+      "sha256": "50831b96610dea643b2921971f7834c514d9fbaa9a1e76761f06b8a879a8b48f",
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -949,17 +951,17 @@
           "checks": "",
           "description": "Age below 21 or above 100."
         },
-        "candidate_gender_raw": {
+        "candidate_woman_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
           "description": "Gender, verbatim."
         },
-        "candidate_gender": {
-          "type": "String",
+        "candidate_woman": {
+          "type": "Int8",
           "nullable": true,
-          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
-          "description": "Gender mapped to male/female/other."
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 महिला, 0 पुरुष; null for other."
         },
         "candidate_address": {
           "type": "String",
@@ -1051,19 +1053,17 @@
           "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
           "description": "By-election round: 2023_1, 2023_2 or 2025_1."
         }
-      }
+      },
+      "unique_key": [
+        "source_url",
+        "source_row"
+      ]
     },
     {
       "path": "byelection_result_rows.parquet",
       "rows": 4643,
       "bytes": 193150,
       "sha256": "5f29cf8519c15e059a5e4c5d5975305807c1a5a6e9a9c162d922a396b65c9ce5",
-      "unique_key": [
-        "phase",
-        "post_id",
-        "unit_id",
-        "source_row"
-      ],
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -1197,18 +1197,19 @@
           "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
           "description": "By-election round: 2023_1, 2023_2 or 2025_1."
         }
-      }
+      },
+      "unique_key": [
+        "phase",
+        "post_id",
+        "unit_id",
+        "source_row"
+      ]
     },
     {
       "path": "byelection_winners.parquet",
       "rows": 5749,
-      "bytes": 131630,
-      "sha256": "c6445333c4109b108bb36681e530bce0de9f31e343d9e7636ca9bb258cf0153b",
-      "unique_key": [
-        "phase",
-        "post_id",
-        "unit_id"
-      ],
+      "bytes": 132857,
+      "sha256": "268ef4591436f02abd989c55b60d6de13255c2540e61d168d3490f41c676c90b",
       "columns": {
         "post_id": {
           "type": "Int8",
@@ -1246,11 +1247,17 @@
           "checks": "",
           "description": "Candidate-list name, else the result name."
         },
-        "candidate_gender": {
+        "candidate_woman_raw": {
           "type": "String",
           "nullable": true,
-          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
-          "description": "Mapped gender; null if unlisted."
+          "checks": "",
+          "description": "Gender, verbatim; null if unlisted."
+        },
+        "candidate_woman": {
+          "type": "Int8",
+          "nullable": true,
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 woman, 0 man; null if other or unlisted."
         },
         "candidate_age": {
           "type": "Int32",
@@ -1276,633 +1283,33 @@
           "checks": "<Check isin: isin(['2023_1', '2023_2', '2025_1'])>",
           "description": "By-election round: 2023_1, 2023_2 or 2025_1."
         }
-      }
+      },
+      "unique_key": [
+        "phase",
+        "post_id",
+        "unit_id"
+      ]
     }
   ],
-  "source_archives_sha256": {
-    "statewide_2021.tar.gz": "1bc11a97596d0b0bfa49f380e4a4af8747870b9fbb3a687cfcc8a4dcd4b1e6d3",
-    "2021_offices_p4.tar": "06d6f6de6e4f59f6ac9e66e7c8100fbb71ea9fac436fa5e358b4d91076539a4a",
-    "2021_offices_p5.tar": "7a04042c9497fe89f5838ab5e70ad6665346e02bc1122cd51f13aa6afd040fe5",
-    "2021_offices_p6.tar": "fd99413c3e0c644aeda3b3676daad7e26bb75e619260fb2bc4de505ee166671c",
-    "2021_offices_p2.tar": "c3855634ca02adbade05aed07a0838ccfb2305b295e8c1ded0809c9f6c282340",
-    "2021_offices_p1.tar": "ac537d392993c3d1356b4484acaa8da3e6997da96e85de946c078197000581b3",
-    "byelections.tar": "7534f2514dc9b79a139cdfdb7f0c6477ec31f134c83debc50b9dde99626ebf15",
-    "current_winners.tar": "60e4eaa37d73a6ddbf39d3a05f61954e7ea8daf8fa096a75715cb447544db204",
-    "current_reservations.tar": "3c3af9edbd296aad36891e71e401ab912361270f1e7cd708ad15ee2c6d38bc22"
+  "source_directory_digests": {
+    "2021/candidates": "ea1caf3b2ca8233b460d037b8f9b562304f585a2a985712146f96b30b45c158c",
+    "2021/results": "b3ce219453b054ff673efc0087651f4462c0f6ee39f0a263bf4e1d898868b42a",
+    "2021/phases": "d9ce8a71f520d919de54e85ea4116b3d41a912045e2dbcce3b72975cb0897dfc",
+    "2021/offices/p4": "6920c0a1e5e886fe48d28b4d5309ccc34804a524ec65154ba99a14c0c70f2501",
+    "2021/offices/p5": "02769c3546fd82338a34a916fc55c66cc606dbce9c2b1c6ac19a7804aaf4033b",
+    "2021/offices/p6": "1ba7ce47d38c6be4b53d8ab9b475b78ef3fcaa25d7d5d9169b08204b6abe3978",
+    "2021/offices/p2": "cbbbe0d8137a5419e0d6debfb1fe22e89f68ae8d6c3352bbf12cd67578c46829",
+    "2021/offices/p1": "87a71d916ed2d5d112b09482e66be7f8e16f7bc240d216f4bc645703c8017c4e",
+    "byelections": "bd82c0bd4a75cc3b62eb0da59b5fd1c71a2eab856dec037f09703aa65d44346a",
+    "current/winners": "31cc77d3a51ab50d43b99cb9e3330d3a4b043b315432795decefd62ad319e9de",
+    "current/reservations": "2537ae959925b3cb6d6afafb44a7e5f744d9327f21b38f9551544971b361a3f7"
   },
+  "source_digest_method": "SHA-256 of sorted relative ledger paths + NUL + each file SHA-256 digest",
   "code_sha256": {
-    "build_2021.py": "43062f3f539dd7fc9435f350519654bce8968fd9f5752fe9cc7d36a07abf375a",
-    "matching.py": "eb4b553c6be1265febb7fbe30553b863cf3900c7be88da88a4b8fd80373e7aaa",
-    "schemas_2021.py": "37df6e99af4af9de801da795a078cad7391840a04961fffd5a69103af88b3431",
-    "sec_portal.py": "c0a9e8c74688e32890224abddca8c2134464c8b36b85720c0c087e8653856811"
-  },
-  "audit": {
-    "seats_vs_portal_totals": {
-      "seats": {
-        "1": 109641,
-        "2": 109641,
-        "3": 8067,
-        "4": 8067,
-        "5": 11095,
-        "6": 1160
-      },
-      "district_office_mismatches": []
-    },
-    "seat_status": {
-      "6": {
-        "candidates_no_results": 7,
-        "results": 1151,
-        "no_candidates": 2
-      },
-      "3": {
-        "results": 8058,
-        "candidates_no_results": 4,
-        "no_candidates": 5
-      },
-      "4": {
-        "no_candidates": 11,
-        "candidates_no_results": 6,
-        "results": 8050
-      },
-      "1": {
-        "candidates_no_results": 29,
-        "no_candidates": 58,
-        "one_candidate_no_results": 1270,
-        "results": 108284
-      },
-      "5": {
-        "results": 11067,
-        "no_candidates": 20,
-        "candidates_no_results": 8
-      },
-      "2": {
-        "no_candidates": 2802,
-        "one_candidate_no_results": 31420,
-        "results": 75259,
-        "candidates_no_results": 160
-      }
-    },
-    "winners": {
-      "by_post_and_basis": [
-        {
-          "post_id": 1,
-          "winner_basis": "result_flag",
-          "len": 108240
-        },
-        {
-          "post_id": 1,
-          "winner_basis": "sole_candidate",
-          "len": 1270
-        },
-        {
-          "post_id": 2,
-          "winner_basis": "result_flag",
-          "len": 75236
-        },
-        {
-          "post_id": 2,
-          "winner_basis": "sole_candidate",
-          "len": 31420
-        },
-        {
-          "post_id": 3,
-          "winner_basis": "result_flag",
-          "len": 8050
-        },
-        {
-          "post_id": 4,
-          "winner_basis": "result_flag",
-          "len": 8044
-        },
-        {
-          "post_id": 5,
-          "winner_basis": "result_flag",
-          "len": 11065
-        },
-        {
-          "post_id": 6,
-          "winner_basis": "result_flag",
-          "len": 1150
-        }
-      ],
-      "winner_not_in_candidate_list": 100,
-      "flagged_winner_below_top_vote": 0,
-      "examples_below_top": [],
-      "partial_winner_flags": 4
-    },
-    "sec_report_candidates_by_office": {
-      "1": {
-        "report": {
-          "male": 239123,
-          "female": 266340,
-          "total": 505463
-        },
-        "release": {
-          "male": 239111,
-          "female": 266147,
-          "other": 178,
-          "unlisted_gender_unknown": 2,
-          "total": 505438
-        }
-      },
-      "2": {
-        "report": {
-          "male": 89257,
-          "female": 127794,
-          "total": 217051
-        },
-        "release": {
-          "male": 88922,
-          "female": 127456,
-          "other": 51,
-          "unlisted_gender_unknown": 0,
-          "total": 216429
-        }
-      },
-      "3": {
-        "report": {
-          "male": 32464,
-          "female": 33971,
-          "total": 66435
-        },
-        "release": {
-          "male": 32462,
-          "female": 33952,
-          "other": 16,
-          "unlisted_gender_unknown": 0,
-          "total": 66430
-        }
-      },
-      "4": {
-        "report": {
-          "male": 26345,
-          "female": 23364,
-          "total": 49709
-        },
-        "release": {
-          "male": 26341,
-          "female": 23353,
-          "other": 4,
-          "unlisted_gender_unknown": 0,
-          "total": 49698
-        }
-      },
-      "5": {
-        "report": {
-          "male": 35321,
-          "female": 38477,
-          "total": 73798
-        },
-        "release": {
-          "male": 34370,
-          "female": 37602,
-          "other": 12,
-          "unlisted_gender_unknown": 1794,
-          "total": 73778
-        }
-      },
-      "6": {
-        "report": {
-          "male": 6405,
-          "female": 6532,
-          "total": 12937
-        },
-        "release": {
-          "male": 6277,
-          "female": 6440,
-          "other": 3,
-          "unlisted_gender_unknown": 215,
-          "total": 12935
-        }
-      }
-    },
-    "sec_report_candidates_by_block": {
-      "report_blocks": 2136,
-      "name_matched": 2126,
-      "equal": 1753,
-      "absolute_difference_total": 673,
-      "largest_differences": [
-        {
-          "post": 2,
-          "district": "कैमूर(भभुआ)",
-          "block": "कुदरा",
-          "report": 292,
-          "release": 285
-        },
-        {
-          "post": 2,
-          "district": "मधुबनी",
-          "block": "जयनगर",
-          "report": 406,
-          "release": 400
-        },
-        {
-          "post": 2,
-          "district": "गोपालगंज",
-          "block": "बरौली",
-          "report": 567,
-          "release": 561
-        },
-        {
-          "post": 2,
-          "district": "दरभंगा",
-          "block": "दरभंगा",
-          "report": 618,
-          "release": 612
-        },
-        {
-          "post": 2,
-          "district": "समस्तीपुर",
-          "block": "विद्यापतिनगर",
-          "report": 397,
-          "release": 392
-        },
-        {
-          "post": 2,
-          "district": "मुजफ्फरपुर",
-          "block": "औराई",
-          "report": 654,
-          "release": 649
-        },
-        {
-          "post": 2,
-          "district": "लखीसराय",
-          "block": "सूरजगढ़ा",
-          "report": 541,
-          "release": 536
-        },
-        {
-          "post": 2,
-          "district": "सिवान",
-          "block": "बड़हरिया",
-          "report": 590,
-          "release": 585
-        },
-        {
-          "post": 2,
-          "district": "गोपालगंज",
-          "block": "कुचायकोट",
-          "report": 797,
-          "release": 792
-        },
-        {
-          "post": 2,
-          "district": "औरंगाबाद",
-          "block": "कुटुम्बा",
-          "report": 553,
-          "release": 548
-        }
-      ],
-      "unmatched_report_blocks": 10
-    },
-    "sec_report_elected_by_office": {
-      "1": {
-        "report": {
-          "female": 57153,
-          "total": 109554
-        },
-        "release": {
-          "total": 109510,
-          "female": 57145,
-          "gender_unknown": 1,
-          "sole_candidate": 1270
-        }
-      },
-      "3": {
-        "report": {
-          "female": 4209,
-          "total": 8058
-        },
-        "release": {
-          "total": 8050,
-          "female": 4206,
-          "gender_unknown": 0,
-          "sole_candidate": 0
-        }
-      },
-      "5": {
-        "report": {
-          "female": 5982,
-          "total": 11092
-        },
-        "release": {
-          "total": 11065,
-          "female": 5917,
-          "gender_unknown": 93,
-          "sole_candidate": 0
-        }
-      },
-      "6": {
-        "report": {
-          "female": 654,
-          "total": 1159
-        },
-        "release": {
-          "total": 1150,
-          "female": 648,
-          "gender_unknown": 6,
-          "sole_candidate": 0
-        }
-      },
-      "2": {
-        "report": {
-          "female": 63974,
-          "total": 107431
-        },
-        "release": {
-          "total": 106656,
-          "female": 63620,
-          "gender_unknown": 0,
-          "sole_candidate": 31420
-        }
-      },
-      "4": {
-        "report": {
-          "female": 3833,
-          "total": 8059
-        },
-        "release": {
-          "total": 8044,
-          "female": 3827,
-          "gender_unknown": 0,
-          "sole_candidate": 0
-        }
-      }
-    },
-    "dated_vs_current_winner": {
-      "p1_different_name": 2279,
-      "p1_same_name": 107223,
-      "p1_vacant_now": 8,
-      "p2_different_name": 1460,
-      "p2_same_name": 105192,
-      "p2_vacant_now": 4,
-      "p3_different_name": 236,
-      "p3_same_name": 7814,
-      "p4_different_name": 231,
-      "p4_same_name": 7813,
-      "p5_different_name": 227,
-      "p5_same_name": 10838,
-      "p6_different_name": 47,
-      "p6_same_name": 1103
-    },
-    "current_feeds": {
-      "current_winners": {
-        "rows": 247671,
-        "unmatched_to_seats": 0,
-        "repeated_seats": 0
-      },
-      "current_reservations": {
-        "rows": 247671,
-        "unmatched_to_seats": 0,
-        "repeated_seats": 0
-      },
-      "vacant_placeholders": 362
-    },
-    "portal_gender_statistics": {
-      "1": {
-        "portal": {
-          "c01": 47.21,
-          "c02": 52.79,
-          "c03": 0.0
-        },
-        "release": {
-          "c01": 47.2,
-          "c02": 52.79,
-          "c03": 0.0
-        }
-      },
-      "2": {
-        "portal": {
-          "c01": 39.53,
-          "c02": 60.14,
-          "c03": 0.01
-        },
-        "release": {
-          "c01": 39.53,
-          "c02": 60.15,
-          "c03": 0.0
-        }
-      },
-      "3": {
-        "portal": {
-          "c01": 47.18,
-          "c02": 52.81,
-          "c03": 0.0
-        },
-        "release": {
-          "c01": 47.18,
-          "c02": 52.81,
-          "c03": 0.0
-        }
-      },
-      "4": {
-        "portal": {
-          "c01": 52.0,
-          "c02": 47.97,
-          "c03": 0.02
-        },
-        "release": {
-          "c01": 52.0,
-          "c02": 48.0,
-          "c03": 0.0
-        }
-      },
-      "5": {
-        "portal": {
-          "c01": 45.4,
-          "c02": 54.6,
-          "c03": 0.0
-        },
-        "release": {
-          "c01": 45.4,
-          "c02": 54.6,
-          "c03": 0.0
-        }
-      },
-      "6": {
-        "portal": {
-          "c01": 43.19,
-          "c02": 56.81,
-          "c03": 0.0
-        },
-        "release": {
-          "c01": 43.19,
-          "c02": 56.81,
-          "c03": 0.0
-        }
-      }
-    },
-    "resample": {
-      "seats": 200,
-      "changed": []
-    },
-    "byelections": {
-      "seats": [
-        {
-          "phase": "2023_1",
-          "post_id": 1,
-          "len": 533
-        },
-        {
-          "phase": "2023_1",
-          "post_id": 2,
-          "len": 2002
-        },
-        {
-          "phase": "2023_1",
-          "post_id": 3,
-          "len": 48
-        },
-        {
-          "phase": "2023_1",
-          "post_id": 4,
-          "len": 54
-        },
-        {
-          "phase": "2023_1",
-          "post_id": 5,
-          "len": 44
-        },
-        {
-          "phase": "2023_1",
-          "post_id": 6,
-          "len": 7
-        },
-        {
-          "phase": "2023_2",
-          "post_id": 1,
-          "len": 321
-        },
-        {
-          "phase": "2023_2",
-          "post_id": 2,
-          "len": 788
-        },
-        {
-          "phase": "2023_2",
-          "post_id": 3,
-          "len": 20
-        },
-        {
-          "phase": "2023_2",
-          "post_id": 4,
-          "len": 34
-        },
-        {
-          "phase": "2023_2",
-          "post_id": 5,
-          "len": 20
-        },
-        {
-          "phase": "2023_2",
-          "post_id": 6,
-          "len": 4
-        },
-        {
-          "phase": "2025_1",
-          "post_id": 1,
-          "len": 733
-        },
-        {
-          "phase": "2025_1",
-          "post_id": 2,
-          "len": 915
-        },
-        {
-          "phase": "2025_1",
-          "post_id": 3,
-          "len": 63
-        },
-        {
-          "phase": "2025_1",
-          "post_id": 4,
-          "len": 83
-        },
-        {
-          "phase": "2025_1",
-          "post_id": 5,
-          "len": 72
-        },
-        {
-          "phase": "2025_1",
-          "post_id": 6,
-          "len": 8
-        }
-      ],
-      "status": {
-        "one_candidate_no_results": 4499,
-        "results": 1250
-      },
-      "winners_by_basis": {
-        "result_flag": 1250,
-        "sole_candidate": 4499
-      },
-      "flagged_winner_below_top_vote": 0
-    },
-    "distributions": {
-      "candidates_by_post": {
-        "1": 505438,
-        "2": 216429,
-        "3": 66430,
-        "4": 49698,
-        "5": 73778,
-        "6": 12935
-      },
-      "result_only_candidates": {
-        "6": 215,
-        "5": 1794,
-        "1": 2
-      },
-      "implausible_ages": 93,
-      "age_quantiles": {
-        "0": 21.0,
-        "0.01": 21.0,
-        "0.5": 41.0,
-        "0.99": 74.0,
-        "1": 1987.0
-      },
-      "result_votes_max": 5900,
-      "result_votes_null": 531,
-      "match_methods": {
-        "name": 16676,
-        "null": 3367,
-        "name_contained": 1430,
-        "serial_and_name": 946905,
-        "serial_only": 16,
-        "namesake_order": 168
-      },
-      "candidates_per_seat": {
-        "0": 2898,
-        "1": 32690,
-        "2": 60681,
-        "3": 43542,
-        "4": 32580,
-        "5": 25279,
-        "6": 18257,
-        "7": 12151,
-        "8": 7639,
-        "9": 4677,
-        "10": 3610,
-        "11": 1266,
-        "12": 830,
-        "13": 534,
-        "14": 333,
-        "15": 242,
-        "16": 168,
-        "17": 68,
-        "18": 68,
-        "19": 49,
-        "20": 79,
-        "21": 9,
-        "22": 8,
-        "23": 3,
-        "24": 2,
-        "26": 4,
-        "27": 1,
-        "28": 1,
-        "30": 2
-      }
-    },
-    "flags": []
+    "year2021/parse.py": "b5bea5b6173bd17f1b2fa94a954e7253d19a90dbf50855ebaa5cc91e826127c4",
+    "year2021/schema.py": "0b6ecf336e89114aa2be5f1276ee793e939711d247e95b1a26116514a66fdf3c",
+    "shared/matching.py": "eb4b553c6be1265febb7fbe30553b863cf3900c7be88da88a4b8fd80373e7aaa",
+    "shared/portal.py": "ddc743862763458d7e79bcf7497377f1762d1596633a86852172c57b4776b897",
+    "shared/schema.py": "3b0307cb663e280b3ad31cdbade45b8013c1a7a618496377d302272fcea8e87c"
   }
 }

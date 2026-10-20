@@ -41,7 +41,7 @@ def test_real_source_disagreements_are_preserved(sources):
     assert checks["flagged_winners_same_document_url"] == 35
     assert len(flagged) == 35
     assert checks["flagged_winners_current_gender"] == {"पुरुष": 4, "महिला": 31}
-    assert all(r["gender_2021"].strip() == "पुरुष" for r in flagged)
+    assert all(r["candidate_woman_raw_2021"].strip() == "पुरुष" for r in flagged)
 
 
 def test_seat_reservation_does_not_follow_winner_gender():
@@ -66,10 +66,12 @@ def test_current_winner_disagreement_does_not_recode_2021(sources):
     key = tuple(flagged[0][f] for f in ["district_id", "block_id", "panchayat_id"])
     for r in altered["current_winners"]:
         if tuple(int(r[f]) for f in ["district_id", "block_id", "panchayat_id"]) == key:
-            r["candidate_gender"] = "अन्य"
+            r["candidate_woman_raw"] = "अन्य"
     changed, rows = run(altered)
     assert changed["winners"] == checks["winners"]
-    assert [r["gender_2021"] for r in rows] == [r["gender_2021"] for r in flagged]
+    assert [r["candidate_woman_raw_2021"] for r in rows] == [
+        r["candidate_woman_raw_2021"] for r in flagged
+    ]
 
 
 def test_published_audit_checksums_and_provenance():
@@ -88,9 +90,7 @@ def test_published_audit_checksums_and_provenance():
 def test_current_reservation_disagreement_is_counted(sources):
     altered = copy.deepcopy(sources)
     r = altered["current_winners"][0]
-    r["reservation_for_reported"] = (
-        "अन्य" if r["reservation_for_reported"] == "महिला" else "महिला"
-    )
+    r["reserved_woman_raw"] = "अन्य" if r["reserved_woman_raw"] == "महिला" else "महिला"
     checks, _ = run(altered)
     assert checks["current_feeds_women_reservation"]["disagrees"] == 1
     assert checks["current_feeds_women_reservation"]["agrees"] == 8066

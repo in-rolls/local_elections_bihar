@@ -1,24 +1,24 @@
 {
-  "frame_sha256": "02b18f64655e303bf1831b24bfcc1ebaef657ab5840698c89c868fcd9a586101",
-  "review_sha256": "2344cb78749d42bb68969da550d352cb808f7ca544c9b07c10e2e447bd22dc52",
-  "output_sha256": "6c0ca06fdae188dc22ba925146511112c109a3ad683cdd23514d0d08a549b5f7",
-  "csv_sha256": "308e7749fa2d0ac932b657832d0a58ac04d502bd65fcf810ee1bf8237a208fd0",
+  "frame_sha256": "f0e3524036c84cfb0093768173e6404b43243a9b0bd05f8fc878675cc1b6aa31",
+  "review_sha256": "f53017486c9fce524d28a4094e69d177de44a2b26ca544f7fbdba5a94d556894",
+  "output_sha256": "c1315aec48ab0e58d94c74fe2f78a7c7ce1e4cfa30e01d13bdf2be4b00d2a0ec",
+  "csv_sha256": "c94fa381b58bac0a2748b1e6c8bb709f19214e8e1e6d69c0914b2b5e33827d46",
   "rows": 64,
   "degree_classified": 57,
-  "quota_classified": 51,
+  "reserved_woman_from_affidavit_classified": 51,
   "coverage_by_document_reservation": [
     {
-      "quota_document": 0,
+      "reserved_woman_from_affidavit": 0,
       "winners": 26,
       "degree_classified": 24
     },
     {
-      "quota_document": 1,
+      "reserved_woman_from_affidavit": 1,
       "winners": 25,
       "degree_classified": 21
     },
     {
-      "quota_document": null,
+      "reserved_woman_from_affidavit": null,
       "winners": 13,
       "degree_classified": 12
     }
@@ -36,19 +36,19 @@
     "candidate_name": "string",
     "result_name": "string",
     "name_matches": "bool",
-    "candidate_gender": "string",
+    "candidate_woman_raw": "string",
     "candidate_age": "int64",
     "affidavit_url": "string",
     "candidate_source_url": "string",
     "result_source_url": "string",
     "page": "int64",
     "education_raw": "string",
-    "education_category": "string",
+    "education_level": "string",
     "graduate_plus": "int8",
     "illiterate": "int8",
     "prior_elected": "int8",
-    "reservation_raw": "string",
-    "quota_document": "int8",
+    "reserved_raw_from_affidavit": "string",
+    "reserved_woman_from_affidavit": "int8",
     "review_status": "string",
     "notes": "string",
     "additional_pages": "list<item: int64>",

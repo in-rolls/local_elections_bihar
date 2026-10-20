@@ -120,7 +120,7 @@ def test_pages_no_record_uncontested_and_vacant(tmp_path):
     vacant = pl.read_parquet(tmp_path / "out/candidates.parquet").filter(
         pl.col("remarks") == "Vacant"
     )
-    assert vacant.row(0, named=True)["gender"] is None
+    assert vacant.row(0, named=True)["candidate_woman"] is None
     assert vacant.row(0, named=True)["mobile_number"] == "0990"
 
 
@@ -162,7 +162,7 @@ def test_lot_mark_third_gender_and_unset_reservation(tmp_path):
     winner = pl.read_parquet(tmp_path / "out/winners.parquet").sort("unit_code")
     first = winner.row(0, named=True)
     assert (first["sr_no"], first["winner_basis"], first["votes"]) == (2, "lot", 136)
-    assert first["tied"] and first["margin"] == 0 and first["gender"] == "other"
+    assert first["tied"] and first["margin"] == 0 and first["candidate_woman"] is None
     rows = pl.read_parquet(tmp_path / "out/candidates.parquet").sort(
         "unit_code", "sr_no"
     )
@@ -171,7 +171,7 @@ def test_lot_mark_third_gender_and_unset_reservation(tmp_path):
     assert rows["age"].to_list() == [40, 40, 40, None]
     assert rows["age_raw"][3] == "229525839157"
     seats = pl.read_parquet(tmp_path / "out/seats.parquet").sort("unit_code")
-    assert seats["seat_reservation"].to_list() == ["अनारक्षित", None]
+    assert seats["reserved_raw"].to_list() == ["अनारक्षित", None]
 
 
 def test_lot_mark_below_the_top_vote_stops_the_build(tmp_path):

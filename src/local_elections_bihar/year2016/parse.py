@@ -40,9 +40,9 @@ COLUMNS = (
     "sr_no",
     "candidate_name",
     "father_husband_name",
-    "gender_raw",
+    "candidate_woman_raw",
     "age",
-    "category",
+    "candidate_caste_raw",
     "education",
     "mobile_number",
     "address",
@@ -50,7 +50,8 @@ COLUMNS = (
     "votes_raw",
     "remarks",
 )
-GENDER = {"पुरुष": "male", "महिला": "female", "तृतीय लिंग": "other", "--": None}
+# 1 / 0 / null (NAMING.md); third gender and "--" keep their text in the raw column
+GENDER = {"पुरुष": 0, "महिला": 1, "तृतीय लिंग": None, "--": None}
 MAX_AGE = 120
 # A tie broken by drawing lots is shown as the tied count "+1" on the winner's row,
 # written three ways: "136+1" (Samastipur ward), "951+1=952" (Supaul sarpanch) and
@@ -129,7 +130,7 @@ def parse_page(html, where):
     )
     return {
         "seat_label": spans.get("lblPradesikForMukhiya"),
-        "seat_reservation": None if reservation == UNSET_RESERVATION else reservation,
+        "reserved_raw": None if reservation == UNSET_RESERVATION else reservation,
         "rows": rows,
     }
 
@@ -204,8 +205,10 @@ def build(frame_path, results, out, partial=False):
             for row in info["rows"]:
                 if row["remarks"] not in ("0", "Uncontested", "Vacant"):
                     raise ValueError(f"Unknown remark {row['remarks']!r} in {where}")
-                if row["gender_raw"] not in GENDER:
-                    raise ValueError(f"Unknown gender {row['gender_raw']!r} in {where}")
+                if row["candidate_woman_raw"] not in GENDER:
+                    raise ValueError(
+                        f"Unknown gender {row['candidate_woman_raw']!r} in {where}"
+                    )
                 lot = LOT.fullmatch(row["votes_raw"].strip())
                 if lot and lot.group(2) and int(lot.group(2)) != int(lot.group(1)) + 1:
                     raise ValueError(f"Lot total is not count + 1 in {where}")
@@ -217,11 +220,11 @@ def build(frame_path, results, out, partial=False):
                         "sr_no": number(row["sr_no"], "Sr No.", where),
                         "candidate_name": text(row["candidate_name"]),
                         "father_husband_name": text(row["father_husband_name"]),
-                        "gender_raw": row["gender_raw"],
-                        "gender": GENDER[row["gender_raw"]],
+                        "candidate_woman_raw": row["candidate_woman_raw"],
+                        "candidate_woman": GENDER[row["candidate_woman_raw"]],
                         "age": age(row["age"], where),
                         "age_raw": text(row["age"]),
-                        "category": text(row["category"]),
+                        "candidate_caste_raw": text(row["candidate_caste_raw"]),
                         "education": text(row["education"]),
                         "mobile_number": text(row["mobile_number"]),
                         "address": text(row["address"]),
@@ -243,7 +246,7 @@ def build(frame_path, results, out, partial=False):
                 r["sr_no"] is not None and serials.count(r["sr_no"]) > 1
             )
         note = undecidable(rows)
-        labels = {(p["seat_label"], p["seat_reservation"]) for p in parsed}
+        labels = {(p["seat_label"], p["reserved_raw"]) for p in parsed}
         if len(labels) != 1:
             raise ValueError(f"Seat label changes across pages for {key}")
         seat_label, reservation = labels.pop()
@@ -256,7 +259,7 @@ def build(frame_path, results, out, partial=False):
                 "unit": unit["unit_label"],
                 "code_repeated": unit["code_repeated"],
                 "seat_label": seat_label,
-                "seat_reservation": reservation,
+                "reserved_raw": reservation,
                 "status": "results" if rows else "no_record",
                 "pages": len(seat_pages),
                 "candidate_rows": len(rows),
@@ -348,7 +351,15 @@ def decide(rows, key):
 
 
 def pick(row):
-    columns = ("sr_no", "row", "candidate_name", "gender", "age", "category")
+    columns = (
+        "sr_no",
+        "row",
+        "candidate_name",
+        "candidate_woman_raw",
+        "candidate_woman",
+        "age",
+        "candidate_caste_raw",
+    )
     return {k: row[k] for k in columns}
 
 

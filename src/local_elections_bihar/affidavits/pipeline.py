@@ -61,7 +61,7 @@ def frame(source, out):
                 "candidate_name": candidate["candidate_name"],
                 "result_name": row["candidate_name"],
                 "name_matches": name == candidate["candidate_name"].strip(),
-                "candidate_gender": candidate["candidate_gender"],
+                "candidate_woman_raw": candidate["candidate_woman_raw"],
                 "candidate_age": candidate["candidate_age"],
                 "affidavit_url": candidate["affidavit_url"],
                 "candidate_source_url": candidate["source_url"],
@@ -312,7 +312,12 @@ def locate(row):
     }
 
 
-BINARY = ["graduate_plus", "illiterate", "prior_elected", "quota_document"]
+BINARY = [
+    "graduate_plus",
+    "illiterate",
+    "prior_elected",
+    "reserved_woman_from_affidavit",
+]
 
 
 def read_reviews(path, ids):
@@ -346,7 +351,7 @@ def read_reviews(path, ids):
         ):
             raise ValueError("Non-candidate page cannot supply elite attributes")
         if (
-            row["education_category"]
+            row["education_level"]
             in {
                 "ambiguous",
                 "missing_document",
@@ -433,10 +438,10 @@ def export(frame_path, review_path, out):
             )
     coverage = []
     for quota in [0, 1, None]:
-        group = [r for r in rows if r["quota_document"] == quota]
+        group = [r for r in rows if r["reserved_woman_from_affidavit"] == quota]
         coverage.append(
             {
-                "quota_document": quota,
+                "reserved_woman_from_affidavit": quota,
                 "winners": len(group),
                 "degree_classified": sum(r["graduate_plus"] is not None for r in group),
             }
@@ -448,7 +453,9 @@ def export(frame_path, review_path, out):
         "csv_sha256": file_hash(out.with_suffix(".csv")),
         "rows": len(rows),
         "degree_classified": sum(r["graduate_plus"] is not None for r in rows),
-        "quota_classified": sum(r["quota_document"] is not None for r in rows),
+        "reserved_woman_from_affidavit_classified": sum(
+            r["reserved_woman_from_affidavit"] is not None for r in rows
+        ),
         "coverage_by_document_reservation": coverage,
         "review_method": (
             "Codex inspected candidate biographies and affidavits; "
@@ -473,7 +480,7 @@ def export(frame_path, review_path, out):
                 for k in [
                     "rows",
                     "degree_classified",
-                    "quota_classified",
+                    "reserved_woman_from_affidavit_classified",
                     "coverage_by_document_reservation",
                 ]
             }
