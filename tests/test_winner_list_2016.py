@@ -1,5 +1,7 @@
 """Synthetic 2016 winner-list (wcl.aspx) pages and no-winner review; no requests."""
 
+from pathlib import Path
+
 import polars as pl
 import pytest
 
@@ -215,3 +217,23 @@ def test_review_decisions(rows, listed, decision):
     )
     result = w.review(records, seats, candidates_frame("02", rows))
     assert [r["decision"] for r in result] == [decision]
+
+
+def test_reviewed_rulings_accept_only_robust_leaders():
+    """Every accepted ruling names the leader the vote rule makes robust."""
+    base = Path(__file__).resolve().parents[1] / "data/2016/winner_list"
+    review = pl.read_csv(base / "no_winner_review.csv", infer_schema_length=0)
+    ruled = pl.read_csv(base / "no_winner_reviewed.csv", infer_schema_length=0)
+    key = ["district_code", "block_code", "unit_code"]
+    assert ruled.select(key).is_unique().all()
+    assert ruled.height == review.height
+    joined = ruled.join(review, on=key, how="inner")
+    accepted = joined.filter(pl.col("decision") == "accept")
+    assert (
+        accepted["decision_right"]
+        .is_in(["supported", "supported_if_same_person"])
+        .all()
+    )
+    assert (accepted["winner_sr_no"] == accepted["leader_sr_no"]).all()
+    undecided = joined.filter(pl.col("decision") == "undecided")
+    assert (undecided["decision_right"] == "undecided").all()

@@ -78,3 +78,13 @@ The collector writes one ledger per block to
 `data/2016/raw/statewide/2016/winner_list/`, with every response body. These
 ledgers are not yet in the Zenodo source archives. `MANIFEST.json` records
 their checksums.
+
+## Reviewed rulings
+
+`no_winner_reviewed.csv` records the review of `no_winner_review.csv`
+(2026-10-19). Rule: where the results page prints a candidate twice with
+different counts, the winner is taken from the votes only when the leader's
+lowest count exceeds every rival's counts added together. 29 seats are
+accepted on that rule (28 `supported`, plus the Maniyari seat whose leader's
+two rows differ only in the father's name, VIJAY/VINAY PASWAN); 12 are left
+undecided. `winners.parquet` is unchanged; a consumer applies these rulings.
