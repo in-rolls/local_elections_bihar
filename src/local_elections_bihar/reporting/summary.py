@@ -387,10 +387,15 @@ def published_files(data):
         "mukhiya_2016_2021": "2016 Mukhiya seat linked to its 2021 seat by name",
         "mukhiya_2011_2016": "2011 Mukhiya winner record linked to its 2016 seat",
         "place_transliterations": "Romanization of a Devanagari GP name",
+        "winner_list_records": (
+            "Mukhiya winner row from the SEC winner list for a block with a "
+            "no-record or no-winner seat"
+        ),
     }
     paths = sorted(
         [
             *data.glob("2016/*.parquet"),
+            data / "2016/winner_list/winner_list_records.parquet",
             *data.glob("2021/*.parquet"),
             data / "2011/mukhiya_reports/winner_records.parquet",
             data / "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",

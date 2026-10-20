@@ -12,6 +12,7 @@ import pytest
     "folder",
     [
         "2016",
+        "2016/winner_list",
         "2021",
         "2011/gaya_mukhiya",
         "2011/mukhiya_reports",

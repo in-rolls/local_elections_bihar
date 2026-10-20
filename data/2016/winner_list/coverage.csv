@@ -1,0 +1,122 @@
+district_code,block_code,block,frame_seats,ovc_no_record_seats,ovc_no_winner_seats,message,pages,listed,listed_no_record_seats,listed_no_winner_seats,source_file
+01,010,010 - Mainatand,16,0,1,,1,16,0,1,mukhiya_d01_b010.jsonl.gz
+01,015,015 - Bettiah,7,0,1,,1,7,0,1,mukhiya_d01_b015.jsonl.gz
+02,001,001 - Raxaul,13,13,0,Record not Found..!,1,0,0,0,mukhiya_d02_b001.jsonl.gz
+02,002,002 - Adapur,17,10,0,,1,7,0,0,mukhiya_d02_b002.jsonl.gz
+02,003,003 - Ramgarhwa,16,0,0,,1,16,0,0,mukhiya_d02_b003.jsonl.gz
+02,004,004 - Sugauli,16,1,0,,1,15,0,0,mukhiya_d02_b004.jsonl.gz
+02,007,007 - Bankatwa,10,1,0,,1,9,0,0,mukhiya_d02_b007.jsonl.gz
+02,010,010 - Chiraiya,23,23,0,Record not Found..!,1,0,0,0,mukhiya_d02_b010.jsonl.gz
+02,011,011 - Motihari,20,0,1,,1,20,0,1,mukhiya_d02_b011.jsonl.gz
+02,012,012 - Turkaulia,16,1,1,,1,15,0,1,mukhiya_d02_b012.jsonl.gz
+02,019,019 - Kotwa,16,1,0,,1,15,0,0,mukhiya_d02_b019.jsonl.gz
+02,023,023 - Patahi,15,1,0,,1,14,0,0,mukhiya_d02_b023.jsonl.gz
+02,024,024 - Phenhara,6,0,1,,1,6,0,1,mukhiya_d02_b024.jsonl.gz
+02,025,025 - Madhuban,13,1,0,,1,12,0,0,mukhiya_d02_b025.jsonl.gz
+03,001,001 - Purnahiya,8,0,1,,1,8,0,1,mukhiya_d03_b001.jsonl.gz
+04,002,002 - Suppi,11,0,1,,1,12,0,1,mukhiya_d04_b002.jsonl.gz
+04,004,004 - Sonbarsha,20,0,1,,1,20,0,1,mukhiya_d04_b004.jsonl.gz
+04,005,005 - Parihar,27,2,0,,2,25,0,0,mukhiya_d04_b005.jsonl.gz
+04,006,006 - Sursand,18,0,2,,1,18,0,2,mukhiya_d04_b006.jsonl.gz
+04,007,007 - Bathnaha,21,19,0,,1,2,0,0,mukhiya_d04_b007.jsonl.gz
+04,013,013 - Bajpatti,19,0,1,,1,19,0,1,mukhiya_d04_b013.jsonl.gz
+04,017,017 - Bokhara,11,1,0,,1,10,0,0,mukhiya_d04_b017.jsonl.gz
+05,006,006 - Khutauna,18,0,1,,1,18,0,1,mukhiya_d05_b006.jsonl.gz
+05,012,012 - Benipatti,34,1,0,,2,33,0,0,mukhiya_d05_b012.jsonl.gz
+05,013,013 - Bisfi,29,1,0,,2,28,0,0,mukhiya_d05_b013.jsonl.gz
+05,017,017 - Andhratharhi,18,1,0,,1,17,0,0,mukhiya_d05_b017.jsonl.gz
+05,021,021 - Madhepur,26,0,3,,2,26,0,3,mukhiya_d05_b021.jsonl.gz
+06,001,001 - Nirmali,7,0,2,,1,7,0,2,mukhiya_d06_b001.jsonl.gz
+06,003,003 - Chhatapur,23,0,1,,2,23,0,1,mukhiya_d06_b003.jsonl.gz
+07,002,002 - Forbesganj,32,0,1,,2,32,0,1,mukhiya_d07_b002.jsonl.gz
+07,009,009 - Jokihat,27,1,0,,2,27,1,0,mukhiya_d07_b009.jsonl.gz
+09,007,007 - Amour,25,1,0,,2,24,0,0,mukhiya_d09_b007.jsonl.gz
+09,008,008 - Baisi,17,2,0,,1,15,0,0,mukhiya_d09_b008.jsonl.gz
+09,009,009 - Dagarua,18,14,0,,1,4,0,0,mukhiya_d09_b009.jsonl.gz
+09,010,010 - Krityanand Nagar,18,1,0,,1,17,0,0,mukhiya_d09_b010.jsonl.gz
+09,013,013 - Jalalgarh,10,10,0,Record not Found..!,1,0,0,0,mukhiya_d09_b013.jsonl.gz
+10,004,004 - Kadwa,30,2,0,,2,28,0,0,mukhiya_d10_b004.jsonl.gz
+10,006,006 - Barsoi,29,3,0,,2,26,0,0,mukhiya_d10_b006.jsonl.gz
+11,005,005 - Shankarpur,9,1,0,,1,9,0,0,mukhiya_d11_b005.jsonl.gz
+11,006,006 - Kumarkhand,21,1,0,,1,20,0,0,mukhiya_d11_b006.jsonl.gz
+11,012,012 - Chausa,13,1,0,,1,13,0,0,mukhiya_d11_b012.jsonl.gz
+11,013,013 - Puraini,9,1,0,,1,8,0,0,mukhiya_d11_b013.jsonl.gz
+12,006,006 - Patarghat,11,5,0,,1,6,0,0,mukhiya_d12_b006.jsonl.gz
+12,008,008 - Simri Bakhtiarpur,22,2,0,,1,20,0,0,mukhiya_d12_b008.jsonl.gz
+13,010,010 - Hanuman Nagar,14,1,0,,1,13,0,0,mukhiya_d13_b010.jsonl.gz
+13,011,011 - Hayaghat,14,14,0,Record not Found..!,1,0,0,0,mukhiya_d13_b011.jsonl.gz
+14,001,001 - Sahebganj,21,1,0,,1,20,0,0,mukhiya_d14_b001.jsonl.gz
+14,003,003 - Paroo,34,2,0,,2,32,0,0,mukhiya_d14_b003.jsonl.gz
+14,005,005 - Marwan,14,1,0,,1,14,1,0,mukhiya_d14_b005.jsonl.gz
+14,009,009 - Aurai,26,1,0,,2,25,0,0,mukhiya_d14_b009.jsonl.gz
+15,003,003 - Bhorey,17,0,1,,1,17,0,1,mukhiya_d15_b003.jsonl.gz
+15,014,014 - Baikunthpur,22,0,1,,2,22,0,1,mukhiya_d15_b014.jsonl.gz
+16,003,003 - Barharia,30,0,1,,2,30,0,1,mukhiya_d16_b003.jsonl.gz
+16,008,008 - Maharajganj,16,1,0,,1,15,0,0,mukhiya_d16_b008.jsonl.gz
+16,009,009 - Pachrukhi,21,3,0,,1,18,0,0,mukhiya_d16_b009.jsonl.gz
+16,010,010 - Hussainganj,18,2,0,,1,16,0,0,mukhiya_d16_b010.jsonl.gz
+16,011,011 - Ziradei,13,0,1,,1,13,0,1,mukhiya_d16_b011.jsonl.gz
+16,012,012 - Mairwa,9,1,0,,1,8,0,0,mukhiya_d16_b012.jsonl.gz
+16,017,017 - Hasanpura,10,1,0,,1,9,0,0,mukhiya_d16_b017.jsonl.gz
+16,018,018 - Duraundha,18,1,0,,1,17,0,0,mukhiya_d16_b018.jsonl.gz
+17,003,003 - Taraiya,13,7,0,,1,6,0,0,mukhiya_d17_b003.jsonl.gz
+17,005,005 - Baniapur,25,10,0,,1,15,0,0,mukhiya_d17_b005.jsonl.gz
+17,007,007 - Ekma,18,18,0,Record not Found..!,1,0,0,0,mukhiya_d17_b007.jsonl.gz
+17,008,008 - Manjhi,25,19,0,,1,6,0,0,mukhiya_d17_b008.jsonl.gz
+17,010,010 - Rivilganj,9,1,2,,1,8,0,2,mukhiya_d17_b010.jsonl.gz
+17,013,013 - Marhaura,21,0,1,,2,21,0,1,mukhiya_d17_b013.jsonl.gz
+17,014,014 - Amnour,18,13,0,,1,5,0,0,mukhiya_d17_b014.jsonl.gz
+17,016,016 - Parsa,13,1,0,,1,12,0,0,mukhiya_d17_b016.jsonl.gz
+17,017,017 - Dariapur,22,6,0,,1,16,0,0,mukhiya_d17_b017.jsonl.gz
+18,001,001 - Hajipur,26,1,0,,2,25,0,0,mukhiya_d18_b001.jsonl.gz
+18,002,002 - Raghopur,20,20,0,Record not Found..!,1,0,0,0,mukhiya_d18_b002.jsonl.gz
+18,003,003 - Lalganj,21,21,0,Record not Found..!,1,0,0,0,mukhiya_d18_b003.jsonl.gz
+18,004,004 - Vaishali,16,1,0,,1,15,0,0,mukhiya_d18_b004.jsonl.gz
+18,009,009 - Sahdei Buzurg,11,1,0,,1,11,1,0,mukhiya_d18_b009.jsonl.gz
+18,012,012 - Chehara Kala,12,12,0,Record not Found..!,1,0,0,0,mukhiya_d18_b012.jsonl.gz
+18,014,014 - Goraul,16,16,0,Record not Found..!,1,0,0,0,mukhiya_d18_b014.jsonl.gz
+18,015,015 - Patepur,32,18,0,,1,15,1,0,mukhiya_d18_b015.jsonl.gz
+19,002,002 - Pusa,13,0,1,,1,13,0,1,mukhiya_d19_b002.jsonl.gz
+20,007,007 - Bachhwara,18,3,0,,1,15,0,0,mukhiya_d20_b007.jsonl.gz
+20,009,009 - Barauni,24,7,0,,1,17,0,0,mukhiya_d20_b009.jsonl.gz
+21,005,005 - Beldaur,16,1,0,,1,15,0,0,mukhiya_d21_b005.jsonl.gz
+22,001,001 - Narayanpur,11,1,0,,1,6,0,0,mukhiya_d22_b001.jsonl.gz
+22,007,007 - Ismailpur,5,1,0,,1,4,0,0,mukhiya_d22_b007.jsonl.gz
+22,012,012 - Nathnagar,14,3,0,,1,10,0,0,mukhiya_d22_b012.jsonl.gz
+22,015,015 - Sultanganj,19,0,1,,1,19,0,1,mukhiya_d22_b015.jsonl.gz
+23,003,003 - Rajoun,18,1,0,,1,17,0,0,mukhiya_d23_b003.jsonl.gz
+24,001,001 - Sadar Munger,13,3,0,,1,11,0,0,mukhiya_d24_b001.jsonl.gz
+24,002,002 - Jamalpur,10,0,2,,1,10,0,2,mukhiya_d24_b002.jsonl.gz
+24,007,007 - Sangrampur,10,2,0,,1,8,0,0,mukhiya_d24_b007.jsonl.gz
+25,002,002 - Pipariya,6,1,0,,1,5,0,0,mukhiya_d25_b002.jsonl.gz
+25,003,003 - Surajgarha,28,0,1,,2,28,0,1,mukhiya_d25_b003.jsonl.gz
+27,003,003 - Chandi,15,14,0,,1,1,0,0,mukhiya_d27_b003.jsonl.gz
+27,007,007 - Ekangarsarai,18,5,0,,1,13,0,0,mukhiya_d27_b007.jsonl.gz
+27,015,015 - Biharsharif,20,1,0,,1,19,0,0,mukhiya_d27_b015.jsonl.gz
+27,018,018 - Rajgir,9,0,1,,1,9,0,1,mukhiya_d27_b018.jsonl.gz
+27,019,019 - Giriyak,10,1,0,,1,10,1,0,mukhiya_d27_b019.jsonl.gz
+28,006,006 - Dulhin Bajar,14,1,0,,1,13,0,0,mukhiya_d28_b006.jsonl.gz
+28,012,012 - Phulwari Sharif,14,1,0,,1,13,0,0,mukhiya_d28_b012.jsonl.gz
+29,003,003 - Jagdishpur,20,1,0,,1,20,1,0,mukhiya_d29_b003.jsonl.gz
+29,006,006 - Barhara,22,1,1,,2,21,0,1,mukhiya_d29_b006.jsonl.gz
+29,007,007 - Koilwar,17,0,1,,1,13,0,1,mukhiya_d29_b007.jsonl.gz
+30,009,009 - Itarhi,15,3,0,,1,12,0,0,mukhiya_d30_b009.jsonl.gz
+30,011,011 - Rajpur,19,0,1,,1,19,0,1,mukhiya_d30_b011.jsonl.gz
+32,013,013 - Nauhatta,11,1,0,,1,10,0,0,mukhiya_d32_b013.jsonl.gz
+32,014,014 - Sheosagar,16,0,1,,1,16,0,1,mukhiya_d32_b014.jsonl.gz
+32,017,017 - Dehri,13,2,0,,1,11,0,0,mukhiya_d32_b017.jsonl.gz
+33,002,002 - Kaler,15,0,1,,1,15,0,1,mukhiya_d33_b002.jsonl.gz
+34,001,001 - Ratni Faridpur,14,2,0,,1,12,0,0,mukhiya_d34_b001.jsonl.gz
+34,002,002 - Jehanabad,14,0,1,,1,14,0,1,mukhiya_d34_b002.jsonl.gz
+34,007,007 - Makhdumpur,22,0,1,,2,22,0,1,mukhiya_d34_b007.jsonl.gz
+35,009,009 - Nabinagar,25,1,0,,2,24,0,0,mukhiya_d35_b009.jsonl.gz
+36,007,007 - Nagar,16,0,1,,1,16,0,1,mukhiya_d36_b007.jsonl.gz
+37,003,003 - Nawada,18,18,0,Record not Found..!,1,0,0,0,mukhiya_d37_b003.jsonl.gz
+37,004,004 - Warisaliganj,16,1,0,,1,15,0,0,mukhiya_d37_b004.jsonl.gz
+37,005,005 - Kashichak,7,7,0,Record not Found..!,1,0,0,0,mukhiya_d37_b005.jsonl.gz
+37,009,009 - Gobindpur,9,0,1,,1,9,0,1,mukhiya_d37_b009.jsonl.gz
+37,010,010 - Akbarpur,20,2,0,,1,18,0,0,mukhiya_d37_b010.jsonl.gz
+37,014,014 - Rajauli,16,1,0,,1,15,0,0,mukhiya_d37_b014.jsonl.gz
+38,005,005 - Sikandra,14,1,0,,1,13,0,0,mukhiya_d38_b005.jsonl.gz
+38,007,007 - Khaira,22,1,0,,1,20,1,0,mukhiya_d38_b007.jsonl.gz
+38,008,008 - Jhajha,20,1,0,,1,20,1,0,mukhiya_d38_b008.jsonl.gz
