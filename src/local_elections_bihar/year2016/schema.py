@@ -174,3 +174,61 @@ class Winner(pa.DataFrameModel):
 
 
 TABLES = {"seats": Seat, "candidates": Candidate, "winners": Winner}
+
+
+class WinnerListRecord(pa.DataFrameModel):
+    """One row of the SEC Mukhiya winner list (old-sec/wcl.aspx) for a block."""
+
+    district_code: pl.Utf8 = keys()["district_code"]
+    block_code: pl.Utf8 = field("Form block code.")
+    unit_code: pl.Utf8 = field(
+        "Frame panchayat code (unit_code in seats.parquet), found as match_basis "
+        "states. Not the number at the end of seat_label, a territorial number "
+        "that often differs (Bisfi/Bhairva/17 is unit 19)."
+    )
+    match_basis: pl.Utf8 = field(
+        "seat_label: the ovc.aspx page for that seat printed the same label, "
+        "ignoring case, spacing and zero padding; panchayat_name: the only "
+        "unclaimed frame seat in the block with this panchayat name.",
+        isin=["seat_label", "panchayat_name"],
+    )
+    sr_no: pl.Int32 = field(
+        "SR No., the row's position in the block list across pages.", ge=1
+    )
+    panchayat_name: pl.Utf8 = field("Panchayat Name, verbatim.")
+    seat_label: pl.Utf8 = field("Territorial seat (नि० क्षे० सं०), verbatim.")
+    seat_reservation: pl.Utf8 = nullable("Reservation Status, verbatim.")
+    winner_name: pl.Utf8 = field("Candidate Name, verbatim.")
+    father_husband_name: pl.Utf8 = nullable("Father/Husband Name, verbatim.")
+    gender_raw: pl.Utf8 = field("Gender, verbatim.")
+    gender: pl.Utf8 = nullable("Gender mapped to male/female/other.", isin=GENDERS)
+    age: pl.Int32 = nullable("Age; null when blank or above 120.", ge=0, le=120)
+    age_raw: pl.Utf8 = nullable("Age, verbatim.")
+    category: pl.Utf8 = nullable("Category, verbatim.")
+    education: pl.Utf8 = nullable("Educational Qualification, verbatim.")
+    mobile_number: pl.Utf8 = nullable("Mobile No., verbatim.")
+    address: pl.Utf8 = nullable("Address, verbatim.")
+    unit_repeated: pl.Boolean = field(
+        "The list has another row for this seat. It repeats ovc.aspx's duplicated "
+        "candidate entries (Suppi, Maniyari 02: RAMITA DEVI twice), so a seat can "
+        "carry two rows; neither is dropped."
+    )
+    label_matches_frame: pl.Boolean = field(
+        "Panchayat Name equals the seat frame's label for this unit_code, compared "
+        "case-insensitively without spaces or punctuation."
+    )
+    source_file: pl.Utf8 = field("Winner-list ledger holding the saved page.")
+    source_event: pl.Int32 = field(PROVENANCE["source_event"], ge=0)
+    page: pl.Int16 = field("Winner-list grid page the row was on.", ge=1)
+    source_row: pl.Int32 = field("Row on that grid page, from 1.", ge=1)
+    fetched_at: pl.Utf8 = field(PROVENANCE["fetched_at"])
+    page_sha256: pl.Utf8 = field(PROVENANCE["page_sha256"], str_length=64)
+
+    class Config:
+        strict = True
+        unique: ClassVar[list[str]] = [
+            "district_code",
+            "block_code",
+            "unit_code",
+            "sr_no",
+        ]

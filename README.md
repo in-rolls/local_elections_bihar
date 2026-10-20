@@ -18,6 +18,7 @@ The list is generated from the published files by `make data-summary`.
 | [2011/mukhiya_reports/winner_records.parquet](data/2011/mukhiya_reports/winner_records.parquet) | 3,973 | Mukhiya winner reported in a 2011 district PDF (23 districts, including Gaya) |
 | [2016/candidates.parquet](data/2016/candidates.parquet) | 644,865 | Candidate record |
 | [2016/seats.parquet](data/2016/seats.parquet) | 258,095 | Seat in the election frame |
+| [2016/winner_list/winner_list_records.parquet](data/2016/winner_list/winner_list_records.parquet) | 1,682 | Mukhiya winner row from the SEC winner list for a block with a no-record or no-winner seat |
 | [2016/winners.parquet](data/2016/winners.parquet) | 210,717 | Winner record, with determination basis |
 | [2021/byelection_candidates.parquet](data/2021/byelection_candidates.parquet) | 8,449 | Candidate in a by-election round |
 | [2021/byelection_result_rows.parquet](data/2021/byelection_result_rows.parquet) | 4,643 | Source result record in a by-election round |
@@ -70,6 +71,10 @@ not zero, male, unreserved or an inferred winner.
   repeated seat labels remain flagged; counts are not verified unique seats.
 - **2016:** Election-specific reservation labels are available. Some source
   geography codes identify multiple seats; ambiguity is retained in the tables.
+  405 Mukhiya seats have no results record, and the rows of 41 others name no
+  winner. The SEC's [winner list](data/2016/winner_list/README.md) fills 8 of
+  the 405 and gives evidence for reviewing the 41; it is kept separate from
+  `winners.parquet`.
 - **2021:** Election results and undated current-term feeds are distinct.
   Snapshot reservation labels are not verified assignments for the 2021 election
   or its by-elections. `result_rows` retains the source result grain; it is not

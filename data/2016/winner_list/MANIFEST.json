@@ -1,0 +1,318 @@
+{
+  "year": 2016,
+  "source": "https://sec.bihar.gov.in/old-sec/wcl.aspx",
+  "files": [
+    {
+      "path": "winner_list_records.parquet",
+      "rows": 1682,
+      "sha256": "ee4e67341b7097cfe5fa0bb24e6f51cf280bdeeb306ad39e269ee055e06382f5",
+      "columns": {
+        "district_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form district code."
+        },
+        "block_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Form block code."
+        },
+        "unit_code": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Frame panchayat code (unit_code in seats.parquet), found as match_basis states. Not the number at the end of seat_label, a territorial number that often differs (Bisfi/Bhairva/17 is unit 19)."
+        },
+        "match_basis": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['seat_label', 'panchayat_name'])>",
+          "description": "seat_label: the ovc.aspx page for that seat printed the same label, ignoring case, spacing and zero padding; panchayat_name: the only unclaimed frame seat in the block with this panchayat name."
+        },
+        "sr_no": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "SR No., the row's position in the block list across pages."
+        },
+        "panchayat_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Panchayat Name, verbatim."
+        },
+        "seat_label": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Territorial seat (नि० क्षे० सं०), verbatim."
+        },
+        "seat_reservation": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Reservation Status, verbatim."
+        },
+        "winner_name": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Candidate Name, verbatim."
+        },
+        "father_husband_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Father/Husband Name, verbatim."
+        },
+        "gender_raw": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Gender, verbatim."
+        },
+        "gender": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['male', 'female', 'other'])>",
+          "description": "Gender mapped to male/female/other."
+        },
+        "age": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>; <Check less_than_or_equal_to: less_than_or_equal_to(120)>",
+          "description": "Age; null when blank or above 120."
+        },
+        "age_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Age, verbatim."
+        },
+        "category": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Category, verbatim."
+        },
+        "education": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Educational Qualification, verbatim."
+        },
+        "mobile_number": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Mobile No., verbatim."
+        },
+        "address": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Address, verbatim."
+        },
+        "unit_repeated": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "The list has another row for this seat. It repeats ovc.aspx's duplicated candidate entries (Suppi, Maniyari 02: RAMITA DEVI twice), so a seat can carry two rows; neither is dropped."
+        },
+        "label_matches_frame": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "Panchayat Name equals the seat frame's label for this unit_code, compared case-insensitively without spaces or punctuation."
+        },
+        "source_file": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Winner-list ledger holding the saved page."
+        },
+        "source_event": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(0)>",
+          "description": "Zero-based position of the page in that ledger."
+        },
+        "page": {
+          "type": "Int16",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "Winner-list grid page the row was on."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "<Check greater_than_or_equal_to: greater_than_or_equal_to(1)>",
+          "description": "Row on that grid page, from 1."
+        },
+        "fetched_at": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "UTC time the page was retrieved."
+        },
+        "page_sha256": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check str_length: str_length(64)>",
+          "description": "SHA-256 of the saved page HTML."
+        }
+      }
+    },
+    {
+      "path": "coverage.csv",
+      "rows": 121,
+      "sha256": "ca0f579061662a88159e55c222935b13f370c0cc7172b7c45f26c896ab797ac6"
+    },
+    {
+      "path": "comparison.csv",
+      "rows": 1630,
+      "sha256": "b6aa42749d2b17dda576dfa40eef023c71f11de7ebc574f4e99bf9d0c727f5f7"
+    },
+    {
+      "path": "no_winner_review.csv",
+      "rows": 41,
+      "sha256": "12f4e75c43e3a1386a63de463f07734bb7602d505eaf618f131820a4754e8e31"
+    }
+  ],
+  "inputs_sha256": {
+    "seats.parquet": "5f234dad9afc7603e37aa34401ff4210fee31e6448cb8f94d79737a667d1761c",
+    "candidates.parquet": "0b73373fce5b29292c61399b3308d44b95f850f17127f5c2e6bfef3e162f65ca",
+    "winners.parquet": "1f1712f0a91370cb3db6a4b891d419a60cd81a4a7dbc00c57ea04e4fc14aeb13"
+  },
+  "source_ledgers": {
+    "mukhiya_d01_b010.jsonl.gz": "df5a2c441b5ab2fc7422bf9bf1758bb36c82bec30863cb3551d0bc79311f1fd5",
+    "mukhiya_d01_b015.jsonl.gz": "9f2bfeaa23db270aaddf4bb9f0bca9936b0802b05c421104d093cd62c0fd5878",
+    "mukhiya_d02_b001.jsonl.gz": "b4458c3baab5c8282b1afb561e5e7d2bde726110043cfbf1c0f9edd95b95cb74",
+    "mukhiya_d02_b002.jsonl.gz": "34564633a726a1bb5817fb785c14e0e7b7a872be20ab6caeaca3bbcad51f28b9",
+    "mukhiya_d02_b003.jsonl.gz": "60eee8230bf04f40c76dc91c4d41febfced8d69e424c51f70e563ffe85dedc57",
+    "mukhiya_d02_b004.jsonl.gz": "e40ec5dfbbbaad4367990c498b123d63015c789a06be444308b38067888d5d69",
+    "mukhiya_d02_b007.jsonl.gz": "ba9d2112024571f9b2e4e051bd9749c850178eec675e6c8d555a023b84092430",
+    "mukhiya_d02_b010.jsonl.gz": "4637f2bae4b66f5e73307e63afea036377d7640e1a0e195d078ea28af536dc95",
+    "mukhiya_d02_b011.jsonl.gz": "b83e291f74031bdcf0c9359fe31ecefef01990fc7c1470d9b334ccd897d2a537",
+    "mukhiya_d02_b012.jsonl.gz": "6723bd0e9691ca8ec8bfa48564fcba571049c3420b164cf3506ea42e07638f5c",
+    "mukhiya_d02_b019.jsonl.gz": "6a75adbef1717d46397f41e1a3390ba9775f2ed5e6a89c529d52f26aadaf9f62",
+    "mukhiya_d02_b023.jsonl.gz": "740c33dd3e93e67c0606cf1ed11eb695c5a69416b606c8150de7c233adb2f8df",
+    "mukhiya_d02_b024.jsonl.gz": "452956ea6c27481ec65037b14be66ea5e77998ca06be83a3a1cfc9d111f435c8",
+    "mukhiya_d02_b025.jsonl.gz": "c8464835f8855ef91df1d5d3a81c4d45490c6d7ee090995d4a25759e5351bea4",
+    "mukhiya_d03_b001.jsonl.gz": "8cfac17356f380750265a994068e0f540f77fd00c95128bf547f5a73a1e833e8",
+    "mukhiya_d04_b002.jsonl.gz": "f1603e7b9256686e30208fb003b055b8a1f97da17971f7dff04b618c679cdfed",
+    "mukhiya_d04_b004.jsonl.gz": "fab309f5fe043f5e01c8a1343ed0d075cf0a4b28503ca78dd91ad67dff402917",
+    "mukhiya_d04_b005.jsonl.gz": "292c9a7590c87decfe7459d79bc77027560c0cf7fea96ae272423f592d4458c3",
+    "mukhiya_d04_b006.jsonl.gz": "46e17b2c2b21d90f48aa26b7113221ede0e9a8c282c56ebb85f2acec6762174a",
+    "mukhiya_d04_b007.jsonl.gz": "7acc8854061ef991fcf6261f16225d13bc7b8e70789a927e98c86c1489c94268",
+    "mukhiya_d04_b013.jsonl.gz": "8a253fb8fb2b0cbb08a9083f0f0decb21f548397d92c7e69e0e05628dc4b53a2",
+    "mukhiya_d04_b017.jsonl.gz": "33c1852f5646fd94cec15fec92c390e09bbda568a8febaa3f8fda2541ed2d917",
+    "mukhiya_d05_b006.jsonl.gz": "d50d4fc3d4c4663e88db1fc5bfe37318428fc314f28911c9835603d29a6cdbce",
+    "mukhiya_d05_b012.jsonl.gz": "a5e836d0559f2ba9c95e528b39ac4802ac451c6ad6e2368e2d2e7236249f0f87",
+    "mukhiya_d05_b013.jsonl.gz": "f5a4e0bacba547e04d66ad0c93c98ca5c3107bf23f01e0f4e23060b9d74164d9",
+    "mukhiya_d05_b017.jsonl.gz": "b464ff6b5562b886aeb49939c8400d8f888155dad7e850578972b6af1933a250",
+    "mukhiya_d05_b021.jsonl.gz": "27c0dbc07360dd906d277f174e31231ffd55316c12d2d4967011c5771a3bf46b",
+    "mukhiya_d06_b001.jsonl.gz": "6a80d4d0325d592403488298aa569fb9005c021c55294a888ca3ac0047567916",
+    "mukhiya_d06_b003.jsonl.gz": "3145af20817fba3d76501ae5e4b3aef685fb7ded38194d1a2144a82f20da7aec",
+    "mukhiya_d07_b002.jsonl.gz": "fa1adaec86cda404543db4b175c279d83ec3067d0b41a8db3a52143b5f04d6af",
+    "mukhiya_d07_b009.jsonl.gz": "c414af61361a72365bdaf65ee7b039d0eedcc7cfa33879d7280dcf7a35a71d43",
+    "mukhiya_d09_b007.jsonl.gz": "0700984107c53bfc521bdb18706dc5767025af3d603d3fe31c1f0c60b50b5bc1",
+    "mukhiya_d09_b008.jsonl.gz": "9252562e5332b6a75a66b0aeeca4db67251cbd92cd7f1586668be0c9ab7c5044",
+    "mukhiya_d09_b009.jsonl.gz": "6a43222ecdff5e975e66b6bb302a82ff14dba35164379e1497abcc2a9ffa89b3",
+    "mukhiya_d09_b010.jsonl.gz": "94b57f989519b6a418d7dcc3af70143a873b7813b0ec01f41b86200eed3eea48",
+    "mukhiya_d09_b013.jsonl.gz": "184a796bf4e12f741a019aaa3afd33fab2b23f1692fd5f1e8a60e67d009c222f",
+    "mukhiya_d10_b004.jsonl.gz": "d0005bccc082a454d7e477c340a6c8fcc847166624e2b3ee4f1ae7956a851d12",
+    "mukhiya_d10_b006.jsonl.gz": "eaf974c68aa07b4bd9fbf964fc094ba9d78a044f2dcdfdac95eee1db831b365e",
+    "mukhiya_d11_b005.jsonl.gz": "a7816f1040ade3e8cdf04c5d467ec038b753819268435aadf44b443a37efe732",
+    "mukhiya_d11_b006.jsonl.gz": "57754bd16d76c1ffc89cc4e277b915c2e8b60bd15b8f75ce9b74edabd087a2c6",
+    "mukhiya_d11_b012.jsonl.gz": "609032d6c0c3f8dc3e151b23b7d55744dd0ca05ae47b51bdc2a6c115418df841",
+    "mukhiya_d11_b013.jsonl.gz": "3de63981f7e180dad51ab54b4ceb49affafc223865a6d4f025e81b22e2800459",
+    "mukhiya_d12_b006.jsonl.gz": "9c74916fabf9b6ccdbd1304d3b69df8106ff591d7db5072e32bc4a629f18bf8c",
+    "mukhiya_d12_b008.jsonl.gz": "b2ff43fd7f693cf69d6528bede94ec257a9fb982b4b6ed2f8870477e207f14d1",
+    "mukhiya_d13_b010.jsonl.gz": "eaf35790a654b0445653912e4601caf0931a7fc54e97e31451b3381c38242925",
+    "mukhiya_d13_b011.jsonl.gz": "f6136957506949eca6b55b1fd588e6cf8b104db34461379b1b6de4c4bbc09462",
+    "mukhiya_d14_b001.jsonl.gz": "a28ce2f1e914fe9070c04c25601069987e0c795511a15978fea1b05f639a2e92",
+    "mukhiya_d14_b003.jsonl.gz": "166d4ad7cd21e5ef64e2262e39f814b3864531fcf787eb4a21fc36353f9082a2",
+    "mukhiya_d14_b005.jsonl.gz": "0c91e5f0d7742c024d236aac0e8b964c0468675b9a2c5f43a4db164b72a9b0c9",
+    "mukhiya_d14_b009.jsonl.gz": "2aa5a694c5e78fbfccb1cea0d7c97f28f2e7db2d3b765b0507109bdbdfe81fac",
+    "mukhiya_d15_b003.jsonl.gz": "6ba36e5bd4a39a0136e856c83db3c00a6f3393594413050c487b24a0ec8f075e",
+    "mukhiya_d15_b014.jsonl.gz": "2b80f656de2e39103be540fe8602e163e5374905a59434828acf9027dfbb2a2d",
+    "mukhiya_d16_b003.jsonl.gz": "9783d52ed8ae5e6a430f85100b71c4620228ef139c58c62bb837a0052d6579dd",
+    "mukhiya_d16_b008.jsonl.gz": "1e15b9e2f5455bedb7ccade4418893412bdfcf401ccab28d1d33fdd3b27fcd7b",
+    "mukhiya_d16_b009.jsonl.gz": "945953fbf8e4746597dc0275eec8cd8a8df8de4c4a830d35d93aa16ea77fea63",
+    "mukhiya_d16_b010.jsonl.gz": "9e7d158b932956ebcbcf11bcb1775de0ebda2fb318fe6fbc6c0d3b54f341569e",
+    "mukhiya_d16_b011.jsonl.gz": "762fb781b3b8a88bfb5b40166c2c927507f4b1082ab5563e16259354691ee85d",
+    "mukhiya_d16_b012.jsonl.gz": "d870f4820daed8d98ca244b9b879833308d45967b46fac083a8a60b53a000a6e",
+    "mukhiya_d16_b017.jsonl.gz": "1b95f1a097875ca8e510f43ea9b8f9bbfaf3f3c6a207ee64412fd4ab6c751a0d",
+    "mukhiya_d16_b018.jsonl.gz": "19e9ca585c3dfcd881d4cbb93ea54d0956e73c91c37189d509a35687c8159cf2",
+    "mukhiya_d17_b003.jsonl.gz": "6a07ebf846940426aa3bf31baedfbc978e8cc66b11b2798760f6ff096f5eeb8f",
+    "mukhiya_d17_b005.jsonl.gz": "0f54bed60ba408c791c73799f3c27a9c43f1a8d5b3195db46c93042ab2521d34",
+    "mukhiya_d17_b007.jsonl.gz": "75e622cdee6746e717dda4bcc568d782c3333ef6a25cdaf6e032341d5f62caad",
+    "mukhiya_d17_b008.jsonl.gz": "e7e0680a3f45aee9ef130f91f18a1d0c1d068fc5b03fef20643997d27a189e1c",
+    "mukhiya_d17_b010.jsonl.gz": "8d19b5722a55be855744441dfcd16200f5b372b9dec44ccd5545a2b8377d858b",
+    "mukhiya_d17_b013.jsonl.gz": "7be8411a7d939f359b7524cf59254fc3a5dd68ed37f9caefe448372385f13f36",
+    "mukhiya_d17_b014.jsonl.gz": "e2ff5dc68b68dd763208628a49d94a74b2a645c1c20b4dc06dc9270c1c57b6bc",
+    "mukhiya_d17_b016.jsonl.gz": "f7df9743bc62dbc92fb197596f8c25cf6d35ed27553c0e89894e2b4e2d6262e6",
+    "mukhiya_d17_b017.jsonl.gz": "01f78a2d9f629f16fbdb2bc0339f4f80e0924520b2c022d62c9a2a579ba9f5ab",
+    "mukhiya_d18_b001.jsonl.gz": "2c7937b9b874f88f86a9707b8693d2497394f598daee5c417ee7ae2baad3bb59",
+    "mukhiya_d18_b002.jsonl.gz": "45a9a4aeb3e803d7e485e933c970d3da44c8d500b007217a07d762bbb54b1586",
+    "mukhiya_d18_b003.jsonl.gz": "389360dae96c5b3a471558bd2596fd7b48d8adf650ef46b0f772639b0d9033d5",
+    "mukhiya_d18_b004.jsonl.gz": "a3d0a0186c4b3e969e6abaa690a01abaf747be2df284ad254da3f1f4c3be6d4b",
+    "mukhiya_d18_b009.jsonl.gz": "3d181e31d85dcf5313d3c7657eb1cb0b9f8ce27716b7102f671fcddcb3256b81",
+    "mukhiya_d18_b012.jsonl.gz": "4cdb096c10449059b9aeafc42574891fde84764cfffff93afe194bb528be822b",
+    "mukhiya_d18_b014.jsonl.gz": "db792a64eaf1c30777960cb53f52fadfc762555e4f76a56a6c13b069ea5c9ca1",
+    "mukhiya_d18_b015.jsonl.gz": "a0f02b14847fac34465198da0962766f478c7346f63060263cda7c374d11f7c7",
+    "mukhiya_d19_b002.jsonl.gz": "f02d181f2e174f46799aae22bd6b1ea9cd7b3d026378cb6db21513c51d9e2c03",
+    "mukhiya_d20_b007.jsonl.gz": "e114767bc2352a04aaf72e977622a770d225c2b160bb923d42ce9462a9032591",
+    "mukhiya_d20_b009.jsonl.gz": "802614fe0ad0088aa21179db0090304019035b5db1bac4e3ded97ec034a6f986",
+    "mukhiya_d21_b005.jsonl.gz": "ec0e215ebec4b6cb17541743d8cf481ca76fd6aad3260dbbbaf79d91673c9962",
+    "mukhiya_d22_b001.jsonl.gz": "72d4684f59ea3edfced0fdc63bf78c210334e01048f58f31f154ee7211c54aee",
+    "mukhiya_d22_b007.jsonl.gz": "abbe6d71be3620e366095cccbd65adb3e9484b36372532e6919cbff075189b04",
+    "mukhiya_d22_b012.jsonl.gz": "f68c5af892cfd4d04a39bbb039fbb611b460c70030ab186d954c3fadb014d331",
+    "mukhiya_d22_b015.jsonl.gz": "b30ad835b24a4ac05cc8cea3dba831fea83cd759e62f89104a8fdf16a2ff8e74",
+    "mukhiya_d23_b003.jsonl.gz": "bc74b55a943a777ff50416b57d76a3f274ed943d32d644818cb88791e3fb51ac",
+    "mukhiya_d24_b001.jsonl.gz": "64d48fedf1308b9902d68f3e73239a5a38a86c1652b86261b4269a40249e88d7",
+    "mukhiya_d24_b002.jsonl.gz": "05044995e8a9938569681bd213576a2060868cbffbef4ed9182386e946630599",
+    "mukhiya_d24_b007.jsonl.gz": "ef6b949cfd39c8bdbe2b932158482a87b9ad8d1ce4070ef087c9ccc5f6fe8bfe",
+    "mukhiya_d25_b002.jsonl.gz": "b898ac9f1fcd2ba35109e5f55486dbaca62826a55d123e39da586b7932fc5bdd",
+    "mukhiya_d25_b003.jsonl.gz": "8b59c65b756c63c0b054cc2f09bb811b1a73bf3eae2e7492bf8e1437651d3fe0",
+    "mukhiya_d27_b003.jsonl.gz": "d5187945950d4fc8de4f9d3755c118c91c78fbda25df7234407a1e3306d1d5da",
+    "mukhiya_d27_b007.jsonl.gz": "2a3c531e81808a29440df9703c50b03706be4b2d8563e915e53dcd1b4416db84",
+    "mukhiya_d27_b015.jsonl.gz": "02eaea571821a1bdb0393de99c91a1c7fddd035a88675c75461ab4ab8ddcc736",
+    "mukhiya_d27_b018.jsonl.gz": "68c5cdf35435824dc01d770ba31dc0e723be8e9ee2fba4c65d99f3b4f6e81e2c",
+    "mukhiya_d27_b019.jsonl.gz": "fa14979bcca108d23cf92d41212b17d22f93c1b2c914967d3b808b37666383a8",
+    "mukhiya_d28_b006.jsonl.gz": "79a53c521e117038c89e61faedbc33c5d355a39b0be6f306b5dc60a0e65c38e5",
+    "mukhiya_d28_b012.jsonl.gz": "dd0adb8abd6840e35179f2c2c590738d2f030bbe689f968ea8c85e586733231a",
+    "mukhiya_d29_b003.jsonl.gz": "742b6848cfe0e10a784464723961e1e1d40c6942c8e128a80f7a66a4a61f6e5d",
+    "mukhiya_d29_b006.jsonl.gz": "10e6596af1a6ec56fa40c0844083d5b6c7a8affd7c06d33b894940efd04558a9",
+    "mukhiya_d29_b007.jsonl.gz": "94cec2ff5f4e6556ddd355fe2beaf1716211b28aaeeccab7daca955826aa409e",
+    "mukhiya_d30_b009.jsonl.gz": "1b8364b3275679f09a00a7355d364cce92672a53a4d113489f08a18006a971c6",
+    "mukhiya_d30_b011.jsonl.gz": "bca3f41938e419fabab7a92fa462698111b66b72ae3c9ae12ba6b4c39c726a45",
+    "mukhiya_d32_b013.jsonl.gz": "3cec5b8b38c9f381e254a94e4e42a99be1a3c49c29cc8415cf10bb63b2864d98",
+    "mukhiya_d32_b014.jsonl.gz": "79f64123547f2dda3cebd15180eed257c6611c7c16f143a34b97fac357e3ac23",
+    "mukhiya_d32_b017.jsonl.gz": "d97f4f5429a374f977c8eab2d7a601077a100b4d66a312dfce25a12cd398eaa3",
+    "mukhiya_d33_b002.jsonl.gz": "d7b6b9f44bc483b74e5253a011678b258ddff1527462a5a1b6b3b041e69cf063",
+    "mukhiya_d34_b001.jsonl.gz": "98eb9bf54ab3e8b19e7d5749a90f126ca4d65ef6ac65fabc98e961141b68ad47",
+    "mukhiya_d34_b002.jsonl.gz": "676c0530a651c67162dfab3566df77a70c3e84a45c8d74de50646cdf9e41b303",
+    "mukhiya_d34_b007.jsonl.gz": "4a49df3507ea06de30ff0a112cc864a68c53adf5e44a1c00a839a9b5f546a37c",
+    "mukhiya_d35_b009.jsonl.gz": "da7f05cf10dc4df61234f3e58688d69034755e522927918bf453b06e0b1f4338",
+    "mukhiya_d36_b007.jsonl.gz": "56973b669fccf9723c200b9d5ab899107d3656b0c912fbdd8d2f160edc3dfc02",
+    "mukhiya_d37_b003.jsonl.gz": "53ed1381b57ecafde93e01732291a1197173d68cefbed305a4c8cc5596bd943a",
+    "mukhiya_d37_b004.jsonl.gz": "1410443dea7292b7030da78d86f0fd1235d1211869df59de8e9ab5a01d92dc9e",
+    "mukhiya_d37_b005.jsonl.gz": "e6071083f62451a25aa2c35b3725b892b08fbcd2042e0329b59677681ee36c1d",
+    "mukhiya_d37_b009.jsonl.gz": "543d2bd981946dce3e55e18990212db1c8dbfad9b5883109fe47880f35d9270e",
+    "mukhiya_d37_b010.jsonl.gz": "486acf582863e7925b3dc4152b8f6f9c0a79bc9e0cad02eeac9de2d195421193",
+    "mukhiya_d37_b014.jsonl.gz": "c350c3844e7d19d846358dbb7810c6ba5fdc6d731becaceeaae2a6dcc0fa587f",
+    "mukhiya_d38_b005.jsonl.gz": "337971ac8191c8fcfb055462de5dd2fac00de7c31927ec7ba0df468d4ae43deb",
+    "mukhiya_d38_b007.jsonl.gz": "b2b33a8b7e72845abe778f2b7775d419562c4ed4c94d7989c2ea28132eae8c91",
+    "mukhiya_d38_b008.jsonl.gz": "1c0d6ef90b1be06161c6af4f4ded98577b5ea5200f8016bbc5d666346254ee2f"
+  },
+  "code_sha256": {
+    "year2016/winner_list.py": "530df80a838abbb0626db008703d64dd1513500f711cf5df976ba8fd4978d492",
+    "year2016/collect_winner_list.py": "61f9890595319356db130a2b33835dcbaf8a40fa576e3013537d9cfc3048ab2f",
+    "year2016/collect.py": "8ebaa771f593b0717385479d473854492f2799d935f28a90bea328cee16120f2",
+    "year2016/schema.py": "618eecf8150284df1f00419462a2bb6dab092431c6bcb4d49b9b4c1cdbb3dbde"
+  }
+}
