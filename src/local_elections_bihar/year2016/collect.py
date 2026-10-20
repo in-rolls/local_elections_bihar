@@ -84,18 +84,18 @@ def form_state(html):
     return hidden, options, chosen
 
 
-def fetch(current, method, data, out):
+def fetch(current, method, data, out, url):
     try:
         if method == "GET":
-            out.append(current.get(URL, timeout=(30, 180)))
+            out.append(current.get(url, timeout=(30, 180)))
         else:
-            out.append(current.post(URL, data=data, timeout=(30, 180)))
+            out.append(current.post(url, data=data, timeout=(30, 180)))
     # Anything the request raises is handed to the caller waiting on the thread.
     except BaseException as error:
         out.append(error)
 
 
-def request(method, data=None):
+def request(method, data=None, url=None):
     def attempt():
         # A read timeout only fires when nothing arrives at all, so a server that
         # trickles a response, or a socket that somehow carries no timeout, can hold
@@ -103,7 +103,9 @@ def request(method, data=None):
         # in its own thread so that waiting for it is capped by the clock alone.
         current, out = session(), []
         worker = threading.Thread(
-            target=fetch, args=(current, method, data, out), daemon=True
+            target=fetch,
+            args=(current, method, data, out, url or URL),
+            daemon=True,
         )
         worker.start()
         worker.join(DEADLINE)
@@ -131,14 +133,14 @@ def request(method, data=None):
     return policy(attempt)
 
 
-def postback(html, field, value, submit=False):
+def postback(html, field, value, submit=False, url=None):
     hidden, _, chosen = form_state(html)
     data = {**hidden, **chosen, field: value}
     if submit:
         data.update(__EVENTTARGET="", __EVENTARGUMENT="", btnSubmit="View")
     else:
         data.update(__EVENTTARGET=field, __EVENTARGUMENT="")
-    return request("POST", data)
+    return request("POST", data, url)
 
 
 class Ledger:
