@@ -7,6 +7,7 @@ check:
 	uv run ruff check .
 	uv run ruff format --check .
 	uv run pytest -q
+	uv run python -m local_elections_bihar.build.fetch_log --check
 
 test:
 	uv run pytest -q
