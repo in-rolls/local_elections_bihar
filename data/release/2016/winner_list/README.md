@@ -1,7 +1,7 @@
 # 2016 Mukhiya winner list (wcl.aspx)
 
 The SEC's archived 2016 site has a second results form besides `ovc.aspx`, the
-candidate-and-vote form behind `2016/seats.parquet`. The winner list
+candidate-and-vote form behind `release/2016/seats.parquet`. The winner list
 [`old-sec/wcl.aspx`](https://sec.bihar.gov.in/old-sec/wcl.aspx) takes post,
 district and block. It returns one row per panchayat with the winner's name,
 father/husband name, gender, age, category, education, mobile number, address
@@ -46,9 +46,9 @@ target blocks plus the control block Ramgarhwa, 02/003.
 
 | File | Row | Key |
 | --- | --- | --- |
-| `winner_list_records.parquet` | Listed winner row | `district_code, block_code, unit_code, sr_no`; `unit_code` matches `2016/seats.parquet` |
+| `winner_list_records.parquet` | Listed winner row | `district_code, block_code, unit_code, sr_no`; `unit_code` matches `release/2016/seats.parquet` |
 | `coverage.csv` | Collected block | `district_code, block_code` |
-| `comparison.csv` | Listed seat that also has a winner in `2016/winners.parquet` | seat key and `wcl_sr_no` |
+| `comparison.csv` | Listed seat that also has a winner in `release/2016/winners.parquet` | seat key and `wcl_sr_no` |
 | `no_winner_review.csv` | Seat with `winner_note` set | seat key |
 
 `seat_label` keeps the printed text. `label_matches_frame` records whether the
@@ -75,7 +75,7 @@ make verify-winner-list-2016
 ```
 
 The collector writes one ledger per block to
-`data/2016/raw/statewide/2016/winner_list/`, with every response body. These
+`data/raw/2016/statewide/2016/winner_list/`, with every response body. These
 ledgers are not yet in the Zenodo source archives. `MANIFEST.json` records
 their checksums.
 
@@ -92,6 +92,6 @@ undecided. `winners.parquet` is unchanged; a consumer applies these rulings.
 ## Raw responses
 
 The 121 winner-list responses (3 MB, gzipped JSON lines; sha256 in
-`MANIFEST.json`) are committed under `data/2016/raw/statewide/2016/winner_list/`,
+`MANIFEST.json`) are committed under `data/raw/2016/statewide/2016/winner_list/`,
 an exception to this repository's practice of archiving raw files on Zenodo:
 they are small and were not part of the existing archives.

@@ -187,7 +187,7 @@ def test_vacant_placeholder_fields_are_not_a_person(tmp_path):
     assert winner["candidate_age"] is None and winner.get("photo_url") is None
     assert winner["placeholder_date"] == "01-Nov-2023"
     assert "MobileNo" not in winner
-    validate("current_winners", [winner])
+    validate("term_feed_winners", [winner])
 
 
 def test_unpublished_votes_stay_null_not_zero(tmp_path):

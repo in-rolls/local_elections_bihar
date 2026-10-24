@@ -13,12 +13,12 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from bs4 import BeautifulSoup
 
-RAW = Path("data/unprocessed/2021/reservation_check")
-RELEASE = Path("data/2021")
+RAW = Path("data/raw/audit_sources/2021/reservation_check")
+RELEASE = Path("data/release/2021")
 OUT = RELEASE / "reservation_check"
 INPUTS = {
     name: RELEASE / f"{name}.parquet"
-    for name in ["seats", "candidates", "current_winners", "current_reservations"]
+    for name in ["seats", "candidates", "term_feed_winners", "term_feed_reservations"]
 }
 KEY = ["district_id", "block_id", "panchayat_id", "candidate_serial"]
 SEAT = KEY[:-1]
@@ -71,11 +71,11 @@ def load(inputs=INPUTS):
         .select(*KEY, "post_id", pl.lit(2021).alias("year"), *person, "elected")
     )
     return {
-        "reservations": mukhiya("current_reservations")
+        "reservations": mukhiya("term_feed_reservations")
         .with_columns(year=pl.lit(None, pl.Int64))
         .select(*SEAT, "post_id", "year", "reserved_raw", "source_sha256")
         .to_dicts(),
-        "current_winners": mukhiya("current_winners")
+        "term_feed_winners": mukhiya("term_feed_winners")
         .select(*SEAT, "post_id", "reserved_woman_raw", *person)
         .to_dicts(),
         "candidates": candidates.drop("elected").to_dicts(),
@@ -116,11 +116,11 @@ def report_totals(body):
     )
 
 
-def audit(reservations, candidates, winners, current_winners, official):
+def audit(reservations, candidates, winners, term_feed_winners, official):
     seats = unique(reservations, SEAT)
     unique(candidates, KEY)
     unique(winners, SEAT)
-    current = unique(current_winners, SEAT)
+    current = unique(term_feed_winners, SEAT)
     if any(r["year"] != 2021 for r in candidates + winners):
         raise ValueError("Candidate/winner records must be explicitly dated 2021")
     if any(r["post_id"] != 3 for r in reservations + candidates + winners):

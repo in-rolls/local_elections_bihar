@@ -21,7 +21,9 @@ def run(sources):
 
 def test_real_source_disagreements_are_preserved(sources):
     checks, flagged = run(sources)
-    expected = json.loads(Path("data/2021/reservation_check/MANIFEST.json").read_text())
+    expected = json.loads(
+        Path("data/release/2021/reservation_check/MANIFEST.json").read_text()
+    )
     assert checks == expected["validation"]
     assert checks["current_minus_official"] == {
         "total": 0,
@@ -64,7 +66,7 @@ def test_current_winner_disagreement_does_not_recode_2021(sources):
     altered = copy.deepcopy(sources)
     checks, flagged = run(altered)
     key = tuple(flagged[0][f] for f in ["district_id", "block_id", "panchayat_id"])
-    for r in altered["current_winners"]:
+    for r in altered["term_feed_winners"]:
         if tuple(int(r[f]) for f in ["district_id", "block_id", "panchayat_id"]) == key:
             r["candidate_woman_raw"] = "अन्य"
     changed, rows = run(altered)
@@ -75,7 +77,7 @@ def test_current_winner_disagreement_does_not_recode_2021(sources):
 
 
 def test_published_audit_checksums_and_provenance():
-    root = Path("data/2021/reservation_check")
+    root = Path("data/release/2021/reservation_check")
     manifest = json.loads((root / "MANIFEST.json").read_text())
     for info in manifest["files"]:
         assert sha(root / info["path"]) == info["sha256"]
@@ -89,7 +91,7 @@ def test_published_audit_checksums_and_provenance():
 
 def test_current_reservation_disagreement_is_counted(sources):
     altered = copy.deepcopy(sources)
-    r = altered["current_winners"][0]
+    r = altered["term_feed_winners"][0]
     r["reserved_woman_raw"] = "अन्य" if r["reserved_woman_raw"] == "महिला" else "महिला"
     checks, _ = run(altered)
     assert checks["current_feeds_women_reservation"]["disagrees"] == 1
@@ -98,7 +100,7 @@ def test_current_reservation_disagreement_is_counted(sources):
 
 def test_missing_documents_do_not_prove_identity(sources):
     altered = copy.deepcopy(sources)
-    for r in altered["winners"] + altered["current_winners"]:
+    for r in altered["winners"] + altered["term_feed_winners"]:
         r["affidavit_url"] = None
     checks, flagged = run(altered)
     assert checks["flagged_winners_same_document_url"] == 0

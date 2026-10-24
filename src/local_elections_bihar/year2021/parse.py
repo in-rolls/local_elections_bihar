@@ -545,7 +545,7 @@ def verify(out):
     ):
         seats = pl.read_parquet(out / f"{prefix}seats.parquet")
         names = ["candidates", "result_rows", "winners"]
-        names += ["current_winners"] if not prefix else []
+        names += ["term_feed_winners"] if not prefix else []
         for name in names:
             rows = pl.read_parquet(out / f"{prefix}{name}.parquet").drop_nulls(
                 "unit_id"
@@ -567,14 +567,14 @@ def verify(out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
-    parser.add_argument("--raw", type=Path, default=Path("data/2021/raw/statewide"))
+    parser.add_argument("--raw", type=Path, default=Path("data/raw/2021/statewide"))
     parser.add_argument(
         "--current-mukhiya",
         type=Path,
-        default=Path("data/2021/raw/portal_snapshot_2026"),
+        default=Path("data/raw/2021/portal_snapshot_2026"),
     )
     parser.add_argument("--frames", type=Path, default=Path(".cache/2021"))
-    parser.add_argument("--out", type=Path, default=Path("data/2021"))
+    parser.add_argument("--out", type=Path, default=Path("data/release/2021"))
     args = parser.parse_args()
     if args.check:
         verify(args.out)
@@ -666,8 +666,8 @@ def main():
             stem = path.name.removesuffix(".jsonl.gz").removesuffix("_p3")
             legacy[f"current/{kind}/p3/{stem}"] = event
     built = build_current(current, legacy, frame)
-    tables["current_winners"] = built["winners"]
-    tables["current_reservations"] = built["reservations"]
+    tables["term_feed_winners"] = built["winners"]
+    tables["term_feed_reservations"] = built["reservations"]
     files = write_tables(args.out, tables)
     manifest = {
         "year": 2021,

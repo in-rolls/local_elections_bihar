@@ -484,9 +484,13 @@ def verify(out, seats_path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--raw", type=Path, default=Path("data/2016/raw/statewide"))
-    parser.add_argument("--seats", type=Path, default=Path("data/2016/seats.parquet"))
-    parser.add_argument("--out", type=Path, default=Path("data/2016/winner_list"))
+    parser.add_argument("--raw", type=Path, default=Path("data/raw/2016/statewide"))
+    parser.add_argument(
+        "--seats", type=Path, default=Path("data/release/2016/seats.parquet")
+    )
+    parser.add_argument(
+        "--out", type=Path, default=Path("data/release/2016/winner_list")
+    )
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     if not args.check:

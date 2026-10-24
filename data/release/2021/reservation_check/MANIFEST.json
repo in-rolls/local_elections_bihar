@@ -7,20 +7,20 @@
     "candidate_serial"
   ],
   "inputs": {
-    "data/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
-    "data/2021/candidates.parquet": "e5679156c18bd8ae44d8983484f27fac26fcda1d658d17bf1aff67a8c14f5768",
-    "data/2021/current_winners.parquet": "3c1044399c66b6d5965302117f7b1b7d525aac1def93e0543a33190d9bd95cb6",
-    "data/2021/current_reservations.parquet": "45341aeecf7157e8028e4d96275d2f62b596da0d36190d6cbb4012c30347c142"
+    "data/release/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
+    "data/release/2021/candidates.parquet": "e5679156c18bd8ae44d8983484f27fac26fcda1d658d17bf1aff67a8c14f5768",
+    "data/release/2021/term_feed_winners.parquet": "3c1044399c66b6d5965302117f7b1b7d525aac1def93e0543a33190d9bd95cb6",
+    "data/release/2021/term_feed_reservations.parquet": "45341aeecf7157e8028e4d96275d2f62b596da0d36190d6cbb4012c30347c142"
   },
   "receipts": {
-    "data/2021/raw/reservation_check/btnFilter.jsonl.gz": "d4666f0dd1674cf8a919d990a7016e3c5b9c3e5d76b84abad95433f0b206a8c8",
-    "data/2021/raw/reservation_check/candidate_detail.jsonl.gz": "ff2969f8400c335027a1481c153fd262676eb69361a788762a2f8ebfcc2b1a0e",
-    "data/2021/raw/reservation_check/nomination_lblTotalList.jsonl.gz": "5fa3635b7313b6777c5887954d32ac400ca4641436f3014f8b45d6da77d5e5cb",
-    "data/2021/raw/reservation_check/report_ch1.jsonl.gz": "2ee9eede96e4e0d3d0364f78c4cc79bd6a58ec537fecea4a727051f3077859be",
-    "data/2021/raw/reservation_check/reservation_d33_b1.jsonl.gz": "840a4961df29c9c7040f48b89280594b4041ddc8694ebf6f9fc3b5bc666c6a5c"
+    "data/raw/2021/reservation_check/btnFilter.jsonl.gz": "d4666f0dd1674cf8a919d990a7016e3c5b9c3e5d76b84abad95433f0b206a8c8",
+    "data/raw/2021/reservation_check/candidate_detail.jsonl.gz": "ff2969f8400c335027a1481c153fd262676eb69361a788762a2f8ebfcc2b1a0e",
+    "data/raw/2021/reservation_check/nomination_lblTotalList.jsonl.gz": "5fa3635b7313b6777c5887954d32ac400ca4641436f3014f8b45d6da77d5e5cb",
+    "data/raw/2021/reservation_check/report_ch1.jsonl.gz": "2ee9eede96e4e0d3d0364f78c4cc79bd6a58ec537fecea4a727051f3077859be",
+    "data/raw/2021/reservation_check/reservation_d33_b1.jsonl.gz": "840a4961df29c9c7040f48b89280594b4041ddc8694ebf6f9fc3b5bc666c6a5c"
   },
   "report_url": "https://sec.bihar.gov.in/PanchayatRpt/ch1.aspx",
-  "parser_sha256": "7aa8025f8042cc233e1ad40b98540de24e5b356ce9fe8900c92b1f3b50c68b9f",
+  "parser_sha256": "c9dd85c0d285b903be89ade3962ef88ce7ec78bd3956cbe74c2e6d300612d20a",
   "files": [
     {
       "path": "flagged_winners.parquet",

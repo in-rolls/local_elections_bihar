@@ -217,7 +217,7 @@ def audit(release, raw, report_dir, resample, seed):
     report["sec_report_elected_by_office"] = elected
 
     # 4. Current feeds: coverage, and agreement with the dated 2021 winner.
-    current = t["current_winners"]
+    current = t["term_feed_winners"]
     joined = winners.join(
         current.select("post_id", "unit_id", "candidate_name", "vacant_placeholder"),
         on=["post_id", "unit_id"],
@@ -251,7 +251,7 @@ def audit(release, raw, report_dir, resample, seed):
             .filter(pl.col("len") > 1)
             .height,
         }
-        for name in ("current_winners", "current_reservations")
+        for name in ("term_feed_winners", "term_feed_reservations")
     }
     report["current_feeds"]["vacant_placeholders"] = current.filter(
         "vacant_placeholder"
@@ -375,10 +375,10 @@ def audit(release, raw, report_dir, resample, seed):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--release", type=Path, default=Path("data/2021"))
-    parser.add_argument("--raw", type=Path, default=Path("data/2021/raw/statewide"))
+    parser.add_argument("--release", type=Path, default=Path("data/release/2021"))
+    parser.add_argument("--raw", type=Path, default=Path("data/raw/2021/statewide"))
     parser.add_argument(
-        "--report", type=Path, default=Path("data/unprocessed/2021/report_pages")
+        "--report", type=Path, default=Path("data/raw/audit_sources/2021/report_pages")
     )
     parser.add_argument("--resample", type=int, default=200)
     parser.add_argument("--seed", type=int, default=2021)

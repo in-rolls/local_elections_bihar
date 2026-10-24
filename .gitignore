@@ -8,9 +8,15 @@ __pycache__/
 /dist/
 *.log
 *.part
-data/*/raw
-data/*/interim
+# Originals and caches live on the staging drive (symlinked) or in the Zenodo
+# source archives; the 2016 winner-list ledgers are tracked on purpose.
+/data/raw/2006
+/data/raw/2011
+/data/raw/2016/
+/data/raw/2021
+/data/raw/undated
+/data/raw/audit_sources
+/data/build/
 Desktop.ini
 Thumbs.db
 .cache/
-data/unprocessed

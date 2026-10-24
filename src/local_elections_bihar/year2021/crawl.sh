@@ -6,11 +6,11 @@ set -eu
 if command -v caffeinate >/dev/null 2>&1 && [ "${BIHAR_AWAKE:-0}" != 1 ]; then
     exec env BIHAR_AWAKE=1 caffeinate -dims "$0" "$@"
 fi
-if [ ! -f data/2021/raw/statewide/frame.parquet ]; then
-    uv run python -m local_elections_bihar.shared.portal list --raw data/2021/raw/statewide
+if [ ! -f data/raw/2021/statewide/frame.parquet ]; then
+    uv run python -m local_elections_bihar.shared.portal list --raw data/raw/2021/statewide
 fi
 
-uv run python -m local_elections_bihar.year2021.collect_mukhiya fetch --raw data/2021/raw/statewide --districts $(seq 1 38)
+uv run python -m local_elections_bihar.year2021.collect_mukhiya fetch --raw data/raw/2021/statewide --districts $(seq 1 38)
 
 # A pass that leaves failed units exits non-zero; later passes retry only those.
 passes() {
@@ -23,11 +23,11 @@ passes() {
     done
     return 1
 }
-[ -f data/2021/raw/statewide/2021/offices/frame.parquet ] || passes frame
+[ -f data/raw/2021/statewide/2021/offices/frame.parquet ] || passes frame
 passes current
 passes dated --posts 4 5 6
 passes dated --posts 1 2
-[ -f data/2021/raw/statewide/byelections/frame.parquet ] ||
+[ -f data/raw/2021/statewide/byelections/frame.parquet ] ||
     uv run python -m local_elections_bihar.year2021.collect_byelections frame
 for pass in 1 2 3 4 5; do
     uv run python -m local_elections_bihar.year2021.collect_byelections fetch && break

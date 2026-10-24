@@ -221,7 +221,7 @@ def test_review_decisions(rows, listed, decision):
 
 def test_reviewed_rulings_accept_only_robust_leaders():
     """Every accepted ruling names the leader the vote rule makes robust."""
-    base = Path(__file__).resolve().parents[1] / "data/2016/winner_list"
+    base = Path(__file__).resolve().parents[1] / "data/release/2016/winner_list"
     review = pl.read_csv(base / "no_winner_review.csv", infer_schema_length=0)
     ruled = pl.read_csv(base / "no_winner_reviewed.csv", infer_schema_length=0)
     key = ["district_code", "block_code", "unit_code"]

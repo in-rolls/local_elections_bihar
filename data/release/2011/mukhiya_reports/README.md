@@ -1,6 +1,6 @@
 # District Mukhiya winner reports
 
-[winner_records.parquet](winner_records.parquet) contains **3,973 located, named winner records from 23 district reports**, including 3,971 nonblank reservation labels. The parser reads 4,320 source rows across 311 pages, excludes 47 rows without a recoverable block or GP, and removes 300 exact content repeats. These reports came from the historical 2011 handoff collection. Both `collection_year` and `election_year` are 2011. The maintainer identified the reports as 2011, noting that “पूर्व निर्वाचित” refers to prior service in 2001 and 2006. The [source provenance](../../PROVENANCE.json) preserves that confirmation and its scope. Every published row has district, block, GP and winner name. These remain source reports, not a verified statewide seat roster.
+[winner_records.parquet](winner_records.parquet) contains **3,973 located, named winner records from 23 district reports**, including 3,971 nonblank reservation labels. The parser reads 4,320 source rows across 311 pages, excludes 47 rows without a recoverable block or GP, and removes 300 exact content repeats. These reports came from the historical 2011 handoff collection. Both `collection_year` and `election_year` are 2011. The maintainer identified the reports as 2011, noting that “पूर्व निर्वाचित” refers to prior service in 2001 and 2006. The [source provenance](../../../manual/PROVENANCE.json) preserves that confirmation and its scope. Every published row has district, block, GP and winner name. These remain source reports, not a verified statewide seat roster.
 
 The table includes 338 primary Gaya PDF winner records. [Gaya workbook and runner-up records](../gaya_mukhiya/README.md) are separate source lists. The explicitly dated Gaya workbook supplies 330 named winners with GP and block labels (one blank-name source row is excluded) and remains separate pending review of extracted name differences. The [Khajuria judgment transcription](../khajuria_judgment/README.md) independently supports one reported winner's 2011 election, without dating the whole report or its reservation labels.
 
@@ -17,7 +17,7 @@ Each record preserves panchayat and block labels, winner and relative names, sea
 
 ## Reproduce and check
 
-Originals are read from `data/2011/raw/reports/`. See [PROVENANCE.json](../../PROVENANCE.json) for their origins and availability. With the originals restored:
+Originals are read from `data/raw/2011/reports/`. See [PROVENANCE.json](../../../manual/PROVENANCE.json) for their origins and availability. With the originals restored:
 
 ```sh
 uv sync --frozen --group dev

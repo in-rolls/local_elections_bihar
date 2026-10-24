@@ -416,9 +416,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--frame", type=Path, default=Path(".cache/2016/frame.parquet"))
     parser.add_argument(
-        "--results", type=Path, default=Path("data/2016/raw/statewide/2016/results")
+        "--results", type=Path, default=Path("data/raw/2016/statewide/2016/results")
     )
-    parser.add_argument("--out", type=Path, default=Path("data/2016"))
+    parser.add_argument("--out", type=Path, default=Path("data/release/2016"))
     parser.add_argument("--check", action="store_true")
     # Development only: build from the pages saved so far, skipping unfetched seats.
     parser.add_argument("--partial", action="store_true")

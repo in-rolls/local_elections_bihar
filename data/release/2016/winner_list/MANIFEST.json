@@ -310,9 +310,9 @@
     "mukhiya_d38_b008.jsonl.gz": "1c0d6ef90b1be06161c6af4f4ded98577b5ea5200f8016bbc5d666346254ee2f"
   },
   "code_sha256": {
-    "year2016/winner_list.py": "05ec2f90d7fec3cb8908adb7a58c38090862dc66645e21d97c1bad676c444fa3",
-    "year2016/collect_winner_list.py": "61f9890595319356db130a2b33835dcbaf8a40fa576e3013537d9cfc3048ab2f",
-    "year2016/collect.py": "8ebaa771f593b0717385479d473854492f2799d935f28a90bea328cee16120f2",
+    "year2016/winner_list.py": "6f64fda49ea24fbd04679cc47e4a4776bed7eadbdc8ba378c5fa0a3821727378",
+    "year2016/collect_winner_list.py": "896a40a717fbb3cd162ace514db246ae781cd7f3a655e7fdc139253df56dbf35",
+    "year2016/collect.py": "11a869428cf6c77ed918e9074c0568ba7453b9255ca7cb5e46413471ba33ca49",
     "year2016/schema.py": "41bbd056a3f7c70902bff90648b6595550cfe92fecdee319967cde72d411e7c1"
   }
 }

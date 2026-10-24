@@ -4,7 +4,7 @@
   "source_groups": {
     "2011_reports": {
       "year": 2011,
-      "root": "2011/raw/reports",
+      "root": "raw/2011/reports",
       "include": [
         "winners/*/*GPM.pdf",
         "mukhiya_spreadsheets/Gaya.xls",
@@ -16,7 +16,7 @@
     },
     "2016_pages": {
       "year": 2016,
-      "root": "2016/raw/statewide",
+      "root": "raw/2016/statewide",
       "include": [
         "2016/frame/*.jsonl.gz",
         "2016/results/*.jsonl.gz"
@@ -27,7 +27,7 @@
     },
     "2021_pages": {
       "year": 2021,
-      "root": "2021/raw/statewide",
+      "root": "raw/2021/statewide",
       "include": [
         "2021/frame/**/*.jsonl.gz",
         "2021/candidates/**/*.jsonl.gz",
@@ -44,7 +44,7 @@
     },
     "2021_geography_and_mukhiya_snapshot": {
       "year": 2021,
-      "root": "2021/raw/portal_snapshot_2026",
+      "root": "raw/2021/portal_snapshot_2026",
       "include": [
         "landing.jsonl.gz",
         "frame/*.jsonl.gz",
@@ -67,36 +67,36 @@
           "module": "local_elections_bihar.year2011.parse_reports",
           "arguments": [
             "--raw",
-            "{data}/2011/raw/reports",
+            "{data}/raw/2011/reports",
             "--out",
-            "{data}/2011/mukhiya_reports"
+            "{data}/release/2011/mukhiya_reports"
           ],
           "produces": [
-            "2011/mukhiya_reports/winner_records.parquet"
+            "release/2011/mukhiya_reports/winner_records.parquet"
           ]
         },
         {
           "module": "local_elections_bihar.year2011.parse_gaya",
           "arguments": [
             "--raw",
-            "{data}/2011/raw/reports",
+            "{data}/raw/2011/reports",
             "--out",
-            "{data}/2011/gaya_mukhiya"
+            "{data}/release/2011/gaya_mukhiya"
           ],
           "produces": [
-            "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
-            "2011/gaya_mukhiya/runner_up_records.parquet"
+            "release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
+            "release/2011/gaya_mukhiya/runner_up_records.parquet"
           ]
         }
       ],
       "outputs": [
-        "2011/mukhiya_reports/winner_records.parquet",
-        "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
-        "2011/gaya_mukhiya/runner_up_records.parquet"
+        "release/2011/mukhiya_reports/winner_records.parquet",
+        "release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
+        "release/2011/gaya_mukhiya/runner_up_records.parquet"
       ],
       "manifests": [
-        "2011/mukhiya_reports/MANIFEST.json",
-        "2011/gaya_mukhiya/MANIFEST.json"
+        "release/2011/mukhiya_reports/MANIFEST.json",
+        "release/2011/gaya_mukhiya/MANIFEST.json"
       ]
     },
     "2016": {
@@ -126,24 +126,24 @@
             "--frame",
             "{cache}/2016/frame.parquet",
             "--results",
-            "{data}/2016/raw/statewide/2016/results",
+            "{data}/raw/2016/statewide/2016/results",
             "--out",
-            "{data}/2016"
+            "{data}/release/2016"
           ],
           "produces": [
-            "2016/seats.parquet",
-            "2016/candidates.parquet",
-            "2016/winners.parquet"
+            "release/2016/seats.parquet",
+            "release/2016/candidates.parquet",
+            "release/2016/winners.parquet"
           ]
         }
       ],
       "outputs": [
-        "2016/seats.parquet",
-        "2016/candidates.parquet",
-        "2016/winners.parquet"
+        "release/2016/seats.parquet",
+        "release/2016/candidates.parquet",
+        "release/2016/winners.parquet"
       ],
       "manifests": [
-        "2016/MANIFEST.json"
+        "release/2016/MANIFEST.json"
       ]
     },
     "2021": {
@@ -175,42 +175,42 @@
           "module": "local_elections_bihar.year2021.parse",
           "arguments": [
             "--raw",
-            "{data}/2021/raw/statewide",
+            "{data}/raw/2021/statewide",
             "--frames",
             "{cache}/2021",
             "--current-mukhiya",
-            "{data}/2021/raw/portal_snapshot_2026",
+            "{data}/raw/2021/portal_snapshot_2026",
             "--out",
-            "{data}/2021"
+            "{data}/release/2021"
           ],
           "produces": [
-            "2021/seats.parquet",
-            "2021/candidates.parquet",
-            "2021/result_rows.parquet",
-            "2021/winners.parquet",
-            "2021/byelection_seats.parquet",
-            "2021/byelection_candidates.parquet",
-            "2021/byelection_result_rows.parquet",
-            "2021/byelection_winners.parquet",
-            "2021/current_winners.parquet",
-            "2021/current_reservations.parquet"
+            "release/2021/seats.parquet",
+            "release/2021/candidates.parquet",
+            "release/2021/result_rows.parquet",
+            "release/2021/winners.parquet",
+            "release/2021/byelection_seats.parquet",
+            "release/2021/byelection_candidates.parquet",
+            "release/2021/byelection_result_rows.parquet",
+            "release/2021/byelection_winners.parquet",
+            "release/2021/term_feed_winners.parquet",
+            "release/2021/term_feed_reservations.parquet"
           ]
         }
       ],
       "outputs": [
-        "2021/seats.parquet",
-        "2021/candidates.parquet",
-        "2021/result_rows.parquet",
-        "2021/winners.parquet",
-        "2021/byelection_seats.parquet",
-        "2021/byelection_candidates.parquet",
-        "2021/byelection_result_rows.parquet",
-        "2021/byelection_winners.parquet",
-        "2021/current_winners.parquet",
-        "2021/current_reservations.parquet"
+        "release/2021/seats.parquet",
+        "release/2021/candidates.parquet",
+        "release/2021/result_rows.parquet",
+        "release/2021/winners.parquet",
+        "release/2021/byelection_seats.parquet",
+        "release/2021/byelection_candidates.parquet",
+        "release/2021/byelection_result_rows.parquet",
+        "release/2021/byelection_winners.parquet",
+        "release/2021/term_feed_winners.parquet",
+        "release/2021/term_feed_reservations.parquet"
       ],
       "manifests": [
-        "2021/MANIFEST.json"
+        "release/2021/MANIFEST.json"
       ]
     }
   },
@@ -371,7 +371,7 @@
   },
   "retention": {
     "raw": "Only originals used by the listed pipelines. Include the original response body together with its URL, parameters and collection date.",
-    "unprocessed": "Unique collected originals with no current output are in one unprocessed/<year>/ collection outside data/<year>/raw and the reproduction archives; optionally expose it at data/unprocessed for audit commands.",
+    "unprocessed": "Unique collected originals with no current output are in one raw/audit_sources/<year>/ collection outside data/raw/<year>/ and the reproduction archives; optionally expose it at data/raw/audit_sources for audit commands.",
     "cache": "Geography frames and other generated intermediate files belong in .cache; remove after use if desired.",
     "affidavits": "Existing affidavit sources and review inputs remain unchanged, outside these pipelines.",
     "metadata": "Dataset MANIFEST.json files own schemas and source/output checksums. This file owns collection origins and pipeline definitions."

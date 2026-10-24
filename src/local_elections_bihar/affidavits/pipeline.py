@@ -26,9 +26,9 @@ from local_elections_bihar.shared.portal import TransientError, retry_after, ret
 
 LOCAL = threading.local()
 KEY = ["district_id", "block_id", "panchayat_id", "candidate_serial"]
-ROOT = Path("data/2021/raw/affidavits")
-CACHE_ROOT = Path("data/2021/interim/affidavits")
-AFFIDAVITS = Path("data/2021/affidavits")
+ROOT = Path("data/raw/2021/affidavits")
+CACHE_ROOT = Path("data/build/2021/affidavits")
+AFFIDAVITS = Path("data/release/2021/affidavits")
 MIN_FREE_BYTES = 5 * 1024**3
 
 
@@ -644,7 +644,7 @@ def main():
     parser.add_argument(
         "--status-out",
         type=Path,
-        default=Path("data/2021/interim/download_status.parquet"),
+        default=Path("data/build/2021/download_status.parquet"),
     )
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--limit", type=int)

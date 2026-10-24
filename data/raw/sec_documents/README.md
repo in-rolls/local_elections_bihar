@@ -1,4 +1,4 @@
-# Historical handoff (2011 reports, 2006 workbooks)
+# SEC Bihar documents (2011 reports, 2006 workbooks)
 
 The source files Bihar's panchayat data started from, as first committed to
 in-rolls/local_elections (commit `e7b5224d`, 2022-10-28) and kept there until
@@ -20,5 +20,5 @@ commit). Left out: the old readme and 11 Windows `Desktop.ini` files.
 | `GPS_GKP_PSS_ZPS/<DIVISION>/` | district workbooks for ward, kachahari, samiti and zila parishad members, headed 2006 | 32 |
 
 Only the 23 Mukhiya PDFs, the Gaya workbook and the Gaya runner-up PDF are
-parsed (`data/2011/mukhiya_reports`, `data/2011/gaya_mukhiya`); their working
+parsed (`data/release/2011/mukhiya_reports`, `data/release/2011/gaya_mukhiya`); their working
 copies are in the Zenodo 2011 source archive. Everything else here is unparsed.

@@ -14,8 +14,8 @@ import xlrd
 
 from local_elections_bihar.year2011.hindi import cell_text, decoded_pdf, kruti_text
 
-ROOT = Path("data/2011/raw/reports")
-YEAR_RECEIPT = Path(__file__).resolve().parents[3] / "data/PROVENANCE.json"
+ROOT = Path("data/raw/2011/reports")
+YEAR_RECEIPT = Path(__file__).resolve().parents[3] / "data/manual/PROVENANCE.json"
 YEAR_ASSIGNMENT = {
     "election_year": 2011,
     "year_basis": (
@@ -391,7 +391,7 @@ DESCRIPTIONS = {
     ),
     "serial": "Serial printed in the workbook, retained as a string",
     "source_serial": "Printed PDF serial; consecutive within the report",
-    "source_file": "Path relative to data/2011/raw/reports",
+    "source_file": "Path relative to data/raw/2011/reports",
     "source_sha256": "SHA-256 of original source document",
     "source_page": "Original PDF page, one-based",
     "source_row": "Original Sheet1 row, one-based",
@@ -633,14 +633,14 @@ def run(root, out):
         "columns": metadata(out),
         "validation": report,
         "year_assignment": {
-            "path": "data/PROVENANCE.json",
+            "path": "data/manual/PROVENANCE.json",
             "election_year": YEAR_ASSIGNMENT["election_year"],
             "basis": YEAR_ASSIGNMENT["year_basis"],
             "sha256": hashlib.sha256(YEAR_RECEIPT.read_bytes()).hexdigest(),
         },
         "sources": {
             k: {
-                "path": "data/2011/raw/reports/" + v,
+                "path": "data/raw/2011/reports/" + v,
                 "sha256": hashlib.sha256((root / v).read_bytes()).hexdigest(),
             }
             for k, v in SOURCES.items()
@@ -678,6 +678,8 @@ def run(root, out):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--raw", type=Path, default=ROOT)
-    parser.add_argument("--out", type=Path, default=Path("data/2011/gaya_mukhiya"))
+    parser.add_argument(
+        "--out", type=Path, default=Path("data/release/2011/gaya_mukhiya")
+    )
     args = parser.parse_args()
     run(args.raw, args.out)

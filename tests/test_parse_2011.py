@@ -11,7 +11,7 @@ import pytest
 from local_elections_bihar.year2011 import parse_gaya as p
 from local_elections_bihar.year2011.hindi import cell_text, kruti_text, logical_text
 
-PILOT = Path("data/2011/gaya_mukhiya")
+PILOT = Path("data/release/2011/gaya_mukhiya")
 REVIEW = Path("tests/fixtures/2011/gaya_visual_review.csv")
 
 
@@ -86,7 +86,7 @@ def check_review():
     rows = {
         r["source_serial"]: r
         for r in pq.read_table(
-            "data/2011/mukhiya_reports/winner_records.parquet"
+            "data/release/2011/mukhiya_reports/winner_records.parquet"
         ).to_pylist()
         if r["district_raw"] == "GAYA"
     }

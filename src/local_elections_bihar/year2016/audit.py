@@ -544,10 +544,10 @@ def audit(release, frame_path, legacy, roster, sample, seed):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--release", type=Path, default=Path("data/2016"))
+    parser.add_argument("--release", type=Path, default=Path("data/release/2016"))
     parser.add_argument("--frame", type=Path, default=Path(".cache/2016/frame.parquet"))
     parser.add_argument(
-        "--legacy", type=Path, default=Path("data/unprocessed/2016/legacy_csv")
+        "--legacy", type=Path, default=Path("data/raw/audit_sources/2016/legacy_csv")
     )
     parser.add_argument(
         "--roster",

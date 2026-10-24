@@ -13,7 +13,7 @@ import pytest
 from local_elections_bihar.year2011 import parse_gaya as p
 from local_elections_bihar.year2011.parse_reports import release_records, reservation
 
-OUT = Path("data/2011/mukhiya_reports")
+OUT = Path("data/release/2011/mukhiya_reports")
 
 
 @pytest.mark.parametrize(
@@ -98,7 +98,7 @@ def test_district_records_and_visual_transcription():
             assert str(actual[field]) == value, (expected["source_serial"], field)
     assert indexed[("BEGUSARAI", "43")]["reserved_raw"] is None
     runners = pq.read_table(
-        "data/2011/gaya_mukhiya/runner_up_records.parquet"
+        "data/release/2011/gaya_mukhiya/runner_up_records.parquet"
     ).to_pylist()
     by_id = {r["record_id"]: r for r in rows}
     for runner in runners:
@@ -125,8 +125,8 @@ def test_district_records_and_visual_transcription():
 
 
 def test_output_receipts_and_dated_contest():
-    court = Path("data/2011/khajuria_judgment")
-    for directory in [OUT, Path("data/2011/gaya_mukhiya")]:
+    court = Path("data/release/2011/khajuria_judgment")
+    for directory in [OUT, Path("data/release/2011/gaya_mukhiya")]:
         manifest = json.loads((directory / "MANIFEST.json").read_text())
         assignment = manifest["year_assignment"]
         evidence = Path(assignment["path"])

@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from urllib.request import urlopen
 
-SPEC = Path(__file__).resolve().parents[2] / "data/PROVENANCE.json"
+SPEC = Path(__file__).resolve().parents[2] / "data/manual/PROVENANCE.json"
 
 
 def digest(path):
@@ -106,6 +106,18 @@ def fetch(spec, year, data):
             extract(downloaded, data, year)
 
 
+def placed(member, year):
+    """Where an archive member lands under data/.
+
+    The published archives store `<year>/raw/...`, the layout they were packed
+    from; archives packed now store `raw/<year>/...`. Both land in raw/<year>/.
+    """
+    parts = PurePosixPath(member).parts
+    if parts[:2] in {(year, "raw"), ("raw", year)}:
+        return PurePosixPath("raw", year, *parts[2:])
+    return None
+
+
 def extract(archive, data, year):
     with zipfile.ZipFile(archive) as source:
         members = source.infolist()
@@ -116,7 +128,7 @@ def extract(archive, data, year):
                 path.is_absolute()
                 or ".." in path.parts
                 or "\\" in member.filename
-                or path.parts[:2] != (year, "raw")
+                or placed(member.filename, year) is None
                 or (member.external_attr >> 16) & 0o170000 == 0o120000
                 or member.filename in names
             ):
@@ -124,7 +136,7 @@ def extract(archive, data, year):
                     f"Unsafe or duplicate archive member: {member.filename}"
                 )
             names.add(member.filename)
-            target = data / member.filename
+            target = data / placed(member.filename, year)
             if any(
                 p.is_symlink() for p in [target, *target.parents] if p != data.parent
             ):
@@ -144,15 +156,20 @@ def extract(archive, data, year):
         if bad:
             raise ValueError(f"Corrupt source archive member: {bad}")
         for member in members:
-            if not (data / member.filename).exists():
-                source.extract(member, data)
+            target = data / placed(member.filename, year)
+            if member.is_dir():
+                target.mkdir(parents=True, exist_ok=True)
+            elif not target.exists():
+                target.parent.mkdir(parents=True, exist_ok=True)
+                with source.open(member) as original, target.open("xb") as out:
+                    shutil.copyfileobj(original, out)
 
 
 def frames(year, data, cache):
     if year == "2016":
         from local_elections_bihar.year2016.collect import write_frame
 
-        write_frame(data / "2016/raw/statewide", cache / "2016/frame.parquet")
+        write_frame(data / "raw/2016/statewide", cache / "2016/frame.parquet")
     elif year == "2021":
         from local_elections_bihar.shared.portal import enumerate_frame, read_saved
         from local_elections_bihar.year2021 import (
@@ -161,10 +178,10 @@ def frames(year, data, cache):
             collect_offices,
         )
 
-        raw = data / "2021/raw/statewide"
+        raw = data / "raw/2021/statewide"
         output = cache / "2021"
         enumerate_frame(
-            data / "2021/raw/portal_snapshot_2026",
+            data / "raw/2021/portal_snapshot_2026",
             4,
             loader=read_saved,
             out=output / "frame.parquet",
@@ -201,7 +218,7 @@ def verify(spec, year, data):
                 f"local_elections_bihar.year{year}.parse",
                 "--check",
                 "--out",
-                str(data / year),
+                str(data / "release" / year),
             ],
             check=True,
         )

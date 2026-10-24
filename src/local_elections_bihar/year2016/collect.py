@@ -427,7 +427,7 @@ def run_jobs(function, jobs, workers):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["frame", "frame-offline", "results"])
-    parser.add_argument("--raw", type=Path, default=Path("data/2016/raw/statewide"))
+    parser.add_argument("--raw", type=Path, default=Path("data/raw/2016/statewide"))
     parser.add_argument("--frame-out", type=Path)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--offices", nargs="+", default=list(OFFICES))

@@ -170,7 +170,7 @@ def parse(raw, out):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["download", "parse"])
-    parser.add_argument("--raw", type=Path, default=Path("data/unprocessed/2016"))
+    parser.add_argument("--raw", type=Path, default=Path("data/raw/audit_sources/2016"))
     parser.add_argument(
         "--out", type=Path, default=Path(".cache/reservation_roster_2016.parquet")
     )

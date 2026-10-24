@@ -501,7 +501,7 @@
       ]
     },
     {
-      "path": "current_winners.parquet",
+      "path": "term_feed_winners.parquet",
       "rows": 247671,
       "bytes": 13269235,
       "sha256": "3c1044399c66b6d5965302117f7b1b7d525aac1def93e0543a33190d9bd95cb6",
@@ -675,7 +675,7 @@
       ]
     },
     {
-      "path": "current_reservations.parquet",
+      "path": "term_feed_reservations.parquet",
       "rows": 247671,
       "bytes": 1903613,
       "sha256": "45341aeecf7157e8028e4d96275d2f62b596da0d36190d6cbb4012c30347c142",
@@ -1306,10 +1306,10 @@
   },
   "source_digest_method": "SHA-256 of sorted relative ledger paths + NUL + each file SHA-256 digest",
   "code_sha256": {
-    "year2021/parse.py": "b5bea5b6173bd17f1b2fa94a954e7253d19a90dbf50855ebaa5cc91e826127c4",
-    "year2021/schema.py": "0b6ecf336e89114aa2be5f1276ee793e939711d247e95b1a26116514a66fdf3c",
+    "year2021/parse.py": "9ac647642f08cbe5cfc7eca4f50c35e20ac15b08d3b38ae12abcc5717890c3a6",
+    "year2021/schema.py": "6b140041bfdf4eff6cedf6cd992ccbcaf0a27bd5d39e909deb1bf3fc70cbbc10",
     "shared/matching.py": "eb4b553c6be1265febb7fbe30553b863cf3900c7be88da88a4b8fd80373e7aaa",
-    "shared/portal.py": "ddc743862763458d7e79bcf7497377f1762d1596633a86852172c57b4776b897",
+    "shared/portal.py": "86b17b78ffb4b665e4840e4c9d685d58ed2efc9a366e1444f38cd9447620ffdb",
     "shared/schema.py": "3b0307cb663e280b3ad31cdbade45b8013c1a7a618496377d302272fcea8e87c"
   }
 }

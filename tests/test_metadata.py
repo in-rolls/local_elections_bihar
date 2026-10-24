@@ -11,13 +11,13 @@ import pytest
 @pytest.mark.parametrize(
     "folder",
     [
-        "2016",
-        "2016/winner_list",
-        "2021",
-        "2011/gaya_mukhiya",
-        "2011/mukhiya_reports",
-        "2011/khajuria_judgment",
-        "2021/reservation_check",
+        "release/2016",
+        "release/2016/winner_list",
+        "release/2021",
+        "release/2011/gaya_mukhiya",
+        "release/2011/mukhiya_reports",
+        "release/2011/khajuria_judgment",
+        "release/2021/reservation_check",
     ],
 )
 def test_manifest_covers_files_and_columns(folder):

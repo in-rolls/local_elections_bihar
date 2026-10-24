@@ -10,9 +10,9 @@ not establish that boundaries are unchanged, and it is not an official identifie
 | `mukhiya_2011_2016.parquet` | 2011 winner record linked to a 2016 seat | `record_id_2011` and the 2016 key, each unique |
 | `place_transliterations.parquet` | Devanagari GP name and its romanization | `native` |
 
-Join `mukhiya_2016_2021` to `2016/seats.parquet` on the 2016 key, and to the 2021
+Join `mukhiya_2016_2021` to `release/2016/seats.parquet` on the 2016 key, and to the 2021
 tables on `unit_id`. Join `mukhiya_2011_2016` to
-`2011/mukhiya_reports/winner_records.parquet` on `record_id`.
+`release/2011/mukhiya_reports/winner_records.parquet` on `record_id`.
 
 ## How the links are made
 
@@ -22,7 +22,7 @@ and Devanagari names. The 2011 reports print Devanagari GP names under romanized
 block headings. District and block codes agree between 2016 and 2021. The 23
 district names of the 2011 reports map to 2016 codes through a fixed table in the
 code. Their 266 block headings map to 2016 block codes through the reviewed
-[`data/crosswalks/block_2011_2016.csv`](../crosswalks/block_2011_2016.csv). Some blocks
+[`data/manual/crosswalks/block_2011_2016.csv`](../../manual/crosswalks/block_2011_2016.csv). Some blocks
 appear under two headings, e.g. `Pandaul` and `PANDAUL`, or `Chapra_Sadar` for
 Chapra, so the map is many-to-one. Each row records a reason.
 

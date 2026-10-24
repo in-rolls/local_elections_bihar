@@ -171,7 +171,7 @@ def report(data):
     rows.extend(
         event_rows(
             *(
-                read(f"2016/{name}.parquet")
+                read(f"release/2016/{name}.parquet")
                 for name in ["seats", "candidates", "winners"]
             ),
             KEY_2016,
@@ -180,11 +180,11 @@ def report(data):
             2016,
         )
     )
-    snapshot = read("2021/current_reservations.parquet")
+    snapshot = read("release/2021/term_feed_reservations.parquet")
     rows.extend(
         event_rows(
             *(
-                read(f"2021/{name}.parquet")
+                read(f"release/2021/{name}.parquet")
                 for name in ["seats", "candidates", "winners"]
             ),
             ["post_id", "unit_id"],
@@ -195,7 +195,7 @@ def report(data):
         )
     )
     bye = [
-        read(f"2021/byelection_{name}.parquet")
+        read(f"release/2021/byelection_{name}.parquet")
         for name in ["seats", "candidates", "winners"]
     ]
     phases = set(bye[0]["phase"].unique())
@@ -217,7 +217,7 @@ def report(data):
         ("mukhiya_reports/winner_records", 2011, "winner"),
         ("gaya_mukhiya/runner_up_records", 2011, "runner"),
     ]:
-        df = read(f"2011/{name}.parquet")
+        df = read(f"release/2011/{name}.parquet")
         if df["election_year"].unique().to_list() != [year]:
             raise ValueError(f"Update coverage classification for changed {name} year")
         reserved = present(df, "reserved_raw")
@@ -236,7 +236,7 @@ def report(data):
             cross_general_election_link_status="not_established",
         )
         rows.append(row)
-    path = "2011/khajuria_judgment/candidates.csv"
+    path = "release/2011/khajuria_judgment/candidates.csv"
     court = pl.read_csv(data / path)
     inputs[path] = {
         "sha256": sha256(data / path),
@@ -301,10 +301,10 @@ def report(data):
             ),
         ],
         "unparsed_sources": [
-            "unprocessed/2006/workbooks",
-            "unprocessed/undated/workbooks",
+            "raw/audit_sources/2006/workbooks",
+            "raw/audit_sources/undated/workbooks",
         ],
-        "partially_parsed_sources": ["2011/raw/reports"],
+        "partially_parsed_sources": ["raw/2011/reports"],
         "inputs": inputs,
         "producer_sha256": sha256(Path(__file__)),
     }
@@ -370,8 +370,8 @@ def published_files(data):
         "candidates": "Candidate record",
         "winners": "Winner record, with determination basis",
         "result_rows": "Source result record; see dataset grain",
-        "current_winners": "Undated current-term winner-feed record",
-        "current_reservations": "Undated current-term seat-reservation record",
+        "term_feed_winners": "Undated current-term winner-feed record",
+        "term_feed_reservations": "Undated current-term seat-reservation record",
         "byelection_seats": "Seat in a by-election round",
         "byelection_candidates": "Candidate in a by-election round",
         "byelection_result_rows": "Source result record in a by-election round",
@@ -395,11 +395,11 @@ def published_files(data):
     paths = sorted(
         [
             *data.glob("2016/*.parquet"),
-            data / "2016/winner_list/winner_list_records.parquet",
+            data / "release/2016/winner_list/winner_list_records.parquet",
             *data.glob("2021/*.parquet"),
-            data / "2011/mukhiya_reports/winner_records.parquet",
-            data / "2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
-            data / "2011/gaya_mukhiya/runner_up_records.parquet",
+            data / "release/2011/mukhiya_reports/winner_records.parquet",
+            data / "release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
+            data / "release/2011/gaya_mukhiya/runner_up_records.parquet",
             *data.glob("linkage/*.parquet"),
         ]
     )
@@ -426,7 +426,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=Path("data"))
     args = parser.parse_args()
-    provenance = json.loads((args.data / "PROVENANCE.json").read_text())
+    provenance = json.loads((args.data / "manual" / "PROVENANCE.json").read_text())
     path = args.data / "README.md"
     update_readme(path, summary_markdown(provenance))
     update_readme(

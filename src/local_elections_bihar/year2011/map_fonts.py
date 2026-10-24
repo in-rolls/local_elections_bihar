@@ -25,7 +25,7 @@ def key(f, n):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--font", type=Path, required=True)
-    parser.add_argument("--raw", type=Path, default=Path("data/2011/raw/reports"))
+    parser.add_argument("--raw", type=Path, default=Path("data/raw/2011/reports"))
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument(
         "--glob",

@@ -1,7 +1,7 @@
 # Bihar election data
 
 Use the Parquet files listed in the [repository README](../README.md). These are
-parsed election records. [PROVENANCE.json](PROVENANCE.json) defines source origins,
+parsed election records. [PROVENANCE.json](manual/PROVENANCE.json) defines source origins,
 collection dates, required inputs and the ordered script chains. Each dataset's
 `MANIFEST.json` defines columns, missing values and source/output checksums.
 
@@ -12,9 +12,9 @@ and an external drive are not needed to update the guide.
 
 | Collection | Required originals | Processing chain | Published outputs | Archive |
 | --- | --- | --- | --- | --- |
-| 2011 | 23 district winner PDFs, Gaya winner workbook and runner-up PDF. Originals retain all pages and rows. | `local_elections_bihar.year2011.parse_reports` → `local_elections_bihar.year2011.parse_gaya` | `2011/mukhiya_reports/winner_records.parquet`<br>`2011/gaya_mukhiya/spreadsheet_winner_records.parquet`<br>`2011/gaya_mukhiya/runner_up_records.parquet` | 25 originals; 3.58 MB; [bihar_2011_sources.zip](https://zenodo.org/records/23092132/files/bihar_2011_sources.zip?download=1) |
-| 2016 | Geography form responses and election results; request metadata and original response bodies travel together. | `local_elections_bihar.sources` → `local_elections_bihar.year2016.parse` | `2016/seats.parquet`<br>`2016/candidates.parquet`<br>`2016/winners.parquet` | 2,933 originals; 2.66 GB; [bihar_2016_sources_d01_d08.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d01_d08.zip?download=1)<br>[bihar_2016_sources_d09_d16.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d09_d16.zip?download=1)<br>[bihar_2016_sources_d17_d24.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d17_d24.zip?download=1)<br>[bihar_2016_sources_d25_d32.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d25_d32.zip?download=1)<br>[bihar_2016_sources_d33_d38.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d33_d38.zip?download=1) |
-| 2021 | General and by-election geography, candidates, results, phases and current-term feeds.<br>District/block names and current-term Mukhiya winners and reservations. | `local_elections_bihar.sources` → `local_elections_bihar.year2021.parse` | `2021/seats.parquet`<br>`2021/candidates.parquet`<br>`2021/result_rows.parquet`<br>`2021/winners.parquet`<br>`2021/byelection_seats.parquet`<br>`2021/byelection_candidates.parquet`<br>`2021/byelection_result_rows.parquet`<br>`2021/byelection_winners.parquet`<br>`2021/current_winners.parquet`<br>`2021/current_reservations.parquet` | 630,549 originals; 798.91 MB; [bihar_2021_sources.zip](https://zenodo.org/records/23092132/files/bihar_2021_sources.zip?download=1) |
+| 2011 | 23 district winner PDFs, Gaya winner workbook and runner-up PDF. Originals retain all pages and rows. | `local_elections_bihar.year2011.parse_reports` → `local_elections_bihar.year2011.parse_gaya` | `release/2011/mukhiya_reports/winner_records.parquet`<br>`release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet`<br>`release/2011/gaya_mukhiya/runner_up_records.parquet` | 25 originals; 3.58 MB; [bihar_2011_sources.zip](https://zenodo.org/records/23092132/files/bihar_2011_sources.zip?download=1) |
+| 2016 | Geography form responses and election results; request metadata and original response bodies travel together. | `local_elections_bihar.sources` → `local_elections_bihar.year2016.parse` | `release/2016/seats.parquet`<br>`release/2016/candidates.parquet`<br>`release/2016/winners.parquet` | 2,933 originals; 2.66 GB; [bihar_2016_sources_d01_d08.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d01_d08.zip?download=1)<br>[bihar_2016_sources_d09_d16.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d09_d16.zip?download=1)<br>[bihar_2016_sources_d17_d24.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d17_d24.zip?download=1)<br>[bihar_2016_sources_d25_d32.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d25_d32.zip?download=1)<br>[bihar_2016_sources_d33_d38.zip](https://zenodo.org/records/23092132/files/bihar_2016_sources_d33_d38.zip?download=1) |
+| 2021 | General and by-election geography, candidates, results, phases and current-term feeds.<br>District/block names and current-term Mukhiya winners and reservations. | `local_elections_bihar.sources` → `local_elections_bihar.year2021.parse` | `release/2021/seats.parquet`<br>`release/2021/candidates.parquet`<br>`release/2021/result_rows.parquet`<br>`release/2021/winners.parquet`<br>`release/2021/byelection_seats.parquet`<br>`release/2021/byelection_candidates.parquet`<br>`release/2021/byelection_result_rows.parquet`<br>`release/2021/byelection_winners.parquet`<br>`release/2021/term_feed_winners.parquet`<br>`release/2021/term_feed_reservations.parquet` | 630,549 originals; 798.91 MB; [bihar_2021_sources.zip](https://zenodo.org/records/23092132/files/bihar_2021_sources.zip?download=1) |
 
 Run `make parse YEAR=<year>` for the complete ordered chain. Intermediate geography tables are disposable `.cache/` files.
 
@@ -55,17 +55,23 @@ archives. The JSON lists each step's module, arguments and outputs.
 
 ```text
 data/
-  PROVENANCE.json          source origins, archive checksums and processing chains
-  <year>/raw/             required original documents and responses
-  <year>/*.parquet        published election datasets
-  <dataset>/MANIFEST.json columns, interpretation, source/output checksums
-.cache/                  disposable generated geography and transport packaging
+  raw/<year>/                  required original documents and responses
+  raw/sec_documents/           SEC Bihar documents copied from the pooled repository
+  raw/audit_sources/<year>/    optional originals no output reads
+  raw/fetch_log.csv            one row per tracked raw file: origin, sha256, method
+  manual/PROVENANCE.json       source origins, archive checksums and processing chains
+  manual/crosswalks/           hand-built block crosswalks
+  build/<year>/                caches (page text, images, download status)
+  release/<year>/*.parquet     published election datasets
+  release/<year>/<dataset>/    supporting datasets with their own MANIFEST.json
+  release/linkage/             Mukhiya seats linked across elections
+.cache/                        disposable generated geography and transport packaging
 ```
 
 Keep complete PDFs and workbooks, even when some rows do not enter an output.
 Their page and row references allow checking the extraction against the original.
 Saved web-response files also retain request parameters, URLs and collection dates.
-Unused unique originals belong in one `unprocessed/<year>/` collection, separate
+Unused unique originals belong in one `raw/audit_sources/<year>/` collection, separate
 from reproduction inputs. Existing affidavit material is unchanged and excluded.
 The reviewed Khajuria court transcription is a separate manual input, not a
 script-generated dataset.
@@ -77,7 +83,7 @@ ZIPs, sixteen Parquets and `bihar_code.zip` with source code, the lockfile,
 documentation and manifests. Download the Parquets to use the data. To reproduce
 a year, extract `bihar_code.zip` into an empty directory, then run the reproduction
 commands above from that directory. `make fetch-sources` restores the originals
-to `data/<year>/raw` automatically.
+to `data/raw/<year>` automatically.
 
 The 2016 sources are grouped by SEC district code: 01–08, 09–16, 17–24, 25–32
 and 33–38. Each ZIP is independently extractable; no concatenation is needed.
@@ -94,6 +100,6 @@ are in the provenance JSON.
 To restore the historical 2016 deposit, download its files into a temporary
 directory and follow its `README_DATA.md` and checksums. Concatenate `rp.??` into
 the results tar, then extract the results and frame-page archives under
-`data/2016/raw/statewide`. Reservation PDFs are not required for the three published
+`data/raw/2016/statewide`. Reservation PDFs are not required for the three published
 tables. Run `make parse YEAR=2016`; this reconstructs the geography offline.
 Transport chunks and tar files can be removed after verified extraction.

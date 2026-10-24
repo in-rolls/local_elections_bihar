@@ -116,7 +116,7 @@
       "source_file": {
         "type": "string",
         "nullable": true,
-        "description": "Path relative to data/2011/raw/reports",
+        "description": "Path relative to data/raw/2011/reports",
         "null_count": 0,
         "empty_string_count": 0,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
@@ -270,7 +270,7 @@
       "source_file": {
         "type": "string",
         "nullable": true,
-        "description": "Path relative to data/2011/raw/reports",
+        "description": "Path relative to data/raw/2011/reports",
         "null_count": 0,
         "empty_string_count": 0,
         "missing": "Null for unavailable typed values; empty text preserves blank source cell"
@@ -423,27 +423,27 @@
     "scope": "Gaya workbook winners and runner-up list; overlapping source claims"
   },
   "year_assignment": {
-    "path": "data/PROVENANCE.json",
+    "path": "data/manual/PROVENANCE.json",
     "election_year": 2011,
     "basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
-    "sha256": "46a3fb823da8e07bf972469e6187595044e1cb4282b1b22b901cb690da1bf786"
+    "sha256": "3f5c82989da6452183e00fcaa878810267b0b4196869a6cace0855b32371e0ce"
   },
   "sources": {
     "winners": {
-      "path": "data/2011/raw/reports/winners/GAYA/GAYA_GPM.pdf",
+      "path": "data/raw/2011/reports/winners/GAYA/GAYA_GPM.pdf",
       "sha256": "4a3d89964b07a713b13848c8b27aaa3d7b3a1563fd0b2d3020db0115baf92b4d"
     },
     "spreadsheet": {
-      "path": "data/2011/raw/reports/mukhiya_spreadsheets/Gaya.xls",
+      "path": "data/raw/2011/reports/mukhiya_spreadsheets/Gaya.xls",
       "sha256": "484ad9a2dd0f8ec6af6b604d81758db66b47ff0fce8c2c179cd6fd93f41f211e"
     },
     "runners": {
-      "path": "data/2011/raw/reports/runners/GAYA/GAYA_gpm.pdf",
+      "path": "data/raw/2011/reports/runners/GAYA/GAYA_gpm.pdf",
       "sha256": "466dee40ce85a3faae20425223859cc50713e8af9ffa5efcaebbae219f6dff5d"
     }
   },
   "code_sha256": {
-    "parse_gaya.py": "d2d1e74bc20f7eb4eee565b7f7d7f10bd00fd11dee7fc2c8aaedb07ad1849607",
+    "parse_gaya.py": "266d03103308ef80d44837c15104c5259eaa5e41d63ada0b61e85efe07c8d6a4",
     "hindi.py": "000941e5857904e74dca2b714c555738cbba3e1aaa5b591471e14471da7948cf",
     "font_map.json": "347a65f6cdb7044c0a779000028b5f931c4178e81af5938973c458ccb25585cb",
     "kruti_dev_010.json": "71daac4ca9c59752deada373a8c2bf68fe8e465b293e3ab05c2c1bbfc842e2cc",

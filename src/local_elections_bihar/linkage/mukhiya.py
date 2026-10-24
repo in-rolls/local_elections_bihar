@@ -33,14 +33,14 @@ from preclink import ExactComparison, Pipeline
 from rapidfuzz import fuzz
 
 DATA = Path("data")
-OUT = DATA / "linkage"
+OUT = DATA / "release" / "linkage"
 TRANSLITERATIONS = OUT / "place_transliterations.parquet"
-BLOCKS_2011 = DATA / "crosswalks" / "block_2011_2016.csv"
+BLOCKS_2011 = DATA / "manual" / "crosswalks" / "block_2011_2016.csv"
 INPUTS = {
-    "seats_2016": DATA / "2016/seats.parquet",
-    "seats_2021": DATA / "2021/seats.parquet",
-    "reservations_2021": DATA / "2021/current_reservations.parquet",
-    "winners_2011": DATA / "2011/mukhiya_reports/winner_records.parquet",
+    "seats_2016": DATA / "release/2016/seats.parquet",
+    "seats_2021": DATA / "release/2021/seats.parquet",
+    "reservations_2021": DATA / "release/2021/term_feed_reservations.parquet",
+    "winners_2011": DATA / "release/2011/mukhiya_reports/winner_records.parquet",
 }
 NAME_THRESHOLD = 0.80
 # With equal weights on name and ward count, 0.80 means the ward counts agree

@@ -112,8 +112,10 @@ def later_pages(first):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--raw", type=Path, default=Path("data/2016/raw/statewide"))
-    parser.add_argument("--seats", type=Path, default=Path("data/2016/seats.parquet"))
+    parser.add_argument("--raw", type=Path, default=Path("data/raw/2016/statewide"))
+    parser.add_argument(
+        "--seats", type=Path, default=Path("data/release/2016/seats.parquet")
+    )
     parser.add_argument(
         "--blocks", nargs="*", help="DISTRICT:BLOCK codes; default: derived from seats"
     )

@@ -19,7 +19,7 @@ they are explicit collection jobs, not checks to run during ordinary maintenance
 The data summary reads published tables and the provenance specification; it does
 not scan raw storage.
 
-Original sources remain under `data/<year>/raw`. The 2016 reservation audit's
+Original sources remain under `data/raw/<year>`. The 2016 reservation audit's
 regenerable table goes under ignored `.cache/`. Published column definitions,
 source/output hashes and audit findings live in one `MANIFEST.json` per dataset.
 Historical manifests retain hashes of the code that produced their tables;
@@ -27,8 +27,8 @@ those hashes do not assert that today's reorganized scripts are byte-identical.
 
 `sources.py` is the shared entry point for `make fetch-sources YEAR=...`,
 `make parse YEAR=...` and `make verify YEAR=...`. Pipeline steps are defined once
-in `data/PROVENANCE.json`. Parsing uses saved responses; live collection stays an
+in `data/manual/PROVENANCE.json`. Parsing uses saved responses; live collection stays an
 explicit separate command. `python -m local_elections_bihar.sources pack --year 2011` creates
 only the specified input archives in `.cache/archives/` and records their checksums.
 Archive URLs stay empty until a public version is available. Optional audit sources live under
-`data/unprocessed/<year>/`; they are not reproduction dependencies.
+`data/raw/audit_sources/<year>/`; they are not reproduction dependencies.

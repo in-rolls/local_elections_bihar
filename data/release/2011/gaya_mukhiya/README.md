@@ -12,7 +12,7 @@ GP. A printed report serial identifies a source row, not an official seat.
 The workbook explicitly identifies the 2011 election. The maintainer also
 confirmed the PDF collection as 2011, noting its “पूर्व निर्वाचित” columns for
 prior elected office in 2001 and 2006. Both tables use `election_year=2011`;
-the [source provenance](../../PROVENANCE.json) records that evidence.
+the [source provenance](../../../manual/PROVENANCE.json) records that evidence.
 Extracted workbook/PDF name differences still require checking against the
 originals. Keep the source records separate until that review resolves them.
 These files do not yet establish a reconciled roster or complete seat frame.
@@ -65,7 +65,9 @@ outcomes. The district table retains repeated literal GP labels with flags.
 ```python
 import pyarrow.parquet as pq
 
-winners = pq.read_table("data/2011/gaya_mukhiya/spreadsheet_winner_records.parquet")
+winners = pq.read_table(
+    "data/release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet"
+)
 print(winners.select(["block", "panchayat_raw", "candidate_name", "age"]).to_pandas())
 ```
 
@@ -95,7 +97,7 @@ counterparts provide a row-level recode record. The rules are:
 
 ## Original sources
 
-Paths are relative to `data/2011/raw/reports/`:
+Paths are relative to `data/raw/2011/reports/`:
 
 | Role | Original file |
 | --- | --- |
@@ -107,7 +109,7 @@ Paths are relative to `data/2011/raw/reports/`:
 published outputs. Every record identifies its original SHA-256 and PDF page or
 workbook row. Runner records link to `mukhiya_reports/winner_records.parquet`;
 the Gaya PDF winners are published only in that district table. Alternate reports
-and summary PDFs are preserved separately as unprocessed material and are not
+and summary PDFs are preserved separately among the audit sources (`data/raw/audit_sources/`) and are not
 required by this pipeline.
 
 The PDF text uses embedded glyph encodings whose original Unicode maps scramble
@@ -131,12 +133,12 @@ Workbook text is decoded only in cells marked Kruti Dev 010. The ordered mapping
 comes from the MIT-licensed
 [Kruti Dev converter](https://github.com/ravitaak/krutidevtounicode/blob/main/lib/src/krutidevtounicode.dart),
 with an explicit local correction for चौ. Attribution and the license are in
-the repository [LICENSE](../../../LICENSE); the exact mapping is committed.
+the repository [LICENSE](../../../../LICENSE); the exact mapping is committed.
 
 ## Validation and reproduction
 
 A 32-record visual transcription from original primary PDF pages 1, 10, 18 and 26
-is stored in [`gaya_visual_review.csv`](../../../tests/fixtures/2011/gaya_visual_review.csv).
+is stored in [`gaya_visual_review.csv`](../../../../tests/fixtures/2011/gaya_visual_review.csv).
 Names, ages, gender labels and incomes agree with those reviewed records. This was
 an assistant visual review, not independent human labeling or a random accuracy
 study. It covers selected PDF fields; workbook decoding and the remaining PDF
