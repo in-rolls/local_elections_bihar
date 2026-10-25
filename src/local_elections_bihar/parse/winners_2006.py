@@ -87,6 +87,8 @@ def rows(office, folder):
                     context.block = None
                 last_serial, headed = int(text[0]), False
                 text += [None] * (12 - len(text))
+                if text[1] is None and text[2] is None:
+                    continue  # a numbered template line: no panchayat, no winner
                 out.append(
                     {
                         "office": office,
