@@ -1,0 +1,263 @@
+{
+  "year": 2006,
+  "source": "SEC Bihar 2006 workbooks under data/raw/sec_documents/",
+  "files": [
+    {
+      "path": "seats.parquet",
+      "rows": 199065,
+      "sha256": "75f7a0b4f5773d31a67599ccc02af90c65ee1d345daff9c1a36008a6ae7cb842",
+      "columns": {
+        "office": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['ward_member', 'panch', 'mukhiya', 'sarpanch', 'panchayat_samiti_member', 'zila_parishad_member'])>",
+          "description": "Office of the seat."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District, from the workbook heading."
+        },
+        "district_from_file": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District, from the workbook's file name."
+        },
+        "block": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Block heading; null for zila parishad seats."
+        },
+        "gram_panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Gram panchayat (or its gram kachahari) heading or cell; null for samiti and zila parishad seats."
+        },
+        "constituency_no": {
+          "type": "Int32",
+          "nullable": true,
+          "checks": "",
+          "description": "Printed constituency number; for mukhiya and sarpanch, the serial."
+        },
+        "constituency_name": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Printed constituency name; null for mukhiya and sarpanch."
+        },
+        "winner": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Decoded winner name as printed; null when vacant."
+        },
+        "winner_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "The winner cell's Kruti Dev bytes."
+        },
+        "vacant": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "The seat was printed vacant (रिक्त) or blank (----)."
+        },
+        "reserved_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Caste and woman cells as printed, joined by ' / '; null for mukhiya and sarpanch, whose workbooks state no reservation."
+        },
+        "reserved_caste_local": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "The printed caste cell."
+        },
+        "reserved_caste": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['NONE', 'SC', 'ST', 'BC'])>",
+          "description": "The seat's caste reservation read from reserved_caste_local; null when unstated, ambiguous or naming two categories."
+        },
+        "reserved_woman_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "The printed महिला/अन्य cell."
+        },
+        "reserved_woman": {
+          "type": "Int8",
+          "nullable": true,
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 reserved for a woman (महिला), 0 not (अन्य); null when unstated."
+        },
+        "source_path": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Workbook the row was read from, relative to the repository."
+        },
+        "source_sheet": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Sheet name in that workbook."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "One-based row number in that sheet."
+        }
+      }
+    },
+    {
+      "path": "winner_profiles.parquet",
+      "rows": 14542,
+      "sha256": "18994d0c37111e16f5d8af5b3ce5e88409d757c4458ab1bd354008bfa7e56198",
+      "columns": {
+        "office": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['mukhiya', 'sarpanch'])>",
+          "description": "mukhiya or sarpanch."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District, from the workbook heading."
+        },
+        "district_from_file": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District, from the workbook's file name."
+        },
+        "block": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Block heading."
+        },
+        "serial": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "Serial printed within the block."
+        },
+        "gram_panchayat": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Gram panchayat as printed."
+        },
+        "winner": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Decoded winner name as printed, honorific included."
+        },
+        "winner_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "The winner cell's Kruti Dev bytes."
+        },
+        "winner_age": {
+          "type": "Int16",
+          "nullable": true,
+          "checks": "",
+          "description": "Age; null where blank or printed 0."
+        },
+        "winner_education_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Education as printed."
+        },
+        "winner_social_class_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Social standing as printed (उच्च/मध्यम/निम्न वर्ग)."
+        },
+        "winner_caste_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "The winner's own category as printed; some districts print a jati."
+        },
+        "winner_caste": {
+          "type": "String",
+          "nullable": true,
+          "checks": "<Check isin: isin(['NONE', 'SC', 'ST', 'BC', 'EBC'])>",
+          "description": "The winner's category read from winner_caste_raw: EBC is अत्यन्त पिछड़ा वर्ग; null for a jati, 'अन्य' or blank."
+        },
+        "winner_income_inr": {
+          "type": "Int64",
+          "nullable": true,
+          "checks": "",
+          "description": "Annual income in rupees, when a number."
+        },
+        "winner_income_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Annual income as printed."
+        },
+        "winner_occupation_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Occupation as printed."
+        },
+        "winner_sons": {
+          "type": "Int16",
+          "nullable": true,
+          "checks": "",
+          "description": "Number of sons."
+        },
+        "winner_daughters": {
+          "type": "Int16",
+          "nullable": true,
+          "checks": "",
+          "description": "Number of daughters."
+        },
+        "source_path": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Workbook the row was read from, relative to the repository."
+        },
+        "source_sheet": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Sheet name in that workbook."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "One-based row number in that sheet."
+        }
+      }
+    }
+  ],
+  "code_sha256": {
+    "parse/release_2006.py": "69cf277d140d1713b4e5d832a4ec65d227a2bc55cd1740cebe9c5448219ac473",
+    "parse/schema_2006.py": "b6629fb614ff9fe2e5fd5d95de35e44f4c4e610aa86eec9612624063c7eae3cf",
+    "parse/members_2006.py": "d24e11fde55a6130dcfbbb2b00e254af15be8af188082498f2b56f5458579f2b",
+    "parse/winners_2006.py": "332e12805afacaf69437cdf1ecbfe501059a6efc67c1df4020505370608f75c4",
+    "parse/sec_workbooks.py": "4f584106d937eaac9cac068486aa7a3fbe4a983f88bd35e77e7fbcd53012281e",
+    "year2011/hindi.py": "e9c6669a90d25478c0165eaac753752151a3417aa323a83c411d0ff7d0412f0b",
+    "year2011/kruti_dev_010.json": "71daac4ca9c59752deada373a8c2bf68fe8e465b293e3ab05c2c1bbfc842e2cc"
+  }
+}
