@@ -1170,6 +1170,11 @@ wheels = [
 ]
 
 [[package]]
+name = "legacy-devanagari"
+version = "0.1.0"
+source = { git = "https://github.com/in-rolls/legacy_devanagari?rev=65929fda573eea54b52654c88240264891ac07e2#65929fda573eea54b52654c88240264891ac07e2" }
+
+[[package]]
 name = "litellm"
 version = "1.106.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1213,6 +1218,7 @@ source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "fonttools" },
+    { name = "legacy-devanagari" },
     { name = "pandera", extra = ["polars"] },
     { name = "pdfplumber" },
     { name = "pillow" },
@@ -1241,6 +1247,7 @@ transliterate = [
 requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.15.0" },
     { name = "fonttools", specifier = ">=4" },
+    { name = "legacy-devanagari", git = "https://github.com/in-rolls/legacy_devanagari?rev=65929fda573eea54b52654c88240264891ac07e2" },
     { name = "pandera", extras = ["polars"], specifier = ">=0.33" },
     { name = "pdfplumber", specifier = ">=0.11" },
     { name = "pillow", specifier = ">=12.3.0" },

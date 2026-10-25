@@ -1,0 +1,95 @@
+{
+  "year": 2001,
+  "source": "sec.bih.nic.in division lists, via the Wayback Machine (data/raw/sec_bih_nic_in/mukhiya/)",
+  "files": [
+    {
+      "path": "mukhiya_winners.parquet",
+      "rows": 8426,
+      "sha256": "c17659ebc6ea7f9bd2e55afef4010edbbe17b753e48df118a380dc3f208916e4",
+      "columns": {
+        "year": {
+          "type": "Int16",
+          "nullable": false,
+          "checks": "<Check isin: isin([2001])>",
+          "description": "Election year, printed in each list's title."
+        },
+        "division": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Division heading (प्रमंडल), as printed."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District heading (जिला), as printed."
+        },
+        "block": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Block heading (प्रखंड), as printed."
+        },
+        "serial": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "Serial printed within the block."
+        },
+        "gram_panchayat": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Gram panchayat, decoded from Akruti."
+        },
+        "winner": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Elected mukhiya, decoded, honorific removed; null where the list prints no name."
+        },
+        "winner_honorific": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "श्री, श्रीमती ... as printed, or carried from the row above when the list prints the ditto mark ''; null where no name is printed."
+        },
+        "honorific_from_ditto": {
+          "type": "Boolean",
+          "nullable": false,
+          "checks": "",
+          "description": "winner_honorific came from the row above through a ditto mark."
+        },
+        "winner_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "The winner cell's Akruti bytes."
+        },
+        "gram_panchayat_raw": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "The panchayat cell's Akruti bytes."
+        },
+        "source_path": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Division list the row was read from."
+        },
+        "source_page": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "One-based page in that list."
+        }
+      }
+    }
+  ],
+  "code_sha256": {
+    "parse/mukhiya_2001.py": "a7d0d0bb044c9d7d6b467e3c93f660dcecae0c2fa8fdaca7a63c612361e93e6a",
+    "parse/schema_2001.py": "a59522190271e498b149214370164e60157a1807df1180eb3b144124105b49a5"
+  }
+}

@@ -21,11 +21,15 @@ dependencies = [
     "requests>=2.34.2",
     "tenacity>=9.1.4",
     "xlrd>=2",
+    "legacy-devanagari",
 ]
 
 [project.urls]
 Repository = "https://github.com/in-rolls/local_elections_bihar"
 Issues = "https://github.com/in-rolls/local_elections_bihar/issues"
+
+[tool.uv.sources]
+legacy-devanagari = { git = "https://github.com/in-rolls/legacy_devanagari", rev = "65929fda573eea54b52654c88240264891ac07e2" }
 
 [build-system]
 requires = ["hatchling>=1.25"]
