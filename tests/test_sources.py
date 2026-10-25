@@ -116,7 +116,7 @@ def test_archive_cannot_write_through_existing_symlink(tmp_path):
 def test_declared_outputs_match_public_contract():
     spec = json.loads(Path("data/manual/PROVENANCE.json").read_text())
     outputs = [f for p in spec["pipelines"].values() for f in p["outputs"]]
-    assert len(outputs) == len(set(outputs)) == 16
+    assert len(outputs) == len(set(outputs)) == 19
     assert all((Path("data") / f).is_file() for f in outputs)
     assert all(
         p["outputs"]

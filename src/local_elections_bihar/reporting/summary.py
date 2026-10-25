@@ -337,6 +337,8 @@ def summary_markdown(provenance):
         outputs = "<br>".join(f"`{path}`" for path in pipeline["outputs"])
         archives = provenance["archives"].get(year, [])
         status = "Publication pending"
+        if pipeline.get("raw_in_repository"):
+            status = f"In this repository: `{pipeline['raw_in_repository']}`"
         if archives:
             count = sum(archive["source_files"] for archive in archives)
             size = sum(archive["source_bytes"] for archive in archives)
@@ -387,6 +389,11 @@ def published_files(data):
         "mukhiya_2016_2021": "2016 Mukhiya seat linked to its 2021 seat by name",
         "mukhiya_2011_2016": "2011 Mukhiya winner record linked to its 2016 seat",
         "place_transliterations": "Romanization of a Devanagari GP name",
+        "mukhiya_winners": "Mukhiya elected in 2001, from the SEC's division lists",
+        "winner_profiles": (
+            "2006 mukhiya or sarpanch winner with the SEC's profile (age, "
+            "education, category, income)"
+        ),
         "winner_list_records": (
             "Mukhiya winner row from the SEC winner list for a block with a "
             "no-record or no-winner seat"
@@ -394,13 +401,15 @@ def published_files(data):
     }
     paths = sorted(
         [
-            *data.glob("2016/*.parquet"),
+            *data.glob("release/2001/*.parquet"),
+            *data.glob("release/2006/*.parquet"),
+            *data.glob("release/2016/*.parquet"),
             data / "release/2016/winner_list/winner_list_records.parquet",
-            *data.glob("2021/*.parquet"),
+            *data.glob("release/2021/*.parquet"),
             data / "release/2011/mukhiya_reports/winner_records.parquet",
             data / "release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet",
             data / "release/2011/gaya_mukhiya/runner_up_records.parquet",
-            *data.glob("linkage/*.parquet"),
+            *data.glob("release/linkage/*.parquet"),
         ]
     )
     lines = ["| File | Rows | Each row represents |", "| --- | ---: | --- |"]

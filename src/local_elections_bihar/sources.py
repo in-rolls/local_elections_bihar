@@ -84,6 +84,9 @@ def pack(spec, year, data, destination):
 
 
 def fetch(spec, year, data):
+    if spec.get("pipelines", {}).get(year, {}).get("raw_in_repository"):
+        print(f"{year}: originals are in this repository; nothing to fetch")
+        return
     archives = spec["archives"].get(year, [])
     if not archives or any(not archive.get("url") for archive in archives):
         raise ValueError(f"No published source archive for {year}; see PROVENANCE.json")

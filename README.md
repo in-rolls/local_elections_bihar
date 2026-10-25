@@ -13,10 +13,29 @@ The list is generated from the published files by `make data-summary`.
 
 | File | Rows | Each row represents |
 | --- | ---: | --- |
+| [release/2001/mukhiya_winners.parquet](data/release/2001/mukhiya_winners.parquet) | 8,426 | Mukhiya elected in 2001, from the SEC's division lists |
+| [release/2006/seats.parquet](data/release/2006/seats.parquet) | 199,065 | Seat in the election frame |
+| [release/2006/winner_profiles.parquet](data/release/2006/winner_profiles.parquet) | 14,542 | 2006 mukhiya or sarpanch winner with the SEC's profile (age, education, category, income) |
 | [release/2011/gaya_mukhiya/runner_up_records.parquet](data/release/2011/gaya_mukhiya/runner_up_records.parquet) | 337 | Gaya Mukhiya runner-up with GP linked from the companion winner PDF |
 | [release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet](data/release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet) | 330 | Gaya Mukhiya winner with GP and block (Excel) |
 | [release/2011/mukhiya_reports/winner_records.parquet](data/release/2011/mukhiya_reports/winner_records.parquet) | 3,973 | Mukhiya winner reported in a 2011 district PDF (23 districts, including Gaya) |
+| [release/2016/candidates.parquet](data/release/2016/candidates.parquet) | 644,865 | Candidate record |
+| [release/2016/seats.parquet](data/release/2016/seats.parquet) | 258,095 | Seat in the election frame |
 | [release/2016/winner_list/winner_list_records.parquet](data/release/2016/winner_list/winner_list_records.parquet) | 1,682 | Mukhiya winner row from the SEC winner list for a block with a no-record or no-winner seat |
+| [release/2016/winners.parquet](data/release/2016/winners.parquet) | 210,717 | Winner record, with determination basis |
+| [release/2021/byelection_candidates.parquet](data/release/2021/byelection_candidates.parquet) | 8,449 | Candidate in a by-election round |
+| [release/2021/byelection_result_rows.parquet](data/release/2021/byelection_result_rows.parquet) | 4,643 | Source result record in a by-election round |
+| [release/2021/byelection_seats.parquet](data/release/2021/byelection_seats.parquet) | 5,749 | Seat in a by-election round |
+| [release/2021/byelection_winners.parquet](data/release/2021/byelection_winners.parquet) | 5,749 | Winner in a by-election round |
+| [release/2021/candidates.parquet](data/release/2021/candidates.parquet) | 924,708 | Candidate record |
+| [release/2021/result_rows.parquet](data/release/2021/result_rows.parquet) | 968,562 | Source result record; see dataset grain |
+| [release/2021/seats.parquet](data/release/2021/seats.parquet) | 247,671 | Seat in the election frame |
+| [release/2021/term_feed_reservations.parquet](data/release/2021/term_feed_reservations.parquet) | 247,671 | Undated current-term seat-reservation record |
+| [release/2021/term_feed_winners.parquet](data/release/2021/term_feed_winners.parquet) | 247,671 | Undated current-term winner-feed record |
+| [release/2021/winners.parquet](data/release/2021/winners.parquet) | 244,475 | Winner record, with determination basis |
+| [release/linkage/mukhiya_2011_2016.parquet](data/release/linkage/mukhiya_2011_2016.parquet) | 3,342 | 2011 Mukhiya winner record linked to its 2016 seat |
+| [release/linkage/mukhiya_2016_2021.parquet](data/release/linkage/mukhiya_2016_2021.parquet) | 7,945 | 2016 Mukhiya seat linked to its 2021 seat by name |
+| [release/linkage/place_transliterations.parquet](data/release/linkage/place_transliterations.parquet) | 8,434 | Romanization of a Devanagari GP name |
 
 <!-- datasets:end -->
 

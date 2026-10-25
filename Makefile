@@ -1,6 +1,7 @@
 .PHONY: fetch-sources parse check test verify verify-2016 verify-2021 build-2016 \
 	audit-2016 build-2021 audit-2021 reservation-check-2021 data-summary parse-2011 \
-	linkage verify-linkage winner-list-2016 verify-winner-list-2016
+	linkage verify-linkage winner-list-2016 verify-winner-list-2016 \
+	collect-sec-site parse-2006 verify-2006 parse-2001 verify-2001
 
 check:
 	uv sync --frozen --group dev
@@ -8,6 +9,9 @@ check:
 	uv run ruff format --check .
 	uv run pytest -q
 	uv run python -m local_elections_bihar.build.fetch_log --check
+	uv run python -m local_elections_bihar.parse.release_2006 --check
+	uv run python -m local_elections_bihar.parse.mukhiya_2001 --check
+	uv run python -m local_elections_bihar.build.profile_year_check
 
 test:
 	uv run pytest -q
@@ -62,3 +66,22 @@ winner-list-2016:
 
 verify-winner-list-2016:
 	uv run python -m local_elections_bihar.year2016.winner_list --check
+
+# the old SEC site (sec.bih.nic.in) from the Wayback Machine: 2001 winner
+# lists and the 2006 reservation directive (network)
+collect-sec-site:
+	uv run python -m local_elections_bihar.collect.sec_wayback
+
+# 2006 SEC workbooks: member seats with reservation, mukhiya and sarpanch winners
+parse-2006:
+	uv run python -m local_elections_bihar.parse.release_2006
+
+verify-2006:
+	uv run python -m local_elections_bihar.parse.release_2006 --check
+
+# 2001 mukhiya winners from the SEC site's division lists (Akruti)
+parse-2001:
+	uv run python -m local_elections_bihar.parse.mukhiya_2001
+
+verify-2001:
+	uv run python -m local_elections_bihar.parse.mukhiya_2001 --check
