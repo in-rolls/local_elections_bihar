@@ -24,6 +24,9 @@ def logical_text(text):
         text,
     )
     text = re.sub(rf"({CLUSTER}[ािीुूृॄेैोौंँ़]*)\ue000", r"र्\1", text)
+    # Typists also put the reph after a half form: Kruti "xkso/Zu" is ग ो व ध्
+    # reph न, printed गोवर्धन. The reph sits on the full consonant.
+    text = re.sub(rf"([{CONSONANTS}]़?)्\ue000", r"र्\1", text)
     if "\ue000" in text:
         raise ValueError(f"Unresolved reph: {text!r}")
     return unicodedata.normalize("NFC", " ".join(text.split()))
@@ -98,4 +101,8 @@ def kruti_text(text):
         .replace("f", "ि")
         .replace("Z", "\ue000")
     )
+    # Some typists complete a half glyph with "k" before the vowel sign: both
+    # "lkfo=kh" and "lkfo=h" are सावित्री. ा before ी, ु or ू is never a
+    # spelling, so that ा is the stray stroke.
+    text = re.sub("ा(?=[ीुू])", "", text)
     return logical_text(text)
