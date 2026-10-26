@@ -13,8 +13,8 @@ A row is one gram panchayat: rows with a serial number. Samastipur's mukhiya
 workbook repeats one filler row ("उ", "उमा देवी") about 20,000 times below its
 352 numbered rows; those rows carry no serial and are not read.
 
-The address and telephone column is left out of the release: it identifies
-private people and the raw workbook keeps it.
+The address column is kept as printed, telephone numbers included, as the
+2011 Gaya release keeps it.
 """
 
 import re
@@ -100,6 +100,7 @@ def rows(office, folder):
                         "winner": text[2],
                         "winner_raw": row[2][1] if len(row) > 2 else None,
                         "winner_age": age(text[3]),
+                        "winner_address_raw": text[4],
                         "winner_education_raw": text[5],
                         "winner_social_class_raw": text[6],
                         "winner_caste_raw": text[7],

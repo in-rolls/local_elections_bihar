@@ -72,6 +72,9 @@ class WinnerProfile(pa.DataFrameModel):
     winner: pl.Utf8 = nullable("Decoded winner name as printed, honorific included.")
     winner_raw: pl.Utf8 = nullable("The winner cell's Kruti Dev bytes.")
     winner_age: pl.Int16 = nullable("Age; null where blank or printed 0.")
+    winner_address_raw: pl.Utf8 = nullable(
+        "Address as printed, telephone numbers included."
+    )
     winner_education_raw: pl.Utf8 = nullable("Education as printed.")
     winner_social_class_raw: pl.Utf8 = nullable(
         "Social standing as printed (उच्च/मध्यम/निम्न वर्ग)."

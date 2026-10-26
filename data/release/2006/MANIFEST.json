@@ -120,7 +120,7 @@
     {
       "path": "winner_profiles.parquet",
       "rows": 14514,
-      "sha256": "ac4bc7640b28c5545b436e3a936aa8b9bc202c019fe4d5c274f3a88e44b6d56c",
+      "sha256": "b9e0ded86b05eb9253421f2a5480e106ac5589007abf172355fbcd83de3afe19",
       "columns": {
         "office": {
           "type": "String",
@@ -175,6 +175,12 @@
           "nullable": true,
           "checks": "",
           "description": "Age; null where blank or printed 0."
+        },
+        "winner_address_raw": {
+          "type": "String",
+          "nullable": true,
+          "checks": "",
+          "description": "Address as printed, telephone numbers included."
         },
         "winner_education_raw": {
           "type": "String",
@@ -253,9 +259,9 @@
   ],
   "code_sha256": {
     "parse/release_2006.py": "69cf277d140d1713b4e5d832a4ec65d227a2bc55cd1740cebe9c5448219ac473",
-    "parse/schema_2006.py": "b6629fb614ff9fe2e5fd5d95de35e44f4c4e610aa86eec9612624063c7eae3cf",
+    "parse/schema_2006.py": "ee7c78cd3946a779b9fcd68d4d4802747ea524abbb3f1ac73d10752ca7394256",
     "parse/members_2006.py": "6d493a32b30b2d5e18d99a836804d15e98d950dc502891edf9f509fc07a74b3f",
-    "parse/winners_2006.py": "8fccd084061e093cd9b952eb47f33bb28514212943593c9f8b0aa20fcf9cdfa3",
+    "parse/winners_2006.py": "21261f90eafad1b188ef813f068d8e9676e2074f5bbf459cbfe0e05a4cd353cf",
     "parse/sec_workbooks.py": "4f584106d937eaac9cac068486aa7a3fbe4a983f88bd35e77e7fbcd53012281e",
     "year2011/hindi.py": "e9c6669a90d25478c0165eaac753752151a3417aa323a83c411d0ff7d0412f0b",
     "year2011/kruti_dev_010.json": "71daac4ca9c59752deada373a8c2bf68fe8e465b293e3ab05c2c1bbfc842e2cc"
