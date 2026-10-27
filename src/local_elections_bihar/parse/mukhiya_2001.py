@@ -2,7 +2,7 @@
 
     python -m local_elections_bihar.parse.mukhiya_2001
 
-Eight division PDFs saved from sec.bih.nic.in (collect/sec_wayback.py), set
+Eight division PDFs saved from sec.bih.nic.in (collect/wayback.py), set
 in Akruti Dev (read with legacy_devanagari.akruti). Koshi's file also carries
 Bhagalpur division, so all nine divisions are here. Each page has two columns
 of block sections (block heading, then serial, panchayat, mukhiya); a district

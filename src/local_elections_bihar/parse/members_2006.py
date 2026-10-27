@@ -113,6 +113,8 @@ def rows():
                         "winner": None if vacant else winner,
                         "winner_raw": row[1][1],
                         "vacant": vacant,
+                        "unopposed": None,
+                        "source_document": "member_workbook",
                         "reserved_raw": " / ".join(
                             t for t in (caste_local, woman_local) if t
                         )

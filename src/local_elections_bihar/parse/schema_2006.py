@@ -40,11 +40,22 @@ class Seat(pa.DataFrameModel):
         "Printed constituency name; null for mukhiya and sarpanch."
     )
     winner: pl.Utf8 = nullable("Decoded winner name as printed; null when vacant.")
-    winner_raw: pl.Utf8 = nullable("The winner cell's Kruti Dev bytes.")
+    winner_raw: pl.Utf8 = nullable(
+        "The winner cell's Kruti Dev bytes (workbooks only)."
+    )
     vacant: pl.Boolean = field("The seat was printed vacant (रिक्त) or blank (----).")
+    unopposed: pl.Boolean = nullable(
+        "Returned unopposed (निर्विरोध); stated only by the result notices."
+    )
+    source_document: pl.Utf8 = field(
+        "member_workbook: the SEC's member workbooks; profile_workbook: the SEC's "
+        "mukhiya and sarpanch workbooks, which print no reservation; "
+        "result_notice: a block's published result (प्रपत्र-23).",
+        isin=["member_workbook", "profile_workbook", "result_notice"],
+    )
     reserved_raw: pl.Utf8 = nullable(
-        "Caste and woman cells as printed, joined by ' / '; null for mukhiya and "
-        "sarpanch, whose workbooks state no reservation."
+        "Caste and woman cells as printed, joined by ' / '; null for seats from "
+        "the profile workbooks, which state no reservation."
     )
     reserved_caste_local: pl.Utf8 = nullable("The printed caste cell.")
     reserved_caste: pl.Utf8 = nullable(

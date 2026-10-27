@@ -11,4 +11,3 @@ CHECKS = DATA / "checks"
 
 SEC_DOCUMENTS = RAW / "sec_documents"
 SEC_SITE = RAW / "sec_bih_nic_in"
-SEC_SITE_RECEIPTS = SEARCH_LOG / "sec_bih_nic_in_wayback.jsonl"

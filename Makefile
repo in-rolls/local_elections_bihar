@@ -1,7 +1,7 @@
 .PHONY: fetch-sources parse check test verify verify-2016 verify-2021 build-2016 \
 	audit-2016 build-2021 audit-2021 reservation-check-2021 data-summary parse-2011 \
 	linkage verify-linkage winner-list-2016 verify-winner-list-2016 \
-	collect-sec-site parse-2006 verify-2006 parse-2001 verify-2001
+	collect-wayback parse-2006 verify-2006 parse-2001 verify-2001
 
 check:
 	uv sync --frozen --group dev
@@ -67,10 +67,10 @@ winner-list-2016:
 verify-winner-list-2016:
 	uv run python -m local_elections_bihar.year2016.winner_list --check
 
-# the old SEC site (sec.bih.nic.in) from the Wayback Machine: 2001 winner
-# lists and the 2006 reservation directive (network)
-collect-sec-site:
-	uv run python -m local_elections_bihar.collect.sec_wayback
+# old SEC and district sites from the Wayback Machine: 2001 winner lists, the
+# 2006 reservation directive, Madhubani's 2006 result notices (network)
+collect-wayback:
+	uv run python -m local_elections_bihar.collect.wayback
 
 # 2006 SEC workbooks: member seats with reservation, mukhiya and sarpanch winners
 parse-2006:

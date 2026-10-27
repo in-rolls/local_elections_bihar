@@ -426,7 +426,7 @@
     "path": "data/manual/PROVENANCE.json",
     "election_year": 2011,
     "basis": "Maintainer-confirmed 2011; prior-election columns refer to 2001/2006; historical 2011 collection",
-    "sha256": "120b5ff3841a3fd9edd9d61ea101ba529f9bc3542a35cf66f9f9fd59c4e82269"
+    "sha256": "a747b4500b79444eb57b6b23fa14693ccfa5be6f7d94f6d7ec79975378bdd15f"
   },
   "sources": {
     "winners": {

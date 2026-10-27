@@ -1,11 +1,11 @@
 {
   "year": 2006,
-  "source": "SEC Bihar 2006 workbooks under data/raw/sec_documents/",
+  "source": "SEC Bihar 2006 workbooks under data/raw/sec_documents/; Madhubani's result notices under data/raw/madhubani_bih_nic_in/",
   "files": [
     {
       "path": "seats.parquet",
-      "rows": 199037,
-      "sha256": "4e0d7918167e487dd11f64c6c55352b1e8def200db6e2923cd6bddfbff6ed34e",
+      "rows": 209523,
+      "sha256": "796bc5ebf483ad0c559876c246d27a09415d0bd63bafce675c5aa39d83489134",
       "columns": {
         "office": {
           "type": "String",
@@ -59,7 +59,7 @@
           "type": "String",
           "nullable": true,
           "checks": "",
-          "description": "The winner cell's Kruti Dev bytes."
+          "description": "The winner cell's Kruti Dev bytes (workbooks only)."
         },
         "vacant": {
           "type": "Boolean",
@@ -67,11 +67,23 @@
           "checks": "",
           "description": "The seat was printed vacant (रिक्त) or blank (----)."
         },
+        "unopposed": {
+          "type": "Boolean",
+          "nullable": true,
+          "checks": "",
+          "description": "Returned unopposed (निर्विरोध); stated only by the result notices."
+        },
+        "source_document": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['member_workbook', 'profile_workbook', 'result_notice'])>",
+          "description": "member_workbook: the SEC's member workbooks; profile_workbook: the SEC's mukhiya and sarpanch workbooks, which print no reservation; result_notice: a block's published result (प्रपत्र-23)."
+        },
         "reserved_raw": {
           "type": "String",
           "nullable": true,
           "checks": "",
-          "description": "Caste and woman cells as printed, joined by ' / '; null for mukhiya and sarpanch, whose workbooks state no reservation."
+          "description": "Caste and woman cells as printed, joined by ' / '; null for seats from the profile workbooks, which state no reservation."
         },
         "reserved_caste_local": {
           "type": "String",
@@ -258,10 +270,11 @@
     }
   ],
   "code_sha256": {
-    "parse/release_2006.py": "69cf277d140d1713b4e5d832a4ec65d227a2bc55cd1740cebe9c5448219ac473",
-    "parse/schema_2006.py": "ee7c78cd3946a779b9fcd68d4d4802747ea524abbb3f1ac73d10752ca7394256",
-    "parse/members_2006.py": "6d493a32b30b2d5e18d99a836804d15e98d950dc502891edf9f509fc07a74b3f",
+    "parse/release_2006.py": "2073761faa3566482f7a522c8611fb2503b804e9d17aee2b46e7f8a3b14eeb9f",
+    "parse/schema_2006.py": "dfb1cc18b0a6ceefecc2e83329618c44a8bc61347efc076feb76ad5a7ee1b05a",
+    "parse/members_2006.py": "db4f733977d99b6a946e0e3645fc96e49a73a524ff2b03226930099fd1e7c4bf",
     "parse/winners_2006.py": "21261f90eafad1b188ef813f068d8e9676e2074f5bbf459cbfe0e05a4cd353cf",
+    "parse/result_notices_2006.py": "947896b188b6a892dfda36c79980cdf5df5c5cbe601326102ffc92da070d6aa3",
     "parse/sec_workbooks.py": "4f584106d937eaac9cac068486aa7a3fbe4a983f88bd35e77e7fbcd53012281e",
     "year2011/hindi.py": "e9c6669a90d25478c0165eaac753752151a3417aa323a83c411d0ff7d0412f0b",
     "year2011/kruti_dev_010.json": "71daac4ca9c59752deada373a8c2bf68fe8e465b293e3ab05c2c1bbfc842e2cc"

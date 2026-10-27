@@ -143,6 +143,8 @@ def test_changed_pdf_invalidates_cached_ocr(tmp_path, monkeypatch):
 
     monkeypatch.setattr(affidavits, "ROOT", tmp_path / "raw")
     monkeypatch.setattr(affidavits, "CACHE_ROOT", tmp_path / "interim")
+    # about the cache, not the machine: free space is not this test's input
+    monkeypatch.setattr(affidavits, "MIN_FREE_BYTES", 0)
     folder = affidavits.ROOT / "a"
     folder.mkdir(parents=True)
     cache = affidavits.CACHE_ROOT / "a"

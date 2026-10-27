@@ -14,8 +14,8 @@ The list is generated from the published files by `make data-summary`.
 | File | Rows | Each row represents |
 | --- | ---: | --- |
 | [release/2001/mukhiya_winners.parquet](data/release/2001/mukhiya_winners.parquet) | 8,426 | Mukhiya elected in 2001, from the SEC's division lists |
-| [release/2006/seats.parquet](data/release/2006/seats.parquet) | 199,065 | Seat in the election frame |
-| [release/2006/winner_profiles.parquet](data/release/2006/winner_profiles.parquet) | 14,542 | 2006 mukhiya or sarpanch winner with the SEC's profile (age, education, category, income) |
+| [release/2006/seats.parquet](data/release/2006/seats.parquet) | 209,523 | Seat in the election frame |
+| [release/2006/winner_profiles.parquet](data/release/2006/winner_profiles.parquet) | 14,514 | 2006 mukhiya or sarpanch winner with the SEC's profile (age, education, category, income) |
 | [release/2011/gaya_mukhiya/runner_up_records.parquet](data/release/2011/gaya_mukhiya/runner_up_records.parquet) | 337 | Gaya Mukhiya runner-up with GP linked from the companion winner PDF |
 | [release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet](data/release/2011/gaya_mukhiya/spreadsheet_winner_records.parquet) | 330 | Gaya Mukhiya winner with GP and block (Excel) |
 | [release/2011/mukhiya_reports/winner_records.parquet](data/release/2011/mukhiya_reports/winner_records.parquet) | 3,973 | Mukhiya winner reported in a 2011 district PDF (23 districts, including Gaya) |

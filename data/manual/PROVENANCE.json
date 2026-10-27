@@ -9,7 +9,7 @@
         "mukhiya/*-Mukhiya.pdf"
       ],
       "origin": "http://sec.bih.nic.in/mukhiya.html via the Wayback Machine",
-      "collected": "Captured by the Internet Archive May 2006; saved 2026-10-25 by collect/sec_wayback.py (receipts in data/search_log/sec_bih_nic_in_wayback.jsonl)",
+      "collected": "Captured by the Internet Archive May 2006; saved 2026-10-25 by collect/wayback.py (receipts in data/search_log/sec_bih_nic_in_wayback.jsonl)",
       "purpose": "Eight division lists of the mukhiyas elected in 2001 (Akruti Dev PDFs); Koshi's file carries Bhagalpur division."
     },
     "2006_sec_workbooks": {
@@ -76,6 +76,16 @@
       "origin": "https://sec25.bihar.gov.in",
       "collected": "September 2026; exact request dates in ledgers",
       "purpose": "District/block names and current-term Mukhiya winners and reservations."
+    },
+    "2006_madhubani_notices": {
+      "year": 2006,
+      "root": "raw/madhubani_bih_nic_in",
+      "include": [
+        "PanchayatElection2006/*.pdf"
+      ],
+      "origin": "http://madhubani.bih.nic.in/PanchayatElection2006/ via the Wayback Machine",
+      "collected": "Captured by the Internet Archive April 2009; saved 2026-10-26 by collect/wayback.py (receipts in data/search_log/madhubani_bih_nic_in_wayback.jsonl)",
+      "purpose": "Madhubani's 2006 result notices (प्रपत्र-23), one per block and one for the zila parishad: every seat with its reservation, mukhiya and sarpanch included."
     }
   },
   "pipelines": {
@@ -104,9 +114,10 @@
     "2006": {
       "year": 2006,
       "inputs": [
-        "2006_sec_workbooks"
+        "2006_sec_workbooks",
+        "2006_madhubani_notices"
       ],
-      "raw_in_repository": "data/raw/sec_documents/",
+      "raw_in_repository": "data/raw/sec_documents/, data/raw/madhubani_bih_nic_in/",
       "steps": [
         {
           "module": "local_elections_bihar.parse.release_2006",
@@ -420,7 +431,7 @@
   "interpretation": {
     "2001_year": "2001 lists print 'त्रिस्तरीय पंचायत निर्वाचन, 2001' in every title. Bihar reserved no panchayat seats in 2001, so the table has no reservation columns. Kudra block (Kaimur) is printed without names.",
     "2006_year": "The 2006 member workbooks print 'पंचायत निर्वाचन, 2006'. The mukhiya and sarpanch profile workbooks print no year (Gaya's title says 2011); build/profile_year_check.py dates them by the 2011 winner reports: where the 2011 winner says they were mukhiya in 2006 the profile names them 70% of the time, where they say no office 2.5%.",
-    "2006_coverage": "2006 member seats cover 32 districts, some partly (Gaya's ward sheet holds one block); Araria, East Champaran, Jehanabad, Madhubani, Purnia and Sitamarhi are absent. Mukhiya and sarpanch seats carry no reservation: the workbooks state none, and none is inferred.",
+    "2006_coverage": "2006 member seats cover 32 districts, some partly (Gaya's ward sheet holds one block); Araria, East Champaran, Jehanabad, Madhubani, Purnia and Sitamarhi are absent. Mukhiya and sarpanch seats carry a reservation only in Madhubani, whose result notices state it; the SEC's profile workbooks state none, and none is inferred.",
     "2011_year": {
       "year": 2011,
       "confirmed": "2026-10-01",

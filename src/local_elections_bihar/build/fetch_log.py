@@ -10,10 +10,10 @@ one recorded where the documents were downloaded. The 2016 winner-list ledgers
 were saved by collect_winner_list from the SEC portal; each response line keeps
 its own `fetched_at`, and the row gives the earliest. The originals restored
 from the Zenodo archives are not tracked and have no row; PROVENANCE.json
-records those archives. The old SEC site's pages under sec_bih_nic_in/ came
-from the Wayback Machine (collect/sec_wayback.py); each has a receipt in
-data/search_log/sec_bih_nic_in_wayback.jsonl, so the row is `method=wayback`
-with the capture's URL and the time it was saved.
+records those archives. Pages of Bihar's old government sites came from the
+Wayback Machine (collect/wayback.py); each has a receipt in
+data/search_log/<host>_wayback.jsonl, so the row is `method=wayback` with the
+capture's URL and the time it was saved.
 """
 
 import argparse
@@ -26,7 +26,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from local_elections_bihar.paths import SEC_SITE, SEC_SITE_RECEIPTS
+from local_elections_bihar.paths import SEARCH_LOG
 from local_elections_bihar.year2016.collect_winner_list import URL as WINNER_LIST_URL
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -60,8 +60,8 @@ def rows():
     copied = {item["path"]: item for item in manifest["files"]}
     commit = manifest["origin_commit"]
     receipts = {}
-    if SEC_SITE_RECEIPTS.exists():
-        for line in SEC_SITE_RECEIPTS.read_text(encoding="utf-8").splitlines():
+    for log in sorted(SEARCH_LOG.glob("*_wayback.jsonl")):
+        for line in log.read_text(encoding="utf-8").splitlines():
             receipt = json.loads(line)
             receipts[receipt["path"]] = receipt
     out = []
@@ -89,10 +89,10 @@ def rows():
                 row["copied_from"] = (
                     f"in-rolls/local_elections@{commit}:{item['original_path']}"
                 )
-        elif path.is_relative_to(SEC_SITE):
-            receipt = receipts.get(row["path"])
-            if receipt is None or receipt["sha256"] != sha:
-                raise SystemExit(f"{row['path']}: no matching Wayback receipt")
+        elif row["path"] in receipts:
+            receipt = receipts[row["path"]]
+            if receipt["sha256"] != sha:
+                raise SystemExit(f"{row['path']}: differs from its Wayback receipt")
             row["url"] = receipt["url"]
             row["fetched_at_utc"] = receipt["fetched_at_utc"]
             row["method"] = "wayback"

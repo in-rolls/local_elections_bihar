@@ -4,9 +4,11 @@
     python -m local_elections_bihar.parse.release_2006 --check  # verify
 
 seats.parquet holds every seat read: ward member, panch, samiti and zila
-parishad seats with their printed reservation (members_2006), and the mukhiya
+parishad seats with their printed reservation (members_2006); the mukhiya
 and sarpanch seats from the profile workbooks (winners_2006), which state no
-reservation. winner_profiles.parquet holds the mukhiya and sarpanch profiles.
+reservation; and every seat in the result notices that survive
+(result_notices_2006, Madhubani), which state it for all offices.
+winner_profiles.parquet holds the mukhiya and sarpanch profiles.
 data/checks/ gets each reservation and caste spelling beside its reading.
 """
 
@@ -17,7 +19,11 @@ import sys
 
 import polars as pl
 
-from local_elections_bihar.parse import members_2006, winners_2006
+from local_elections_bihar.parse import (
+    members_2006,
+    result_notices_2006,
+    winners_2006,
+)
 from local_elections_bihar.parse.schema_2006 import TABLES
 from local_elections_bihar.paths import CHECKS, RELEASE
 from local_elections_bihar.shared import release
@@ -28,6 +34,7 @@ CODE = [
     "parse/schema_2006.py",
     "parse/members_2006.py",
     "parse/winners_2006.py",
+    "parse/result_notices_2006.py",
     "parse/sec_workbooks.py",
     "year2011/hindi.py",
     "year2011/kruti_dev_010.json",
@@ -46,6 +53,8 @@ def head_seat(profile):
         "winner": profile["winner"],
         "winner_raw": profile["winner_raw"],
         "vacant": profile["winner"] is None,
+        "unopposed": None,
+        "source_document": "profile_workbook",
         "reserved_raw": None,
         "reserved_caste_local": None,
         "reserved_caste": None,
@@ -77,7 +86,16 @@ def build():
         for office, folder in winners_2006.SOURCES.items()
         for row in winners_2006.rows(office, folder)
     ]
-    tables = {"seats": members + [head_seat(p) for p in profiles]}
+    notices = result_notices_2006.rows()
+    noticed = {(r["district"], r["office"]) for r in notices}
+    if any((r["district"], r["office"]) in noticed for r in members):
+        raise SystemExit("a member workbook and a result notice cover the same seats")
+    # Where a district's result notices survive, they replace the profile
+    # workbook's head seats: the notice states the seat's reservation.
+    heads = [
+        head_seat(p) for p in profiles if (p["district"], p["office"]) not in noticed
+    ]
+    tables = {"seats": members + heads + notices}
     tables["winner_profiles"] = profiles
     CHECKS.mkdir(parents=True, exist_ok=True)
     vocabulary(
@@ -99,7 +117,8 @@ def build():
         TABLES,
         CODE,
         year=2006,
-        source="SEC Bihar 2006 workbooks under data/raw/sec_documents/",
+        source="SEC Bihar 2006 workbooks under data/raw/sec_documents/; "
+        "Madhubani's result notices under data/raw/madhubani_bih_nic_in/",
     )
     return frame_summary()
 
