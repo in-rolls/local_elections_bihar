@@ -1,0 +1,24 @@
+{
+  "2017": {
+    "winners": 75,
+    "women_winners": 48,
+    "women_reserved": 36,
+    "women_in_non_women_reserved": 13,
+    "education_missing": 0
+  },
+  "2022": {
+    "winners": 75,
+    "women_winners": 47,
+    "women_reserved": 36,
+    "women_in_non_women_reserved": 11,
+    "education_missing": 75
+  },
+  "tcpd_candidates": 1008,
+  "reservation_conflicts": 2,
+  "tcpd_winner_differences": 2,
+  "post_quota_open_transitions": 0,
+  "reservation_transitions": {
+    "0->0": 39,
+    "1->1": 36
+  }
+}

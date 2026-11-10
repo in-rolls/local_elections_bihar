@@ -11,7 +11,9 @@ Two kinds of site, both gone, both kept by the Internet Archive:
   The site never linked a list for Bhagalpur division.
 - District collectorate sites (<district>.bih.nic.in). Madhubani published
   each block's 2006 result notice (प्रपत्र-23, rule 83): every winner with the
-  seat's reservation, mukhiya included.
+  seat's reservation, mukhiya included. Saran and Jehanabad published their
+  2016 reservation rosters (प्रपत्र-3), which mark each constituency's 2006
+  reservation.
 
 The earliest successful capture of each page is kept, under
 data/raw/<host with _ for .>/ at its path on the site (percent-escapes
@@ -81,6 +83,22 @@ SITES = {
         "PanchayatElection2006/Rahika%20Panchayat%20Data.pdf",
         "PanchayatElection2006/Rajnagar%20Panchyati%20Data.pdf",
         "PanchayatElection2006/Zila%20Parisad%20-Madhubani.pdf",
+    ],
+    # 2016 reservation rosters (प्रपत्र-3), which mark each constituency's 2006
+    # reservation beside its number ("*वर्ष 2006 के निर्वाचन में आरक्षित").
+    "saran.bih.nic.in": [
+        "reservn/mukhiya.pdf",
+        "reservn/Sarpanch.pdf",
+        "reservn/Panchayat_Samiti_Sadasya.pdf",
+        "reservn/Panchayat_Samiti_Pramukh.pdf",
+        "reservn/Zila_Parishad_Sadasya.pdf",
+    ],
+    "jehanabad.bih.nic.in": [
+        "pdf/PanchayatElection2016/Reservation2016/"
+        "JehanabadPanchayat%20ReservationRoster2016.pdf",
+        "pdf/PanchayatElection2016/Reservation2016/Makhadumpur_reser2016.pdf",
+        "pdf/PanchayatElection2016/Reservation2016/Modanganj_reser_2016.pdf",
+        "pdf/PanchayatElection2016/Reservation2016/Ratnifaridpurres_2016.pdf",
     ],
 }
 

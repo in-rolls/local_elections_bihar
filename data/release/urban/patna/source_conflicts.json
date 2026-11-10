@@ -1,0 +1,49 @@
+{
+  "reservation_conflicts": [
+    {
+      "year": 2017,
+      "ward_id": "32",
+      "field": "ward_reservation",
+      "winner_grid": "अनारक्षित",
+      "adopted_category": "General",
+      "adopted_women_reserved": true,
+      "basis": "signed_reservation_notification",
+      "pdf_page": 21,
+      "pdf_row": 35
+    },
+    {
+      "year": 2017,
+      "ward_id": "35",
+      "field": "ward_reservation",
+      "winner_grid": "पिछड़ा वर्ग",
+      "adopted_category": "General",
+      "adopted_women_reserved": false,
+      "basis": "signed_reservation_notification",
+      "pdf_page": 21,
+      "pdf_row": 38
+    }
+  ],
+  "tcpd_winner_differences": [
+    {
+      "ward_id": "72",
+      "field": "candidate_name",
+      "official_value": "मीरा  देवी",
+      "tcpd_value": "मीरा देवी"
+    },
+    {
+      "ward_id": "22B",
+      "field": "candidate_name",
+      "official_value": "सुचित्रा  सिंह",
+      "tcpd_value": "सुचित्रा सिंह"
+    }
+  ],
+  "age_2022": "API age is retrieval-year dependent; not age at the 2022 election.",
+  "tcpd_polling_date": "21-05-2017 on all rows; not adopted as a verified Patna date.",
+  "sex_reservation_conflicts": [
+    {
+      "election_year": 2017,
+      "ward_id": "26",
+      "sex_recorded": "पुरुष"
+    }
+  ]
+}

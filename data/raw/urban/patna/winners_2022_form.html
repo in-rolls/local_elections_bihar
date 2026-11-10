@@ -1,0 +1,692 @@
+
+
+
+<!doctype html>
+<html class="no-js " lang="en">
+<head>
+    <title>State Election Commission, Bihar</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="description" content="">
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css">
+    <link href="../assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet">
+    <link href="../assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/color_skins.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="../assets/js/moment.min.js"></script>
+    <link rel="stylesheet" href="assets/css/sweetalert.min.css" />
+    <script src="../assets/js/sweetalert.min.js"></script>
+    <script src="../assets/js/parsley.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        .bootstrap-select.btn-group.show-tick > .btn {
+            border-bottom: none !important;
+        }
+        .form-label {            
+            font-weight: bold;
+            color: #022c60ed;
+        }
+        .form-label {            
+            font-weight: bold;
+            color: #022c60ed;
+        }
+        #imgPhoto {
+            width: 120px;
+            margin-top: -48px;
+            border: 3px solid whitesmoke;
+            border-radius: 5px;
+        }
+        .btnshow{
+            margin-top:40px;
+            width:100%;
+        }
+        @media only screen and (max-width: 600px) {
+         .col-photo {
+                text-align: left;
+                padding-top: 20px;
+                padding-left:0px;
+            }
+          .col-photo img{
+              width:106px !important;
+          }
+        }    
+        .parsley-errors-list li{
+            display:inline-block;
+        }
+        .parsley-errors-list li:nth-child(n+2):nth-child(-n+3) {
+          display:none;
+        }
+        #dvCandidates .dt-buttons{
+	        margin-bottom: 10px !important;
+        }
+        .table-hover tbody tr:hover {
+            color: #212529;
+            background-color: rgb(223 218 218 / 8%) !important;
+        }
+        @media print{
+            /*table tr th:last-child {
+                display: none !important;
+            }
+            table tr td:last-child {
+                display: none !important;
+            }*/
+            table {
+              border-collapse: collapse;
+            }
+        }
+        /*.table-bordered td, .table-bordered th {
+            border: 1px solid #4c4d4e !important;
+        }*/
+        table th,table td{
+            text-align: center;
+        }
+        .block-header h2 {           
+            padding-top: 15px;
+        }
+    </style>
+
+    <style>
+        .parsley-errors-list li {
+            color: red !important;
+            list-style: none !important;
+            margin-left: -39px !important;
+            margin-top: 10px !important;
+            font-size: 14px !important;
+        }
+
+        #table-body tr td:last-child {
+            min-width: 120px;
+        }
+
+        .swal-button--confirm {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+        }
+
+            .swal-button--confirm.active, .swal-button--confirm:active, .show > .swal-button--confirm.dropdown-toggle, .swal-button--confirm:hover {
+                background-color: #b02a37 !important;
+                border-color: #a52834 !important;
+                color: #fff;
+            }
+
+        .swal-footer {
+            text-align: center;
+        }
+        .parsley-errors-list{
+            position:absolute;
+        }
+        .form-label{
+            margin-top:5px;
+        }
+        .theme-orange .sidebar .user-info {
+            background: #0670a1;
+            color: #fff;
+        }
+        .theme-orange .sidebar .user-info {
+            background: #407446;
+            color: #fff;
+        }
+        .sidebar {
+            width: 300px;
+        }
+
+        .navbar-header {
+            width: 300px;
+            font-size: 0;
+        }
+
+        section.content {
+            margin: 54px 0px 15px 300px;
+        }
+         @media print
+        {
+            .gj-icon, .dropdown-toggle::after, .block-header, .noprint, .noprint *
+            {
+                display: none !important;
+            }    
+            .ecommerce-page, section.content {
+               margin: 0px !important;
+            }   
+            .table-responsive{
+                overflow:hidden !important;
+            }
+            .pagination{
+                display:none !important;
+            }
+            .dataTables_filter, .dataTables_info, .dt-buttons{
+                display:none !important;
+            }
+        }
+          span.imp{
+            color:red;
+            font-size:20px;
+        }
+
+          .sidebar .menu .list a {
+            color: #222121;
+            font-size: 15px;
+        }
+          .sidebar .menu .list .ml-menu li a {
+            color: #222121;
+            font-size: 15px;
+        }
+    </style>    
+    <script>
+        function ShowMessage(message, messagetype, url) {
+            //document.getElementById('cardProcessing').style.display = 'none';
+            $("#cardProcessing").hide();
+            var toTitleCase = function (str) {
+                str = str.toLowerCase().split(' ');
+                for (var i = 0; i < str.length; i++) {
+                    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+                }
+                return str.join(' ');
+            };
+            if (url == "") {
+                url = "javascript:;";
+            }
+            switch (messagetype) {
+                case 'success':
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.parent.location.href = url;
+                    });
+
+                    break;
+                case 'Error':
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.location = url;
+                    });
+                    break;
+                case 'Warning':
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.location = url;
+                    });
+                    break;
+                default:
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.location = url;
+                    });
+            }
+
+        };
+    </script>
+
+</head>
+<body class="theme-orange ls-toggle-menu">
+    <form method="post" action="./WinningCandidatesPost_Wise.aspx" id="mainForm">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="An9NjqcDiOI83AAebDVBfbT8KV44PybqX6DQH2f/5dd9bq0SCu9ZB+0dCZfG3w62UKNjK77Xy9D2IOsdtcPrFLaZWSMVFI5Vb3sPQtZaBdc=" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="DD91778D" />
+</div>
+        <div>
+            <div class="overlay"></div>
+            <div class="search-bar noprint">
+                
+            </div>
+            <nav class="navbar noprint">
+                <div class="col-12">
+                    <div class="navbar-header">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                        <a href="javascript:void(0);" class="bars"></a>
+                        <a class="navbar-brand" href="Default.aspx">
+                            <img src="../assets/images/logo/logo.png" />
+                        </a>
+                    </div>
+                    
+                </div>
+            </nav>
+            <aside id="leftsidebar" class="sidebar noprint">
+                
+            </aside>    
+            <input type="hidden" id="hdnnprc" />
+            <input type="hidden" id="hdnnprf" />
+            <input type="hidden" id="hdnwardrc" />
+            <input type="hidden" id="hdnwardrf" />
+            
+    <section class="content">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                    <h2>विजेता अभ्यर्थियों की सूची (Phase - II)</h2>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">                       
+                        <div class="body">
+                            <input type="hidden" id="hdnUser_Id" value='' />
+                            <input type="hidden" id="hdnUserRole" value='' />
+                            <input type="hidden" id="hdnDistrictId" value='' />                            
+                            <input type="hidden" id="hdnSubdivisionId" value='' />
+                            <input type="hidden" id="hdnBlockID" value='' />
+                            <input type="hidden" id="hdnNPID2" value='>' />
+                            <div class="row clearfix"> 
+
+                                <div class="col-md-2">
+                                    <label for="ddlPosts" class="form-label">पद <span class="imp">*</span></label>
+                                    <div class="form-group">
+                                        <select id="ddlPosts" class="form-control show-tick" required="" data-parsley-required-message="कृपया पद चुने!">
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label for="ddlDistrict" class="form-label">जिला <span class="imp">*</span></label>
+                                    <div class="form-group">
+                                        <select id="ddlDistrict" class="form-control show-tick" required="" data-parsley-required-message="कृपया जिला चुने!">
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="ddlSubdivision" class="form-label">अनुमंडल <span class="imp">*</span></label>
+                                    <div class="form-group">
+                                        <select id="ddlSubdivision" class="form-control show-tick" required="" data-parsley-required-message="कृपया अनुमंडल चुने!">
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                
+                               
+                                <div class="col-md-3">
+                                    <label for="ddlNagarNikayName" class="form-label">नगरपालिका का नाम <span class="imp">*</span></label>
+                                    <div class="form-group">
+                                        <select id="ddlNagarNikayName" class="form-control show-tick" data-parsley-required-message="कृपया नगरपालिका के नाम चुने!">
+                                            <option value="">All</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                               
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-info btnshow" id="btnshow">Show</button>
+                                    </div>
+                                </div>
+                                                                  
+                            </div>                                                        
+                        </div>
+                    </div>
+
+                    <div class="card" id="cardTable" style="display:none;">
+                        <div class="header">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2> Winning Candidates </h2>
+                                </div>
+                                <div class="col-md-6">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div id="dvCandidates" class="body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover dataTable js-exportables" style="width:100%;">
+                                <thead>
+                                    
+                                    <tr>
+                                        <th></th>
+                                        <th style="width:100px;">Post</th>
+                                        <th>District</th>
+                                        <th>NagarNikay</th>
+                                        <th>WardNo</th>
+                                        <th>ReservationStatus</th>
+                                        <th>CandidateName</th>
+                                        <th>GuardianName</th>
+                                        <th>Gender</th>
+                                        <th>Age</th>
+                                        <th>Category</th>
+                                        <th>Address</th>
+                                        <th>Mobile No</th>
+                                        <th>CandidatePhotos</th>
+                                        <th>Affidavit</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ctbody"></tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+            <section class="content">
+                <div class="container-fluid">
+                    <footer style="position:relative;bottom:0px;height:36px;width:100%;padding:10px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>Developed By : Software Education & Research (P) Ltd.</p>
+                        </div>
+                    </div>
+                </footer>
+                </div>
+            </section>
+            <div class="modal fade show" id="cardProcessing" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-modal="true" role="dialog">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="padding-top:20px;padding-bottom:20px;">            
+                        <div class="modal-body text-center">
+                            <h5><img src="../assets/loading.gif" height="40"> <br>Processing</h5>
+                        </div>          
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </form>    
+    <script src="../assets/bundles/libscripts.bundle.js"></script>
+    <script src="../assets/bundles/vendorscripts.bundle.js"></script>
+    <script src="../assets/plugins/autosize/autosize.js"></script> 
+    <script src="../assets/plugins/momentjs/moment.js"></script> 
+    <script src="../assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <script src="../assets/js/pages/forms/basic-form-elements.js"></script>
+    <script src="../assets/bundles/datatablescripts.bundle.js"></script>
+    <script src="../assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="../assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="../assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="../assets/plugins/jquery-datatable/buttons/buttons.flash.min.js"></script>
+    <script src="../assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="../assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+    <script src="../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="../assets/js/pages/tables/jquery-datatable.js"></script>
+    
+    <script src="../assets/js/parsley.min.js"></script>
+    <script src="../assets/js/ControlNP1.min.js"></script>
+    <script>
+        $(function () {
+            $('#mainForm').parsley();
+
+            $('#btnshow').click(function () {
+                $('#mainForm').parsley().validate();
+            });
+
+            $("#ddlPosts").on("change", () => {
+                if ($("#ddlPosts").val() == 3) {
+                    $("#ddlWardNo").prop('required', true);;
+                }
+                else {
+                    $("#ddlWardNo").prop('required', false);;                    
+                }
+            });
+
+            $('#ddlPosts').on('change', function () {
+                if ($('#ddlPosts').val() == 3) {
+                    $('#WardCont').show();
+                    $('#ddlWardNo').prop('required', true);
+                    $("#ddlNagarNikayName2").attr("disabled", "disabled");
+                    $("#ddlNagarNikayName3").attr("disabled", "disabled");
+                    $("#ddlWardNo2").attr("disabled", "disabled");
+                    $("#ddlWardNo3").attr("disabled", "disabled");
+                }
+                else {
+                    $('#WardCont').hide();
+                    $('#ddlWardNo').prop('required', false);
+                    $("#ddlNagarNikayName2").attr("disabled", "disabled");
+                    $("#ddlNagarNikayName3").attr("disabled", "disabled");
+                    $("#ddlWardNo2").prop("disabled", false);
+                    $("#ddlWardNo3").prop("disabled", false);
+                }
+            });
+
+        });
+    </script>        
+    <script>
+        $(function () {
+            $('.js-exportables').DataTable({
+                searching: false, paging: false, info: false, bSort:false           
+            });
+        });
+    </script>   
+
+    <script type="text/javascript">       
+        $(function () {
+            $("#btnshow").click(function () {
+                $("#cardProcessing").show();
+                $("#mainForm").parsley().validate();
+                if (!$('#mainForm').parsley().isValid()) { $("#cardProcessing").hide(); return; }
+                const district_id = $("#ddlDistrict").val();  
+                const subdivision_id = -1;  
+                var npid = $("#ddlNagarNikayName").val();  
+                if (!npid) {
+                    npid = -1;
+                }
+                var post_id = $("#ddlPosts").val();
+                if (!post_id) {
+                    post_id = -1;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "WinningCandidatesPost_Wise.aspx/GetWinningCandidtes",
+                    data: '{district_id:' + district_id + ', subdivision_id: ' + subdivision_id + ', post_id:' + post_id + ', npid:' + npid + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccess,
+                    failure: function (response) {
+                        //alert(response.d);
+                        $("#cardProcessing").hide();
+                    },
+                    error: function (response) {
+                        //alert(response.d);
+                        $("#cardProcessing").hide();
+                    }
+                });                
+            });
+        });
+        function OnSuccess(response) {
+            $("#cardTable").show();
+            $("#cardProcessing").hide();
+            var candidates = JSON.parse(response.d); 
+            console.log(candidates);
+            const dt = $("#dvCandidates table").DataTable();
+            dt.clear().draw();
+            candidates.map((cand, index) => {     
+                var fold = '';
+                if (cand.Phase == 2) {
+                    fold = '2';
+                }
+                else {
+                    fold = '';
+                }
+                dt.row.add([
+                    `${index + 1}`,
+                    `${cand.post}`,
+                    `${cand.DistrictNameHn}`,
+                    `${cand.NPNameHn}`,
+                    `${cand.post_id == 3 ? cand.wardno == '73' ? '22A' : cand.wardno == '74' ? '22B' : cand.wardno == '75' ? '22C' : cand.wardno : ''}`,
+                    `${cand.ReservedFor.split('_')[0]}`,
+                    //`${cand.ReservedFor.split('_')[1]}`,
+                    `${cand.name_hn}`,
+                    `${cand.guardian_name_hn}`,
+                    `${cand.gender}`,
+                    `${cand.age}`,
+                    `${cand.cname}`,
+                    `${cand.address}`,
+                    `${cand.mobile}`,
+                    `<img src="http://sec2021.bihar.gov.in/ForPublicPdf/SEC_Nomination${fold}/Uploads/${cand.user_id}/photo.jpeg" width="56" />`,
+                    `<a href="http://sec2021.bihar.gov.in/ForPublicPdf/SEC_Nomination${fold}/Uploads/${cand.user_id}/${cand.NomID}/Documents/aff_prapatra_kh.pdf" target="_blank">Affidavit</a>`]
+                ).draw(false);
+            })
+            //$("#ctbody").html(candidatesData);
+        }
+       
+    </script>
+
+    <script>
+        $(function () {
+            var UserRole = $("#hdnUserRole").val();
+            var DistrictId = $("#hdnDistrictId").val();
+            var SubdivisionId = $("#hdnSubdivisionId").val();
+            var NpType = $("#hdnBlockID").val();
+            var NPID = $("#hdnNPID2").val();
+
+            if (UserRole == 6) {
+                $("#ddlDistrict").val(DistrictId);
+                $("#ddlDistrict").selectpicker("refresh");
+                $("#ddlDistrict").trigger("change");
+                $("#ddlSubdivision").val(SubdivisionId);
+                $("#ddlSubdivision").selectpicker("refresh");
+                $("#ddlSubdivision").trigger("change");
+                $("#ddlDistrict").prop("disabled", true);
+                $("#ddlSubdivision").prop("disabled", true);
+            }
+            else if (UserRole == 8) {
+                $("#ddlDistrict").val(DistrictId);
+                $("#ddlDistrict").selectpicker("refresh");
+                $("#ddlDistrict").trigger("change");
+                $("#ddlSubdivision").val(SubdivisionId);
+                $("#ddlSubdivision").selectpicker("refresh");
+                $("#ddlSubdivision").trigger("change");
+
+                $("#ddlNagarNikayType").val(NpType);
+                $("#ddlNagarNikayType").selectpicker("refresh");
+                $("#ddlNagarNikayType").trigger("change");
+
+                $("#ddlNagarNikayName").val(NPID);
+                $("#ddlNagarNikayName").selectpicker("refresh");
+                $("#ddlNagarNikayName").trigger("change");
+
+                $("#ddlDistrict").prop("disabled", true);
+                $("#ddlSubdivision").prop("disabled", true);
+                $("#ddlNagarNikayType").prop("disabled", true);
+                $("#ddlNagarNikayName").prop("disabled", true);
+            }
+        });
+</script>
+    <script>
+        function printPrapatra() {   
+            var post_id = $("#ddlPosts").val();
+            var header_text = "<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"> <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"> <title>Prapatra 26</title> <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css\" integrity=\"sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N\" crossorigin=\"anonymous\"> <style>.cpbody{max-width: 24cm !important; padding: 50px 40px; border: 1px solid #ddd}.col-md-12{width: 24cm !important; padding-bottom: 20px}.col-md-6{width: 50% !important}h2{font-size: 30px !important}h3{font-weight: 600}.indentp{text-indent: 120px}p{line-height: 38px; text-align: justify; font-size: 1.3rem !important}.phl{font-weight: 700; border-bottom: 1px dotted #000; padding-left: 25px; padding-right: 25px}ol li{font-size: 18px}ol li p{line-height: 21px}.table-bordered td, .table-bordered th{border: 1px solid #4c4d4e !important;}table th,table td{text-align: center;}</style></head><body class=\"pbody\"> <div class=\"container cpbody\"> <div class=\"row\"> <div class=\"col-md-12\"> <div class=\"col-md-12\"> <h3 class=\"text-right\">परिशिष्ट-IX</h3> </div><div class=\"col-md-12 text-center\"> <h3>प्रपत्र-26</h3> <p class=\"text-center\">[नियम 87 देखिये]</p><h4 class=\"text-center\"><b>निर्वाचन परिणाम का प्रकाशन</b></h4> </div><div class=\"col-md-12\"> <p class=\"indentp\"> बिहार नगरपालिका निर्वाचन नियमावली, 2007 के नियम 87 के अनुसरण में मैं एतदद्वारा यह अधिसूचित करता हूँ कि नीचें दी गई अनुसूची के स्तम्भ (1) में नामित व्यक्ति, स्तम्भ (2) में अंकित पद पर, स्तम्भ (5) में वर्णित parshad_text_placeholder के लिए सम्यक रूप से निर्वाचित हो गया है | </p></div><div class=\"col-md-12\"> <h3 class=\"text-center\" style=\"font-size:22px;text-decoration: underline;\">अनुसूची</h3> </div><div class=\"col-md-12\"> ";
+            var footer_text = "</div><div class=\"row\" style=\"padding-bottom:30px; padding-top:50px;\"> <div class=\"col-md-6\"> <p>स्थान -<span class=\"phl\" style=\"padding-right:150px;\"></span></p><p>दिनांक -<span class=\"phl\"style=\"padding-right:150px;\"></span></p></div><div class=\"col-md-6 text-right\"> <p class=\"text-center\"><span class=\"phl\" style=\"padding-right:130px\"></span></p><p class=\"text-center\">जिला निर्वाचन पदाधिकारी</p></div></div></div></div></div></body></html>";
+            var parshad_text = "मुख्य पार्षद";
+            var upparshad_text = "उप मुख्य पार्षद";
+            var wardparshad_text = "पार्षद";
+            
+            if (post_id == 1) {
+                header_text = header_text.replaceAll("parshad_text_placeholder", parshad_text);
+            }
+            else if (post_id == 2) {
+                header_text = header_text.replaceAll("parshad_text_placeholder", upparshad_text);
+            }
+            else {
+                header_text = header_text.replaceAll("parshad_text_placeholder", wardparshad_text);
+            }            
+            
+            var printContents = header_text + $("#dvCandidates").html() + footer_text;         
+
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+
+    <script>
+        function printPrapatraCHH(nid) {
+            $.ajax({
+                type: "Post",
+                contentType: "application/json; charset=utf-8",
+                url: "WinningCandidates.aspx/GetWinningCandidtes",
+                data: '{nid: ' + nid + ', prapatra: ' + 11 + '}',
+                dataType: "json",
+                success: function (data) {
+                    var printContents = data.d;
+                    var originalContents = document.body.innerHTML;
+                    document.body.innerHTML = printContents;
+                    setTimeout(() => {
+                        window.print();
+                        document.body.innerHTML = originalContents;
+                    }, 1000);
+                },
+                error: function () {
+
+                    swal("Error while printing prapatra!", "Error ", "error");
+                }
+            });
+        }
+    </script>
+    <script>
+        function setAllSelect() {
+            if ($('#ddlPosts').val() != 3) {
+                if ($('#ddlNagarNikayName > option').length > 1) {
+                    $('#ddlNagarNikayName option:first').text('All');
+                    $('#ddlNagarNikayName option:first').val('-1');
+                    $("#ddlNagarNikayName").selectpicker("refresh");
+                    $('#ddlNagarNikayName').prop('required', false);
+                }
+            }
+            else {
+                if ($('#ddlNagarNikayName > option').length > 1) {
+                    $('#ddlNagarNikayName option:first').text('Select');
+                    $('#ddlNagarNikayName option:first').val('');
+                    $("#ddlNagarNikayName").selectpicker("refresh");
+                    $('#ddlNagarNikayName').prop('required', true);
+                }
+            }
+        }
+
+        $(function () {
+            $('#ddlPosts').on("change", () => {
+                setAllSelect();
+            });
+            $('#ddlDistrict').on("change", () => {
+                setAllSelect();
+            });
+            $('#ddlSubdivision').on("change", () => {
+                setAllSelect();
+            });
+        });
+    </script>
+   
+    <script>
+        $(function () {
+            $("#txtSearch").keyup(function (event) {
+                if (event.keyCode === 13) {
+                    const query = $("#txtSearch").val();
+                    if (query) {
+                        window.location.href = `SearchNomination.aspx?q=${query}`;
+                    }
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>

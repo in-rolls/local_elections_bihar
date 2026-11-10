@@ -1,0 +1,29 @@
+column,type,description
+election_year,int16,Election cohort indicated by source
+city,string,Patna
+office,string,Ward councilor; excludes mayor and deputy mayor
+ward_id,string,Ward label; source IDs 73/74/75 mapped to 22A/22B/22C using official UI
+ward_id_source,string,Unchanged ward ID from source
+candidate_name,string,"Printed original-script name, outer whitespace trimmed"
+relative_name,string,Printed parent or spouse name
+sex_recorded,string,Explicit source sex; never inferred from reservation or name
+is_woman,bool,True for explicit female source label; conflict flag must be consulted
+age_reported,int16,Source integer; 2022 value is dynamic and not election age
+age_reference,string,Meaning and timing of reported age
+education_reported,string,Source category or text; null for 2022 official API
+candidate_category,string,Candidate social category as printed
+votes,int32,Votes from TCPD; null in official winner extracts
+position,int16,Source candidate rank; 1 for official winner lists
+is_winner,bool,Official winner list membership or TCPD position=1
+reservation_category,string,General/BC/SC from adopted reservation source
+is_women_reserved,bool,Women reservation from adopted source; distinct from candidate sex
+sex_reservation_conflict,bool,True if source records male in a women-reserved ward; raw sex preserved
+reservation_source_raw,string,"Original winner-grid/API/TCPD value, including blanks or disagreements with notification"
+reservation_basis,string,Source used to assign adopted reservation
+source_kind,string,Official grid/API or TCPD release
+source_file,string,Path from repository root to original source
+source_sha256,string,SHA-256 of complete original source file
+source_row,int32,2017 grid printed serial; 2022 API 1-based record; TCPD logical CSV record starting at 2 (header counted)
+polling_date_reported,string,TCPD reported polling date; not independently verified
+affidavit_url,string,API-derived public link; document not necessarily retrieved
+raw_record_json,string,"Full original source row, serialized as JSON"

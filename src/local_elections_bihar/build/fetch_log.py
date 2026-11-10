@@ -63,7 +63,27 @@ def rows():
     for log in sorted(SEARCH_LOG.glob("*_wayback.jsonl")):
         for line in log.read_text(encoding="utf-8").splitlines():
             receipt = json.loads(line)
-            receipts[receipt["path"]] = receipt
+            receipts[receipt["path"]] = {**receipt, "method": "wayback"}
+    for log in sorted(RAW.glob("**/receipts.jsonl")):
+        for line in log.read_text(encoding="utf-8").splitlines():
+            receipt = json.loads(line)
+            if not receipt.get("sha256"):
+                continue
+            if "file" in receipt:
+                relative = (log.parent / receipt["file"]).relative_to(ROOT)
+            else:
+                relative = Path(receipt["path"])
+                if relative.parts[0] == ROOT.name:
+                    relative = Path(*relative.parts[1:])
+            receipts[relative.as_posix()] = {
+                **receipt,
+                "fetched_at_utc": receipt.get("retrieved_at_utc")
+                or receipt.get("retrieved_at")
+                or receipt.get("fetched_at_utc", ""),
+                "method": "wayback"
+                if "web.archive.org/" in receipt.get("url", "")
+                else "live",
+            }
     out = []
     for path in tracked():
         if path == LOG:
@@ -92,10 +112,10 @@ def rows():
         elif row["path"] in receipts:
             receipt = receipts[row["path"]]
             if receipt["sha256"] != sha:
-                raise SystemExit(f"{row['path']}: differs from its Wayback receipt")
+                raise SystemExit(f"{row['path']}: differs from its source receipt")
             row["url"] = receipt["url"]
             row["fetched_at_utc"] = receipt["fetched_at_utc"]
-            row["method"] = "wayback"
+            row["method"] = receipt["method"]
         elif path.parent == WINNER_LIST:
             row["url"] = WINNER_LIST_URL
             row["fetched_at_utc"] = earliest_fetch(path)

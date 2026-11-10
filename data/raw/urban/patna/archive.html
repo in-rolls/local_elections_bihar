@@ -1,0 +1,1184 @@
+
+
+<!DOCTYPE html>
+
+<html>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>
+	State Election Commission, Bihar
+</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+  
+<script src="https://unpkg.com/lucide@0.525.0/dist/umd/lucide.min.js"></script>
+    
+    <link href="/SECOfficial/Assets/css/custom.css" rel="stylesheet" type="text/css" /><link href="/SECOfficial/Assets/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+
+    <script>
+        function ShowMessage(message, messagetype, url) {
+            var toTitleCase = function (str) {
+                str = str.toLowerCase().split(' ');
+                for (var i = 0; i < str.length; i++) {
+                    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+                }
+                return str.join(' ');
+            };
+            if (url == "") {
+                url = "javascript:;";
+            }
+            switch (messagetype) {
+                case 'success':
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.parent.location.href = url;
+                    });
+
+                    break;
+                case 'Error':
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.location = url;
+                    });
+                    break;
+                case 'Warning':
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.location = url;
+                    });
+                    break;
+                default:
+                    swal({
+                        title: toTitleCase(messagetype) + " !",
+                        text: message,
+                        icon: messagetype,
+                        button: "OK",
+                    }).then(function () {
+                        window.location = url;
+                    });
+            }
+
+        };
+    </script>
+    <script async src="https://cse.google.com/cse.js?cx=d412cfaf3ceca4bf1"></script>
+    <style>
+        .gsc-input .gsc-input-box {
+            width: 250px !important;
+        }
+    </style>
+    
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        #parallelogram-footer {
+            width: 260px;
+            height: 52px;
+            /* transform: skew(20deg); */
+            background-color: transparent;
+            position: relative;
+            top: 50px;
+            left: 0px;
+            z-index: 9999;
+            color: #fff;
+            font-weight: bold;
+            vertical-align: middle;
+            text-align: center;
+            /border-right: #706f6e solid 5px/
+        }
+
+            #parallelogram-footer:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -60px;
+                width: 100%;
+                height: 100%;
+                background: #f35d20;
+                border-radius: 0px 50px 50px 0px;
+                z-index: -1;
+            }
+
+            #parallelogram-footer p {
+                font-size: 20px !important;
+                font-weight: bold;
+                color: #FFF;
+                padding-top: 12px;
+                padding-right: 20px;
+                margin-left: -40px;
+            }
+
+        .tickerwrapper ul li {
+            line-height: 40px;
+        }
+
+            .tickerwrapper ul li span {
+                font-size: 20px !important;
+            }
+
+        #newsupdate {
+            position: fixed;
+            color: #fff;
+            bottom: 0px;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        .tickerwrapper {
+            z-index: 999;
+            position: relative;
+            top: 0px;
+            left: 0%;
+            border: 2px solid #0b90d9;
+            /background: #1c5cad;
+            / background: #0369a1;
+            color: #fff !important;
+            font-weight: bold;
+            font-size: 16px;
+            width: 99.9%;
+            height: 50px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        marquee h1 {
+            font-size: 25px !important;
+            font-weight: bold;
+            margin-top: 9px;
+            color: #fff;
+        }
+
+
+        @media (max-width: 768px) {
+
+
+            #parallelogram-footer {
+                width: 180px;
+                height: 50px;
+                font-size: 12px !important;
+                padding: 14px 10px;
+                text-align: center;
+            }
+
+                #parallelogram-footer p {
+                    font-size: 12px !important;
+                    font-weight: bold;
+                    color: #FFF;
+                    padding-top: 2px;
+                    padding-right: 10px;
+                    margin-left: -50px;
+                }
+
+            #newsline {
+                font-size: 12px;
+            }
+
+            marquee {
+                height: 40px;
+            }
+
+                marquee h1 {
+                    font-size: 12px !important;
+                    font-weight: bold;
+                    margin-top: 18px;
+                    color: #fff;
+                }
+        }
+    </style>
+    <style>
+        /* High Contrast Theme Overrides */
+        body.high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+
+            body.high-contrast header,
+            body.high-contrast nav,
+            body.high-contrast footer,
+            body.high-contrast .bg-white,
+            body.high-contrast .bg-stone-50 {
+                background-color: #000 !important;
+                color: #fff !important;
+                border-color: #fff !important;
+            }
+
+            body.high-contrast a,
+            body.high-contrast button,
+            body.high-contrast span:not(.text-white),
+            body.high-contrast i:not(.text-white) {
+                color: #ffff00 !important; /* High Visibility Yellow */
+            }
+
+            body.high-contrast .bg-sky-700 {
+                background-color: #1a1a1a !important;
+                border: 1px solid #fff;
+            }
+    </style>
+    <style>
+        /* 1. Main Container: Matches your Zinc-100 background and height */
+        .google-search-wrapper .gsc-control-cse {
+            background-color: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            width: 200px !important; /* Adjust width as needed */
+        }
+
+        /* 2. The Input Box Area */
+        .google-search-wrapper .gsc-input-box {
+            background-color: #f4f4f5 !important; /* bg-zinc-100 */
+            border: 1px solid #e4e4e7 !important; /* border-zinc-200 */
+            border-radius: 9999px !important; /* rounded-full */
+            height: 50px !important; /* specific height */
+            overflow: hidden;
+        }
+
+        /* 3. The Search Button (Like your primary theme color) */
+        .google-search-wrapper button.gsc-search-button-v2 {
+            background-color: #3f3f46 !important; /* zinc-700 gray button */
+            border-radius: 9999px !important;
+            height: 34px !important;
+            width: 60px !important;
+            border: none !important;
+            margin-top: 3px !important;
+            margin-right: 3px !important;
+            transition: background-color 0.2s;
+        }
+
+            .google-search-wrapper button.gsc-search-button-v2:hover {
+                background-color: #18181b !important; /* zinc-900 on hover */
+            }
+
+        /* 4. Formatting the text inside the input */
+        .google-search-wrapper input.gsc-input {
+            background: none !important;
+            padding-left: 15px !important;
+            font-family: 'Poppins', sans-serif !important;
+            font-size: 14px !important;
+            color: #3f3f46 !important;
+        }
+
+        /* 5. Remove the default Google Search Icon inside the box */
+        .google-search-wrapper .gsc-search-button-v2 svg {
+            fill: #ffffff !important;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+    <form method="post" action="./archiveNP.aspx" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="WvA8Xwr0WytOnG/Qr0ShLgmZ+mvcYRu2fa7kPUvIHuVCOc0k6d9NryEojAmtJpNywdMviPan/lZKAzlWwvGrZJDBHrt6HrwlwgJArDaALAQ=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/SECOfficial/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZJ4Uk8yPMc69DuX84NEmgjNYl0ErSr04Aeb_1ZcUj_fuboQP05A8Jyfoh2EBsm7AHQ2&amp;t=639191031332169432" type="text/javascript"></script>
+
+
+<script src="/SECOfficial/ScriptResource.axd?d=D9drwtSJ4hBA6O8UhT6CQvtYNp-_gEB3_SUsCU5NAY5pgVjPLZCAN0PFUprEbBHccYse-Qq7DMgian02RKXWVFnHpqvH6OSwgSzAYwTp6TJLdPpGN-tL4zLi2u0bNuDZFvBrVoUdfwWeToteqTaEZxtfZhUimR-Gn2AXdKwzD9o1&amp;t=ffffffffbec1863d" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof(Sys) === 'undefined') throw new Error('ASP.NET Ajax client-side framework failed to load.');
+//]]>
+</script>
+
+<script src="/SECOfficial/ScriptResource.axd?d=JnUc-DEDOM5KzzVKtsL1tav_yDdD1qdEXVMBGNm6_aC1I30s0TEcjzPE0CmIGQzNrxNVeKqmtAZExy_83p9o5X9R7HmLMgVDgmahKcMhKdjmzyaWapyMGtlXD_zsSOduFZlGBXS-f3Afmh21I1NIr82C34o4ZQLbY3Q3MSfEv_XqjuRi2YnRfSW5N5q6_pg50&amp;t=ffffffffbec1863d" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="5FDBA02D" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="k1EWL/Q4FOvX7jSkG49DlDe1CrY9QtMauEBKatyRrEsfONtPb6kp1rqKk224odAh0tIyrxAYeP8MuN+cKJFEdo7p2461uP0RJzJdlmbKQe9qFupi4bxjUvWxIw0wypSutQkKSbOZxeZd2WqxfukzENEahjWgEGel0kbjA8y2TGk7JIBJCqZbJMCmO4P2phOTaSY68bRs7l7qxovrqwBy+5YNATfdRbjGlYUt88BorXi0NHNnvvbgJevpjmchjTFUNmBKe7N8H4ZSs6vCeWSFd/Yw1P1sR/gMOwgCrFFOk1u1nV4gcTlPHn2iAaYgNLnaIBuGJ7bWY8KiRke8BF/l4pR58dHMOfq1cXspTkn8nHE=" />
+</div>
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', 'form1', [], [], [], 90, 'ctl00');
+//]]>
+</script>
+
+
+        <div class="block lg:hidden w-full relative z-50">
+
+            <div class="bg-black text-white h-5 flex items-center px-2 gap-3 text-[9px] font-medium">
+                <div class="flex items-center gap-1">
+                    <i data-lucide="phone" class="w-3 h-3"></i>1800 345 7243
+                </div>
+                <div class="w-px h-2 bg-white/50"></div>
+                <div class="flex items-center gap-1">
+                    <i data-lucide="mail" class="w-3 h-3"></i>secbihar@gmail.com
+                </div>
+                <div class="flex items-center gap-2 ml-2">
+                    <a href="https://www.facebook.com/SECBihar?rdid=zZFlZVMxbPXib2Hu&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1E13MVN4mV%2F#" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="Facebook">
+                        <i data-lucide="facebook" class="w-3 h-3 text-black"></i>
+                    </a>
+                    <a href="https://x.com/SECBihar?t=iPOBAWcxBlkIsL9lenRELQ&s=09" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="Twitter">
+                        <i data-lucide="X" class="w-3 h-3 text-black"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@stateelectioncommissionbih4051" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="YouTube">
+                        <i data-lucide="youtube" class="w-3 h-3 text-black"></i>
+                    </a>
+                    <a href="https://www.instagram.com/secbihar?igsh=MTNmamtwNDIydHpzZg%3D%3D" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="Instagram">
+                        <i data-lucide="instagram" class="w-3 h-3 text-black"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white h-16 flex items-center justify-between px-4 relative">
+                <a href="#" class="shrink-0">
+                    <img src="Assets/images/logo.png" alt="SEC Logo" class="h-12 w-auto object-contain">
+                </a>
+
+                <button class="bg-sky-700 text-white px-4 py-1.5 rounded-3xl flex items-center gap-1 shadow-sm">
+                    <i data-lucide="help-circle" class="w-3 h-3"></i>
+                    <span class="text-[9px] font-medium tracking-wide">Grievance Redressal</span>
+                </button>
+            </div>
+
+            <div class="h-0.5 w-full gradient-divider"></div>
+
+            <div class="bg-sky-700 h-10 flex items-center justify-between px-4">
+
+                <button type="button" onclick="toggleMenu()" class="flex items-center gap-2 text-white">
+                    <div class="flex flex-col gap-[3px]">
+                        <span class="block w-4 h-0.5 bg-white"></span>
+                        <span class="block w-4 h-0.5 bg-white"></span>
+                        <span class="block w-4 h-0.5 bg-white"></span>
+                    </div>
+                    <span class="text-xs font-medium tracking-wide">Menu</span>
+                </button>
+
+                <div class="flex items-center gap-2">
+                    
+
+
+                    <div class="rounded-full h-6 px-2 flex items-center gap-1">
+
+                        <a id="LinkButton7" class="px-4 py-1 rounded-full text-sm font-bold transition-all bg-gray-50 border border-zinc-300" href="javascript:__doPostBack(&#39;ctl00$LinkButton7&#39;,&#39;&#39;)">
+English
+                        </a>
+
+                        <a id="LinkButton8" class="px-4 py-1 rounded-full text-sm font-bold transition-all bg-gray-50 border border-zinc-300" href="javascript:__doPostBack(&#39;ctl00$LinkButton8&#39;,&#39;&#39;)">    हिंदी
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden lg:block w-full relative z-50">
+            <div class="bg-black text-white py-1.5 px-4 flex justify-between items-center text-[11px] font-medium tracking-wide">
+                <div class="flex gap-6 items-center">
+                    <span class="flex items-center gap-2"><i data-lucide="phone" class="w-3 h-3"></i>1800 345 7243</span>
+                    <span class="flex items-center gap-2"><i data-lucide="mail" class="w-3 h-3"></i>secbihar@gmail.com</span>
+                    <div class="flex items-center gap-2 ml-2">
+                        <a href="https://www.facebook.com/SECBihar?rdid=zZFlZVMxbPXib2Hu&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1E13MVN4mV%2F#" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="Facebook">
+                            <i data-lucide="facebook" class="w-3 h-3 text-black"></i>
+                        </a>
+                        <a href="https://x.com/SECBihar?t=iPOBAWcxBlkIsL9lenRELQ&s=09" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="Twitter">
+                            <i data-lucide="X" class="w-3 h-3 text-black"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@stateelectioncommissionbih4051" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="YouTube">
+                            <i data-lucide="youtube" class="w-3 h-3 text-black"></i>
+                        </a>
+                        <a href="https://www.instagram.com/secbihar?igsh=MTNmamtwNDIydHpzZg%3D%3D" target="_blank" class="w-5 h-5 flex items-center justify-center rounded-full bg-white hover:opacity-80 transition-opacity" title="Instagram">
+                            <i data-lucide="instagram" class="w-3 h-3 text-black"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-center">
+                    <div class="flex gap-4">
+                        <a href="/SECOfficial/ScreenReader.aspx" class="hover:text-orange-400 transition">Screen Reader Access</a>
+                        <a href='#main-content' class="hover:text-orange-400 transition">Skip to Main Content</a>
+                        <a href="/SECOfficial/Sitemap.aspx" class="hover:text-orange-400 transition">Sitemap</a>
+                    </div>
+                    <div class="flex items-center bg-neutral-700 rounded px-1.5 py-0.5 gap-1">
+                        <button type="button" onclick="decreaseFont()" class="px-1 hover:text-orange-400 font-bold">-A</button>
+                        <button type="button" onclick="resetFont()" class="px-1 hover:text-orange-400 font-bold">A</button>
+                        <button type="button" onclick="increaseFont()" class="px-1 hover:text-orange-400 font-bold">+A</button>
+                    </div>
+                    
+                </div>
+            </div>
+            <header class="bg-white shadow-sm">
+                <div class="container-fluid mx-auto px-8 py-4 flex justify-between items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <a href='Default.aspx' class="shrink-0 block">
+                            <img src='Assets/images/logo.png' class="h-[60px]" alt="State Election Commission Logo">
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="relative group">
+                            
+                            
+                            <div class="flex items-center gap-2">
+                                <div class="google-search-wrapper">
+                                    <div class="gcse-searchbox-only" data-resultsurl="SearchGoogle.aspx"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="https://sec2021.bihar.gov.in/SamadhanAll/ComplainantLogin.aspx" target="_blank"
+                            class="bg-sky-700 hover:bg-sky-800 text-white px-6 py-3 rounded-full text-sm font-medium shadow-md transition-transform active:scale-95 flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                            Grievance Redressal
+                        </a>
+
+                        <div class="relative">
+                            <div class="flex items-center gap-2">
+                                <a id="LinkButton1" class="px-4 py-2 rounded-full text-sm font-bold transition-all border border-zinc-300" href="javascript:__doPostBack(&#39;ctl00$LinkButton1&#39;,&#39;&#39;)">
+    English
+                                </a>
+
+                                <a id="LinkButton2" class="px-4 py-2 rounded-full text-sm font-bold transition-all border border-zinc-300" href="javascript:__doPostBack(&#39;ctl00$LinkButton2&#39;,&#39;&#39;)">    हिंदी
+                                </a>
+                            </div>
+                        </div>
+                        <button type="button" onclick="toggleContrast()" class="px-4 py-2 bg-amber-400 text-black px-3 py-0.5 rounded-full text-sm font-bold hover:bg-amber-500 transition">
+                               <i data-lucide="contrast" class="mr-1 h-5 w-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <nav class="bg-sky-700 text-white">
+                    <div class="container-fluid mx-auto px-8">
+                        <ul class="flex items-center">
+                            <!-- LEFT SIDE MENU BUTTON -->
+                            <li class="mr-4">
+                                <button type="button" onclick="toggleMenu()"
+                                    class="flex items-center gap-2 px-4 py-4 hover:bg-sky-800 transition-colors font-medium border-r border-sky-600">
+                                    <i data-lucide="menu" class="w-6 h-6"></i>
+                                    <span>
+                                        Menu</span>
+                                </button>
+                            </li>
+                            <!-- SPACER (push other items to right) -->
+                            <li class="ml-auto"></li>
+
+                            <li class="group dropdown-group relative">
+                                <a href="/SECOfficial/About.aspx"
+                                    class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors flex items-center gap-2">
+                                    About Commission
+                                    <i data-lucide="chevron-down"
+                                        class="w-4 h-4 opacity-70 group-hover:rotate-180 transition-transform"></i>
+                                </a>
+                                <div
+                                    class="dropdown-menu absolute top-full left-0 w-72 bg-white text-sky-900 rounded-b-2xl shadow-xl opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50 border-t-4 border-orange-500">
+                                    <a href="/SECOfficial/About.aspx#MessageFromCommissioner" class="block px-6 py-3 hover:bg-sky-50 font-medium">
+                                        Message From Commissioner
+                                    </a>
+                                    <div class="h-px bg-gray-100 mx-4"></div>
+                                    <a href="/SECOfficial/About.aspx#OrganisationalChart" class="block px-6 py-3 hover:bg-sky-50 font-medium">
+                                        Organisational Chart</a>
+                                    <div class="h-px bg-gray-100 mx-4"></div>
+                                    <a href="/SECOfficial/About.aspx#ContactDirectory" class="block px-6 py-3 hover:bg-sky-50 font-medium">
+                                        Contact Directory</a>
+                                </div>
+                            </li>
+
+                            <li class="group dropdown-group relative">
+                                <a href="#" class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors flex items-center gap-2">
+                                    Voter’s Corner
+                                    <i data-lucide="chevron-down"
+                                        class="w-4 h-4 opacity-70 group-hover:rotate-180 transition-transform"></i>
+                                </a>
+                                <div
+                                    class="dropdown-menu absolute top-full left-0 w-60 bg-white text-sky-900 rounded-b-2xl shadow-xl opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50 border-t-4 border-orange-500">
+                                    <a id="LinkButton3" class="block px-6 py-3 hover:bg-sky-50 font-medium" href="javascript:__doPostBack(&#39;ctl00$LinkButton3&#39;,&#39;&#39;)">Nagarpalika</a>
+                                    <div class="h-px bg-gray-100 mx-4"></div>
+                                    <a id="LinkButton4" class="block px-6 py-3 hover:bg-sky-50 font-medium" href="javascript:__doPostBack(&#39;ctl00$LinkButton4&#39;,&#39;&#39;)">Panchayat</a>
+                                </div>
+                            </li>
+                            <li class="group dropdown-group relative">
+                                <a href="#"
+                                    class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors flex items-center gap-2">
+                                    Candidates’ Corner
+                                    <i data-lucide="chevron-down"
+                                        class="w-4 h-4 opacity-70 group-hover:rotate-180 transition-transform"></i>
+                                </a>
+                                <div
+                                    class="dropdown-menu absolute top-full left-0 w-60 bg-white text-sky-900 rounded-b-2xl shadow-xl opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50 border-t-4 border-orange-500">
+                                    <a id="LinkButton5" class="block px-6 py-3 hover:bg-sky-50 font-medium" href="javascript:__doPostBack(&#39;ctl00$LinkButton5&#39;,&#39;&#39;)">Nagarpalika</a>
+                                    <div class="h-px bg-gray-100 mx-4"></div>
+                                    <a id="LinkButton6" class="block px-6 py-3 hover:bg-sky-50 font-medium" href="javascript:__doPostBack(&#39;ctl00$LinkButton6&#39;,&#39;&#39;)">Panchayat</a>
+                                </div>
+                            </li>
+                            <li><a href="/SECOfficial/MediaCorner.aspx"
+                                class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors">
+                                Media Corner</a>
+
+                            </li>
+
+                            <li class="group dropdown-group relative">
+                                <a href="#"
+                                    class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors flex items-center gap-2">
+                                    Act & Rules
+                                    <i data-lucide="chevron-down"
+                                        class="w-4 h-4 opacity-70 group-hover:rotate-180 transition-transform"></i>
+                                </a>
+                                <div
+                                    class="dropdown-menu absolute top-full left-0 w-60 bg-white text-sky-900 rounded-b-2xl shadow-xl opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50 border-t-4 border-orange-500">
+                                    <a href="ResourcesNagarpalika.aspx" class="block px-6 py-3 hover:bg-sky-50 font-medium" onclick="lnkCNagarnikay_Click">
+                                        Nagarpalika
+                                    </a>
+                                    <div class="h-px bg-gray-100 mx-4"></div>
+                                    <a href="ResourcesPanchayat.aspx" class="block px-6 py-3 hover:bg-sky-50 font-medium" onclick="lnkCPanchayat_Click">
+                                        Panchayat
+                                    </a>
+                                </div>
+                            </li>
+
+                            <li><a href="/SECOfficial/Updates.aspx"
+                                class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors">
+                                Updates</a>
+                            </li>
+                            <li><a href="/SECOfficial/RTI.aspx"
+                                class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors">
+                                RTI</a>
+                            </li>
+                            <li><a href="/SECOfficial/PhotoGallery.aspx"
+                                class="block px-6 py-4 text-base font-medium hover:bg-sky-800 transition-colors">
+                                Gallery</a>
+                            </li>
+                            <li><a href="https://sec.bihar.gov.in" target="_blank" class="bg-zinc-200 hover:bg-zinc-300 text-slate-800 px-5 py-3 rounded-full text-sm font-bold transition-all flex items-center gap">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                                Old Website
+                            </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="h-1 gradient-divider"></div>
+            </header>
+        </div>
+        <div id="mobile-overlay" onclick="toggleMenu()"
+            class="fixed inset-0 bg-black/50 z-50 hidden backdrop-blur-sm transition-opacity">
+        </div>
+        <div id="mobile-menu"
+            class="fixed top-0 left-0 h-full w-[85%] max-w-sm bg-sky-900 text-white z-50 transform -translate-x-full transition-transform duration-300 overflow-y-auto shadow-2xl rounded-r-3xl">
+            <div class="p-6 pb-20">
+                <div class="flex justify-between items-center mb-6 border-b border-sky-800 pb-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                        <h2 class="text-2xl font-bold tracking-wide">
+                            Menu</h2>
+                    </div>
+                    <button type="button" onclick="toggleMenu()"
+                        class="bg-orange-500 p-2 rounded-md text-white hover:bg-orange-600 transition shadow-lg">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-3">
+                    <a href="/SECOfficial/Default.aspx"
+                        class="block py-3 px-4 rounded-3xl border border-sky-700 bg-sky-800/30 hover:bg-sky-800 flex items-center gap-3 transition">
+                        <i data-lucide="home" class="w-5 h-5 text-orange-400"></i>
+                        Homepage
+                    </a>
+                    <div>
+                        <button type="button" onclick="toggleSubmenu('sub-election')"
+                            class="w-full py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex justify-between items-center transition bg-sky-900">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="settings" class="w-5 h-5 text-orange-400"></i>
+                                Election Management
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="arrow-sub-election"></i>
+                        </button>
+                        <div id="sub-election" class="submenu pl-4 space-y-1 ml-4 border-l border-sky-600 mt-2">
+                            <a href="/SECOfficial/ElectionManagementPN.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Panchayat Chunav</a>
+                            <a href="/SECOfficial/ElectionManagementNP.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Nagarpalika Chunav</a>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" onclick="toggleSubmenu('sub-panchayat')"
+                            class="w-full py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex justify-between items-center transition">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="users" class="w-5 h-5 text-orange-400"></i>
+                                Panchayat Chunav
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="arrow-sub-panchayat"></i>
+                        </button>
+                        <div id="sub-panchayat" class="submenu pl-4 space-y-1 ml-4 border-l border-sky-600 mt-2">
+                            <a id="lnkVotersVP" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100" href="javascript:__doPostBack(&#39;ctl00$lnkVotersVP&#39;,&#39;&#39;)">Voter’s Corner</a>
+
+                            <a id="lnkCandidateCP" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100" href="javascript:__doPostBack(&#39;ctl00$lnkCandidateCP&#39;,&#39;&#39;)">Candidates’ Corner</a>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" onclick="toggleSubmenu('sub-nagarpalika')"
+                            class="w-full py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex justify-between items-center transition">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="building-2" class="w-5 h-5 text-orange-400"></i>
+                                Nagarpalika Chunav
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform"
+                                id="arrow-sub-nagarpalika"></i>
+                        </button>
+                        <div type="button" id="sub-nagarpalika" class="submenu pl-4 space-y-1 ml-4 border-l border-sky-600 mt-2">
+                            <a id="lnkVoterVN" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100" href="javascript:__doPostBack(&#39;ctl00$lnkVoterVN&#39;,&#39;&#39;)">Voter’s Corner</a>
+                            <a id="lnkCandidateCN" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100" href="javascript:__doPostBack(&#39;ctl00$lnkCandidateCN&#39;,&#39;&#39;)">Candidates’ Corner</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" onclick="toggleSubmenu('sub-legal')"
+                            class="w-full py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex justify-between items-center transition">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="scale" class="w-5 h-5 text-orange-400"></i>
+                                Legal & Court
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="arrow-sub-legal"></i>
+                        </button>
+                        <div id="sub-legal" class="submenu pl-4 space-y-1 ml-4 border-l border-sky-600 mt-2">
+                            <a href="https://sec2021.bihar.gov.in/courtcase/publicDashboard.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Hearing Calendar</a>
+                            <a href="https://sec2021.bihar.gov.in/CourtCase/Default.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                SEC Court Login</a>
+                            <a href="https://sec.bihar.gov.in/SECOfficial/SecCourt/CourtCaseLettersPN.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                SEC Order Panchayat</a>
+                            <a href="https://sec.bihar.gov.in/SECOfficial/SecCourt/CourtCaseLettersNP.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                SEC Order Nagarpalika</a>
+                            <a href="https://sec.bihar.gov.in/SECOfficial/SecCourt/CourtCaseLettersAG.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                SEC Court Letters</a>
+                            <a href="https://sec.bihar.gov.in/SECOfficial/ResourcesPanchayat.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Acts & Rules</a>
+                            <a href="https://sec.bihar.gov.in/HighCourtCases/Login.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                High Court Login</a>
+                            
+                        </div>
+                    </div>
+                    <a href="Tender.aspx"
+                        class="block py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex items-center gap-3 transition">
+                        <i data-lucide="file-text" class="w-5 h-5 text-orange-400"></i>
+                        Tenders
+                    </a>
+                    <div>
+                        <button type="button" onclick="toggleSubmenu('sub-about')"
+                            class="w-full py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex justify-between items-center transition">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="info" class="w-5 h-5 text-orange-400"></i>
+                                About
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="arrow-sub-about"></i>
+                        </button>
+                        <div id="sub-about" class="submenu pl-4 space-y-1 ml-4 border-l border-sky-600 mt-2">
+                            <a href="About.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                About SEC</a>
+                            <a href="About.aspx#MessageFromCommissioner" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Message From Commissioner</a>
+                            <a href="About.aspx#OrganisationalChart"
+                                class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Organisational Chart</a>
+                            <a href="About.aspx#ContactDirectory" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Contact Directory
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" onclick="toggleSubmenu('sub-media')"
+                            class="w-full py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex justify-between items-center transition">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="megaphone" class="w-5 h-5 text-orange-400"></i>
+                                Media Corner
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="arrow-sub-media"></i>
+                        </button>
+                        <div id="sub-media" class="submenu pl-4 space-y-1 ml-4 border-l border-sky-600 mt-2">
+                            <a href="MediaCorner.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Press Release</a>
+                            
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" onclick="toggleSubmenu('sub-resources')"
+                            class="w-full py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex justify-between items-center transition">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="image" class="w-5 h-5 text-orange-400"></i>
+                                Act & Rules
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="arrow-sub-gallery"></i>
+                        </button>
+                        <div id="sub-resources" class="submenu pl-4 space-y-1 ml-4 border-l border-sky-600 mt-2">
+                            <a href="/SECOfficial/ResourcesNagarpalika.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Nagarpalika</a>
+                            <a href="/SECOfficial/ResourcesPanchayat.aspx" class="block py-2 px-3 rounded-lg hover:bg-sky-800 text-sm text-blue-100">
+                                Panchayat</a>
+                        </div>
+                    </div>
+                    <a href="/SECOfficial/Updates.aspx"
+                        class="block py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex items-center gap-3 transition">
+                        <i data-lucide="file-text" class="w-5 h-5 text-orange-400"></i>
+                        Updates
+                    </a>
+                    <a href="/SECOfficial/RTI.aspx"
+                        class="block py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex items-center gap-3 transition">
+                        <i data-lucide="file-text" class="w-5 h-5 text-orange-400"></i>
+                        RTI
+                    </a>
+                    <a href="/SECOfficial/PhotoGallery.aspx"
+                        class="block py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex items-center gap-3 transition">
+                        <i data-lucide="file-text" class="w-5 h-5 text-orange-400"></i>
+                        Gallery
+                    </a>
+                    <a href="https://sec2021.bihar.gov.in/SamadhanAll/ComplainantLogin.aspx" target="_blank"
+                        class="block py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex items-center gap-3 transition">
+                        <i data-lucide="file-text" class="w-5 h-5 text-orange-400"></i>
+                        Grievance Redressal
+                    </a>
+                    <a href="https://sec.bihar.gov.in/" target="_blank"
+                        class=" bg-zinc-200 hover:bg-zinc-300 text-slate-800 px-5 py-3 rounded-full text-bold block py-3 px-4 rounded-3xl border border-sky-700 hover:bg-sky-800 flex items-center gap-3 transition">
+                        <i data-lucide="file-text" class="w-5 h-5 text-orange-400"></i>
+                        Old Website
+                    </a>
+                    
+                </div>
+            </div>
+            --%>
+        </div>
+
+        <div id="main-content">
+            
+    <div class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-4 md:px-8 py-3 flex items-center gap-2 text-sm md:text-base">
+            <a href="/SECOfficial/Default.aspx" class="flex items-center gap-1 text-sky-600 font-medium hover:underline">
+                <i data-lucide="home" class="w-4 h-4"></i>Home
+            </a>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+            <span class="text-gray-600 font-medium">Archive</span>
+        </div>
+    </div>
+    <section class="container mx-auto px-4 md:px-8 py-10 space-y-2">
+        <h2 class="text-sky-900 text-3xl md:text-4xl font-semibold">नगरपालिका चुनाव 2017</h2>
+    </section>
+    <section class="container mx-auto px-4 md:px-8 mb-16" id="OrganisationalChart">
+        <div class="bg-white rounded-[2rem] p-8 md:p-10 shadow-md border border-gray-100">
+            <div class="border-2 border-sky-600 rounded-[2rem] p-8 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="bg-sky-600 p-2 rounded-full text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" aria-hidden="true" class="lucide lucide-check w-5 h-5">
+                            <path d="M20 6 9 17l-5-5"></path></svg>
+                    </div>
+                    <h4 class="text-sky-600 text-2xl md:text-3xl font-semibold">नगरपालिका चुनाव</h4>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/Ultr.aspx" target="_blank">पत्र और निर्देश - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/letters/Letter 2748.pdf" target="_blank">चुनाव अधिसूचना - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/download/AR-02-29-03-2007.pdf" target="_blank">नगरपालिका चुनाव विधेयक - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/download/N_Rules, 2007.pdf" target="_blank">नगरपालिका चुनाव नियम - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/letters/Letter 1557.pdf" target="_blank">निर्वाचन का कार्यक्रम - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/ULBReservation.aspx" target="_blank">आरक्षण - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/ltr.aspx" target="_blank">पत्र और निर्देश - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/UContesting.aspx" target="_blank">नामांकन करने वाले उम्मीदवारों की सूचि - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/FinalContested.aspx" target="_blank">चुनाव लड़ रहे उम्मीदवार - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/UContestingDB.aspx" target="_blank">नामांकन स्थिति - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/UOptainVote.aspx" target="_blank">उम्मीदवारों द्वारा प्राप्त वैध मत - 2017</a></h5>
+                    </div>
+                    <div class="border-l-4 border-sky-600 bg-sky-50 p-4 rounded-r-lg">
+                        <h5 class="text-sky-900 font-semibold text-lg mb-1"><a href="//sec.bihar.gov.in/old-sec/UWCL.aspx" target="_blank">विजयी उम्मीदवार - 2017</a></h5>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+        </div>
+
+        <footer class="bg-sky-700 text-white pt-10 pb-10">
+            <!-- TOP GRID -->
+            <div class="container max-w-[1728px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+                <!-- MAP -->
+                <div class="md:col-span-1">
+                    <iframe class="w-full h-56 rounded" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" id="gmap_canvas" src="https://maps.google.com/maps?width=520&amp;hl=en&amp;q=State%20Election%20Commission,%20Bihar,%20Sone%20Bhawan%20Beerchand%20Patel%20Marg,%20Patna%20Patna+(State%20Election%20Commission,%20Bihar)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                </div>
+                <!-- QUICK LINKS -->
+                <div>
+                    <h3 class="text-xl font-semibold border-b border-white pb-2 mb-4">
+                        Quick Links
+                    </h3>
+                    <ul class="space-y-3 text-left text-sm">
+                        <li><a href="https://state.bihar.gov.in/biharprd/CitizenHome.html">
+                            Panchayati Raj Dept.</a></li>
+                        <li><a href="https://state.bihar.gov.in/urban/CitizenHome.html">
+                            Urban Development & Housing Department</a></li>
+                        <li>
+                            Act & Rules
+                            : (<a href="/SECOfficial/ResourcesPanchayat.aspx">Panchayat</a> | <a href="/SECOfficial/ResourcesNagarpalika.aspx">Nagarpalika</a>)</li>
+                        <li><a href="/SECOfficial/Resources.aspx">
+                            Frequently Asked Questions</a></li>
+                        <li><a href="/SECOfficial/ExternalLink.aspx" target="_blank">
+                            Other State Election Commission</a></li>
+                        <li><a href="/SECOfficial/PrivacyPolicy.aspx" target="_blank">
+                            Privacy Policy</a></li>
+                        <li><a href="/SECOfficial/TermsConditions.aspx" target="_blank">
+                            Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <!-- IMPORTANT LINKS -->
+                <div>
+                    <h3 class="text-xl font-semibold border-b border-white pb-2 mb-4">
+                        Important Links
+                    </h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="https://sec2021.bihar.gov.in/ForPublic_2025_P1/search">
+                            Search in E-Roll
+                            (Panchayat)</a></li>
+                        <li><a href="https://sec.bihar.gov.in/ForPublic/SearchElectroralRoll2025P1.aspx">
+                            Search in E-Roll
+                            (Nagarpalika)</a></li>
+                        <li><a href="https://sec2021.bihar.gov.in/ForPublic_2025_P1/download">
+                            Search in PDF
+                            (Panchayat)</a></li>
+                        <li><a href="https://sec.bihar.gov.in/ForPublic/RollPrint2025U1.aspx">
+                            Search in PDF
+                            (Nagarpalika)</a></li>
+                    </ul>
+                </div>
+                <!-- HELP -->
+                <div>
+                    <h3 class="text-xl font-semibold border-b border-white pb-2 mb-4">
+                        May I Help You?
+                    </h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/SECOfficial/About.aspx#ContactDirectory">
+                            Contact Us</a></li>
+                        <li>
+                            Voter Helpline no.
+                            18003457243</li>
+                        <li>
+                            Tel. No.
+                            : (0612) 2506826, 2506917</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- DIVIDER -->
+            <div class="max-w-7xl mx-auto px-6">
+                <hr class="border-white my-10">
+            </div>
+            <!-- BOTTOM NAV -->
+            <div class="text-center text-lg mb-4">
+                <a href="/SECOfficial/Default.aspx" class="hover:underline">
+                    Home</a>
+                <span class="mx-2">|</span>
+                <a href="/SECOfficial/PhotoGallery.aspx" target="_blank" class="hover:underline">
+                    Gallery</a>
+                <span class="mx-2">|</span>
+                <a href="/SECOfficial/About.aspx#ContactDirectory" class="hover:underline">
+                    Contact Us</a>
+            </div>
+            <!-- COPYRIGHT -->
+            <div class="text-center text-base font-medium pb-8">
+                © State Election Commission, Bihar
+            </div>
+            <!-- CREDIT -->
+            
+        </footer>
+        <div id="newsupdate">
+            <div id="parallelogram-footer">
+                <p>LATEST UPDATES</p>
+            </div>
+            <div class="tickerwrapper bg-sky-700">
+                <marquee>
+                    <h1 id="newsline">||&nbsp; <a href="https://sec.bihar.gov.in/Documents/Notice/202505241709591167.pdf" target="_blank" style="color: White;" bis_skin_checked="1">अधिसूचना (नगरपालिका आम/उप निर्वाचन, 2025 : निर्वाचन सम्पन्न कराये जाने के संबंध में |) </a>||
+        
+            ||&nbsp; <a href="http://sec.bihar.gov.in/Documents/Notice/202503071522333694.pdf" target="_blank" style="color: White;" bis_skin_checked="1">नगरपालिका का आम/उप निर्वाचन,2025 : मतदाता सूची के लिए रिवाईजिंग ऑथोरिटी की नियुक्ति के संबंध में | </a>||
+        
+            ||&nbsp; <a href="http://sec.bihar.gov.in/Documents/Notice/202503112303230851.pdf" target="_blank" style="color: White;" bis_skin_checked="1">नगरपालिका का आम/उप निर्वाचन,2025 : मतदाता सूची की तैयारी से सम्बंधित | </a>||
+        
+            ||&nbsp; <a href="http://sec.bihar.gov.in/Documents/Notice/202503071522167803.pdf" target="_blank" style="color: White;" bis_skin_checked="1">नगरपालिका का आम/उप निर्वाचन,2025 से सम्बंधित अधिसूचना | </a>||
+        
+            ||&nbsp; <a href="http://sec.bihar.gov.in/Documents/Notice/202503071521472678.pdf" target="_blank" style="color: White;" bis_skin_checked="1">नगरपालिका का आम/उप निर्वाचन,2025 से सम्बंधित आदेश | </a>||
+        
+            ||&nbsp;  <a href="https://sec.bihar.gov.in/Documents/Notice/202506091619342027.pdf" target="_blank" style="color: White;" bis_skin_checked="1">पंचायत उप निर्वाचन ,2025 - निर्वाचन सम्पन्न कराये जाने के सम्बन्ध में | </a>||
+        
+            ||&nbsp; <a href="http://164.100.130.161/admin/Documents/LetterDocuments/20250322132314787.pdf" target="_blank" style="color: White;" bis_skin_checked="1">पंचायत उप निर्वाचन ,2025 - मतदाता सूची की तैयारी के सम्बन्ध में | </a>||
+        
+            ||&nbsp;  <a href="https://sec.bihar.gov.in/IndirectElectionLetters.aspx" target="_blank" style="color: White;" bis_skin_checked="1">अप्रत्यक्ष निर्वाचन Letter No. 115 dt.2026-01-08 जिला - मुंगेर पद - प्रमुख दिनांक - 2026-01-27 </a>||
+        
+            ||&nbsp;  <a href="https://sec.bihar.gov.in/IndirectElectionLetters.aspx" target="_blank" style="color: White;" bis_skin_checked="1">अप्रत्यक्ष निर्वाचन Letter No. 128 dt.2026-01-09 जिला - रोहतास पद - उपप्रमुख दिनांक - 2026-01-28 </a>||
+        
+            ||&nbsp;  <a href="https://sec.bihar.gov.in/IndirectElectionLetters.aspx" target="_blank" style="color: White;" bis_skin_checked="1">अप्रत्यक्ष निर्वाचन Letter No. 128 dt.2026-01-09 जिला - रोहतास पद - प्रमुख दिनांक - 2026-01-28 </a>||
+                    </h1>
+                </marquee>
+            </div>
+
+        </div>
+
+        <script>
+            function switchTab(tab) {
+                const highlight = document.getElementById("tab-highlight");
+                const btnP = document.getElementById("btn-panchayat");
+                const btnN = document.getElementById("btn-nagarpalika");
+
+                if (tab === "panchayat") {
+                    highlight.style.left = "6px";
+                    btnP.classList.add("active");
+                    btnN.classList.remove("active");
+                } else {
+                    highlight.style.left = "50%";
+                    btnN.classList.add("active");
+                    btnP.classList.remove("active");
+                }
+            }
+
+        </script>
+        <script>
+            // Initialize Icons
+            lucide.createIcons();
+
+            // 2. Tabs Logic (Panchayat / Nagarpalika)
+            function switchTab(type) {
+                const btnPanchayat = document.getElementById('btn-panchayat');
+                const btnNagarpalika = document.getElementById('btn-nagarpalika');
+                const highlight = document.getElementById('tab-highlight');
+                const contentPN = document.getElementById('corners-content-pn');
+                const contentNP = document.getElementById('corners-content-np');
+
+                if (type === 'panchayat') {
+                    highlight.style.transform = 'translateX(0)';
+                    btnPanchayat.classList.add('text-white'); btnPanchayat.classList.remove('text-sky-700');
+                    btnNagarpalika.classList.add('text-sky-700'); btnNagarpalika.classList.remove('text-white');
+
+                    contentPN.style.opacity = '0.5';
+                    setTimeout(() => { contentPN.style.opacity = '1'; }, 200);
+                    contentNP.style.display = 'none';
+                    contentPN.style.display = 'block';
+                } else {
+                    highlight.style.transform = 'translateX(100%)';
+                    btnNagarpalika.classList.add('text-white'); btnNagarpalika.classList.remove('text-sky-700');
+                    btnPanchayat.classList.add('text-sky-700'); btnPanchayat.classList.remove('text-white');
+                    btnPanchayat.classList.remove('active')
+                    contentNP.style.opacity = '0.5';
+                    setTimeout(() => { contentNP.style.opacity = '1'; }, 200);
+                    contentPN.style.display = 'none';
+                    contentNP.style.display = 'block';
+                }
+
+            }
+
+            // 3. Accordion Logic
+            function toggleAccordion(id) {
+                const content = document.getElementById(id);
+                const arrow = document.getElementById('arrow-' + id);
+
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.classList.remove('active');
+                    arrow.style.transform = 'rotate(0deg)';
+                } else {
+                    // Close others (Optional: Uncomment to make it true accordion)
+                    // document.querySelectorAll('.accordion-content').forEach(c => { c.style.maxHeight = null; c.classList.remove('active'); });
+                    // document.querySelectorAll('[id^="arrow-"]').forEach(a => { a.style.transform = 'rotate(0deg)'; });
+
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.classList.add('active');
+                    arrow.style.transform = 'rotate(180deg)';
+                }
+            }
+
+            // Open "Election Archives" by default on load
+            document.addEventListener("DOMContentLoaded", function () {
+                toggleAccordion('acc-indirect');
+                const contentNP = document.getElementById('corners-content-np');
+                contentNP.style.display = 'none';
+            });
+        </script>
+
+        <script>
+            lucide.createIcons();
+
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileOverlay = document.getElementById('mobile-overlay');
+
+            function toggleMenu() {
+                const isClosed = mobileMenu.classList.contains('-translate-x-full');
+                if (isClosed) {
+                    mobileMenu.classList.remove('-translate-x-full');
+                    mobileOverlay.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                } else {
+                    mobileMenu.classList.add('-translate-x-full');
+                    mobileOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            function toggleSubmenu(id) {
+                const submenu = document.getElementById(id);
+                const arrow = document.getElementById('arrow-' + id);
+
+                if (submenu.classList.contains('open')) {
+                    submenu.classList.remove('open');
+                    arrow.style.transform = 'rotate(0deg)';
+                } else {
+                    // Optional: Close other submenus
+                    // document.querySelectorAll('.submenu').forEach(el => el.classList.remove('open'));
+                    // document.querySelectorAll('[id^="arrow-"]').forEach(el => el.style.transform = 'rotate(0deg)');
+
+                    submenu.classList.add('open');
+                    arrow.style.transform = 'rotate(180deg)';
+                }
+            }
+        </script>
+        <script>
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            let current = 0;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('opacity-100', i === index);
+                    slide.classList.toggle('opacity-0', i !== index);
+                    dots[i].classList.toggle('opacity-100', i === index);
+                    dots[i].classList.toggle('opacity-50', i !== index);
+                });
+                current = index;
+            }
+
+            function nextSlide() {
+                showSlide((current + 1) % slides.length);
+            }
+
+            function prevSlide() {
+                showSlide((current - 1 + slides.length) % slides.length);
+            }
+
+            function goToSlide(index) {
+                showSlide(index);
+            }
+
+            // Auto Slide
+            setInterval(nextSlide, 5000);
+        </script>
+        
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const path = window.location.pathname.split("/").pop() || "Default.aspx";
+                const activeClasses = ["bg-sky-700", "text-white", "shadow-md"];
+                const inactiveClasses = ["text-gray-600", "hover:bg-stone-100", "hover:text-sky-700"];
+                const links = document.querySelectorAll('nav.voter-menu a');
+
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (path.toLowerCase() === href.toLowerCase()) {
+                        link.classList.add(...activeClasses);
+                        link.classList.remove(...inactiveClasses);
+                        const icon = link.querySelector('i');
+                        if (icon) icon.classList.remove('opacity-50');
+                    } else {
+                        link.classList.remove(...activeClasses);
+                        link.classList.add(...inactiveClasses);
+                    }
+                });
+            });
+        </script>
+        <script>
+            let currentSize = localStorage.getItem("fontSize")
+                ? parseInt(localStorage.getItem("fontSize"))
+                : 16;
+
+            const minSize = 14;
+            const maxSize = 20;
+
+            function applyFont() {
+                document.documentElement.style.fontSize = currentSize + "px";
+                localStorage.setItem("fontSize", currentSize);
+            }
+
+            function increaseFont() {
+                if (currentSize < maxSize) {
+                    currentSize++;
+                    applyFont();
+                }
+            }
+
+            function decreaseFont() {
+                if (currentSize > minSize) {
+                    currentSize--;
+                    applyFont();
+                }
+            }
+
+            function resetFont() {
+                currentSize = 16;
+                applyFont();
+            }
+
+            applyFont();
+        </script>
+
+        <script>
+            function toggleContrast() {
+                const active = document.body.classList.toggle('high-contrast');
+                localStorage.setItem("highContrast", active);
+            }
+
+            // Load preference on startup
+            document.addEventListener("DOMContentLoaded", function () {
+                if (localStorage.getItem("highContrast") === "true") {
+                    document.body.classList.add('high-contrast');
+                }
+                // Ensure icons are initialized
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            });
+</script>
+
+    </form>
+</body>
+</html>

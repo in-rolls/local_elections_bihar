@@ -40,6 +40,9 @@ packages = ["src/local_elections_bihar"]
 
 [dependency-groups]
 dev = ["ruff>=0.14", { include-group = "test" }]
+ocr = [
+    "opencv-python-headless>=4.10",
+]
 test = ["pytest>=8"]
 transliterate = ["indicate>=0.10; python_version >= '3.13'"]
 

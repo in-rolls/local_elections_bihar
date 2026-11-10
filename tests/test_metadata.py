@@ -45,3 +45,18 @@ def test_manifest_covers_files_and_columns(folder):
         assert all(spec["type"] and spec["description"] for spec in columns.values())
         if "rows" in info:
             assert pq.read_metadata(path).num_rows == info["rows"]
+
+
+def test_urban_receipts_retain_source_provenance():
+    from local_elections_bihar.build.fetch_log import rows
+
+    records = {row["path"]: row for row in rows()}
+    for path in [
+        "data/raw/urban/patna/winners_2022.json",
+        "data/raw/urban_expansion/urban_women_2007_rcues.pdf",
+    ]:
+        row = records[path]
+        assert row["url"].startswith("http")
+        assert row["fetched_at_utc"]
+        assert row["method"] == "live"
+        assert row["sha256"] == hashlib.sha256(Path(path).read_bytes()).hexdigest()
