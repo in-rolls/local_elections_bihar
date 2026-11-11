@@ -86,6 +86,16 @@
       "origin": "http://madhubani.bih.nic.in/PanchayatElection2006/ via the Wayback Machine",
       "collected": "Captured by the Internet Archive April 2009; saved 2026-10-26 by collect/wayback.py (receipts in data/search_log/madhubani_bih_nic_in_wayback.jsonl)",
       "purpose": "Madhubani's 2006 result notices (प्रपत्र-23), one per block and one for the zila parishad: every seat with its reservation, mukhiya and sarpanch included."
+    },
+    "2006_sharan_reservations": {
+      "year": 2006,
+      "root": "raw/sharan",
+      "include": [
+        "Bihar_GP_Reservation_2006.dta"
+      ],
+      "origin": "Stata file sent by M. R. Sharan; its label credits the State Election Commission. The SEC records it was built from and the way its English names and blocks were assigned are not documented.",
+      "collected": "Received 2026-11-10 (receipt in data/raw/sharan/receipts.jsonl); the file's Stata timestamp is 11 Nov 2026",
+      "purpose": "M. R. Sharan's research file of 2006 mukhiya seat reservations (SC, ST, EBC, women) for 8,262 gram panchayats in 38 districts, with English names."
     }
   },
   "pipelines": {
@@ -115,22 +125,25 @@
       "year": 2006,
       "inputs": [
         "2006_sec_workbooks",
-        "2006_madhubani_notices"
+        "2006_madhubani_notices",
+        "2006_sharan_reservations"
       ],
-      "raw_in_repository": "data/raw/sec_documents/, data/raw/madhubani_bih_nic_in/",
+      "raw_in_repository": "data/raw/sec_documents/, data/raw/madhubani_bih_nic_in/, data/raw/sharan/",
       "steps": [
         {
           "module": "local_elections_bihar.parse.release_2006",
           "arguments": [],
           "produces": [
             "release/2006/seats.parquet",
-            "release/2006/winner_profiles.parquet"
+            "release/2006/winner_profiles.parquet",
+            "release/2006/gp_head_reservations.parquet"
           ]
         }
       ],
       "outputs": [
         "release/2006/seats.parquet",
-        "release/2006/winner_profiles.parquet"
+        "release/2006/winner_profiles.parquet",
+        "release/2006/gp_head_reservations.parquet"
       ],
       "manifests": [
         "release/2006/MANIFEST.json"
@@ -431,7 +444,8 @@
   "interpretation": {
     "2001_year": "2001 lists print 'त्रिस्तरीय पंचायत निर्वाचन, 2001' in every title. Bihar reserved no panchayat seats in 2001, so the table has no reservation columns. Kudra block (Kaimur) is printed without names.",
     "2006_year": "The 2006 member workbooks print 'पंचायत निर्वाचन, 2006'. The mukhiya and sarpanch profile workbooks print no year (Gaya's title says 2011); build/profile_year_check.py dates them by the 2011 winner reports: where the 2011 winner says they were mukhiya in 2006 the profile names them 70% of the time, where they say no office 2.5%.",
-    "2006_coverage": "2006 member seats cover 32 districts, some partly (Gaya's ward sheet holds one block); Araria, East Champaran, Jehanabad, Madhubani, Purnia and Sitamarhi are absent. Mukhiya and sarpanch seats carry a reservation only in Madhubani, whose result notices state it; the SEC's profile workbooks state none, and none is inferred.",
+    "2006_coverage": "2006 member seats cover 32 districts, some partly (Gaya's ward sheet holds one block); Araria, East Champaran, Jehanabad, Madhubani, Purnia and Sitamarhi are absent. In seats.parquet, mukhiya and sarpanch seats carry a reservation only in Madhubani, whose result notices state it; the SEC's profile workbooks state none, and none is inferred or copied in from elsewhere.",
+    "2006_sharan": "gp_head_reservations.parquet is M. R. Sharan's research file, not an SEC document: 8,262 gram panchayats in 38 districts with the mukhiya seat's reservation. Its label credits the SEC, but the records it was built from are not documented, and 130 of its identifiers 1-8,392 are absent. Names are in English and its blocks are not always the SEC's (Jainagar holds 13 gram panchayats here, 15 in Madhubani's notices). It names the backward-class reservation EBC; Madhubani's notices and most 2011 reports print पिछड़ा वर्ग (BC) for the same seats, and each label is left as its source gives it. 44.7% of its seats are flagged for women, which is what the rule gives: the Bihar Panchayat Election Rules, 2006, rule 12, reserve 'as nearly as fifty percent but not more than that' in each category, and in 96% of the file's 1,630 block-by-category groups the women's seats are exactly half the group rounded down. Two checks use information that plays no part in the name links. Section 4 of the Bihar Panchayat Raj (Amendment) Act, 2009 rotates a mukhiya seat's reservation only after two consecutive general elections, counted from 2006, so a 2006 seat should carry its 2011 label: through release/linkage/mukhiya_2006_2016.parquet (7,809 linked) the file agrees with the printed 2011 women's label for 98.0% of 2,212 gram panchayats (50.0% for pairs drawn at random) and with the caste label for 98.1% of 2,520 (54.5%). In Madhubani, through release/linkage/mukhiya_2006_sharan.parquet (6,954 linked), 96.5% of 343 linked pairs carry the same reservation in the file and in the official 2006 notice (25.8%).",
     "2011_year": {
       "year": 2011,
       "confirmed": "2026-10-01",

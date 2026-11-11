@@ -10,10 +10,12 @@
     "data/release/2021/seats.parquet": "690f4e18e5e73558bb578f539b1c957c09dd17469b49726f69961c636b3d1fab",
     "data/release/2021/term_feed_reservations.parquet": "45341aeecf7157e8028e4d96275d2f62b596da0d36190d6cbb4012c30347c142",
     "data/release/2011/mukhiya_reports/winner_records.parquet": "83b07aed81343393692d866067f5c3b75295067027e803bc70f7ab3942428104",
-    "data/release/linkage/place_transliterations.parquet": "a8396c524de712e08e04b5f913bed52c2ce44c4c886743bcca9bcb19943e5175",
+    "data/release/2006/seats.parquet": "796bc5ebf483ad0c559876c246d27a09415d0bd63bafce675c5aa39d83489134",
+    "data/release/2006/gp_head_reservations.parquet": "12e8f3c8fa31003db4d1c71a74d5092381865e742dab5c75d107e51fce35b328",
+    "data/release/linkage/place_transliterations.parquet": "6ce7fea88123bfa31ad937d11e5b49f8a7d099f80df8b74d32d1f3b9f7e067c8",
     "data/manual/crosswalks/block_2011_2016.csv": "3cfd61d23d3e7a9dc20be56877fc043ef6b1ea523310884774cc9dd8bd4954dd"
   },
-  "code_sha256": "6f57b0d3e9ca473d80dc8806b128cafae9e070bfee834b739f358f83d29e91ba",
+  "code_sha256": "8511ea361b090918bbb268d5ca5a3debfb6a35a36b7c39231dec18e788ceb75d",
   "validation": {
     "mukhiya_2016_2021": {
       "gps_2016": 8400,
@@ -33,6 +35,34 @@
       "block_headings_2011": 266,
       "block_headings_linked": 266,
       "linked": 3342
+    },
+    "mukhiya_2006_sharan": {
+      "gps_sharan": 8262,
+      "gps_2006": 7895,
+      "linked": 6954,
+      "linked_block_pass": 6514,
+      "linked_district_pass": 440,
+      "notice_gps": 389,
+      "notice_gps_linked": 343,
+      "reservation_agreement": 0.965,
+      "reservation_agreement_random_pairing": 0.2581,
+      "reservation_agreement_block_pass": 0.9706,
+      "caste_agreement": 0.9767,
+      "woman_agreement": 0.9854
+    },
+    "mukhiya_2006_2016": {
+      "gps_sharan": 8262,
+      "gps_2016": 8400,
+      "linked": 7809,
+      "linked_block_pass": 7797,
+      "linked_district_pass": 12,
+      "with_2011_woman_label": 2212,
+      "woman_agreement_2006_2011": 0.9797,
+      "woman_agreement_random_pairing": 0.5002,
+      "woman_agreement_2006_2011_block_pass": 0.9805,
+      "with_2011_caste_label": 2520,
+      "caste_agreement_2006_2011": 0.9806,
+      "caste_agreement_random_pairing": 0.5452
     }
   },
   "files": [
@@ -45,6 +75,16 @@
       "path": "mukhiya_2011_2016.parquet",
       "rows": 3342,
       "sha256": "a794fb5b4955fa98120be284be695b495e55a93952feb22f971f210639900024"
+    },
+    {
+      "path": "mukhiya_2006_sharan.parquet",
+      "rows": 6954,
+      "sha256": "d439623e54061d2e804fc6c4d5c226eebaf56796eb44bbbdf31f34c56a171f88"
+    },
+    {
+      "path": "mukhiya_2006_2016.parquet",
+      "rows": 7809,
+      "sha256": "d12c83be64678532bbe1bca0ebca165efa1298aac6cd8b97f76e4a60fb92b9e2"
     }
   ]
 }

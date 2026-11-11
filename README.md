@@ -14,6 +14,7 @@ The list is generated from the published files by `make data-summary`.
 | File | Rows | Each row represents |
 | --- | ---: | --- |
 | [release/2001/mukhiya_winners.parquet](data/release/2001/mukhiya_winners.parquet) | 8,426 | Mukhiya elected in 2001, from the SEC's division lists |
+| [release/2006/gp_head_reservations.parquet](data/release/2006/gp_head_reservations.parquet) | 8,262 | Gram panchayat with its 2006 mukhiya seat reservation, from M. R. Sharan's research file |
 | [release/2006/seats.parquet](data/release/2006/seats.parquet) | 209,523 | Seat in the election frame |
 | [release/2006/winner_profiles.parquet](data/release/2006/winner_profiles.parquet) | 14,514 | 2006 mukhiya or sarpanch winner with the SEC's profile (age, education, category, income) |
 | [release/2011/gaya_mukhiya/runner_up_records.parquet](data/release/2011/gaya_mukhiya/runner_up_records.parquet) | 337 | Gaya Mukhiya runner-up with GP linked from the companion winner PDF |
@@ -33,9 +34,11 @@ The list is generated from the published files by `make data-summary`.
 | [release/2021/term_feed_reservations.parquet](data/release/2021/term_feed_reservations.parquet) | 247,671 | Undated current-term seat-reservation record |
 | [release/2021/term_feed_winners.parquet](data/release/2021/term_feed_winners.parquet) | 247,671 | Undated current-term winner-feed record |
 | [release/2021/winners.parquet](data/release/2021/winners.parquet) | 244,475 | Winner record, with determination basis |
+| [release/linkage/mukhiya_2006_2016.parquet](data/release/linkage/mukhiya_2006_2016.parquet) | 7,809 | Gram panchayat of Sharan's 2006 file linked by name to its 2016 Mukhiya seat |
+| [release/linkage/mukhiya_2006_sharan.parquet](data/release/linkage/mukhiya_2006_sharan.parquet) | 6,954 | Gram panchayat of Sharan's 2006 file linked by name to a 2006 mukhiya seat's gram panchayat |
 | [release/linkage/mukhiya_2011_2016.parquet](data/release/linkage/mukhiya_2011_2016.parquet) | 3,342 | 2011 Mukhiya winner record linked to its 2016 seat |
 | [release/linkage/mukhiya_2016_2021.parquet](data/release/linkage/mukhiya_2016_2021.parquet) | 7,945 | 2016 Mukhiya seat linked to its 2021 seat by name |
-| [release/linkage/place_transliterations.parquet](data/release/linkage/place_transliterations.parquet) | 8,434 | Romanization of a Devanagari GP name |
+| [release/linkage/place_transliterations.parquet](data/release/linkage/place_transliterations.parquet) | 11,240 | Romanization of a Devanagari GP name |
 
 <!-- datasets:end -->
 

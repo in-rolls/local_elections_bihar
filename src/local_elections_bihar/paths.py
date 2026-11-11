@@ -11,3 +11,4 @@ CHECKS = DATA / "checks"
 
 SEC_DOCUMENTS = RAW / "sec_documents"
 SEC_SITE = RAW / "sec_bih_nic_in"
+SHARAN = RAW / "sharan"

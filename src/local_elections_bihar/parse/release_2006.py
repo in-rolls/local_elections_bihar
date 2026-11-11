@@ -9,6 +9,9 @@ and sarpanch seats from the profile workbooks (winners_2006), which state no
 reservation; and every seat in the result notices that survive
 (result_notices_2006, Madhubani), which state it for all offices.
 winner_profiles.parquet holds the mukhiya and sarpanch profiles.
+gp_head_reservations.parquet holds M. R. Sharan's research file of mukhiya seat
+reservations (sharan_2006), kept apart from seats.parquet: its names are English
+and its origin in SEC records is undocumented.
 data/checks/ gets each reservation and caste spelling beside its reading.
 """
 
@@ -22,6 +25,7 @@ import polars as pl
 from local_elections_bihar.parse import (
     members_2006,
     result_notices_2006,
+    sharan_2006,
     winners_2006,
 )
 from local_elections_bihar.parse.schema_2006 import TABLES
@@ -35,6 +39,7 @@ CODE = [
     "parse/members_2006.py",
     "parse/winners_2006.py",
     "parse/result_notices_2006.py",
+    "parse/sharan_2006.py",
     "parse/sec_workbooks.py",
     "year2011/hindi.py",
     "year2011/kruti_dev_010.json",
@@ -97,6 +102,7 @@ def build():
     ]
     tables = {"seats": members + heads + notices}
     tables["winner_profiles"] = profiles
+    tables["gp_head_reservations"] = sharan_2006.rows()
     CHECKS.mkdir(parents=True, exist_ok=True)
     vocabulary(
         CHECKS / "reserved_2006_vocabulary.csv",
@@ -118,7 +124,8 @@ def build():
         CODE,
         year=2006,
         source="SEC Bihar 2006 workbooks under data/raw/sec_documents/; "
-        "Madhubani's result notices under data/raw/madhubani_bih_nic_in/",
+        "Madhubani's result notices under data/raw/madhubani_bih_nic_in/; "
+        "M. R. Sharan's gram panchayat head reservations under data/raw/sharan/",
     )
     return frame_summary()
 

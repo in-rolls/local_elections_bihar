@@ -3,7 +3,16 @@
 import pandas as pd
 from preclink import ExactComparison
 
-from local_elections_bihar.linkage.mukhiya import PlaceName, fold, link, name_key
+from local_elections_bihar.linkage.mukhiya import (
+    PlaceName,
+    english_key,
+    fold,
+    hindi_key,
+    link,
+    link_in_learned_blocks,
+    name_key,
+    romanized_key,
+)
 
 
 def frame(rows):
@@ -58,3 +67,64 @@ def test_qualifiers_conflict_only_within_a_family():
     assert qualifiers_conflict(south, name_key("सिंघिया बुजुर्ग उत् तर", "")[2])
     assert not qualifiers_conflict(frozenset({"kalan"}), frozenset({"north"}))
     assert qualifiers_conflict(frozenset({"kalan"}), frozenset({"khurd"}))
+
+
+def test_english_and_hindi_compass_words_meet():
+    # Sharan's file writes the compass word in English, in brackets, or as a
+    # letter; the 2006 workbooks print the Hindi word or its abbreviation.
+    assert english_key("SARISAW PAHI (E)") == hindi_key(
+        "सरिसवपाही पूर्वी", "sarisavpahi purvi"
+    )
+    assert english_key("PAROO [N]") == hindi_key("पारू उत्तरी", "paru uttari")
+    assert english_key("NORTHI PATJIRAWA")[2] == {"north"}
+    # प0 is romanized "0v"; the word is dropped by position and is not a number
+    assert hindi_key("प0 वाखरपुर", "0v vakharpur") == (
+        fold("vakharpur"),
+        frozenset(),
+        {"west"},
+    )
+    assert english_key("FULWARIA-II")[1] == hindi_key("फुलवरिया-2", "phulwariya")[1]
+
+
+def test_opposite_compass_words_never_pair():
+    left = frame([("a", "x", "x", 1)])
+    right = frame([("x", "x", "x", 1)])
+    left["name_key"] = [english_key("SAKRI EAST")]
+    right["name_key"] = [hindi_key("सकरी पश्चिमी", "sakri pashchimi")]
+    assert link(left, right, ["block_code"], [PlaceName()], 0.5).empty
+    right["name_key"] = [hindi_key("सकरी पूर्वी", "sakri purvi")]
+    assert len(link(left, right, ["block_code"], [PlaceName()], 0.5)) == 1
+
+
+def test_romanized_compass_words_meet_english_ones():
+    # the 2016 form prints the Hindi word in Latin letters
+    assert romanized_key("05 - Siswa Pashchimi") == english_key("SISWA WEST")
+    assert romanized_key("RAGHUNATHPUR  DAKSHIN") == english_key("RAGHUNATHPUR SOUTH")
+    assert romanized_key("Dakshini Madhubani")[2] == {"south"}
+    assert romanized_key("03 - Dariyapur-2")[1] == {2}
+
+
+def test_blocks_are_learned_before_names_are_paired():
+    # Rampur recurs in both blocks; only the block tells the two apart.
+    names = ["Rampur", "Belwa", "Chikani", "Rampur", "Kurma", "Satha"]
+    coded = pd.DataFrame(
+        {
+            "key": list("abcdef"),
+            "district_code": "07",
+            "block_code": ["001"] * 3 + ["002"] * 3,
+            "name_key": [romanized_key(n) for n in names],
+        }
+    )
+    free = pd.DataFrame(
+        {
+            "key": [1, 2, 3, 4, 5, 6],
+            "district_code": "07",
+            "block_name": ["NORTH BLOCK"] * 3 + ["SOUTH BLOCK"] * 3,
+            "name_key": [english_key(n.upper()) for n in names],
+        }
+    )
+    pairs = link_in_learned_blocks(coded, free)
+    assert dict(zip(pairs["left"], pairs["right"], strict=True)) == dict(
+        zip("abcdef", [1, 2, 3, 4, 5, 6], strict=True)
+    )
+    assert set(pairs["link_pass"]) == {"block"}

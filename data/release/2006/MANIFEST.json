@@ -1,6 +1,6 @@
 {
   "year": 2006,
-  "source": "SEC Bihar 2006 workbooks under data/raw/sec_documents/; Madhubani's result notices under data/raw/madhubani_bih_nic_in/",
+  "source": "SEC Bihar 2006 workbooks under data/raw/sec_documents/; Madhubani's result notices under data/raw/madhubani_bih_nic_in/; M. R. Sharan's gram panchayat head reservations under data/raw/sharan/",
   "files": [
     {
       "path": "seats.parquet",
@@ -267,14 +267,76 @@
           "description": "One-based row number in that sheet."
         }
       }
+    },
+    {
+      "path": "gp_head_reservations.parquet",
+      "rows": 8262,
+      "sha256": "12e8f3c8fa31003db4d1c71a74d5092381865e742dab5c75d107e51fce35b328",
+      "columns": {
+        "ugp": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "The file's gram panchayat identifier (UGP); 130 of 1-8,392 are absent."
+        },
+        "district": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "District, in English as the file gives it."
+        },
+        "block": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Block, in English as the file gives it; not always the block the SEC lists the gram panchayat under."
+        },
+        "gram_panchayat": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Gram panchayat, in English: gram_panchayat_raw with a mis-encoded no-break space removed and runs of spaces collapsed."
+        },
+        "gram_panchayat_raw": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Gram panchayat exactly as the file gives it."
+        },
+        "reserved_caste": {
+          "type": "String",
+          "nullable": false,
+          "checks": "<Check isin: isin(['NONE', 'SC', 'ST', 'EBC'])>",
+          "description": "Caste reservation of the mukhiya seat, from the file's SC, ST and EBC flags; NONE when all three are 0."
+        },
+        "reserved_woman": {
+          "type": "Int8",
+          "nullable": false,
+          "checks": "<Check isin: isin([0, 1])>",
+          "description": "1 when the file flags the mukhiya seat reserved for women."
+        },
+        "source_path": {
+          "type": "String",
+          "nullable": false,
+          "checks": "",
+          "description": "Stata file read, relative to the repository."
+        },
+        "source_row": {
+          "type": "Int32",
+          "nullable": false,
+          "checks": "",
+          "description": "One-based observation number in that file."
+        }
+      }
     }
   ],
   "code_sha256": {
-    "parse/release_2006.py": "2073761faa3566482f7a522c8611fb2503b804e9d17aee2b46e7f8a3b14eeb9f",
-    "parse/schema_2006.py": "dfb1cc18b0a6ceefecc2e83329618c44a8bc61347efc076feb76ad5a7ee1b05a",
+    "parse/release_2006.py": "0c370ca657d659c2fc63f4e0597367fb5e386e4235141cd90f1cdd7ab54ef34f",
+    "parse/schema_2006.py": "41ea8bacaee9ded7f3f800ffe36ff78f02c9a80908b13c36793a4af87fcf18de",
     "parse/members_2006.py": "db4f733977d99b6a946e0e3645fc96e49a73a524ff2b03226930099fd1e7c4bf",
     "parse/winners_2006.py": "21261f90eafad1b188ef813f068d8e9676e2074f5bbf459cbfe0e05a4cd353cf",
-    "parse/result_notices_2006.py": "947896b188b6a892dfda36c79980cdf5df5c5cbe601326102ffc92da070d6aa3",
+    "parse/result_notices_2006.py": "56e77667760ae1012ef507c53cce413eb2ef958ed9d0254b6fd69bb13b33b16e",
+    "parse/sharan_2006.py": "9f81110c31cf66fa88ce35ea02440356d25d4ecdf6dac6514b666411e6323019",
     "parse/sec_workbooks.py": "4f584106d937eaac9cac068486aa7a3fbe4a983f88bd35e77e7fbcd53012281e",
     "year2011/hindi.py": "e9c6669a90d25478c0165eaac753752151a3417aa323a83c411d0ff7d0412f0b",
     "year2011/kruti_dev_010.json": "71daac4ca9c59752deada373a8c2bf68fe8e465b293e3ab05c2c1bbfc842e2cc"

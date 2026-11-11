@@ -389,10 +389,22 @@ def published_files(data):
         "mukhiya_2016_2021": "2016 Mukhiya seat linked to its 2021 seat by name",
         "mukhiya_2011_2016": "2011 Mukhiya winner record linked to its 2016 seat",
         "place_transliterations": "Romanization of a Devanagari GP name",
+        "mukhiya_2006_2016": (
+            "Gram panchayat of Sharan's 2006 file linked by name to its 2016 "
+            "Mukhiya seat"
+        ),
+        "mukhiya_2006_sharan": (
+            "Gram panchayat of Sharan's 2006 file linked by name to a 2006 "
+            "mukhiya seat's gram panchayat"
+        ),
         "mukhiya_winners": "Mukhiya elected in 2001, from the SEC's division lists",
         "winner_profiles": (
             "2006 mukhiya or sarpanch winner with the SEC's profile (age, "
             "education, category, income)"
+        ),
+        "gp_head_reservations": (
+            "Gram panchayat with its 2006 mukhiya seat reservation, from "
+            "M. R. Sharan's research file"
         ),
         "winner_list_records": (
             "Mukhiya winner row from the SEC winner list for a block with a "

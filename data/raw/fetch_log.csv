@@ -562,6 +562,9 @@ data/raw/sec_documents/Sarpanch/Sitamarhi.xls,,ed898a5b380ac9c23cc09f01535525d8b
 data/raw/sec_documents/Sarpanch/Siwan.xls,,3769d47199f2d585ef717a9cc93a7abe0c63a1f753f2ba314d52d74401e04dfa,91648,,copy,in-rolls/local_elections@fa4c4e79:data/bihar/Sarpanch/Siwan.xls
 data/raw/sec_documents/Sarpanch/Supaul.xls,,87a928c592edbff0a710c1eeb5e7245d6adedd654526939a8f4a6fa4195951ed,569344,,copy,in-rolls/local_elections@fa4c4e79:data/bihar/Sarpanch/Supaul.xls
 data/raw/sec_documents/Sarpanch/West Champaran.xls,,d3a24055293f3b9a7c8913cc6ba0eff0b8e2594c0149115dc4166ffcdcce1c6f,547840,,copy,in-rolls/local_elections@fa4c4e79:data/bihar/Sarpanch/West Champaran.xls
+data/raw/sharan/Bihar_GP_Reservation_2006.dta,,2b8ea2c336c488a59b69b157ac2b95d5f0672642090fb9e45c65cb9510fd61de,688211,2026-11-10,manual,M. R. Sharan
+data/raw/sharan/README.md,,95ebe6ce5b5f13b7287561754405896fb110b527040bb88e3454a2927acc5d05,617,,unknown,
+data/raw/sharan/receipts.jsonl,,151302c566cc4d7f1c19aaf1173c633e26a98a2a883746008955e423ae00c3ee,199,,unknown,
 data/raw/urban/patna/affidavit_2017_ward26.pdf,https://sec.bihar.gov.in/old-sec/UWCL.aspx,226787d8c9c9fd6836e3bd12ca5ba66dc4aabb68bb41655f42496a084d4198e4,470739,2026-11-09T07:27:58.569426+00:00,live,
 data/raw/urban/patna/archive.html,https://sec.bihar.gov.in/SECOfficial/archiveNP.aspx,41eb74463fa1b9e9e7dd96d7a7618c9bb6980b0b108335fdb32d938a5b711605,68653,2026-11-09T07:22:38.052750+00:00,live,
 data/raw/urban/patna/controls_2022.js,http://sec2021.bihar.gov.in/SEC_NP_P2_01/assets/js/ControlNP1.min.js,c3a29c1b9ef317d7bca36032bed54a2878429bc3ed4d46125bafbacace66a0ef,1001315,2026-11-09T07:22:23.876096+00:00,live,

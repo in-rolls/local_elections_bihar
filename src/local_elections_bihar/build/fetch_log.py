@@ -13,7 +13,9 @@ from the Zenodo archives are not tracked and have no row; PROVENANCE.json
 records those archives. Pages of Bihar's old government sites came from the
 Wayback Machine (collect/wayback.py); each has a receipt in
 data/search_log/<host>_wayback.jsonl, so the row is `method=wayback` with the
-capture's URL and the time it was saved.
+capture's URL and the time it was saved. A file handed over by a person has a
+receipt naming `received_from`: the row is `method=manual`, with that name in
+`copied_from` and the day it arrived.
 """
 
 import argparse
@@ -77,12 +79,17 @@ def rows():
                     relative = Path(*relative.parts[1:])
             receipts[relative.as_posix()] = {
                 **receipt,
+                "url": receipt.get("url", ""),
                 "fetched_at_utc": receipt.get("retrieved_at_utc")
                 or receipt.get("retrieved_at")
-                or receipt.get("fetched_at_utc", ""),
-                "method": "wayback"
+                or receipt.get("fetched_at_utc")
+                or receipt.get("received_at", ""),
+                "method": "manual"
+                if "received_from" in receipt
+                else "wayback"
                 if "web.archive.org/" in receipt.get("url", "")
                 else "live",
+                "copied_from": receipt.get("received_from", ""),
             }
     out = []
     for path in tracked():
@@ -116,6 +123,7 @@ def rows():
             row["url"] = receipt["url"]
             row["fetched_at_utc"] = receipt["fetched_at_utc"]
             row["method"] = receipt["method"]
+            row["copied_from"] = receipt.get("copied_from", "")
         elif path.parent == WINNER_LIST:
             row["url"] = WINNER_LIST_URL
             row["fetched_at_utc"] = earliest_fetch(path)

@@ -16,6 +16,7 @@ OFFICES = [
 CASTE = ["NONE", "SC", "ST", "BC"]
 WINNER_CASTE = ["NONE", "SC", "ST", "BC", "EBC"]
 WOMAN = [0, 1]
+SHARAN_CASTE = ["NONE", "SC", "ST", "EBC"]
 
 SOURCE = {
     "source_path": "Workbook the row was read from, relative to the repository.",
@@ -108,4 +109,35 @@ class WinnerProfile(pa.DataFrameModel):
     source_row: pl.Int32 = field(SOURCE["source_row"])
 
 
-TABLES = {"seats": Seat, "winner_profiles": WinnerProfile}
+class GpHeadReservation(pa.DataFrameModel):
+    ugp: pl.Int32 = field(
+        "The file's gram panchayat identifier (UGP); 130 of 1-8,392 are absent.",
+        unique=True,
+    )
+    district: pl.Utf8 = field("District, in English as the file gives it.")
+    block: pl.Utf8 = field(
+        "Block, in English as the file gives it; not always the block the SEC "
+        "lists the gram panchayat under."
+    )
+    gram_panchayat: pl.Utf8 = field(
+        "Gram panchayat, in English: gram_panchayat_raw with a mis-encoded "
+        "no-break space removed and runs of spaces collapsed."
+    )
+    gram_panchayat_raw: pl.Utf8 = field("Gram panchayat exactly as the file gives it.")
+    reserved_caste: pl.Utf8 = field(
+        "Caste reservation of the mukhiya seat, from the file's SC, ST and EBC "
+        "flags; NONE when all three are 0.",
+        isin=SHARAN_CASTE,
+    )
+    reserved_woman: pl.Int8 = field(
+        "1 when the file flags the mukhiya seat reserved for women.", isin=WOMAN
+    )
+    source_path: pl.Utf8 = field("Stata file read, relative to the repository.")
+    source_row: pl.Int32 = field("One-based observation number in that file.")
+
+
+TABLES = {
+    "seats": Seat,
+    "winner_profiles": WinnerProfile,
+    "gp_head_reservations": GpHeadReservation,
+}
