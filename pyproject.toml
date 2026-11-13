@@ -65,4 +65,4 @@ addopts = ["-ra", "--strict-config", "--strict-markers"]
 [tool.codespell]
 builtin = "clear,rare,en-GB_to_en-US"
 skip = "*.pdf,*.png,*.jpg,*.jpeg,*.gif,*.csv,*.tsv,*.json,*.geojson,*.graphml,*.ipynb,*.html,*.svg,*.bib,*.bbl,*.lock,*.parquet,*.rda,*.rds,*.RData,*.dta,*.xlsx,*.xml,*.min.js,*.map,*.log,*.aux,./data"
-ignore-words-list = "kno,pash"
+ignore-words-list = "cancelled,kno,organised,pash,recognise"
