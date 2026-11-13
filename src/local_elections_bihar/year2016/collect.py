@@ -2,7 +2,7 @@
 
 The form at old-sec/ovc.aspx cascades office -> district -> block -> panchayat ->
 ward (or territorial number). Each dropdown change is a postback whose response
-carries the next dropdown, so work is organized in units that replay their own
+carries the next dropdown, so work is organised in units that replay their own
 cascade: one ledger per office and district for the frame, and one per office,
 district and block for results. Every response's HTML is saved in the ledger.
 """
@@ -31,7 +31,7 @@ from tenacity import (
 )
 
 URL = "https://sec.bihar.gov.in/old-sec/ovc.aspx"
-# The form answers postbacks from clients it does not recognize as browsers with
+# The form answers postbacks from clients it does not recognise as browsers with
 # HTTP 500 (ASP.NET browser capabilities); a Mozilla-compatible agent still names us.
 AGENT = "Mozilla/5.0 (compatible; local-elections-bihar research archive)"
 OFFICES = {
@@ -110,7 +110,7 @@ def request(method, data=None, url=None):
         worker.start()
         worker.join(DEADLINE)
         if worker.is_alive():
-            # Abandoned, not canceled: it keeps this session until its socket gives
+            # Abandoned, not cancelled: it keeps this session until its socket gives
             # up, so the next attempt opens a fresh one rather than sharing it.
             del LOCAL.session
             raise Transient(f"No response within {DEADLINE}s")
