@@ -4,7 +4,7 @@ The archive page lists, per district, PDFs for zila parishad members, samiti hea
 samiti members, mukhiyas and sarpanches. The PDFs carry text in the legacy
 KrutiDev font encoding; only seat numbers (plain digits) and a small fixed
 vocabulary of reservation labels are needed, so labels are looked up in a table
-of their KrutiDev spellings and anything unrecognised stops the parse.
+of their KrutiDev spellings and anything unrecognized stops the parse.
 """
 
 import argparse
