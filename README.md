@@ -1,5 +1,7 @@
 # Bihar local-election data
 
+Bihar election data [![Bihar election data DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23092131.svg)](https://doi.org/10.5281/zenodo.23092131) · 2016 source archive [![2016 source archive DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22852473.svg)](https://doi.org/10.5281/zenodo.22852473)
+
 Seat reservations, candidates and winners for Bihar's rural local governments.
 The published data cover the 2016 and 2021 general elections for all six panchayat
 offices, subsequent by-elections, and a partial 2011 Mukhiya collection.
