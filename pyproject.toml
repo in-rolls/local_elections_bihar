@@ -4,7 +4,7 @@ version = "1.0.0"
 description = "Bihar panchayat seat reservations, candidates and election outcomes across general elections and by-elections"
 readme = "README.md"
 requires-python = ">=3.12"
-authors = [{ name = "Gaurav Sood", email = "contact@gsood.com" }]
+authors = [{ name = "Gaurav Sood" }]
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["Bihar", "elections", "panchayats", "reservation", "data"]
